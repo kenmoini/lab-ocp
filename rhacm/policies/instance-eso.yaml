@@ -1,0 +1,190 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-eso
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the External Secrets Operator connected to Vault
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-OD - Operator Deployment
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: eso-vault-token
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: eso-vault-token
+                  namespace: external-secrets
+                type: Opaque
+                data:
+                  token: '{{hub fromSecret "open-cluster-management-policies" "eso-vault-token" "token" hub}}'
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: eso-operatorconfig
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: OperatorConfig
+                apiVersion: operator.external-secrets.io/v1alpha1
+                metadata:
+                  name: cluster
+                  namespace: external-secrets
+                spec:
+                  affinity: {}
+                  certController:
+                    affinity: {}
+                    create: true
+                    deploymentAnnotations: {}
+                    extraArgs: {}
+                    extraEnv: []
+                    fullnameOverride: ''
+                    image:
+                      pullPolicy: IfNotPresent
+                      repository: ghcr.io/external-secrets/external-secrets
+                      #tag: ''
+                      flavour: "ubi"
+                    imagePullSecrets: []
+                    nameOverride: ''
+                    nodeSelector: {}
+                    podAnnotations: {}
+                    podLabels: {}
+                    podSecurityContext: {}
+                    priorityClassName: ''
+                    prometheus:
+                      enabled: false
+                      service:
+                        port: 8080
+                    rbac:
+                      create: true
+                    requeueInterval: 5m
+                    resources: {}
+                    securityContext: {}
+                    serviceAccount:
+                      annotations: {}
+                      create: true
+                      name: ''
+                    tolerations: []
+                  concurrent: 1
+                  controllerClass: ''
+                  crds:
+                    createClusterExternalSecret: true
+                    createClusterSecretStore: true
+                  createOperator: true
+                  deploymentAnnotations: {}
+                  extraArgs: {}
+                  extraEnv: []
+                  fullnameOverride: ''
+                  image:
+                    pullPolicy: IfNotPresent
+                    #repository: oci.external-secrets.io/external-secrets/external-secrets
+                    repository: ghcr.io/external-secrets/external-secrets
+                    #tag: ''
+                    flavour: "ubi"
+                  imagePullSecrets: []
+                  installCRDs: false
+                  leaderElect: false
+                  nameOverride: ''
+                  nodeSelector: {}
+                  podAnnotations: {}
+                  podLabels: {}
+                  podSecurityContext: {}
+                  priorityClassName: ''
+                  processClusterExternalSecret: true
+                  processClusterStore: true
+                  prometheus:
+                    enabled: false
+                    service:
+                      port: 8080
+                  rbac:
+                    create: true
+                  replicaCount: 1
+                  resources: {}
+                  scopedNamespace: ''
+                  scopedRBAC: false
+                  securityContext: {}
+                  serviceAccount:
+                    annotations: {}
+                    create: true
+                    name: ''
+                  tolerations: []
+                  webhook:
+                    affinity: {}
+                    certCheckInterval: 5m
+                    certDir: /tmp/certs
+                    create: true
+                    deploymentAnnotations: {}
+                    extraArgs: {}
+                    extraEnv: []
+                    fullnameOverride: ''
+                    image:
+                      pullPolicy: IfNotPresent
+                      repository: ghcr.io/external-secrets/external-secrets
+                      #tag: ''
+                      flavour: "ubi"
+                    imagePullSecrets: []
+                    nameOverride: ''
+                    nodeSelector: {}
+                    podAnnotations: {}
+                    podLabels: {}
+                    podSecurityContext: {}
+                    priorityClassName: ''
+                    prometheus:
+                      enabled: false
+                      service:
+                        port: 8080
+                    rbac:
+                      create: true
+                    replicaCount: 1
+                    resources: {}
+                    securityContext: {}
+                    serviceAccount:
+                      annotations: {}
+                      create: true
+                      name: ''
+                    tolerations: []
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: eso-vault-clustersecretstore
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: external-secrets.io/v1beta1
+                kind: ClusterSecretStore
+                metadata:
+                  name: kemo-labs-vault
+                spec:
+                  provider:
+                    vault:
+                      auth:
+                        tokenSecretRef:
+                          key: token
+                          name: eso-vault-token
+                          namespace: external-secrets
+                      path: kv
+                      server: 'https://vault.apps.kemo.labs'
+                      version: v2
+                      caBundle: '{{hub fromConfigMap "open-cluster-management-policies" "root-ca-bundle" "ca-bundle.crt" | base64enc hub}}'

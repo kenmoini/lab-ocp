@@ -6,14 +6,15 @@ namespace: open-cluster-management-policies
 
 resources:
   - namespace.yaml
+  - root-ca.yaml
 
   # Health Signals
-  - failing-ns.yml
-  - health-clusteroperator.yml
-  - health-node.yml
-  - health-clusterversion.yml
-  - health-machineconfigpool.yml
-  - health-mc-addons.yml
+  - failing-ns.yaml
+  - health-clusteroperator.yaml
+  - health-node.yaml
+  - health-clusterversion.yaml
+  - health-machineconfigpool.yaml
+  - health-mc-addons.yaml
 
   # Global/Common Policies
   - console-info-header.yaml
@@ -46,3 +47,4 @@ resources:
   - instance-virtualization.yaml
   - instance-nfd.yaml
   - instance-nvidia-gpu.yaml
+  - instance-eso.yaml

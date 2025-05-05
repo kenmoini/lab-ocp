@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: root-ca-bundle
+  labels:
+    # This label will create the .data['ca-bundle.crt'] key with all the system trusted roots, custom and default
+    config.openshift.io/inject-trusted-cabundle: 'true'
