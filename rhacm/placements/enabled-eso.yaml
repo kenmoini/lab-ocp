@@ -1,0 +1,14 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: enabled-eso
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: enabled-eso
+              operator: In
+              values:
+                - "true"

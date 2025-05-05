@@ -11,3 +11,5 @@ resources:
   - hcp-inception.yaml
   - hcp-kubevirt.yaml
   - hub-cluster.yaml
+
+  - enabled-eso.yaml

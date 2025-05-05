@@ -29,6 +29,7 @@ resources:
   - operators-pipelines.yaml
   - operators-compliance.yaml
   - operators-cco.yaml
+  - operators-eso.yaml
   - operators-nfd.yaml
   - operators-nmstate.yaml
   - operators-nmo.yaml
