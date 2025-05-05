@@ -1,0 +1,46 @@
+# https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.13/html/observability/observing-environments-intro#configuring-alertmanager
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  annotations:
+    skip-creation-if-exist: 'true'
+  name: alertmanager-config
+  namespace: open-cluster-management-observability
+type: Opaque
+stringData:
+  alertmanager.yaml: |
+    global:
+      resolve_timeout: "5m"
+    receivers:
+    - name: "null"
+    - name: debug-receiver
+      webhook_configs:
+        - url: http://debug-receiver.debug-receiver.svc.cluster.local:9393/v1/receiver
+    - name: simple-chat
+      webhook_configs:
+        - url: http://simple-chat.simple-chat.svc.cluster.local:7979/api/alertmanagerReceiver
+    - name: "eda-debug"
+      webhook_configs:
+        - url: 'http://eda-debug.ansible-automation-platform.svc:8000/endpoint'
+    - name: "eda-acm-alerts"
+      webhook_configs:
+        - url: 'http://eda-acm-alerts.ansible-automation-platform.svc:8000/endpoint'
+    route:
+      group_by:
+      - "cluster"
+      - "namespace"
+      group_interval: "5m"
+      group_wait: "30s"
+      receiver: "null"
+      repeat_interval: "12h"
+      routes:
+      - match:
+          alertname: "Watchdog"
+        receiver: "debug-receiver"
+      - match:
+          alertname: "Watchdog"
+        receiver: "eda-debug"
+      - receiver: "eda-acm-alerts"
+        matchers:
+          - "processor = eda"

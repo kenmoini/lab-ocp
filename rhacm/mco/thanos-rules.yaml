@@ -1,9 +1,10 @@
+# https://docs.redhat.com/en/documentation/red_hat_advanced_cluster_management_for_kubernetes/2.13/html/observability/observing-environments-intro#creating-custom-rules
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: thanos-ruler-custom-rules
-  #namespace: open-cluster-management-observability
+  namespace: open-cluster-management-observability
 data:
   custom_rules.yaml: |
     groups:
@@ -16,7 +17,7 @@ data:
         expr: sum without (managed_cluster_id) (label_replace((sum without (clusterID) (label_replace((sum(policyreport_info * on (managed_cluster_id) group_left (cluster) label_replace(acm_managed_cluster_labels, "cluster", "$1", "name", "(.*)")) by (cluster, category, clusterID, managed_cluster_id, policy, severity) > 0),"hub_cluster_id", "$1", "clusterID", "(.*)"))),"clusterID", "$1", "managed_cluster_id", "(.*)"))
         for: 1m
         labels:
-          severity: "{{ $labels.severity }}"
+          severity: warning
           processor: eda
     - name: watchdog-rules
       rules:
