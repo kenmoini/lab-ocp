@@ -52,6 +52,13 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-governance-policy-framework: unreachable
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/addon-governance-policy-framework: unhealthy
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -72,6 +79,13 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-application-manager: unreachable
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/addon-application-manager: unhealthy
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -92,6 +106,13 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-managed-serviceaccount: unreachable
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/addon-managed-serviceaccount: unhealthy
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -112,6 +133,13 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-search-collector: unreachable
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/addon-search-collector: unhealthy
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -132,6 +160,13 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-observability-controller: unreachable
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/addon-observability-controller: unhealthy
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -152,6 +187,13 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-cluster-proxy: unreachable
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/addon-cluster-proxy: unhealthy
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -172,6 +214,13 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-config-policy-controller: unreachable
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/addon-config-policy-controller: unhealthy
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -192,6 +241,13 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-cert-policy-controller: unreachable
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/addon-cert-policy-controller: unhealthy
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -212,3 +268,10 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-work-manager: unreachable
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/addon-work-manager: unhealthy
