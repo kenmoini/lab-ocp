@@ -8,3 +8,4 @@ resources:
   - job.yaml
   - mco.yaml
   - thanos-rules.yaml
+  - alertmanager-config.yaml

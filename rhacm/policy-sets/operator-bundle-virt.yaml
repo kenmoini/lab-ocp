@@ -1,0 +1,15 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: operator-bundle-virt
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Set of policies that will deploy basic OpenShift Virtualization components"
+  policies:
+    - operators-nmo
+    - operators-nfd
+    - operators-oadp
+    - operators-nmstate
+    - operators-nvidia-gpu
+    - operators-virtualization

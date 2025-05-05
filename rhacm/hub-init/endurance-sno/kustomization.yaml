@@ -7,5 +7,7 @@ resources:
   - https://github.com/kenmoini/lab-ocp/rhacm/placement-bindings/
   - https://github.com/kenmoini/lab-ocp/rhacm/placements/
   - https://github.com/kenmoini/lab-ocp/rhacm/policies/
+  - https://github.com/kenmoini/lab-ocp/rhacm/policy-sets/
+  - https://github.com/kenmoini/lab-ocp/rhacm/mco/
   - https://github.com/kenmoini/lab-ocp/rhacm/gitops-integration.yaml
   - https://github.com/kenmoini/lab-ocp/rhacm/gitops/appset-democratic-csi-nfs.yaml

@@ -21,26 +21,11 @@ subjects:
     kind: Policy
 
   # Operators
-  - name: operators-nfd
+  - name: operator-bundle-virt
     apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-nmstate
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-nvidia-gpu
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-virtualization
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
+    kind: PolicySet
 
   # Operator Deployment
-  - name: instance-nfd
+  - name: instance-bundle-virt
     apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: instance-nvidia-gpu
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: instance-virtualization
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
+    kind: PolicySet

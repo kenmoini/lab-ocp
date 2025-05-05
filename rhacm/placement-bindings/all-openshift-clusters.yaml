@@ -10,18 +10,9 @@ placementRef:
   kind: Placement
 subjects:
   # Health Signals
-  - name: health-clusteroperator
+  - name: health-checks
     apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: health-clusterversion
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: health-machineconfigpool
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: health-node
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
+    kind: PolicySet
 
   # Configuration
   - name: cluster-info-header
