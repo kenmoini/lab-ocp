@@ -10,5 +10,4 @@ spec:
     - health-clusteroperator
     - health-clusterversion
     - health-machineconfigpool
-    - health-mc-addons
     - health-node

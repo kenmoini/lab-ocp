@@ -10,9 +10,9 @@ placementRef:
   kind: Placement
 subjects:
   # Health Signals
-  - name: health-mc-addons
+  - name: hub-health-checks
     apiGroup: policy.open-cluster-management.io
-    kind: Policy
+    kind: PolicySet
 
   # HCP Integration
   - name: hcp-bmh-acm-infra-creds

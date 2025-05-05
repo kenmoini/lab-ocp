@@ -1,0 +1,10 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: hub-health-checks
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Cluster health check signals from the ACM Hub via ACM Policies"
+  policies:
+    - health-mc-addons

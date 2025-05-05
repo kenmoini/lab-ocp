@@ -16,6 +16,26 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: ocm-feature-foo-test
+        spec:
+          remediationAction: inform
+          severity: high
+          namespaceSelector:
+            exclude:
+              - kube-*
+              - openshift-*
+          object-templates:
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1
+                kind: ManagedCluster
+                metadata:
+                  labels:
+                    feature.open-cluster-management.io/foo: unreachable
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: addon-governance-policy-framework
         spec:
           remediationAction: inform
@@ -24,8 +44,6 @@ spec:
             exclude:
               - kube-*
               - openshift-*
-            include:
-              - default
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -46,8 +64,6 @@ spec:
             exclude:
               - kube-*
               - openshift-*
-            include:
-              - default
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -68,8 +84,6 @@ spec:
             exclude:
               - kube-*
               - openshift-*
-            include:
-              - default
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -90,8 +104,6 @@ spec:
             exclude:
               - kube-*
               - openshift-*
-            include:
-              - default
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -112,8 +124,6 @@ spec:
             exclude:
               - kube-*
               - openshift-*
-            include:
-              - default
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -134,8 +144,6 @@ spec:
             exclude:
               - kube-*
               - openshift-*
-            include:
-              - default
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -156,8 +164,6 @@ spec:
             exclude:
               - kube-*
               - openshift-*
-            include:
-              - default
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -178,8 +184,6 @@ spec:
             exclude:
               - kube-*
               - openshift-*
-            include:
-              - default
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -200,8 +204,6 @@ spec:
             exclude:
               - kube-*
               - openshift-*
-            include:
-              - default
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
