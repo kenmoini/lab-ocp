@@ -5,9 +5,9 @@ metadata:
   name: operators-cco
   annotations:
     policy.open-cluster-management.io/description: Installs the Cluster Observability Operator
-    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
-    policy.open-cluster-management.io/controls: OLM-OD - Operator Deployment
+    policy.open-cluster-management.io/controls: OLM-OI - Operator Installation
 spec:
   disabled: false
   policy-templates:

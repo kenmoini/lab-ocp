@@ -5,9 +5,9 @@ metadata:
   name: instance-nfd
   annotations:
     policy.open-cluster-management.io/description: Deploys the Node Feature Discovery Operator
-    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
-    policy.open-cluster-management.io/controls: OLM-OD - Operator Deployment
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
 spec:
   disabled: false
   policy-templates:

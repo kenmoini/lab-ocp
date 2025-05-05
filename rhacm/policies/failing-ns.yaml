@@ -5,9 +5,10 @@ metadata:
   name: failing-inform
   #namespace: open-cluster-management-policies
   annotations:
-    policy.open-cluster-management.io/categories: CM Configuration Management
-    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
-    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/description: Raises policy violation for a non-existing namespace
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
 spec:
   disabled: false
   policy-templates:
@@ -23,6 +24,6 @@ spec:
                 apiVersion: v1
                 kind: Namespace
                 metadata:
-                  name: does-not-exist
+                  name: i-do-not-exist
           remediationAction: inform
           severity: low

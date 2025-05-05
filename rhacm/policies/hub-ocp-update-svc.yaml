@@ -1,11 +1,13 @@
+---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   name: hub-ocp-update-svc
   annotations:
-    policy.open-cluster-management.io/standards: NIST 800-53, NIST-CSF
-    policy.open-cluster-management.io/categories: CM Configuration Management, PR.IP Information Protection Processes and Procedures
-    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration, PR.IP-1 Baseline Configuration
+    policy.open-cluster-management.io/description: Installs and deploys the OpenShift Update Service Operator
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
 spec:
   disabled: false
   policy-templates:
@@ -33,7 +35,7 @@ spec:
         metadata:
           name: deploy-update-svc
         spec:
-          remediationAction: enforce
+          remediationAction: inform
           severity: high
           object-templates:
             - complianceType: musthave
