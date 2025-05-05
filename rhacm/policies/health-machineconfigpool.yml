@@ -1,0 +1,83 @@
+# Shamelessly stolen from https://github.com/bry-tam/acm-policy-samples/blob/main/policies/cluster-health/machineconfigpool.yml
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-machineconfigpool
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations if the managed cluster is not in a healthy state based on MachineConfigPool status.
+    policy.open-cluster-management.io/categories: SC System and Communications Protection
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/controls: SC-4 Information In Shared Resources
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: machineconfigpool-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates-raw: |
+            {{/* ##  Get the current or desired version of the cluster ## */}}
+            {{- $cVer := (lookup "config.openshift.io/v1" "ClusterVersion" "" "version") }}
+            {{- $desiredVersion := semver (dig "desiredUpdate" "version" ($cVer.status.desired.version) $cVer.spec) }}
+
+            {{/* ##  Determine if an even numbered release by divide by two, and compare  if the result rounds up ## */}}
+            {{- $isEvenRelease := (eq (div $desiredVersion.Minor 2 | toInt)  (div (add $desiredVersion.Minor 1) 2 | toInt)) }}
+
+            {{/* ##  Get the list of MachineConfigPools ## */}}
+            {{- $mcpList := (lookup "machineconfiguration.openshift.io/v1" "MachineConfigPool" "" "").items }}
+
+            {{- range $mcp := $mcpList }}
+              {{/* ##  In the case where we are allowed to be paused and the MCP is paused likely because of an upgrade ## */}}
+              {{/* ##  we want to prevent the policy from being out of compliance as this would be expected ## */}}
+              {{/* ##  1. master MCP must not be paused ## */}}
+              {{/* ##  2. If the ClusterVersion.spec.channel does not start with eus ## */}}
+              {{/* ##  3. The ClusterVersion.spec.channel starts with eus and the cluster minor version is an even release ## */}}
+              {{- $eusMcpPaused := true }}
+              {{- if or (eq $mcp.metadata.name "master")
+                        (not (hasPrefix "eus" $cVer.spec.channel))
+                        (and (hasPrefix "eus" $cVer.spec.channel) 
+                          (or $isEvenRelease (and (not $isEvenRelease) (not $mcp.spec.paused)))
+                        ) }}
+                {{- $eusMcpPaused = false }}
+              {{- end }}
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfigPool
+                metadata:
+                  name: {{ $mcp.metadata.name }}
+
+              {{- if not $eusMcpPaused }}
+                spec:
+                  paused: false
+              {{- end }}
+                status:
+                  conditions:
+                    - status: 'False'
+                      type: RenderDegraded
+                    - status: 'False'
+                      type: NodeDegraded
+                    - status: 'False'
+                      type: Degraded
+                    - status: '{{ $eusMcpPaused | ternary "False" "True" }}'
+                      type: Updated
+                    - status: 'False'
+                      type: Updating
+                  degradedMachineCount: 0
+                  unavailableMachineCount: 0
+                  observedGeneration: '{{ $mcp.metadata.generation | toInt }}'
+
+              {{- if not $eusMcpPaused }}
+                  readyMachineCount: '{{ $mcp.status.machineCount | toInt }}'
+                  updatedMachineCount: '{{ $mcp.status.machineCount | toInt }}'
+              {{- end }}
+              
+            {{- end }}
+            {{- end }}

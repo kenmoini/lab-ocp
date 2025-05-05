@@ -1,0 +1,74 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: enable-internal-registry
+  annotations:
+    policy.open-cluster-management.io/description: Enables the internal OpenShift Registry
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: internal-registry-pvc
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - openshift-image-registry
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: PersistentVolumeClaim
+                metadata:
+                  name: image-registry
+                  namespace: openshift-image-registry
+                spec:
+                  accessModes:
+                    - ReadWriteOnce # Ideally this would be ReadWriteMany, required for multiple replicas of the internal registry service
+                  resources:
+                    requests:
+                      storage: 250Gi # At least 100Gi is needed
+                  volumeMode: Filesystem # Must be Filesystem type
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: internal-registry-config
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: imageregistry.operator.openshift.io/v1
+                kind: Config
+                metadata:
+                  name: cluster
+                spec:
+                  storage:
+                    emptyDir: {}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: imageregistry.operator.openshift.io/v1
+                kind: Config
+                metadata:
+                  name: cluster
+                spec:
+                  rolloutStrategy: Recreate
+                  defaultRoute: true
+                  managementState: Managed
+                  #proxy: {}
+                  storage:
+                    managementState: Unmanaged
+                    pvc:
+                      claim: image-registry
+                  replicas: 1

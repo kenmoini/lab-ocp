@@ -1,0 +1,366 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-virtualization
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the OpenShift Virtualization Operator
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-OD - Operator Deployment
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cnv-os-namespace
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - openshift-virtualization-os-images
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: openshift-virtualization-os-images
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cnv-configmaps
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - openshift-cnv
+              - openshift-virtualization-os-images
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: private-registry-ca
+                  namespace: openshift-cnv
+                data:
+                  ca.crt: |
+                    -----BEGIN CERTIFICATE-----
+                    MIIH0DCCBbigAwIBAgIUVgbrSwOVQdQJrxeN2XcYdCPyFEMwDQYJKoZIhvcNAQEL
+                    BQAwgbQxHzAdBgkqhkiG9w0BCQEWEGtlbkBrZW5tb2luaS5jb20xCzAJBgNVBAYT
+                    AlVTMRcwFQYDVQQIDA5Ob3J0aCBDYXJvbGluYTEQMA4GA1UEBwwHUmFsZWlnaDEW
+                    MBQGA1UECgwNS2VtbyBWZW50dXJlczESMBAGA1UECwwJS2VtbyBMYWJzMS0wKwYD
+                    VQQDDCRLZW1vIExhYnMgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMjUw
+                    MTE5MTIwODMxWhcNNDUwODAyMTIwODMxWjCBtDEfMB0GCSqGSIb3DQEJARYQa2Vu
+                    QGtlbm1vaW5pLmNvbTELMAkGA1UEBhMCVVMxFzAVBgNVBAgMDk5vcnRoIENhcm9s
+                    aW5hMRAwDgYDVQQHDAdSYWxlaWdoMRYwFAYDVQQKDA1LZW1vIFZlbnR1cmVzMRIw
+                    EAYDVQQLDAlLZW1vIExhYnMxLTArBgNVBAMMJEtlbW8gTGFicyBSb290IENlcnRp
+                    ZmljYXRlIEF1dGhvcml0eTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIB
+                    ALIsyqUqJ3Cw2JjRIFDimTLbpsBtWHyFni6yx4epiOzSuotmdrJL0F/PvvpTP1Lh
+                    gPls09AO0GWHBIvnfThUZ0x8SKiL0f27b9rJULHdiVOqBMAOc2i6M83DMYsMXCS3
+                    tPtpTXZkcQlCWAW53omB1po5Gg/H84aIO4zrvtSeWvvqlMrcbaFtN4NyFLtw16rc
+                    yL60jGjUf0W2eXlRrJpQH5IG3JkI8wpFYB9U0Aj91vt2kSkPP68wGDIr/RF1uM0+
+                    5YinRfEb8Ex0QY1FFPJL8elTgjHtuXVdqepoOaWXGcjy5WyV9FVX2R1OjNmhFmWI
+                    Ev1Uejx+6Af7eR4mJvHgJWKGWZbxdjygih2AWXHR5n+k4RRc2cucMbGmQKQ3E66Y
+                    twzQeUfzKkIZ1OMOKXlggh3eni+dSZ8ifkW78mNSJIAc+3iOCjlCLLXG8586JoMm
+                    AJpH4LCY7GUP6upAq+V/bV4iuFy0mLYVeVFqjumCkd2wEwq2RB669tYeYdJJGX+G
+                    pNOvXgw2SdZdb4tg/1pBQoKbse56sDeMz1F72AgR/28ahHzfgwZUCY2Gvmq5+Pbs
+                    op8YHcTr52KN5haRjSLsfflFWTVhXl6t9D16bHGdMKp65IW20igFRMAR12vMvk1R
+                    cveMukSNP5rHZG7KY7jUQwy+n6MZZMrGdxQcWt8xgdfNAgMBAAGjggHWMIIB0jAd
+                    BgNVHQ4EFgQUVOlmpWXIqIG+cXDNOBAUN0VqAHEwgfQGA1UdIwSB7DCB6YAUVOlm
+                    pWXIqIG+cXDNOBAUN0VqAHGhgbqkgbcwgbQxHzAdBgkqhkiG9w0BCQEWEGtlbkBr
+                    ZW5tb2luaS5jb20xCzAJBgNVBAYTAlVTMRcwFQYDVQQIDA5Ob3J0aCBDYXJvbGlu
+                    YTEQMA4GA1UEBwwHUmFsZWlnaDEWMBQGA1UECgwNS2VtbyBWZW50dXJlczESMBAG
+                    A1UECwwJS2VtbyBMYWJzMS0wKwYDVQQDDCRLZW1vIExhYnMgUm9vdCBDZXJ0aWZp
+                    Y2F0ZSBBdXRob3JpdHmCFFYG60sDlUHUCa8Xjdl3GHQj8hRDMA8GA1UdEwEB/wQF
+                    MAMBAf8wDgYDVR0PAQH/BAQDAgGGMDUGCWCGSAGG+EIBDQQoFiZQaWthIFBLSSBH
+                    ZW5lcmF0ZWQgUm9vdCBDQSBDZXJ0aWZpY2F0ZTBiBgNVHR8EWzBZMFegVaBThlFo
+                    dHRwOi8vcGtpLmtlbW8ubmV0d29yay9wdWIvY3Jscy9yb290LWNhLmtlbW8tbGFi
+                    cy1yb290LWNlcnRpZmljYXRlLWF1dGhvcml0eS5jcmwwDQYJKoZIhvcNAQELBQAD
+                    ggIBABnSQENMmzNScyne0hxlArIR6mcQVtFO93kB8UMmXlpfy504Ds8lJSYGtP+g
+                    51DTVSJxhfgcKkG0p/fOIs8EvwSlvZDWrWZyBifUEy563Hsaiq6rMU4R85E+Cr1W
+                    dv7hYOUP7IIwEt2Gn4IulxAxRzkDyv7P74k8Y+9pjKi3BqxBa+U62WDqw160j8cy
+                    K8QYGvyE/TkRvTi7FaM5ppr/0nNZ/7ZQ/pEEWTt60RpcXXFISSQ0tiJBUhOBxR2u
+                    CMGB47vMRKrlmoVl6wDmhg6ItK3MWIntnXeGMvCSkRjVoa+N99JqpbbdF5+pxWKN
+                    APl/fJqDgDAC5lmaiNu9o9nml84M1akB4G14GnLRyxUS4kraJajoyCq2bF2hgmoR
+                    +m7y4hEPlsM8f4O++rleeg44gaMuaDTCdTGoNZ8piz9j+Mr5jiDOoApD/EFWWQ/I
+                    G6kQYhL0cirA2VhtAVVCB8hhGLhv9A0tYO+xhcFmzMaIgKW1SdbZVgLIW2giYEjs
+                    ftaT7oMpN7bO3CNFDJYA8+o94MO2pznlo390+eunOCLsq6691GzSPXZXPnCCyOQd
+                    ATcP+OXC+Xljxsqpksht1DVnwjnmEZALd7T7crzCS/ezuqTtrVbUlsneIaNBhbpO
+                    +wb3mZG781YXVp+JEbeksqL0Dstv6ldNQzawvAL6K7apTiJp
+                    -----END CERTIFICATE-----
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: private-registry-ca
+                  namespace: openshift-virtualization-os-images
+                data:
+                  ca.crt: |
+                    -----BEGIN CERTIFICATE-----
+                    MIIH0DCCBbigAwIBAgIUVgbrSwOVQdQJrxeN2XcYdCPyFEMwDQYJKoZIhvcNAQEL
+                    BQAwgbQxHzAdBgkqhkiG9w0BCQEWEGtlbkBrZW5tb2luaS5jb20xCzAJBgNVBAYT
+                    AlVTMRcwFQYDVQQIDA5Ob3J0aCBDYXJvbGluYTEQMA4GA1UEBwwHUmFsZWlnaDEW
+                    MBQGA1UECgwNS2VtbyBWZW50dXJlczESMBAGA1UECwwJS2VtbyBMYWJzMS0wKwYD
+                    VQQDDCRLZW1vIExhYnMgUm9vdCBDZXJ0aWZpY2F0ZSBBdXRob3JpdHkwHhcNMjUw
+                    MTE5MTIwODMxWhcNNDUwODAyMTIwODMxWjCBtDEfMB0GCSqGSIb3DQEJARYQa2Vu
+                    QGtlbm1vaW5pLmNvbTELMAkGA1UEBhMCVVMxFzAVBgNVBAgMDk5vcnRoIENhcm9s
+                    aW5hMRAwDgYDVQQHDAdSYWxlaWdoMRYwFAYDVQQKDA1LZW1vIFZlbnR1cmVzMRIw
+                    EAYDVQQLDAlLZW1vIExhYnMxLTArBgNVBAMMJEtlbW8gTGFicyBSb290IENlcnRp
+                    ZmljYXRlIEF1dGhvcml0eTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIB
+                    ALIsyqUqJ3Cw2JjRIFDimTLbpsBtWHyFni6yx4epiOzSuotmdrJL0F/PvvpTP1Lh
+                    gPls09AO0GWHBIvnfThUZ0x8SKiL0f27b9rJULHdiVOqBMAOc2i6M83DMYsMXCS3
+                    tPtpTXZkcQlCWAW53omB1po5Gg/H84aIO4zrvtSeWvvqlMrcbaFtN4NyFLtw16rc
+                    yL60jGjUf0W2eXlRrJpQH5IG3JkI8wpFYB9U0Aj91vt2kSkPP68wGDIr/RF1uM0+
+                    5YinRfEb8Ex0QY1FFPJL8elTgjHtuXVdqepoOaWXGcjy5WyV9FVX2R1OjNmhFmWI
+                    Ev1Uejx+6Af7eR4mJvHgJWKGWZbxdjygih2AWXHR5n+k4RRc2cucMbGmQKQ3E66Y
+                    twzQeUfzKkIZ1OMOKXlggh3eni+dSZ8ifkW78mNSJIAc+3iOCjlCLLXG8586JoMm
+                    AJpH4LCY7GUP6upAq+V/bV4iuFy0mLYVeVFqjumCkd2wEwq2RB669tYeYdJJGX+G
+                    pNOvXgw2SdZdb4tg/1pBQoKbse56sDeMz1F72AgR/28ahHzfgwZUCY2Gvmq5+Pbs
+                    op8YHcTr52KN5haRjSLsfflFWTVhXl6t9D16bHGdMKp65IW20igFRMAR12vMvk1R
+                    cveMukSNP5rHZG7KY7jUQwy+n6MZZMrGdxQcWt8xgdfNAgMBAAGjggHWMIIB0jAd
+                    BgNVHQ4EFgQUVOlmpWXIqIG+cXDNOBAUN0VqAHEwgfQGA1UdIwSB7DCB6YAUVOlm
+                    pWXIqIG+cXDNOBAUN0VqAHGhgbqkgbcwgbQxHzAdBgkqhkiG9w0BCQEWEGtlbkBr
+                    ZW5tb2luaS5jb20xCzAJBgNVBAYTAlVTMRcwFQYDVQQIDA5Ob3J0aCBDYXJvbGlu
+                    YTEQMA4GA1UEBwwHUmFsZWlnaDEWMBQGA1UECgwNS2VtbyBWZW50dXJlczESMBAG
+                    A1UECwwJS2VtbyBMYWJzMS0wKwYDVQQDDCRLZW1vIExhYnMgUm9vdCBDZXJ0aWZp
+                    Y2F0ZSBBdXRob3JpdHmCFFYG60sDlUHUCa8Xjdl3GHQj8hRDMA8GA1UdEwEB/wQF
+                    MAMBAf8wDgYDVR0PAQH/BAQDAgGGMDUGCWCGSAGG+EIBDQQoFiZQaWthIFBLSSBH
+                    ZW5lcmF0ZWQgUm9vdCBDQSBDZXJ0aWZpY2F0ZTBiBgNVHR8EWzBZMFegVaBThlFo
+                    dHRwOi8vcGtpLmtlbW8ubmV0d29yay9wdWIvY3Jscy9yb290LWNhLmtlbW8tbGFi
+                    cy1yb290LWNlcnRpZmljYXRlLWF1dGhvcml0eS5jcmwwDQYJKoZIhvcNAQELBQAD
+                    ggIBABnSQENMmzNScyne0hxlArIR6mcQVtFO93kB8UMmXlpfy504Ds8lJSYGtP+g
+                    51DTVSJxhfgcKkG0p/fOIs8EvwSlvZDWrWZyBifUEy563Hsaiq6rMU4R85E+Cr1W
+                    dv7hYOUP7IIwEt2Gn4IulxAxRzkDyv7P74k8Y+9pjKi3BqxBa+U62WDqw160j8cy
+                    K8QYGvyE/TkRvTi7FaM5ppr/0nNZ/7ZQ/pEEWTt60RpcXXFISSQ0tiJBUhOBxR2u
+                    CMGB47vMRKrlmoVl6wDmhg6ItK3MWIntnXeGMvCSkRjVoa+N99JqpbbdF5+pxWKN
+                    APl/fJqDgDAC5lmaiNu9o9nml84M1akB4G14GnLRyxUS4kraJajoyCq2bF2hgmoR
+                    +m7y4hEPlsM8f4O++rleeg44gaMuaDTCdTGoNZ8piz9j+Mr5jiDOoApD/EFWWQ/I
+                    G6kQYhL0cirA2VhtAVVCB8hhGLhv9A0tYO+xhcFmzMaIgKW1SdbZVgLIW2giYEjs
+                    ftaT7oMpN7bO3CNFDJYA8+o94MO2pznlo390+eunOCLsq6691GzSPXZXPnCCyOQd
+                    ATcP+OXC+Xljxsqpksht1DVnwjnmEZALd7T7crzCS/ezuqTtrVbUlsneIaNBhbpO
+                    +wb3mZG781YXVp+JEbeksqL0Dstv6ldNQzawvAL6K7apTiJp
+                    -----END CERTIFICATE-----
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cnv-hyperconverged
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - openshift-cnv
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: hco.kubevirt.io/v1beta1
+                kind: HyperConverged
+                metadata:
+                  name: kubevirt-hyperconverged
+                  namespace: openshift-cnv
+                  annotations:
+                    deployOVS: 'false'
+                spec:
+                  liveMigrationConfig:
+                    allowAutoConverge: false
+                    allowPostCopy: true
+                    completionTimeoutPerGiB: 800
+                    parallelMigrationsPerCluster: 5
+                    parallelOutboundMigrationsPerNode: 2
+                    progressTimeout: 150
+                  certConfig:
+                    ca:
+                      duration: 48h0m0s
+                      renewBefore: 24h0m0s
+                    server:
+                      duration: 24h0m0s
+                      renewBefore: 12h0m0s
+                  featureGates:
+                    deployKubeSecondaryDNS: false
+                    deployTektonTaskResources: true
+                    disableMDevConfiguration: false
+                    enableCommonBootImageImport: true
+                    nonRoot: true
+                    withHostPassthroughCPU: true
+                  workloadUpdateStrategy:
+                    batchEvictionInterval: 1m0s
+                    batchEvictionSize: 10
+                    workloadUpdateMethods:
+                      - LiveMigrate
+                  uninstallStrategy: BlockUninstallIfWorkloadsExist
+                  # Avoids OOMKilled on image importing: https://access.redhat.com/solutions/6988046
+                  resourceRequirements:
+                    storageWorkloads:
+                      limits:
+                        cpu: "500m"
+                        memory: "2Gi"
+                      requests:
+                        cpu: "250m"
+                        memory: "1Gi"
+
+                  # ========================================================================================
+                  # Disconnected/Private Registry Configuration
+                  # ========================================================================================
+
+                  storageImport:
+                    # Disable TLS validation for the private registry
+                    # Or use the certConfigMap parameter to provide the CA certificate as shown below
+                    insecureRegistries:
+                      - quay-ptc.jfrog.lab.kemo.network
+                      - disconn-harbor.d70.kemo.labs
+
+                  # In disconnected environments you have to specifically tell the operator to use the disconnected registry
+                  # It doesn't pick it up from the global cluster mirror configuration :)
+                  # You can source the default values provided by the operator by looking at the .status and copying the values, modifying them as needed, and then applying the changes to the .spec
+                  # The operator will then apply the changes to the cluster
+                  # Below is an example of how to configure the operator to use a disconnected registry for the default boot sources
+                  dataImportCronTemplates:
+                    - metadata:
+                        annotations:
+                          cdi.kubevirt.io/storage.bind.immediate.requested: 'true'
+                        labels:
+                          kubevirt.io/dynamic-credentials-support: 'true'
+                        name: centos-stream8-image-cron
+                      spec:
+                        garbageCollect: Outdated
+                        managedDataSource: centos-stream8
+                        schedule: 30 7/12 * * *
+                        template:
+                          metadata: {}
+                          spec:
+                            source:
+                              registry:
+                                pullMethod: node
+                                url: 'docker://disconn-harbor.d70.kemo.labs/quay-ptc/containerdisks/centos-stream:8'
+                                #secretRef: private-ps
+                                certConfigMap: private-registry-ca
+                            storage:
+                              resources:
+                                requests:
+                                  storage: 30Gi
+                    - metadata:
+                        annotations:
+                          cdi.kubevirt.io/storage.bind.immediate.requested: 'true'
+                        labels:
+                          kubevirt.io/dynamic-credentials-support: 'true'
+                        name: centos-stream9-image-cron
+                      spec:
+                        garbageCollect: Outdated
+                        managedDataSource: centos-stream9
+                        schedule: 30 7/12 * * *
+                        template:
+                          metadata: {}
+                          spec:
+                            source:
+                              registry:
+                                pullMethod: node
+                                url: 'docker://disconn-harbor.d70.kemo.labs/quay-ptc/containerdisks/centos-stream:9'
+                                #secretRef: private-ps
+                                certConfigMap: private-registry-ca
+                            storage:
+                              resources:
+                                requests:
+                                  storage: 30Gi
+                    - metadata:
+                        annotations:
+                          cdi.kubevirt.io/storage.bind.immediate.requested: 'true'
+                        labels:
+                          kubevirt.io/dynamic-credentials-support: 'true'
+                        name: centos-stream10-image-cron
+                      spec:
+                        garbageCollect: Outdated
+                        managedDataSource: centos-stream10
+                        schedule: 30 7/12 * * *
+                        template:
+                          metadata: {}
+                          spec:
+                            source:
+                              registry:
+                                pullMethod: node
+                                url: 'docker://disconn-harbor.d70.kemo.labs/quay-ptc/containerdisks/centos-stream:10'
+                                #secretRef: private-ps
+                                certConfigMap: private-registry-ca
+                            storage:
+                              resources:
+                                requests:
+                                  storage: 30Gi
+                    - metadata:
+                        annotations:
+                          cdi.kubevirt.io/storage.bind.immediate.requested: 'true'
+                        labels:
+                          kubevirt.io/dynamic-credentials-support: 'true'
+                        name: fedora40-image-cron
+                      spec:
+                        garbageCollect: Outdated
+                        managedDataSource: fedora
+                        schedule: 30 7/12 * * *
+                        template:
+                          metadata: {}
+                          spec:
+                            source:
+                              registry:
+                                pullMethod: node
+                                url: 'docker://disconn-harbor.d70.kemo.labs/quay-ptc/containerdisks/fedora:40'
+                                #secretRef: private-ps
+                                certConfigMap: private-registry-ca
+                            storage:
+                              resources:
+                                requests:
+                                  storage: 30Gi
+                    # - metadata:
+                    #     annotations:
+                    #       cdi.kubevirt.io/storage.bind.immediate.requested: 'true'
+                    #     labels:
+                    #       kubevirt.io/dynamic-credentials-support: 'true'
+                    #     name: ubuntu2404-image-cron
+                    #   spec:
+                    #     garbageCollect: Outdated
+                    #     managedDataSource: ubuntu2404
+                    #     schedule: 30 7/12 * * *
+                    #     template:
+                    #       metadata: {}
+                    #       spec:
+                    #         source:
+                    #           registry:
+                    #             pullMethod: node
+                    #             url: 'docker://disconn-harbor.d70.kemo.labs/quay-ptc/containerdisks/ubuntu:24.04'
+                    #             #secretRef: private-ps
+                    #             certConfigMap: private-registry-ca
+                    #         storage:
+                    #           resources:
+                    #             requests:
+                    #               storage: 30Gi
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: truenas-nfs-csi-sp
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cdi.kubevirt.io/v1beta1
+                kind: StorageProfile
+                metadata:
+                  name: truenas-nfs-csi
+                spec:
+                  claimPropertySets:
+                    - accessModes:
+                        - ReadWriteMany
+                        - ReadWriteOnce
+                      volumeMode:
+                        Filesystem

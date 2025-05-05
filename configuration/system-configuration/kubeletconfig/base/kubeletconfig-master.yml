@@ -1,0 +1,25 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: KubeletConfig
+metadata:
+  name: master-set-kubeletconfig
+spec:
+  autoSizingReserved: true
+  kubeletConfig:
+    podsPerCore: 0
+    maxPods: 1000
+    containerLogMaxSize: 5Mi
+    cpuManagerPolicy: static
+    cpuManagerReconcilePeriod: 15s
+    #eventRecordQPS: 1000
+    #kubeAPIQPS: 1000
+    #kubeAPIBurst: 1000
+    #systemReserved:
+    #  cpu: 20000m
+    #  memory: 16Gi
+    #kubeReserved:
+    #  cpu: 20000m
+    #  memory: 16Gi
+
+  machineConfigPoolSelector:
+    matchLabels:
+      pools.operator.machineconfiguration.openshift.io/master: ""

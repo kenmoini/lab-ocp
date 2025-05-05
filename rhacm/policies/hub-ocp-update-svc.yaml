@@ -1,0 +1,66 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: hub-ocp-update-svc
+  annotations:
+    policy.open-cluster-management.io/standards: NIST 800-53, NIST-CSF
+    policy.open-cluster-management.io/categories: CM Configuration Management, PR.IP Information Protection Processes and Procedures
+    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration, PR.IP-1 Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1beta1
+        kind: OperatorPolicy
+        metadata:
+          name: install-operator
+        spec:
+          remediationAction: enforce
+          severity: critical
+          complianceType: musthave
+          subscription:
+            name: cincinnati-operator
+            namespace: openshift-update-service
+            channel: v1
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+          upgradeApproval: Automatic
+          #versions:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: deploy-update-svc
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: updateservice.operator.openshift.io/v1
+                kind: UpdateService
+                metadata:
+                  name: kemo-labs
+                  namespace: openshift-update-service
+                spec:
+                  graphDataImage: 'kemo-labs.jfrog.lab.kemo.network/ocp/update-graph:latest'
+                  releases: quay-ptc.jfrog.lab.kemo.network/openshift-release-dev/ocp-release
+                  replicas: 1
+
+# skopeo inspect docker://disconn-harbor.d70.kemo.labs/quay-ptc/openshift-release-dev/ocp-release:4.16.20-x86_64 | jq -r '.RepoTags[]| (select(test("^sha256")|not)) | (select(test("^4.9")|not)) | (select(test("^4.8")|not)) | (select(test("^4.7")|not)) | (select(test("^4.6")|not)) | (select(test("^4.5")|not)) | (select(test("^4.4")|not)) | (select(test("^4.3")|not)) | (select(test("^4.2")|not)) | (select(test("nightly")|not)) | (select(test("ppc64le")|not)) | (select(test("aarch64")|not)) | (select(test("s390x")|not)) | (select(test("-rc")|not)) | (select(test("-ec")|not)) | (select(test("assembly")|not)) | (select(test("^4.0")|not)) | (select(test("^4.11")|not)) | (select(test("^4.12")|not)) | (select(test("^4.13")|not)) | (select(test("^4.10")|not)) | (select(test("^4.1\\.")|not))'
+
+# Do this in separate steps to avoid pulling and removing the same image layers
+#podman rmi disconn-harbor.d70.kemo.labs/quay-ptc/openshift-release-dev/ocp-release:$tag
+
+    podman pull quay-ptc.jfrog.lab.kemo.network/openshift-release-dev/ocp-release:$tag
+  podman pull disconn-harbor.d70.kemo.labs/quay-ptc/openshift-release-dev/ocp-release:$tag
+while read -r tag; do
+  podman pull disconn-harbor.d70.kemo.labs/quay-ptc/openshift-release-dev/ocp-release:$tag
+  podman tag disconn-harbor.d70.kemo.labs/quay-ptc/openshift-release-dev/ocp-release:$tag disconn-harbor.d70.kemo.labs/library/ocp-release:$tag
+  podman push disconn-harbor.d70.kemo.labs/library/ocp-release:$tag
+done <<< $(cat 4.16.20-x86_64 | jq -r '.RepoTags[]| (select(test("^sha256")|not)) | (select(test("^4.9")|not)) | (select(test("^4.8")|not)) | (select(test("^4.7")|not)) | (select(test("^4.6")|not)) | (select(test("^4.5")|not)) | (select(test("^4.4")|not)) | (select(test("^4.3")|not)) | (select(test("^4.2")|not)) | (select(test("nightly")|not)) | (select(test("ppc64le")|not)) | (select(test("aarch64")|not)) | (select(test("s390x")|not)) | (select(test("-rc")|not)) | (select(test("-ec")|not)) | (select(test("assembly")|not)) | (select(test("^4.0")|not)) | (select(test("^4.11")|not)) | (select(test("^4.12")|not)) | (select(test("^4.13")|not)) | (select(test("^4.10")|not)) | (select(test("^4.1\\.")|not))')
+done <<< $(cat 4.16.20-x86_64 | jq -r '.RepoTags[]| (select(test("nightly")))')
+while read -r tag; do
+    podman rmi quay-ptc.jfrog.lab.kemo.network/openshift-release-dev/ocp-release:$tag
+done <<< $(cat 4.16.20-x86_64 | jq -r '.RepoTags[]| (select(test("^sha256")|not)) | (select(test("^4.9")|not)) | (select(test("^4.8")|not)) | (select(test("^4.7")|not)) | (select(test("^4.6")|not)) | (select(test("^4.5")|not)) | (select(test("^4.4")|not)) | (select(test("^4.3")|not)) | (select(test("^4.2")|not)) | (select(test("nightly")|not)) | (select(test("ppc64le")|not)) | (select(test("aarch64")|not)) | (select(test("s390x")|not)) | (select(test("-rc")|not)) | (select(test("-ec")|not)) | (select(test("assembly")|not)) | (select(test("^4.0")|not)) | (select(test("^4.11")|not)) | (select(test("^4.12")|not)) | (select(test("^4.13")|not)) | (select(test("^4.10")|not)) | (select(test("^4.1\\.")|not))')

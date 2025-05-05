@@ -1,0 +1,30 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: ovs-bond0
+spec:
+  desiredState:
+    interfaces:
+      - name: ovs-bond0
+        description: A dedicated OVS bridge with bond0 as a port allowing all VLANs and untagged traffic
+        type: ovs-bridge
+        state: up
+        bridge:
+          options:
+            stp: false
+          port:
+            - name: bond0
+    ovn:
+      bridge-mappings:
+        # Untagged/Access Mapper
+        - localnet: ovs-bond0-access
+          bridge: ovs-bond0
+          state: present
+        # Mapper per VLAN, different localnet
+        # - localnet: d-vlan60
+        #   bridge: ovs-bond0
+        #   state: present
+        # - localnet: iso-vlan86
+        #   bridge: ovs-bond0
+        #   state: present

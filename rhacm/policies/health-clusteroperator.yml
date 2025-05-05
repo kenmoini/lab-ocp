@@ -1,0 +1,54 @@
+# Shamelessly stolen from https://github.com/bry-tam/acm-policy-samples/blob/main/policies/cluster-health/clusteroperator.yml
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-clusteroperator
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations if the managed cluster is not in a healthy state based on ClusterOperator status.
+    policy.open-cluster-management.io/categories: SC System and Communications Protection
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/controls: SC-4 Information In Shared Resources
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cluster-operator-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates-raw: |
+            {{/* ##  Get the current or desired version of the cluster ## */}}
+            {{- $cVer := (lookup "config.openshift.io/v1" "ClusterVersion" "" "version") }}
+            {{- $desiredVersion := (dig "desiredUpdate" "version" ($cVer.status.desired.version) $cVer.spec) }}
+
+            {{/* ##  Exclude operators that are not real ClusterOperators ## */}}
+            {{- $excludedClusterOperators := list "aro"
+                                                  "cert-manager" }}
+
+            {{/* ## Loop through the ClusterOperators to ensure they are healthy ## */}}
+            {{- range $cOp := (lookup "config.openshift.io/v1" "ClusterOperator" "" "").items }}
+              {{- if not (has $cOp.metadata.name $excludedClusterOperators) }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: config.openshift.io/v1
+                kind: ClusterOperator
+                metadata:
+                  name: {{ $cOp.metadata.name }}
+                status:
+                  conditions:
+                    - status: 'False'
+                      type: Progressing
+                    - status: 'False'
+                      type: Degraded
+                    - status: 'True'
+                      type: Available
+                  versions:
+                    - name: operator
+                      version: {{ $desiredVersion }}
+              {{- end }}
+            {{- end }}

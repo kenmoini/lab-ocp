@@ -1,0 +1,44 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: hcp-bmh-acm-infra-creds
+  annotations:
+    policy.open-cluster-management.io/description: Creates ACM Credentials for OpenShift Virtualization HCP
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: hcp-bmh-acm-infra-creds
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates-raw: |
+            {{- range $hc := (lookup "hypershift.openshift.io/v1beta1" "HostedCluster" "" "").items }}
+            {{- range $key, $value := $hc.metadata.labels }}
+            {{- if and (eq $key "hcpType") (eq $value "baremetal") }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                type: Opaque
+                metadata:
+                  labels:
+                    cluster.open-cluster-management.io/credentials: ''
+                    cluster.open-cluster-management.io/type: kubevirt
+                  name: acm-virt-{{ $hc.metadata.name }}
+                  namespace: {{ $hc.metadata.namespace }}
+                data:
+                  externalInfraNamespace: {{ "hcp-infra" | base64enc }}
+                  kubeconfig: '{{ fromSecret $hc.metadata.namespace (printf "%v%v" $hc.metadata.name  "-admin-kubeconfig") "kubeconfig" }}'
+                  pullSecret: '{{ fromSecret $hc.metadata.namespace $hc.spec.pullSecret.name ".dockerconfigjson" }}'
+                  ssh-publickey: '{{ fromSecret $hc.metadata.namespace $hc.spec.sshKey.name "id_rsa.pub" }}'
+            {{- end }}
+            {{- end }}
+            {{- end }}

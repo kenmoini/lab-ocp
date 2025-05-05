@@ -1,0 +1,44 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+
+  # Health Signals
+  - failing-ns.yml
+  - health-clusteroperator.yml
+  - health-node.yml
+  - health-clusterversion.yml
+  - health-machineconfigpool.yml
+  - health-mc-addons.yml
+
+  # Global/Common Policies
+  - console-info-header.yaml
+  - openshift-samples-config.yaml
+  - enable-internal-registry.yaml
+  - hcp-bmh-infra-creds.yaml
+
+  # RHACM Hub Policies
+  #- hub-ocp-update-svc.yaml
+
+  # Operator Installation Policies
+  - operators-rhacs.yaml
+  - operators-pipelines.yaml
+  - operators-compliance.yaml
+  - operators-nfd.yaml
+  - operators-nmstate.yaml
+  - operators-nmo.yaml
+  - operators-nvidia-gpu.yaml
+  - operators-oadp.yaml
+  - operators-virtualization.yaml
+
+  # Hosted Control Plane, Bare Metal Policies
+  - hcp-bmh-console.yaml
+
+  # Hosted Control Plane, KubeVirt Policies
+
+  # Operator instances
+  - instance-virtualization.yaml
+  - instance-nfd.yaml
+  - instance-nvidia-gpu.yaml

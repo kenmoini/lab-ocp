@@ -1,0 +1,44 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-nfd
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Node Feature Discovery Operator
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-OD - Operator Deployment
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: nfd-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - openshift-nfd
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: NodeFeatureDiscovery
+                apiVersion: nfd.openshift.io/v1
+                metadata:
+                  name: nfd-instance
+                spec:
+                  workerConfig:
+                    configData: |
+                      core:
+                        sleepInterval: 60s
+                      sources:
+                        pci:
+                          deviceClassWhitelist:
+                            - "0200"
+                            - "03"
+                            - "12"
+                          deviceLabelFields:
+                            - "vendor"

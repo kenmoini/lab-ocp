@@ -1,0 +1,13 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: ovs-bond0-d-vlan70
+spec:
+  desiredState:
+    ovn:
+      bridge-mappings:
+        # Mapper per VLAN, different localnet
+        - localnet: d-vlan70
+          bridge: ovs-bond0
+          state: present

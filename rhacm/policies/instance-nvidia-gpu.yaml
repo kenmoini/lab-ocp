@@ -1,0 +1,110 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-nvidia-gpu
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the NVIDIA GPU Operator Instance
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-OD - Operator Deployment
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: nvidia-gpu-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - nvidia-gpu-operator
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: nvidia.com/v1
+                kind: ClusterPolicy
+                metadata:
+                  name: gpu-cluster-policy
+                spec:
+                  vgpuDeviceManager:
+                    enabled: true
+                  migManager:
+                    enabled: true
+                  operator:
+                    defaultRuntime: crio
+                    initContainer: {}
+                    runtimeClass: nvidia
+                    use_ocp_driver_toolkit: true
+                  dcgm:
+                    enabled: true
+                  gfd:
+                    enabled: true
+                  dcgmExporter:
+                    enabled: true
+                    serviceMonitor:
+                      enabled: true
+                  driver:
+                    certConfig:
+                      name: ''
+                    enabled: true
+                    kernelModuleConfig:
+                      name: ''
+                    kernelModuleType: auto
+                    licensingConfig:
+                      configMapName: ''
+                      nlsEnabled: false
+                    repoConfig:
+                      configMapName: ''
+                    upgradePolicy:
+                      autoUpgrade: true
+                      drain:
+                        deleteEmptyDir: false
+                        enable: false
+                        force: false
+                        timeoutSeconds: 300
+                      maxParallelUpgrades: 1
+                      maxUnavailable: 25%
+                      podDeletion:
+                        deleteEmptyDir: false
+                        force: false
+                        timeoutSeconds: 300
+                      waitForCompletion:
+                        timeoutSeconds: 0
+                    virtualTopology:
+                      config: ''
+                  devicePlugin:
+                    config:
+                      default: ''
+                      name: ''
+                    enabled: true
+                  mig:
+                    strategy: single
+                  sandboxDevicePlugin:
+                    enabled: true
+                  validator:
+                    plugin:
+                      env:
+                        - name: WITH_WORKLOAD
+                          value: 'true'
+                  nodeStatusExporter:
+                    enabled: true
+                  daemonsets:
+                    rollingUpdate:
+                      maxUnavailable: '1'
+                    updateStrategy: RollingUpdate
+                  sandboxWorkloads:
+                    defaultWorkload: container
+                    enabled: false
+                  gds:
+                    enabled: false
+                  vgpuManager:
+                    enabled: false
+                  vfioManager:
+                    enabled: true
+                  toolkit:
+                    enabled: true
+                    installDir: /usr/local/nvidia

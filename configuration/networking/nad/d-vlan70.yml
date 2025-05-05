@@ -1,0 +1,27 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: d-vlan70
+  namespace: default
+  metadata:
+    description: Disconnected VLAN 70
+spec:
+  # cniVersion is required and must be "0.3.1"
+  # type is required and must be "ovn-k8s-cni-overlay"
+  # topology is probably localnet unless you want a network internal to the cluster only with layer2
+  # netAttachDefName is required and must be "$NS/$NAME" of this NAD...yep.
+  # name is required and is the name of the bridge-mapping.localnet!
+  # vlanID is optional
+  # mtu is optional
+  # subnets is the subnets for the IP address space that will be MANAGED BY OPENSHIFT!  If you want to use DHCP, you can omit this.
+  # excludeSubnets is the same thing as subnets, but in inverse with the same terms applied.
+  config: |-
+    {
+      "cniVersion": "0.3.1",
+      "type": "ovn-k8s-cni-overlay",
+      "topology": "localnet",
+      "netAttachDefName": "default/d-vlan70",
+      "name": "d-vlan70",
+      "vlanID": 70
+    }
