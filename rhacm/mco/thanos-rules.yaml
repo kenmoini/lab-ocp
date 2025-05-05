@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: thanos-ruler-custom-rules
+  #namespace: open-cluster-management-observability
+data:
+  custom_rules.yaml: |
+    groups:
+    - name: eda-policy-reports
+      rules:
+      - alert: EDAViolatedPolicyReport
+        annotations:
+          summary: "There is a policy report violation with a {{ $labels.severity }} severity level detected."
+          description: "The policy: {{ $labels.policy }} has a severity of {{ $labels.severity }} on cluster: {{ $labels.cluster }}"
+        expr: sum without (managed_cluster_id) (label_replace((sum without (clusterID) (label_replace((sum(policyreport_info * on (managed_cluster_id) group_left (cluster) label_replace(acm_managed_cluster_labels, "cluster", "$1", "name", "(.*)")) by (cluster, category, clusterID, managed_cluster_id, policy, severity) > 0),"hub_cluster_id", "$1", "clusterID", "(.*)"))),"clusterID", "$1", "managed_cluster_id", "(.*)"))
+        for: 1m
+        labels:
+          severity: "{{ $labels.severity }}"
+          processor: eda
+    - name: watchdog-rules
+      rules:
+      - alert: Watchdog
+        annotations:
+          description: |
+            This is an alert meant to ensure that the entire alerting pipeline is functional.
+            This alert is always firing, therefore it should always be firing in Alertmanager
+            and always fire against a receiver. There are integrations with various notification
+            mechanisms that send a notification when this alert is not firing. For example the
+            "DeadMansSnitch" integration in PagerDuty.
+          summary: An alert that should always be firing to certify that Alertmanager is working properly.
+        expr: vector(1)
+        labels:
+          severity: none
+    - name: node-health
+      rules:
+      - alert: NodeOutOfMemory
+        expr: instance:node_memory_utilisation:ratio * 100 > 0
+        for: 1m
+        labels:
+          instance: "{{ $labels.instance }}"
+          cluster: "{{ $labels.cluster }}"
+          clusterID: "{{ $labels.clusterID }}"
+          severity: warning
+    - name: cluster-health
+      rules:
+      - alert: ClusterMemoryOverestimation
+        annotations:
+          summary: Notify when Memory Overestimation is high
+          description: "The cluster has a a greater than 10% overestimation of memory usage: {{ $value }} overestimation for {{ $labels.cluster }} {{ $labels.clusterID }}."
+        expr: |
+          topk(50, cluster:memory_requested:ratio - ignoring(usage) cluster:memory_utilized:ratio) * on(clusterID, cluster) group_left(memory_requested) count_values without() ("memory_requested", cluster:memory_requested:ratio) * on(clusterID, cluster) group_left(memory_utilized) count_values without() ("memory_utilized", cluster:memory_utilized:ratio) > 0.1
+        for: 5s
+        labels:
+          cluster: "{{ $labels.cluster }}"
+          severity: warning

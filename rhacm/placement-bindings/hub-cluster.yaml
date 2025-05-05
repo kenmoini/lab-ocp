@@ -18,3 +18,8 @@ subjects:
   - name: hcp-bmh-acm-infra-creds
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+
+  # Operators
+  - name: operators-cco
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
