@@ -6,7 +6,7 @@ metadata:
     policy.open-cluster-management.io/description: Installs the OpenShift API for Data Protection Operator
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
-    policy.open-cluster-management.io/controls: OLM-OI - Operator Installation
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
 spec:
   disabled: false
   policy-templates:
