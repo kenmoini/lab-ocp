@@ -7,4 +7,13 @@ metadata:
 spec:
   description: "Cluster health check signals from the ACM Hub via ACM Policies"
   policies:
-    - health-mc-addons
+    - health-mc-addons-foo-test
+    - health-mc-addons-gov-pol-frmwk
+    - health-mc-addons-app-mgr
+    - health-mc-addons-mgsvcact
+    - health-mc-addons-search
+    - health-mc-addons-o11y
+    - health-mc-addons-cluster-proxy
+    - health-mc-addons-policy-cntrlr
+    - health-mc-addons-cert-cntrlr
+    - health-mc-addons-wrk-mgr

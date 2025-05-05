@@ -2,7 +2,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: health-mc-addons
+  name: health-mc-addons-foo-test
   #namespace: open-cluster-management-policies
   annotations:
     policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
@@ -32,6 +32,20 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/foo: unreachable
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-mc-addons-gov-pol-frmwk
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -59,6 +73,20 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-governance-policy-framework: unhealthy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-mc-addons-app-mgr
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -86,6 +114,20 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-application-manager: unhealthy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-mc-addons-mgsvcact
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -113,6 +155,20 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-managed-serviceaccount: unhealthy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-mc-addons-search
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -140,6 +196,20 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-search-collector: unhealthy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-mc-addons-o11y
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -167,6 +237,20 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-observability-controller: unhealthy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-mc-addons-cluster-proxy
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -194,6 +278,20 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-cluster-proxy: unhealthy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-mc-addons-policy-cntrlr
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -221,6 +319,20 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-config-policy-controller: unhealthy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-mc-addons-cert-cntrlr
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -248,6 +360,20 @@ spec:
                 metadata:
                   labels:
                     feature.open-cluster-management.io/addon-cert-policy-controller: unhealthy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-mc-addons-wrk-mgr
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Raises policy violations for every unreachable addon
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy

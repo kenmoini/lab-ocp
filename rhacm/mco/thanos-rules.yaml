@@ -6,6 +6,18 @@ metadata:
   name: thanos-ruler-custom-rules
   namespace: open-cluster-management-observability
 data:
+    # - name: vm-health
+    #   rules:
+    #   - alert: VMStuckStarting
+    #     annotations:
+    #       summary: "There is a VM that has been in a Starting state for more than 5 minutes."
+    #     expr: 
+    #     for: 1m
+    #     labels:
+    #       instance: "{{ $labels.instance }}"
+    #       cluster: "{{ $labels.cluster }}"
+    #       clusterID: "{{ $labels.clusterID }}"
+    #       severity: warning
   custom_rules.yaml: |
     groups:
     - name: eda-policy-reports

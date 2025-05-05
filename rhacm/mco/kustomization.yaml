@@ -9,3 +9,7 @@ resources:
   - mco.yaml
   - thanos-rules.yaml
   - alertmanager-config.yaml
+  - alerts-high-usage.yaml
+  - dash-oadp.yaml
+  - dash-vms-starting.yaml
+  - pod-stuck-alerts.yaml
