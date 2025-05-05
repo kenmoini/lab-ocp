@@ -1,0 +1,46 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: hcp-baremetal
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: hcp-baremetal
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  # Configuration
+  - name: hcp-bmh-console
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: hcp-openshift-samples-config
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: enable-internal-registry
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+  # Operators
+  - name: operators-nfd
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-nmstate
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-nvidia-gpu
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-virtualization
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+  # Operator Deployment
+  - name: instance-nfd
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: instance-nvidia-gpu
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: instance-virtualization
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

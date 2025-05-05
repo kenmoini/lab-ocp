@@ -1,0 +1,50 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: democratic-csi-nfs
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  hcpType: baremetal
+          - list:
+              elements:
+              - appName: democratic-nfs
+                namespace: democratic-csi
+                helmRepoURL: 'https://democratic-csi.github.io/charts/'
+                helmChartName: democratic-csi
+                helmRevision: 0.15.0
+  template:
+    metadata:
+      name: "{{name}}-{{appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+    spec:
+      project: default
+      sources:
+        - chart: '{{helmChartName}}'
+          helm:
+            valueFiles:
+              - "$values/75-gitops/{{name}}/helm-values/{{name}}.yaml"
+          repoURL: '{{helmRepoURL}}'
+          targetRevision: '{{helmRevision}}'
+        - ref: values
+          repoURL: 'https://github.com/kenmoini/ztp-for-you-and-me'
+          targetRevision: main
+      destination:
+        name: "{{name}}"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        retry:
+          limit: 2

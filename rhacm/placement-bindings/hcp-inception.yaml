@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: hcp-inception
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: hcp-inception
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: hcp-openshift-samples-config
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
