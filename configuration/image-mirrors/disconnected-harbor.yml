@@ -1,0 +1,82 @@
+---
+apiVersion: config.openshift.io/v1
+kind: ImageTagMirrorSet
+metadata:
+  name: disconnected-harbor
+spec:
+  imageTagMirrors:
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/quay-ptc/openshift-release-dev/ocp-release
+      source: quay.io/openshift-release-dev/ocp-release
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/quay-ptc/openshift-release-dev/ocp-v4.0-art-dev
+      source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/quay-ptc
+      source: quay.io
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/registry-redhat-io-ptc
+      source: registry.redhat.io
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/registry-connect-redhat-com-ptc
+      source: registry.connect.redhat.com
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/registry-access-redhat-com-ptc
+      source: registry.access.redhat.com
+
+    - source: nvcr.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/nvcr-ptc
+    - source: ghcr.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/ghcr-ptc
+    - source: gcr.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/gcr-ptc
+    - source: docker.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/docker-hub-ptc
+    - source: registry.k8s.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/registry-k8s-io-ptc
+---
+apiVersion: config.openshift.io/v1
+kind: ImageDigestMirrorSet
+metadata:
+  name: disconnected-harbor
+spec:
+  imageDigestMirrors:
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/quay-ptc/openshift-release-dev/ocp-release
+      source: quay.io/openshift-release-dev/ocp-release
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/quay-ptc/openshift-release-dev/ocp-v4.0-art-dev
+      source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/quay-ptc
+      source: quay.io
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/registry-redhat-io-ptc
+      source: registry.redhat.io
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/registry-connect-redhat-com-ptc
+      source: registry.connect.redhat.com
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/registry-access-redhat-com-ptc
+      source: registry.access.redhat.com
+
+    - source: nvcr.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/nvcr-ptc
+    - source: ghcr.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/ghcr-ptc
+    - source: gcr.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/gcr-ptc
+    - source: docker.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/docker-hub-ptc
+    - source: registry.k8s.io
+      mirrors:
+        - disconn-harbor.d70.kemo.labs/registry-k8s-io-ptc
