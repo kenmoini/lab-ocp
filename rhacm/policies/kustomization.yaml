@@ -21,6 +21,7 @@ resources:
   - openshift-samples-config.yaml
   - enable-internal-registry.yaml
   - hcp-bmh-infra-creds.yaml
+  - kyverno-outbound-proxy.yaml
 
   # RHACM Hub Policies
   #- hub-ocp-update-svc.yaml

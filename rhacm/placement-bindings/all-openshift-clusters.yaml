@@ -18,6 +18,9 @@ subjects:
   - name: cluster-info-header
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: kyverno-outbound-proxy
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
 
   # Operator Deployment
   - name: operators-rhacs
