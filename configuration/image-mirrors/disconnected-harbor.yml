@@ -39,6 +39,9 @@ spec:
     - source: registry.k8s.io
       mirrors:
         - disconn-harbor.d70.kemo.labs/registry-k8s-io-ptc
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/reg-kyverno-io-ptc
+      source: reg.kyverno.io
 ---
 apiVersion: config.openshift.io/v1
 kind: ImageDigestMirrorSet
@@ -80,3 +83,6 @@ spec:
     - source: registry.k8s.io
       mirrors:
         - disconn-harbor.d70.kemo.labs/registry-k8s-io-ptc
+    - mirrors:
+        - disconn-harbor.d70.kemo.labs/reg-kyverno-io-ptc
+      source: reg.kyverno.io
