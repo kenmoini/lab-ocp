@@ -176,7 +176,7 @@ spec:
                       apiVersion: v1
                       kind: ConfigMap
                       name: out-prxy-root-ca
-                      namespace: "{{request.object.metadata.namespace}}"
+                      namespace: '{{ "{{ request.object.metadata.namespace }}" }}'
                       data:
                         kind: ConfigMap
                         metadata:
