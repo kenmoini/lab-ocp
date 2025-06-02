@@ -19,15 +19,15 @@ metadata:
 spec:
   clusterSets:
     - global
-  # predicates:
-  # - requiredClusterSelector:
-  #     labelSelector:
-  #       matchExpressions:
-  #       - key: vendor
-  #         operator: "In"
-  #         values:
-  #         - OpenShift
-  #         - Google
+  predicates:
+  - requiredClusterSelector:
+      labelSelector:
+        matchExpressions:
+        - key: vendor
+          operator: "In"
+          values:
+          - OpenShift
+          - Google
 ---
 apiVersion: apps.open-cluster-management.io/v1beta1
 kind: GitOpsCluster

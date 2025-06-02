@@ -6,7 +6,6 @@ namespace: open-cluster-management-policies
 resources:
   - all-openshift-clusters.yaml
   - global.yaml
-  - global-hub-cluster.yaml
   - hcp-baremetal.yaml
   - hcp-inception.yaml
   - hcp-kubevirt.yaml

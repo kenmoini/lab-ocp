@@ -11,3 +11,4 @@ resources:
   - https://github.com/kenmoini/lab-ocp/rhacm/mco/
   - https://github.com/kenmoini/lab-ocp/rhacm/gitops-integration.yaml
   - https://github.com/kenmoini/lab-ocp/rhacm/gitops/appset-democratic-csi-nfs.yaml
+  - https://github.com/kenmoini/lab-ocp/rhacm/gitops/appset-install-kyverno.yaml

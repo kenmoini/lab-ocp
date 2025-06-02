@@ -12,7 +12,7 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  vendor: OpenShift
+                  kyverno: enabled
           - list:
               elements:
               - appName: kyverno
