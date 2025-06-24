@@ -18,6 +18,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
+          pruneObjectBehavior: DeleteIfCreated
           namespaceSelector:
             include:
               - cluster-info-header
