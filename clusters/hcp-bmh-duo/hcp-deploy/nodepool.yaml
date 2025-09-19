@@ -1,0 +1,31 @@
+---
+apiVersion: hypershift.openshift.io/v1beta1
+kind: NodePool
+metadata:
+  name: 'nodepool-hcp-bmh-duo'
+  namespace: 'hcp-bmh'
+spec:
+  clusterName: 'hcp-bmh-duo'
+  replicas: 2
+  release:
+    # If connected to the internet, or with ITMS
+    image: quay.io/openshift-release-dev/ocp-release:4.17.11-x86_64
+    # If disconnected from the internet, mirror/proxy registry used
+    #image: quay-ptc.jfrog.lab.kemo.network/openshift-release-dev/ocp-release:4.17.12-x86_64
+  platform:
+    type: Agent
+    agent:
+      agentLabelSelector:
+        matchLabels:
+          'infraenvs.agent-install.openshift.io': 'hcp-bmh'
+          #'agentclusterinstalls.extensions.hive.openshift.io/location': loe-rdu
+          #tenant-id: duo
+  config:
+    - name: 'config-imagemirrors'
+    - name: 'img-tag-override'
+    - name: '999-chronyd-config'
+  management:
+    autoRepair: false
+    upgradeType: InPlace
+  nodeLabels:
+    cpumanager: enabled

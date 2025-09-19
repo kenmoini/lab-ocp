@@ -1,0 +1,23 @@
+---
+kind: L2Advertisement
+apiVersion: metallb.io/v1beta1
+metadata:
+  name: hcp-bmh-duo-pools
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - v70-hcp-bmh-duo-api
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: v70-hcp-bmh-duo-api
+  namespace: metallb-system
+spec:
+  addresses:
+    - 192.168.70.120/32 # Single IP for the API
+  autoAssign: true
+  serviceAllocation:
+    priority: 50
+    namespaces:
+      - hcp-bmh-hcp-bmh-duo

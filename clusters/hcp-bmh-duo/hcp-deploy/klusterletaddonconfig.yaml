@@ -1,0 +1,21 @@
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: 'hcp-bmh-duo'
+  namespace: 'hcp-bmh'
+spec:
+  clusterName: 'hcp-bmh-duo'
+  clusterNamespace: 'hcp-bmh-duo'
+  clusterLabels:
+    cloud: BareMetal
+    vendor: OpenShift
+    hcpType: baremetal
+  applicationManager:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  certPolicyController:
+    enabled: true

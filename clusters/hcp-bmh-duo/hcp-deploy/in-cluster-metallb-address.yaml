@@ -1,0 +1,23 @@
+---
+kind: L2Advertisement
+apiVersion: metallb.io/v1beta1
+metadata:
+  name: hcp-bmh-duo-ic-pools
+  namespace: metallb
+spec:
+  ipAddressPools:
+    - v70-hcp-bmh-duo-apps
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: v70-hcp-bmh-duo-apps
+  namespace: metallb
+spec:
+  addresses:
+    - 192.168.70.121/32 # Single IP for the App Ingress
+  autoAssign: true
+  serviceAllocation:
+    priority: 50
+    namespaces:
+      - openshift-ingress

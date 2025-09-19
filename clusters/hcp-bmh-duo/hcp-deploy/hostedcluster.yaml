@@ -1,0 +1,114 @@
+# API: 192.168.70.120
+# App Ingress: 192.168.70.121
+---
+apiVersion: hypershift.openshift.io/v1beta1
+kind: HostedCluster
+metadata:
+  name: 'hcp-bmh-duo'
+  namespace: 'hcp-bmh'
+  labels:
+    "cluster.open-cluster-management.io/clusterset": 'default'
+    hcpType: baremetal
+spec:
+  # Either SingleReplica or HighlyAvailable
+  controllerAvailabilityPolicy: SingleReplica
+  infrastructureAvailabilityPolicy: SingleReplica
+
+  # OpenShift Release Image location
+  release:
+    # If connected to the internet, or with ITMS
+    image: quay.io/openshift-release-dev/ocp-release:4.17.11-x86_64
+    # If disconnected from the internet, mirror/proxy registry used
+    #image: quay-ptc.jfrog.lab.kemo.network/openshift-release-dev/ocp-release:4.17.12-x86_64
+
+  # Base DNS domain for the cluster - cluster name is from the name of this object is prepended to this
+  dns:
+    baseDomain: 'd70.lab.kemo.network'
+
+  # Agent/Assisted Service BMH installation method
+  platform:
+    type: Agent
+    agent:
+      agentNamespace: 'hcp-bmh'
+  # infraID is the InfraEnv name
+  infraID: 'hcp-bmh'
+  etcd:
+    managed:
+      storage:
+        persistentVolume:
+          size: 8Gi
+          storageClassName: lvms-evg-immediate
+        type: PersistentVolume
+    managementType: Managed
+
+  # If doing multi-cluster networking, make sure to set these to different ranges between the clusters - the examples already do so
+  networking:
+    clusterNetwork:
+      - cidr: 10.132.0.0/14
+    serviceNetwork:
+      - cidr: 172.31.0.0/16
+    networkType: OVNKubernetes
+
+  # General configuration
+  pullSecret:
+    name: pull-secret
+  sshKey:
+    name: ssh-pub-key
+  olmCatalogPlacement: guest
+  services:
+  - service: APIServer
+    servicePublishingStrategy:
+      type: LoadBalancer
+  - service: OAuthServer
+    servicePublishingStrategy:
+      type: Route
+  - service: OIDC
+    servicePublishingStrategy:
+      type: Route
+  - service: Konnectivity
+    servicePublishingStrategy:
+      type: Route
+  - service: Ignition
+    servicePublishingStrategy:
+      type: Route
+
+
+  # ========================================================================================
+  # Additional Trust Bundle Configuration
+  # ========================================================================================
+  # .spec.additionalTrustBundle applies extra root CAs to the HCP nodes and cluster services
+  additionalTrustBundle:
+    name: user-ca-bundle
+  # .spec.configuration.image.additionalTrustedCA applies trusted Roots for image registries
+  configuration:
+    image:
+      additionalTrustedCA:
+        name: user-ca-bundle
+
+    # ======================================================================================
+    # Outbound Proxy Configuration
+    # ======================================================================================
+    proxy:
+      httpProxy: http://proxy.kemo.labs:3129
+      httpsProxy: http://proxy.kemo.labs:3129
+      noProxy: '.kemo.labs,.kemo.network,.local,.svc,localhost,127.0.0.1,192.168.0.0/16,172.16.0.0/12,10.0.0.0/8'
+
+  # ========================================================================================
+  # Disconnected/Private Registry Configuration
+  # ========================================================================================
+  imageContentSources:
+  - source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+    mirrors:
+      - quay-ptc.jfrog.lab.kemo.network/openshift-release-dev/ocp-v4.0-art-dev
+  - source: quay.io/openshift-release-dev/ocp-release
+    mirrors:
+      - quay-ptc.jfrog.lab.kemo.network/openshift-release-dev/ocp-release
+  - source: quay.io
+    mirrors:
+      - quay-ptc.jfrog.lab.kemo.network
+  - source: registry.redhat.io
+    mirrors:
+      - registry-redhat-ptc.jfrog.lab.kemo.network
+  - source: registry.connect.redhat.com
+    mirrors:
+      - registry-connect-redhat-ptc.jfrog.lab.kemo.network
