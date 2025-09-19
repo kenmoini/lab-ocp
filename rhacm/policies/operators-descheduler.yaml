@@ -47,6 +47,8 @@ spec:
                   namespace: openshift-kube-descheduler-operator
                 spec:
                   upgradeStrategy: Default
+                  targetNamespaces:
+                    - openshift-kube-descheduler-operator
           pruneObjectBehavior: DeleteIfCreated
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
