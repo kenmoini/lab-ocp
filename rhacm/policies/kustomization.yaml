@@ -53,9 +53,10 @@ resources:
   # Hosted Control Plane, KubeVirt Policies
 
   # Operator instances
-  - instance-virtualization.yaml
+  - instance-eso.yaml
+  - instance-lso.yaml
+  - instance-metallb.yaml
+  - instance-mtv.yaml
   - instance-nfd.yaml
   - instance-nvidia-gpu.yaml
-  - instance-eso.yaml
-  - instance-mtv.yaml
-  - instance-metallb.yaml
+  - instance-virtualization.yaml
