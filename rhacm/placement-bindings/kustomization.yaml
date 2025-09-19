@@ -12,3 +12,5 @@ resources:
   - hub-cluster.yaml
 
   - enabled-eso.yaml
+  - nvidia-gpu.yaml
+  - virtualization.yaml
