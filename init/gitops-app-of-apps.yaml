@@ -12,7 +12,7 @@ spec:
       targetRevision: HEAD
       path: clusters/bootstrap/
       kustomize: {}
-  project: local-cluster
+  project: default
   syncPolicy:
     automated:
       prune: false
