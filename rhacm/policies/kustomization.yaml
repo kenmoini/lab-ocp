@@ -41,6 +41,7 @@ resources:
   - operators-nhc.yaml
   - operators-nvidia-gpu.yaml
   - operators-oadp.yaml
+  - operators-odf.yaml
   - operators-pipelines.yaml
   - operators-rhacs.yaml
   - operators-snr.yaml
