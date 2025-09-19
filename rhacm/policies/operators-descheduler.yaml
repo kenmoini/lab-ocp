@@ -52,7 +52,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: far-subscription
+          name: descheduler-subscription
         spec:
           remediationAction: enforce
           severity: high
