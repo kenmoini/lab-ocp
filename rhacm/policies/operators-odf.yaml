@@ -50,7 +50,7 @@ spec:
                 spec:
                   upgradeStrategy: Default
                   targetNamespaces:
-                    - openshift-local-storage
+                    - openshift-storage
           pruneObjectBehavior: DeleteIfCreated
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
