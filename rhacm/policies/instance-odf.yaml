@@ -36,19 +36,19 @@ spec:
                 spec:
                   storageDeviceSets:
                     - config: {}
-                      #count: 7
+                      count: 7
                       dataPVCTemplate:
                         metadata: {}
                         spec:
                           accessModes:
                             - ReadWriteOnce
-                          # resources:
-                          #   requests:
-                          #     storage: '1'
-                          storageClassName: local-lso
+                          resources:
+                            requests:
+                              storage: '1'
+                          storageClassName: lso-odf
                           volumeMode: Block
                         status: {}
-                      name: ocs-deviceset-local-lso
+                      name: ocs-deviceset-lso-odf
                       placement: {}
                       preparePlacement: {}
                       replica: 1
