@@ -1,0 +1,65 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-lso
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Local Storage Operator and configures a LocalVolume for use with OpenShift Data Foundation
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: lso-bmh-config
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: local.storage.openshift.io/v1alpha1
+                kind: LocalVolumeDiscovery
+                metadata:
+                  name: auto-discover-devices
+                  namespace: openshift-local-storage
+                spec:
+                  nodeSelector:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                          - key: cluster.ocs.openshift.io/openshift-storage
+                            operator: In
+                            values:
+                              - ''
+                  tolerations:
+                    - effect: NoSchedule
+                      key: node.ocs.openshift.io/storage
+                      operator: Equal
+                      value: 'true'
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: local.storage.openshift.io/v1alpha1
+                kind: LocalVolumeSet
+                metadata:
+                  name: autodetect-local
+                spec:
+                  nodeSelector:
+                    nodeSelectorTerms:
+                      - matchExpressions:
+                          - key: cluster.ocs.openshift.io/openshift-storage
+                            operator: In
+                            values:
+                              - ''
+                  storageClassName: local-lso
+                  volumeMode: Filesystem
+                  fsType: xfs
+                  deviceInclusionSpec:
+                    deviceTypes:
+                      - disk
+                      - part
+                    minSize: 10G

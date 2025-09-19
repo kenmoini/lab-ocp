@@ -1,0 +1,36 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-metallb
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the MetalLB Operator
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: metallb-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - metallb-system
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: metallb.io/v1beta1
+                kind: MetalLB
+                metadata:
+                  name: metallb
+                  namespace: metallb-system
+                  annotations:
+                    argocd.argoproj.io/sync-wave: "10"
+                spec:
+                  bgpBackend: frr

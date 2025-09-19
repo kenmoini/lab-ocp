@@ -2,9 +2,9 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: operators-nmo
+  name: operators-descheduler
   annotations:
-    policy.open-cluster-management.io/description: Installs the Node Maintenance Operator
+    policy.open-cluster-management.io/description: Installs the Kube Descheduler Operator
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
     policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
@@ -15,7 +15,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: nmo-namespace
+          name: descheduler-namespace
         spec:
           remediationAction: enforce
           severity: critical
@@ -28,12 +28,12 @@ spec:
                 apiVersion: v1
                 kind: Namespace
                 metadata:
-                  name: openshift-workload-availability
+                  name: openshift-kube-descheduler-operator
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: nmo-group
+          name: descheduler-group
         spec:
           remediationAction: enforce
           severity: high
@@ -43,8 +43,8 @@ spec:
                 apiVersion: operators.coreos.com/v1
                 kind: OperatorGroup
                 metadata:
-                  name: openshift-workload-availability
-                  namespace: openshift-workload-availability
+                  name: cluster-kube-descheduler-operator
+                  namespace: openshift-kube-descheduler-operator
                 spec:
                   upgradeStrategy: Default
           pruneObjectBehavior: DeleteIfCreated
@@ -52,7 +52,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: nmo-subscription
+          name: far-subscription
         spec:
           remediationAction: enforce
           severity: high
@@ -62,11 +62,11 @@ spec:
                 apiVersion: operators.coreos.com/v1alpha1
                 kind: Subscription
                 metadata:
-                  name: node-maintenance-operator
-                  namespace: openshift-workload-availability
+                  name: cluster-kube-descheduler-operator
+                  namespace: openshift-kube-descheduler-operator
                 spec:
                   channel: stable
                   installPlanApproval: Automatic
-                  name: node-maintenance-operator
+                  name: cluster-kube-descheduler-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace

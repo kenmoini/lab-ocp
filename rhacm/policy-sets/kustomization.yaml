@@ -6,5 +6,9 @@ namespace: open-cluster-management-policies
 resources:
   - health-checks.yaml
   - hub-health-checks.yaml
+  - operator-bundle-nvidia.yaml
+  - operator-bundle-odf.yaml
   - operator-bundle-virt.yaml
   - instance-bundle-virt.yaml
+  - instance-bundle-nvidia.yaml
+  - instance-bundle-odf-lso-bmh.yaml

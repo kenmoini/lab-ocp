@@ -8,5 +8,4 @@ spec:
   description: "Set of policies that will install and configure basic OpenShift Virtualization components"
   policies:
     - instance-nfd
-    - instance-nvidia-gpu
     - instance-virtualization

@@ -12,7 +12,7 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  hcpType: baremetal
+                  appset/democratic-csi: enabled
           - list:
               elements:
               - appName: democratic-nfs
@@ -31,11 +31,11 @@ spec:
         - chart: '{{helmChartName}}'
           helm:
             valueFiles:
-              - "$values/75-gitops/{{name}}/helm-values/{{name}}.yaml"
+              - "$values/lab-ocp/clusters/{{name}}/helm-values/democratic-csi-nfs.yaml"
           repoURL: '{{helmRepoURL}}'
           targetRevision: '{{helmRevision}}'
         - ref: values
-          repoURL: 'https://github.com/kenmoini/ztp-for-you-and-me'
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
       destination:
         name: "{{name}}"

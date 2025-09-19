@@ -1,0 +1,20 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: virtualization
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: virtualization
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  # Operators
+  - name: operator-bundle-virt
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+
+  # Operator Deployment
+  - name: instance-bundle-virt
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet

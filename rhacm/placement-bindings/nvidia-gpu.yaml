@@ -1,0 +1,20 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: nvidia-gpu
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: nvidia-gpu
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  # Operators
+  - name: operator-bundle-nvidia-gpu
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+
+  # Operator Deployment
+  - name: instance-bundle-nvidia-gpu
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet

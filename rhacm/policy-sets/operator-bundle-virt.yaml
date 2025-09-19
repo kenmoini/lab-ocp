@@ -7,9 +7,13 @@ metadata:
 spec:
   description: "Set of policies that will deploy basic OpenShift Virtualization components"
   policies:
+    - operators-descheduler
+    - operators-far
     - operators-nmo
-    - operators-nfd
+    - operators-node-healthcheck
     - operators-oadp
     - operators-nmstate
-    - operators-nvidia-gpu
+    - operators-nfd
+    #- operators-nvidia-gpu
+    - operators-snr
     - operators-virtualization

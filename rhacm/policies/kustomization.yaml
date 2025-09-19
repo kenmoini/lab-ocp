@@ -27,17 +27,25 @@ resources:
   #- hub-ocp-update-svc.yaml
 
   # Operator Installation Policies
-  - operators-rhacs.yaml
-  - operators-pipelines.yaml
-  - operators-compliance.yaml
   - operators-cco.yaml
+  - operators-compliance.yaml
+  - operators-descheduler.yaml
   - operators-eso.yaml
+  - operators-far.yaml
+  - operators-lso.yaml
+  - operators-metallb.yaml
+  - operators-mtv.yaml
   - operators-nfd.yaml
   - operators-nmstate.yaml
   - operators-nmo.yaml
+  - operators-nhc.yaml
   - operators-nvidia-gpu.yaml
   - operators-oadp.yaml
+  - operators-pipelines.yaml
+  - operators-rhacs.yaml
+  - operators-snr.yaml
   - operators-virtualization.yaml
+  - operators-web-terminal.yaml
 
   # Hosted Control Plane, Bare Metal Policies
   - hcp-bmh-console.yaml
@@ -49,3 +57,5 @@ resources:
   - instance-nfd.yaml
   - instance-nvidia-gpu.yaml
   - instance-eso.yaml
+  - instance-mtv.yaml
+  - instance-metallb.yaml

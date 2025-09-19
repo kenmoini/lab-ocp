@@ -1,10 +1,9 @@
----
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: operators-nmo
+  name: operators-metallb
   annotations:
-    policy.open-cluster-management.io/description: Installs the Node Maintenance Operator
+    policy.open-cluster-management.io/description: Installs the MetalLB Operator
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
     policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
@@ -15,25 +14,25 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: nmo-namespace
+          name: metallb-namespace
         spec:
           remediationAction: enforce
           severity: critical
           namespaceSelector:
             include:
-              - openshift-workload-availability
+              - metallb-system
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
                 kind: Namespace
                 metadata:
-                  name: openshift-workload-availability
+                  name: metallb-system
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: nmo-group
+          name: metallb-operator-group
         spec:
           remediationAction: enforce
           severity: high
@@ -43,8 +42,8 @@ spec:
                 apiVersion: operators.coreos.com/v1
                 kind: OperatorGroup
                 metadata:
-                  name: openshift-workload-availability
-                  namespace: openshift-workload-availability
+                  name: metallb-group
+                  namespace: metallb-system
                 spec:
                   upgradeStrategy: Default
           pruneObjectBehavior: DeleteIfCreated
@@ -52,7 +51,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: nmo-subscription
+          name: metallb-subscription
         spec:
           remediationAction: enforce
           severity: high
@@ -62,11 +61,11 @@ spec:
                 apiVersion: operators.coreos.com/v1alpha1
                 kind: Subscription
                 metadata:
-                  name: node-maintenance-operator
-                  namespace: openshift-workload-availability
+                  name: metallb-operator
+                  namespace: metallb-system
                 spec:
                   channel: stable
                   installPlanApproval: Automatic
-                  name: node-maintenance-operator
+                  name: metallb-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace

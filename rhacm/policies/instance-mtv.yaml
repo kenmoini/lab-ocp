@@ -1,0 +1,36 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-mtv
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Migration Toolkit for Virtualization Operator
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: mtv-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - openshift-mtv
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: forklift.konveyor.io/v1beta1
+                kind: ForkliftController
+                metadata:
+                  name: forklift-controller
+                spec:
+                  feature_ui_plugin: 'true'
+                  feature_validation: 'true'
+                  feature_must_gather_api: 'true'
+                  feature_volume_populator: 'true'
