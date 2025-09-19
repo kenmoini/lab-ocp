@@ -1,0 +1,77 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-descheduler
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Kube Descheduler Operator configured for VMs
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: descheduler-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - openshift-kube-descheduler-operator
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1
+                kind: KubeDescheduler
+                metadata:
+                  name: cluster
+                  namespace: openshift-kube-descheduler-operator
+                spec:
+                  logLevel: Normal
+                  mode: Automatic
+                  operatorLogLevel: Normal
+                  # Set to 2min for faster migration testing
+                  deschedulingIntervalSeconds: 60
+                  profileCustomizations:
+                    # This is important - raises thresholds to reasonable limits
+                    devLowNodeUtilizationThresholds: High
+                    # Also required for VMs
+                    devEnableEvictionsInBackground: true
+                    namespaces:
+                      excluded:
+                        - cpuload
+                        - multicluster-engine
+                        - open-cluster-management
+                        - open-cluster-management-agent
+                        - open-cluster-management-agent-addon
+                        - open-cluster-management-global-set
+                        - open-cluster-management-hub
+                        - open-cluster-management-policies
+                        - dedicated-admin
+                        - default
+                        - cert-manager
+                        - cert-manager-operator
+                        - default-broker
+                        - hive
+                        - kube-node-lease
+                        - local-cluster
+                        - stackrox
+                        - rhacs-operator
+                  observedConfig:
+                    servingInfo:
+                      cipherSuites:
+                        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+                        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+                        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+                        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+                        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+                        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+                      minTLSVersion: VersionTLS12
+                  profiles:
+                    - LongLifecycle
+                  managementState: Managed
+                  unsupportedConfigOverrides: null
