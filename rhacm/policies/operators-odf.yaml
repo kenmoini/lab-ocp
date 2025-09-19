@@ -69,7 +69,7 @@ spec:
                   name: odf-operator
                   namespace: openshift-storage
                 spec:
-                  channel: stable
+                  channel: stable-4.19
                   installPlanApproval: Manual
                   name: odf-operator
                   source: redhat-operators 
