@@ -1,0 +1,18 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: bmh-lso-odf
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: bmh-lso-odf
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  # Operator Deployment
+  - name: operator-bundle-odf
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+  - name: instance-bundle-odf-lso-bmh
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
