@@ -55,7 +55,7 @@ resources:
 
   # Operator instances
   - instance-eso.yaml
-  - instance-lso.yaml
+  #- instance-lso.yaml
   - instance-metallb.yaml
   - instance-mtv.yaml
   - instance-nfd.yaml

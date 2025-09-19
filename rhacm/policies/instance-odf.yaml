@@ -1,0 +1,82 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-odf
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the OpenShift Data Foundation Operator for use on top of Local Storage Operator
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-config
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: ocs.openshift.io/v1
+                kind: StorageCluster
+                metadata:
+                  annotations:
+                    cluster.ocs.openshift.io/local-devices: 'true'
+                    uninstall.ocs.openshift.io/cleanup-policy: delete
+                    uninstall.ocs.openshift.io/mode: graceful
+                  name: ocs-storagecluster
+                  namespace: openshift-storage
+                  finalizers:
+                    - storagecluster.ocs.openshift.io
+                spec:
+                  storageDeviceSets:
+                    - config: {}
+                      #count: 7
+                      dataPVCTemplate:
+                        metadata: {}
+                        spec:
+                          accessModes:
+                            - ReadWriteOnce
+                          # resources:
+                          #   requests:
+                          #     storage: '1'
+                          storageClassName: local-lso
+                          volumeMode: Block
+                        status: {}
+                      name: ocs-deviceset-local-lso
+                      placement: {}
+                      preparePlacement: {}
+                      replica: 1
+                      resources: {}
+                  encryption:
+                    keyRotation:
+                      schedule: '@weekly'
+                    kms: {}
+                  monDataDirHostPath: /var/lib/rook
+                  managedResources:
+                    cephObjectStoreUsers: {}
+                    cephCluster: {}
+                    cephBlockPools:
+                      defaultStorageClass: true
+                      defaultVirtualizationStorageClass: true
+                    cephNonResilientPools: {}
+                    cephObjectStores: {}
+                    cephFilesystems: {}
+                    cephRBDMirror: {}
+                    cephToolbox: {}
+                    cephDashboard: {}
+                    cephConfig: {}
+                  arbiter: {}
+                  network:
+                    connections:
+                      encryption: {}
+                    multiClusterService: {}
+                  nodeTopologies: {}
+                  externalStorage: {}
+                  resourceProfile: lean
+                  flexibleScaling: true

@@ -70,7 +70,7 @@ spec:
                   namespace: openshift-storage
                 spec:
                   channel: stable-4.19
-                  installPlanApproval: Manual
+                  installPlanApproval: Automatic
                   name: odf-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
