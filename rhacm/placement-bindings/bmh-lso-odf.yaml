@@ -13,6 +13,6 @@ subjects:
   - name: operator-bundle-odf
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
-  - name: instance-bundle-odf-lso-bmh
+  - name: instance-bundle-odf
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
