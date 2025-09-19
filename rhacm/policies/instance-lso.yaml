@@ -41,6 +41,15 @@ spec:
                       operator: Equal
                       value: 'true'
 
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: lso-lvs
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: local.storage.openshift.io/v1alpha1
