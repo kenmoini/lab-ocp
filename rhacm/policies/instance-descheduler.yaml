@@ -34,13 +34,19 @@ spec:
                   logLevel: Normal
                   mode: Automatic
                   operatorLogLevel: Normal
-                  # Set to 2min for faster migration testing
-                  deschedulingIntervalSeconds: 60
+                  managementState: Managed
+                  deschedulingIntervalSeconds: 30
+                  profiles:
+                    - DevKubeVirtRelieveAndMigrate
                   profileCustomizations:
+                    devEnableSoftTainter: true
+                    devDeviationThresholds: AsymmetricLow
+                    devActualUtilizationProfile: PrometheusCPUCombined
+                  #profileCustomizations:
                     # This is important - raises thresholds to reasonable limits
-                    devLowNodeUtilizationThresholds: High
+                    #devLowNodeUtilizationThresholds: High
                     # Also required for VMs
-                    devEnableEvictionsInBackground: true
+                    #devEnableEvictionsInBackground: true
                     namespaces:
                       excluded:
                         - cpuload
@@ -61,17 +67,14 @@ spec:
                         - local-cluster
                         - stackrox
                         - rhacs-operator
-                  observedConfig:
-                    servingInfo:
-                      cipherSuites:
-                        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
-                        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-                        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-                        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-                        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
-                        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
-                      minTLSVersion: VersionTLS12
-                  profiles:
-                    - LongLifecycle
-                  managementState: Managed
+                  # observedConfig:
+                  #   servingInfo:
+                  #     cipherSuites:
+                  #       - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+                  #       - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+                  #       - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+                  #       - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+                  #       - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+                  #       - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+                  #     minTLSVersion: VersionTLS12
                   unsupportedConfigOverrides: null

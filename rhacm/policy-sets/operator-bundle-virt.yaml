@@ -10,6 +10,7 @@ spec:
     - operators-descheduler
     - operators-far
     - operators-nmo
+    - operators-mtv
     - operators-node-healthcheck
     - operators-oadp
     - operators-nmstate
