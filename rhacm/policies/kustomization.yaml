@@ -59,5 +59,6 @@ resources:
   - instance-metallb.yaml
   - instance-mtv.yaml
   - instance-nfd.yaml
+  - instance-nmstate.yaml
   - instance-nvidia-gpu.yaml
   - instance-virtualization.yaml

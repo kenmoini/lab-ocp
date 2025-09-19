@@ -1,0 +1,32 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-nmstate
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the NMState Operator
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: nmstate-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - openshift-nmstate
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: nmstate.io/v1
+                kind: NMState
+                metadata:
+                  name: nmstate
+                spec: {}
