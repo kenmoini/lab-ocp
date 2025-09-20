@@ -31,7 +31,7 @@ spec:
         - chart: '{{helmChartName}}'
           helm:
             valueFiles:
-              - "$values/lab-ocp/clusters/{{name}}/helm-values/democratic-csi-nfs.yaml"
+              - "$values/clusters/{{name}}/helm-values/democratic-csi-nfs.yaml"
           repoURL: '{{helmRepoURL}}'
           targetRevision: '{{helmRevision}}'
         - ref: values
