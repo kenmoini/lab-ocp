@@ -8,3 +8,4 @@ spec:
   description: "Set of policies that will deploy basic NVIDIA GPU components"
   policies:
     - operators-nvidia-gpu
+    - operators-nfd

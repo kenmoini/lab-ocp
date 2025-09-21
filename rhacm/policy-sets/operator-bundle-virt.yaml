@@ -9,12 +9,11 @@ spec:
   policies:
     - operators-descheduler
     - operators-far
-    - operators-nmo
     - operators-mtv
+    - operators-nfd
+    - operators-nmo
+    - operators-nmstate
     - operators-node-healthcheck
     - operators-oadp
-    - operators-nmstate
-    - operators-nfd
-    #- operators-nvidia-gpu
     - operators-snr
     - operators-virtualization

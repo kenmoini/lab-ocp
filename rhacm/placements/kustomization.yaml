@@ -13,6 +13,7 @@ resources:
   - hcp-inception.yaml
   - hcp-kubevirt.yaml
   - hub-cluster.yaml
+  - kyverno-policies.yaml
 
   - enabled-eso.yaml
   - nvidia-gpu.yaml

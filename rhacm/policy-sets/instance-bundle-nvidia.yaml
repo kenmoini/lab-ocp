@@ -7,4 +7,5 @@ metadata:
 spec:
   description: "Set of policies that will install and configure basic NVIDIA GPU components"
   policies:
+    - instance-nfd
     - instance-nvidia-gpu

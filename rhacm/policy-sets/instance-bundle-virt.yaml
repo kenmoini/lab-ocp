@@ -11,3 +11,4 @@ spec:
     - instance-nmstate
     - instance-mtv
     - instance-virtualization
+    - instance-descheduler
