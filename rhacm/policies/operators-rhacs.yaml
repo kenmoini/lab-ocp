@@ -27,6 +27,12 @@ spec:
                 kind: Namespace
                 metadata:
                   name: rhacs-operator
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: stackrox
           pruneObjectBehavior: DeleteIfCreated
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1

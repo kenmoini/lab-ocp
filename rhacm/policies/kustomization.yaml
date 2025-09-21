@@ -54,6 +54,8 @@ resources:
   # Hosted Control Plane, KubeVirt Policies
 
   # Operator instances
+  - instance-acs-central.yaml
+  - instance-acs-secured-cluster.yaml
   - instance-descheduler.yaml
   - instance-eso.yaml
   #- instance-lso.yaml
