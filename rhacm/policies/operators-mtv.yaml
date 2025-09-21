@@ -28,6 +28,8 @@ spec:
                 kind: Namespace
                 metadata:
                   name: openshift-mtv
+                  labels:
+                    openshift.io/cluster-monitoring: "true"
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -46,6 +48,8 @@ spec:
                   namespace: openshift-mtv
                 spec:
                   upgradeStrategy: Default
+                  targetNamespaces:
+                    - openshift-mtv
           pruneObjectBehavior: DeleteIfCreated
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1

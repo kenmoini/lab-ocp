@@ -28,6 +28,8 @@ spec:
                 kind: Namespace
                 metadata:
                   name: openshift-nmstate
+                  labels:
+                    openshift.io/cluster-monitoring: "true"
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
