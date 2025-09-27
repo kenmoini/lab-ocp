@@ -1,0 +1,96 @@
+apiVersion: operator.openshift.io/v1
+kind: MachineConfiguration
+metadata:
+  name: cluster
+spec:
+  nodeDisruptionPolicy:
+    files:
+      - path: /etc/chrony.conf
+        actions:
+          - restart:
+              serviceName: chronyd.service
+            type: Restart
+      - path: /etc/multipath.conf
+        actions:
+          - restart:
+              serviceName: multipathd.service
+            type: Restart
+      - path: /etc/iscsi/iscsid.conf
+        actions:
+          - restart:
+              serviceName: iscsid.service
+            type: Restart
+
+      - path: /etc/systemd/system/custom-coreos-generate-nvme-hostnqn.service
+        actions:
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: custom-coreos-generate-nvme-hostnqn.service
+
+      - path: /etc/systemd/system/custom-coreos-generate-nvme-hostid.service
+        actions:
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: custom-coreos-generate-nvme-hostid.service
+
+      - path: /etc/systemd/system/coreos-reload-udev.service
+        actions:
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: coreos-reload-udev.service
+
+      - path: /etc/modprobe.d
+        actions:
+          - type: Reload
+            reload:
+              serviceName: systemd-modules-load.service
+      # This requires the config helpers SystemD units
+      - path: /etc/udev/rules.d
+        actions:
+          - type: Reload
+            reload:
+              serviceName: coreos-reload-udev.service
+    units:
+      - name: custom-coreos-generate-nvme-hostnqn.service
+        actions:
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: custom-coreos-generate-nvme-hostnqn.service
+      - name: custom-coreos-generate-nvme-hostid.service
+        actions:
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: custom-coreos-generate-nvme-hostid.service
+      - name: coreos-reload-udev.service
+        actions:
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: coreos-reload-udev.service
+      - name: multipathd.service
+        actions:
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: multipathd.service
+      - name: iscsid.service
+        actions:
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: iscsid.service
+      - name: auditd.service
+        actions:
+          - type: Drain
+          - type: Reload
+            reload:
+              serviceName: crio.service
+          - type: DaemonReload
+          - type: Restart
+            restart:
+              serviceName: crio.service
