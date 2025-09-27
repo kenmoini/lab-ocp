@@ -27,6 +27,7 @@ resources:
   #- hub-ocp-update-svc.yaml
 
   # Operator Installation Policies
+  - operators-aap.yaml
   - operators-cco.yaml
   - operators-compliance.yaml
   - operators-descheduler.yaml

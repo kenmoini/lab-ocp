@@ -25,6 +25,16 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
+                # This lets us bootstrap the SecuredCluster instance policy allowing secrets to be created
+                apiVersion: cluster.open-cluster-management.io/v1beta2
+                kind: ManagedClusterSetBinding
+                metadata:
+                  name: global
+                  namespace: stackrox
+                spec:
+                  clusterSet: global
+            - complianceType: musthave
+              objectDefinition:
                 apiVersion: platform.stackrox.io/v1alpha1
                 kind: Central
                 metadata:

@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - default-o-c-m-p.yaml
   - global-o-c-m-p.yaml
+  - global-stackrox.yaml

@@ -2,9 +2,9 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: operators-cco
+  name: operators-aap
   annotations:
-    policy.open-cluster-management.io/description: Installs the Cluster Observability Operator
+    policy.open-cluster-management.io/description: Installs the Ansible Automation Platform Operator
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
     policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
@@ -15,27 +15,27 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: cco-namespace
+          name: aap-namespace
         spec:
           remediationAction: enforce
           severity: critical
           namespaceSelector:
             include:
-              - openshift-cluster-observability-operator
+              - aap
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
                 kind: Namespace
                 metadata:
-                  name: openshift-cluster-observability-operator
+                  name: aap
                   labels:
                     openshift.io/cluster-monitoring: 'true'
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: cco-operator-group
+          name: aap-operator-group
         spec:
           remediationAction: enforce
           severity: high
@@ -45,8 +45,8 @@ spec:
                 apiVersion: operators.coreos.com/v1
                 kind: OperatorGroup
                 metadata:
-                  name: cco-group
-                  namespace: openshift-cluster-observability-operator
+                  name: aap-group
+                  namespace: aap
                 spec:
                   upgradeStrategy: Default
           pruneObjectBehavior: DeleteIfCreated
@@ -54,7 +54,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: cco-subscription
+          name: aap-subscription
         spec:
           remediationAction: enforce
           severity: high
@@ -64,11 +64,11 @@ spec:
                 apiVersion: operators.coreos.com/v1alpha1
                 kind: Subscription
                 metadata:
-                  name: cluster-observability-operator
-                  namespace: openshift-cluster-observability-operator
+                  name: ansible-automation-platform-operator
+                  namespace: aap
                 spec:
-                  channel: stable
+                  channel: stable-2.5-cluster-scoped
                   installPlanApproval: Automatic
-                  name: cluster-observability-operator
+                  name: ansible-automation-platform-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
