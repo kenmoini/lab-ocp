@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - default-o-c-m-p.yaml
   - global-o-c-m-p.yaml
-  - global-stackrox.yaml
+  # the stackrox namespace must exist for the stackrox policies to work
+  #- global-stackrox.yaml
