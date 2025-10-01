@@ -5,7 +5,8 @@ RUN dnf install -y cloud-init qemu-guest-agent \
   nano curl wget git bash-completion bind-utils jq firewalld \
   yum-utils tar podman cockpit cockpit-podman cockpit-storaged \
   && dnf clean all \
-  && rm -rf /var/cache/dnf
+  && rm -rf /var/cache/dnf \
+  && rm -rf /var/log/dnf*
 
 RUN systemctl enable firewalld \
   && systemctl enable cockpit.socket \
