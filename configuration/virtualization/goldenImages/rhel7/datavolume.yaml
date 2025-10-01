@@ -1,0 +1,20 @@
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: rhel7
+  annotations:
+    iconClass: icon-rhel
+  labels:
+    #instancetype.kubevirt.io/default-instancetype: u1.medium
+    instancetype.kubevirt.io/default-preference: rhel7
+  namespace: openshift-virtualization-os-images
+spec:
+  source:
+    registry:
+      certConfigMap: vm-src-certs
+      url: 'docker://disconn-harbor.d70.kemo.labs/library/containerdisks/rhel7-base-image:latest'
+  storage:
+    resources:
+      requests:
+        storage: 10Gi

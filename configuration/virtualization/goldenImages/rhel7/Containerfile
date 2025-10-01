@@ -1,0 +1,14 @@
+# PREREQUISITE: You must first download the RHEL 7.9 qcow2 image from the Red Hat Customer Portal and place it in this directory as RHEL7.9_x86.qcow2
+# TARGET_REG="registry.example.com"
+# TARGET_PATH="containerdisks/rhel7-base-image"
+# podman build -t rhel7-golden-image -f Containerfile .
+# podman tag rhel7-golden-image $TARGET_REG/$TARGET_PATH:latest
+# podman tag rhel7-golden-image $TARGET_REG/$TARGET_PATH:7.9
+# podman push $TARGET_REG/$TARGET_PATH:latest
+# podman push $TARGET_REG/$TARGET_PATH:7.9
+FROM registry.access.redhat.com/ubi8/ubi:latest AS builder
+ADD --chown=107:107 RHEL7.9_x86.qcow2 /disk/
+RUN chmod 0440 /disk/*
+
+FROM scratch
+COPY --from=builder /disk/* /disk/

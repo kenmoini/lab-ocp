@@ -1,0 +1,20 @@
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: win2k16
+  annotations:
+    iconClass: icon-windows
+  labels:
+    #instancetype.kubevirt.io/default-instancetype: u1.medium
+    instancetype.kubevirt.io/default-preference: windows
+  namespace: openshift-virtualization-os-images
+spec:
+  source:
+    http:
+      certConfigMap: vm-src-certs
+      url: 'https://dropbox.kemo.labs/WindowsServer2016_x64_en-us.iso'
+  storage:
+    resources:
+      requests:
+        storage: 8Gi
