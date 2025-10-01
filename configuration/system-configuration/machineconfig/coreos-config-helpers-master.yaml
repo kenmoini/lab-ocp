@@ -11,7 +11,9 @@ spec:
       version: 3.2.0
     systemd:
       units:
-        - contents: |
+        - name: coreos-reload-udev.service
+          enabled: false
+          contents: |
             [Unit]
             Description=A oneshot service that reloads udev rules and triggers them
             [Service]
@@ -19,10 +21,10 @@ spec:
             RemainAfterExit=yes
             ExecStart=udevadm control --reload-rules
             ExecStart=udevadm trigger
-          enabled: false
-          name: coreos-reload-udev.service
 
-        - contents: |
+        - name: custom-coreos-generate-nvme-hostnqn.service
+          enabled: true
+          contents: |
             [Unit]
             Description=Custom CoreOS Generate NVMe Hostnqn
             [Service]
@@ -31,9 +33,10 @@ spec:
             RemainAfterExit=yes
             [Install]
             WantedBy=multi-user.target
+          
+        - name: custom-coreos-generate-nvme-hostid.service
           enabled: true
-          name: custom-coreos-generate-nvme-hostnqn.service
-        - contents: |
+          contents: |
             [Unit]
             Description=Custom CoreOS Generate NVMe Hostid
             ConditionPathExists=!/etc/nvme/sentinel-hostid
@@ -43,5 +46,3 @@ spec:
             RemainAfterExit=yes
             [Install]
             WantedBy=multi-user.target
-          enabled: true
-          name: custom-coreos-generate-nvme-hostid.service
