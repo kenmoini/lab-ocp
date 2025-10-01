@@ -1,0 +1,26 @@
+# Shamelessly stolen from https://github.com/0xFelix/cloudland2025-demo/blob/main/golden-image/bootc/Containerfile.bootc
+FROM quay.io/fedora/fedora-bootc:42
+
+RUN dnf install -y cloud-init qemu-guest-agent \
+  nano curl wget git bash-completion bind-utils jq firewalld \
+  yum-utils tar podman cockpit cockpit-podman cockpit-storaged \
+  && dnf clean all \
+  && rm -rf /var/cache/dnf
+
+RUN systemctl enable firewalld \
+  && systemctl enable cockpit.socket \
+  && systemctl enable podman.socket
+
+# Blacklist kvm for nested virt, this is equired when already running in nested virtualization
+#RUN printf "blacklist kvm\nblacklist kvm_intel\nblacklist kvm_amd\n" > /usr/lib/modprobe.d/kvm.conf
+
+# Enable automatic onlining of hotplug memory
+RUN echo 'kargs = ["memhp_default_state=online"]' > /usr/lib/bootc/kargs.d/10-memhp.toml
+
+# Enable automatic onlining of hotplug cpus
+RUN echo 'SUBSYSTEM=="cpu", ACTION=="add", TEST=="online", ATTR{online}=="0", ATTR{online}="1"' > /usr/lib/udev/rules.d/99-cpu-hotplug.rules
+
+# Regenerate initrd
+RUN set -x; kver=$(cd /usr/lib/modules && echo *); dracut -vf /usr/lib/modules/$kver/initramfs.img $kver
+
+RUN bootc container lint
