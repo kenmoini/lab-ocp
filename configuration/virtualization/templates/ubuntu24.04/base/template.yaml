@@ -1,0 +1,151 @@
+---
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: ubuntu2404-desktop-small
+  namespace: openshift
+  labels:
+    #flavor.template.kubevirt.io/small: 'true'
+    #workload.template.kubevirt.io/desktop: 'true'
+    os.template.kubevirt.io/ubuntu: 'true'
+    os.template.kubevirt.io/ubuntu2404: 'true'
+    template.kubevirt.io/version: v0.31.1
+    template.kubevirt.io/type: vm
+    vm.kubevirt.io/template.namespace: openshift
+    app.kubernetes.io/name: custom-templates
+  annotations:
+    template.kubevirt.io/provider: Canonical
+    template.kubevirt.io/provider-url: 'https://www.ubuntu.com'
+    template.kubevirt.io/containerdisks: |
+      quay.io/containerdisks/ubuntu:24.04
+    template.kubevirt.io/version: v1alpha1
+    openshift.io/display-name: Ubuntu 24.04 VM
+    operator-sdk/primary-resource-type: SSP.ssp.kubevirt.io
+    defaults.template.kubevirt.io/disk: rootdisk
+    template.kubevirt.io/editable: |
+      /objects[0].spec.template.spec.domain.cpu.sockets
+      /objects[0].spec.template.spec.domain.cpu.cores
+      /objects[0].spec.template.spec.domain.cpu.threads
+      /objects[0].spec.template.spec.domain.memory.guest
+      /objects[0].spec.template.spec.domain.devices.disks
+      /objects[0].spec.template.spec.volumes
+      /objects[0].spec.template.spec.networks
+    template.openshift.io/bindable: 'false'
+    openshift.kubevirt.io/pronounceable-suffix-for-name-expression: 'true'
+    operator-sdk/primary-resource: openshift-cnv/ssp-kubevirt-hyperconverged
+    tags: 'kubevirt,virtualmachine,ubuntu'
+    template.kubevirt.io/provider-support-level: Community
+    description: Template for Ubuntu Linux 24.04 VM. A PVC with the Ubuntu disk image must be available.
+    iconClass: icon-ubuntu
+    name.os.template.kubevirt.io/ubuntu: Ubuntu Linux 24.04
+    name.os.template.kubevirt.io/ubuntu2404: Ubuntu Linux 24.04
+    openshift.io/provider-display-name: Canonical
+objects:
+  - apiVersion: kubevirt.io/v1
+    kind: VirtualMachine
+    metadata:
+      annotations:
+        vm.kubevirt.io/validations: |
+          [
+            {
+              "name": "minimal-required-memory",
+              "path": "jsonpath::.spec.domain.memory.guest",
+              "rule": "integer",
+              "message": "This VM requires more memory.",
+              "min": 2147483648
+            }
+          ]
+      labels:
+        app: '${NAME}'
+        kubevirt.io/dynamic-credentials-support: 'true'
+        vm.kubevirt.io/template.revision: '1'
+        vm.kubevirt.io/template.version: v0.31.1
+        #vm.kubevirt.io/template: ubuntu2404-desktop-small
+      name: '${NAME}'
+    spec:
+      dataVolumeTemplates:
+        - apiVersion: cdi.kubevirt.io/v1beta1
+          kind: DataVolume
+          metadata:
+            name: '${NAME}'
+          spec:
+            sourceRef:
+              kind: DataSource
+              name: '${DATA_SOURCE_NAME}'
+              namespace: '${DATA_SOURCE_NAMESPACE}'
+            storage:
+              resources:
+                requests:
+                  storage: 30Gi
+      running: false
+      template:
+        metadata:
+          annotations:
+            #vm.kubevirt.io/flavor: small
+            #vm.kubevirt.io/workload: desktop
+            vm.kubevirt.io/os: ubuntu
+          labels:
+            kubevirt.io/domain: '${NAME}'
+            #kubevirt.io/size: small
+        spec:
+          architecture: amd64
+          domain:
+            cpu:
+              cores: 1
+              sockets: 1
+              threads: 1
+            devices:
+              disks:
+                - disk:
+                    bus: virtio
+                  name: rootdisk
+                - disk:
+                    bus: virtio
+                  name: cloudinitdisk
+              inputs:
+                - bus: virtio
+                  name: tablet
+                  type: tablet
+              interfaces:
+                - masquerade: {}
+                  model: virtio
+                  name: default
+              rng: {}
+            features:
+              smm:
+                enabled: true
+            firmware:
+              bootloader:
+                efi: {}
+            memory:
+              guest: 2Gi
+          networks:
+            - name: default
+              pod: {}
+          terminationGracePeriodSeconds: 180
+          volumes:
+            - dataVolume:
+                name: '${NAME}'
+              name: rootdisk
+            - cloudInitNoCloud:
+                userData: |-
+                  #cloud-config
+                  user: ubuntu
+                  password: ${CLOUD_USER_PASSWORD}
+                  chpasswd: { expire: False }
+              name: cloudinitdisk
+parameters:
+  - name: NAME
+    description: VM name
+    generate: expression
+    from: 'ubuntu2404-[a-z0-9]{16}'
+  - name: DATA_SOURCE_NAME
+    description: Name of the DataSource to clone
+    value: ubuntu2404
+  - name: DATA_SOURCE_NAMESPACE
+    description: Namespace of the DataSource
+    value: openshift-virtualization-os-images
+  - name: CLOUD_USER_PASSWORD
+    description: Randomized password for the cloud-init user ubuntu
+    generate: expression
+    from: '[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}'

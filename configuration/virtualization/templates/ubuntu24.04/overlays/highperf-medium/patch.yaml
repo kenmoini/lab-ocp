@@ -1,0 +1,44 @@
+
+- op: replace
+  path: /metadata/name
+  value: ubuntu2404-highperformance-medium
+- op: add
+  path: "/objects/0/metadata/labels/vm.kubevirt.io~1template"
+  value: ubuntu2404-highperformance-medium
+
+- op: add
+  path: "/objects/0/spec/template/metadata/annotations/vm.kubevirt.io~1flavor"
+  value: medium
+- op: add
+  path: "/objects/0/spec/template/metadata/labels/kubevirt.io~1size"
+  value: medium
+
+- op: add
+  path: "/objects/0/spec/template/metadata/annotations/vm.kubevirt.io~1workload"
+  value: highperformance
+
+# Default spec overrides
+- op: replace
+  path: "/objects/0/spec/template/spec/domain/cpu/sockets"
+  value: 4
+- op: replace
+  path: "/objects/0/spec/template/spec/domain/memory/guest"
+  value: 8Gi
+
+# High Performance specific tweaks
+- op: add
+  path: "/objects/0/spec/template/spec/domain/cpu/dedicatedCpuPlacement"
+  value: true
+- op: add
+  path: "/objects/0/spec/template/spec/domain/cpu/isolateEmulatorThread"
+  value: true
+- op: add
+  path: "/objects/0/spec/template/spec/domain/devices/disks/0/dedicatedIOThread"
+  value: true
+- op: add
+  path: "/objects/0/spec/template/spec/domain/ioThreadsPolicy"
+  value: shared
+# Used for larger VMs to improve network performance
+- op: add
+  path: "/objects/0/spec/template/spec/domain/devices/networkInterfaceMultiqueue"
+  value: true

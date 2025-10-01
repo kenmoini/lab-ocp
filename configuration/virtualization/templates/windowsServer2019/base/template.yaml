@@ -1,0 +1,181 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: kl-windows2k19-server-medium
+  namespace: openshift
+  labels:
+    #flavor.template.kubevirt.io/medium: 'true'
+    #workload.template.kubevirt.io/server: 'true'
+    os.template.kubevirt.io/win2k19: 'true'
+    template.kubevirt.io/architecture: amd64
+    template.kubevirt.io/default-os-variant: 'true'
+    template.kubevirt.io/version: v0.34.0
+    template.kubevirt.io/type: vm
+    app.kubernetes.io/name: custom-templates
+  annotations:
+    openshift.io/display-name: Microsoft Windows Server 2019 VM
+    description: Template for Microsoft Windows Server 2019 VM. A PVC with the Windows disk image must be available.
+    tags: 'kubevirt,virtualmachine,windows,2019,win2k19'
+    name.os.template.kubevirt.io/win2k19: Microsoft Windows Server 2019
+    defaults.template.kubevirt.io/disk: rootdisk
+    template.kubevirt.io/editable: |
+      /objects[0].spec.template.spec.domain.cpu.cores
+      /objects[0].spec.template.spec.domain.memory.guest
+      /objects[0].spec.template.spec.domain.devices.disks
+      /objects[0].spec.template.spec.volumes
+      /objects[0].spec.template.spec.networks
+    defaults.template.kubevirt.io/network: default
+    template.kubevirt.io/provider: Kemo Labs
+    template.kubevirt.io/provider-url: 'https://www.kemo.labs'
+    template.kubevirt.io/provider-support-level: Full
+    template.kubevirt.io/version: v1alpha1
+    template.openshift.io/bindable: 'false'
+    openshift.io/provider-display-name: Kemo Labs
+    openshift.io/documentation-url: 'https://github.com/kenmoini/lab-ocp'
+    openshift.io/support-url: 'https://github.com/kenmoini/lab-ocp/issues'
+    openshift.kubevirt.io/pronounceable-suffix-for-name-expression: 'true'
+    operator-sdk/primary-resource-type: SSP.ssp.kubevirt.io
+    operator-sdk/primary-resource: openshift-cnv/ssp-kubevirt-hyperconverged
+    iconClass: icon-windows
+objects:
+  - apiVersion: kubevirt.io/v1
+    kind: VirtualMachine
+    metadata:
+      annotations:
+        vm.kubevirt.io/validations: |
+          [
+            {
+              "name": "minimal-required-memory",
+              "path": "jsonpath::.spec.domain.memory.guest",
+              "rule": "integer",
+              "message": "This VM requires more memory.",
+              "min": 536870912
+            }, {
+              "name": "windows-virtio-bus",
+              "path": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "valid": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "rule": "enum",
+              "message": "virtio disk bus type has better performance, install virtio drivers in VM and change bus type",
+              "values": ["virtio"],
+              "justWarning": true
+            }, {
+              "name": "windows-disk-bus",
+              "path": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "valid": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "rule": "enum",
+              "message": "disk bus has to be either virtio or sata or scsi",
+              "values": ["virtio", "sata", "scsi"]
+            }, {
+              "name": "windows-cd-bus",
+              "path": "jsonpath::.spec.domain.devices.disks[*].cdrom.bus",
+              "valid": "jsonpath::.spec.domain.devices.disks[*].cdrom.bus",
+              "rule": "enum",
+              "message": "cd bus has to be sata",
+              "values": ["sata"]
+            }
+          ]
+      labels:
+        app: '${NAME}'
+        #vm.kubevirt.io/template: windows2k19-server-medium
+        vm.kubevirt.io/template.revision: '1'
+        vm.kubevirt.io/template.version: v0.34.0
+      name: '${NAME}'
+    spec:
+      dataVolumeTemplates:
+        - apiVersion: cdi.kubevirt.io/v1beta1
+          kind: DataVolume
+          metadata:
+            name: '${NAME}'
+          spec:
+            sourceRef:
+              kind: DataSource
+              name: '${DATA_SOURCE_NAME}'
+              namespace: '${DATA_SOURCE_NAMESPACE}'
+            storage:
+              resources:
+                requests:
+                  storage: 60Gi
+      runStrategy: Halted
+      template:
+        metadata:
+          annotations:
+            #vm.kubevirt.io/flavor: medium
+            #vm.kubevirt.io/workload: server
+            vm.kubevirt.io/os: windows2k19
+          labels:
+            kubevirt.io/domain: '${NAME}'
+            #kubevirt.io/size: medium
+        spec:
+          architecture: amd64
+          domain:
+            clock:
+              timer:
+                hpet:
+                  present: false
+                hyperv: {}
+                pit:
+                  tickPolicy: delay
+                rtc:
+                  tickPolicy: catchup
+              utc: {}
+            cpu:
+              cores: 1
+              sockets: 1
+              threads: 1
+            devices:
+              disks:
+                - disk:
+                    bus: sata
+                  name: rootdisk
+              inputs:
+                - bus: usb
+                  name: tablet
+                  type: tablet
+              interfaces:
+                - masquerade: {}
+                  model: e1000e
+                  name: default
+            features:
+              acpi: {}
+              apic: {}
+              hyperv:
+                reenlightenment: {}
+                ipi: {}
+                synic: {}
+                synictimer:
+                  direct: {}
+                spinlocks:
+                  spinlocks: 8191
+                reset: {}
+                relaxed: {}
+                vpindex: {}
+                runtime: {}
+                tlbflush: {}
+                frequencies: {}
+                vapic: {}
+              smm: {}
+            firmware:
+              bootloader:
+                efi:
+                  secureBoot: true
+            memory:
+              guest: 4Gi
+          networks:
+            - name: default
+              pod: {}
+          terminationGracePeriodSeconds: 3600
+          volumes:
+            - dataVolume:
+                name: '${NAME}'
+              name: rootdisk
+parameters:
+  - name: NAME
+    description: VM name
+    generate: expression
+    from: 'windows2019-[a-z0-9]{6}'
+  - name: DATA_SOURCE_NAME
+    description: Name of the DataSource to clone
+    value: win2k19
+  - name: DATA_SOURCE_NAMESPACE
+    description: Namespace of the DataSource
+    value: openshift-virtualization-os-images

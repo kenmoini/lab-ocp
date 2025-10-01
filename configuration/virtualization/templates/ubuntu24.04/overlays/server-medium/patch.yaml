@@ -1,0 +1,26 @@
+
+- op: replace
+  path: /metadata/name
+  value: ubuntu2404-server-medium
+- op: add
+  path: "/objects/0/metadata/labels/vm.kubevirt.io~1template"
+  value: ubuntu2404-server-medium
+
+- op: add
+  path: "/objects/0/spec/template/metadata/annotations/vm.kubevirt.io~1flavor"
+  value: medium
+- op: add
+  path: "/objects/0/spec/template/metadata/labels/kubevirt.io~1size"
+  value: medium
+
+- op: add
+  path: "/objects/0/spec/template/metadata/annotations/vm.kubevirt.io~1workload"
+  value: server
+
+# Default spec overrides
+- op: replace
+  path: "/objects/0/spec/template/spec/domain/cpu/sockets"
+  value: 4
+- op: replace
+  path: "/objects/0/spec/template/spec/domain/memory/guest"
+  value: 8Gi

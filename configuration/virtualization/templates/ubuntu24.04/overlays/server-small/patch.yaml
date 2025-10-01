@@ -1,0 +1,18 @@
+
+- op: replace
+  path: /metadata/name
+  value: ubuntu2404-server-small
+- op: add
+  path: "/objects/0/metadata/labels/vm.kubevirt.io~1template"
+  value: ubuntu2404-server-small
+
+- op: add
+  path: "/objects/0/spec/template/metadata/annotations/vm.kubevirt.io~1flavor"
+  value: small
+- op: add
+  path: "/objects/0/spec/template/metadata/labels/kubevirt.io~1size"
+  value: small
+
+- op: add
+  path: "/objects/0/spec/template/metadata/annotations/vm.kubevirt.io~1workload"
+  value: server
