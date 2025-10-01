@@ -1,13 +1,13 @@
 
 - op: replace
   path: /metadata/name
-  value: kl-windows2k19-server-medium
+  value: kl-windows2k22-highperformance-medium
 - op: add
   path: "/metadata/labels/vm.kubevirt.io~1template"
-  value: kl-windows2k19-server-medium
+  value: kl-windows2k22-highperformance-medium
 - op: add
   path: "/objects/0/metadata/labels/vm.kubevirt.io~1template"
-  value: kl-windows2k19-server-medium
+  value: kl-windows2k22-highperformance-medium
 
 - op: add
   path: "/objects/0/spec/template/metadata/annotations/vm.kubevirt.io~1flavor"
@@ -18,7 +18,7 @@
 
 - op: add
   path: "/objects/0/spec/template/metadata/annotations/vm.kubevirt.io~1workload"
-  value: server
+  value: highperformance
 
 # Default spec overrides
 - op: replace
@@ -27,3 +27,15 @@
 - op: replace
   path: "/objects/0/spec/template/spec/domain/memory/guest"
   value: 8Gi
+
+# High Performance specific tweaks
+- op: add
+  path: "/objects/0/spec/template/spec/domain/cpu/dedicatedCpuPlacement"
+  value: true
+- op: add
+  path: "/objects/0/spec/template/spec/domain/cpu/isolateEmulatorThread"
+  value: true
+# Used for larger VMs to improve network performance
+- op: add
+  path: "/objects/0/spec/template/spec/domain/devices/networkInterfaceMultiqueue"
+  value: true

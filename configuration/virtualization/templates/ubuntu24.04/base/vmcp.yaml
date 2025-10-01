@@ -1,0 +1,33 @@
+apiVersion: instancetype.kubevirt.io/v1beta1
+kind: VirtualMachineClusterPreference
+metadata:
+  name: ubuntu2404
+  annotations:
+    kubevirt.io/install-strategy-registry: ''
+    openshift.io/display-name: Ubuntu 24.04 (amd64)
+    openshift.io/documentation-url: 'https://ubuntu.com'
+    tags: 'kubevirt,ubuntu2404'
+    openshift.io/support-url: 'https://ubuntu.com'
+    iconClass: icon-ubuntu
+    openshift.io/provider-display-name: Ubuntu
+  labels:
+    instancetype.kubevirt.io/arch: amd64
+    instancetype.kubevirt.io/os-type: linux
+    instancetype.kubevirt.io/vendor: ubuntu.com
+spec:
+  annotations:
+    vm.kubevirt.io/os: linux
+  devices:
+    preferredDiskBus: virtio
+    preferredInterfaceModel: virtio
+    preferredRng: {}
+  features:
+    preferredSmm: {}
+  firmware:
+    preferredEfi:
+      secureBoot: true
+  requirements:
+    cpu:
+      guest: 1
+    memory:
+      guest: 2Gi

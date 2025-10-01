@@ -3,6 +3,9 @@
   path: /metadata/name
   value: kl-windows2k19-highperformance-medium
 - op: add
+  path: "/metadata/labels/vm.kubevirt.io~1template"
+  value: kl-windows2k19-highperformance-medium
+- op: add
   path: "/objects/0/metadata/labels/vm.kubevirt.io~1template"
   value: kl-windows2k19-highperformance-medium
 

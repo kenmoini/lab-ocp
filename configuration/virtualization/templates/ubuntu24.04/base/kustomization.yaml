@@ -3,3 +3,6 @@ kind: Kustomization
 
 resources:
   - template.yaml
+  - datavolume.yaml
+  - datasource.yaml
+  - vmcp.yaml

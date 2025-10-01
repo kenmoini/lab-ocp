@@ -3,6 +3,9 @@
   path: /metadata/name
   value: ubuntu2404-highperformance-medium
 - op: add
+  path: "/metadata/labels/vm.kubevirt.io~1template"
+  value: ubuntu2404-highperformance-medium
+- op: add
   path: "/objects/0/metadata/labels/vm.kubevirt.io~1template"
   value: ubuntu2404-highperformance-medium
 

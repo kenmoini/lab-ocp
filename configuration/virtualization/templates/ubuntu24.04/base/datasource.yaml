@@ -1,0 +1,17 @@
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataSource
+metadata:
+  name: ubuntu2404
+  annotations:
+    iconClass: icon-ubuntu
+  namespace: openshift-virtualization-os-images
+  labels:
+    #instancetype.kubevirt.io/default-instancetype: u1.medium
+    instancetype.kubevirt.io/default-preference: ubuntu2404
+    kubevirt.io/dynamic-credentials-support: 'true'
+spec:
+  source:
+    pvc:
+      name: ubuntu2404
+      namespace: openshift-virtualization-os-images
