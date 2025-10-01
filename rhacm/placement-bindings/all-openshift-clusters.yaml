@@ -38,3 +38,12 @@ subjects:
   - name: operators-compliance
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: operators-nmo
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-nmstate
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: instance-nmstate
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
