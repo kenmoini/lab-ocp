@@ -5,18 +5,14 @@ metadata:
   name: rhel10-server-small
   namespace: openshift
   labels:
-    app.kubernetes.io/part-of: hyperconverged-cluster
     template.kubevirt.io/architecture: amd64
     flavor.template.kubevirt.io/small: 'true'
     template.kubevirt.io/version: v0.34.0
-    app.kubernetes.io/version: 4.19.6
     template.kubevirt.io/type: base
-    app.kubernetes.io/component: templating
-    app.kubernetes.io/managed-by: ssp-operator
     os.template.kubevirt.io/rhel10.0: 'true'
-    template.kubevirt.io/default-os-variant: 'true'
+    #template.kubevirt.io/default-os-variant: 'true'
+    #workload.template.kubevirt.io/server: 'true'
     app.kubernetes.io/name: common-templates
-    workload.template.kubevirt.io/server: 'true'
   annotations:
     template.kubevirt.io/provider: Red Hat
     template.kubevirt.io/provider-url: 'https://www.redhat.com'
@@ -27,7 +23,7 @@ metadata:
     openshift.io/documentation-url: 'https://github.com/kubevirt/common-templates'
     template.kubevirt.io/images: |
       https://access.redhat.com/downloads/content/479/ver=/rhel---10/10.0/x86_64/product-software
-    operator-sdk/primary-resource-type: SSP.ssp.kubevirt.io
+    #operator-sdk/primary-resource-type: SSP.ssp.kubevirt.io
     defaults.template.kubevirt.io/disk: rootdisk
     name.os.template.kubevirt.io/rhel10.0: Red Hat Enterprise Linux 10.0 or higher
     template.kubevirt.io/editable: |
@@ -40,8 +36,8 @@ metadata:
       /objects[0].spec.template.spec.networks
     template.openshift.io/bindable: 'false'
     openshift.kubevirt.io/pronounceable-suffix-for-name-expression: 'true'
-    operator-sdk/primary-resource: openshift-cnv/ssp-kubevirt-hyperconverged
-    tags: 'hidden,kubevirt,virtualmachine,linux,rhel'
+    #operator-sdk/primary-resource: openshift-cnv/ssp-kubevirt-hyperconverged
+    tags: 'kubevirt,virtualmachine,linux,rhel'
     template.kubevirt.io/provider-support-level: Full
     description: Template for Red Hat Enterprise Linux 10 VM or newer. A PVC with the RHEL disk image must be available.
     openshift.io/support-url: 'https://github.com/kubevirt/common-templates/issues'
@@ -65,7 +61,7 @@ objects:
       labels:
         app: '${NAME}'
         kubevirt.io/dynamic-credentials-support: 'true'
-        vm.kubevirt.io/template: rhel10-server-small
+        #vm.kubevirt.io/template: rhel10-server-small
         vm.kubevirt.io/template.revision: '1'
         vm.kubevirt.io/template.version: v0.34.0
       name: '${NAME}'
@@ -88,12 +84,12 @@ objects:
       template:
         metadata:
           annotations:
-            vm.kubevirt.io/flavor: small
             vm.kubevirt.io/os: rhel10
-            vm.kubevirt.io/workload: server
+            #vm.kubevirt.io/flavor: small
+            #vm.kubevirt.io/workload: server
           labels:
             kubevirt.io/domain: '${NAME}'
-            kubevirt.io/size: small
+            #kubevirt.io/size: small
         spec:
           architecture: amd64
           domain:

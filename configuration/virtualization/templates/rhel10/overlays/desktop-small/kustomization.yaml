@@ -2,14 +2,16 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - ../../base
+- ../../base
 
 patches:
-  - target:
-      kind: Template
-      name: .*
-    path: patch.yaml
+- path: patch.yaml
+  target:
+    kind: Template
+    name: .*
 
-commonLabels:
-  flavor.template.kubevirt.io/small: 'true'
-  workload.template.kubevirt.io/desktop: 'true'
+labels:
+- includeSelectors: true
+  pairs:
+    flavor.template.kubevirt.io/small: "true"
+    workload.template.kubevirt.io/desktop: "true"
