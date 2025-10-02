@@ -1,0 +1,21 @@
+# Not needed since OCPV already provides RHEL images
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: rhel10
+  annotations:
+    iconClass: icon-rhel
+  labels:
+    #instancetype.kubevirt.io/default-instancetype: u1.medium
+    instancetype.kubevirt.io/default-preference: rhel10
+  namespace: openshift-virtualization-os-images
+spec:
+  source:
+    registry:
+      url: 'docker://registry.redhat.io/rhel10/rhel-guest-image:10.0'
+      pullMethod: node # Uses node pull to leverage cluster-wide image pull secret
+  storage:
+    resources:
+      requests:
+        storage: 5Gi

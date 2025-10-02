@@ -1,0 +1,18 @@
+# Not needed since OCPV already provides RHEL images
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataSource
+metadata:
+  name: rhel10
+  annotations:
+    iconClass: icon-rhel
+  namespace: openshift-virtualization-os-images
+  labels:
+    #instancetype.kubevirt.io/default-instancetype: u1.medium
+    instancetype.kubevirt.io/default-preference: rhel10
+    kubevirt.io/dynamic-credentials-support: 'true'
+spec:
+  source:
+    pvc:
+      name: rhel10
+      namespace: openshift-virtualization-os-images
