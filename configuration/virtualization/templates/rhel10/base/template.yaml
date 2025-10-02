@@ -1,0 +1,154 @@
+---
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: rhel10-server-small
+  namespace: openshift
+  labels:
+    app.kubernetes.io/part-of: hyperconverged-cluster
+    template.kubevirt.io/architecture: amd64
+    flavor.template.kubevirt.io/small: 'true'
+    template.kubevirt.io/version: v0.34.0
+    app.kubernetes.io/version: 4.19.6
+    template.kubevirt.io/type: base
+    app.kubernetes.io/component: templating
+    app.kubernetes.io/managed-by: ssp-operator
+    os.template.kubevirt.io/rhel10.0: 'true'
+    template.kubevirt.io/default-os-variant: 'true'
+    app.kubernetes.io/name: common-templates
+    workload.template.kubevirt.io/server: 'true'
+  annotations:
+    template.kubevirt.io/provider: Red Hat
+    template.kubevirt.io/provider-url: 'https://www.redhat.com'
+    template.kubevirt.io/containerdisks: |
+      registry.redhat.io/rhel10/rhel-guest-image
+    template.kubevirt.io/version: v1alpha1
+    openshift.io/display-name: Red Hat Enterprise Linux 10 VM
+    openshift.io/documentation-url: 'https://github.com/kubevirt/common-templates'
+    template.kubevirt.io/images: |
+      https://access.redhat.com/downloads/content/479/ver=/rhel---10/10.0/x86_64/product-software
+    operator-sdk/primary-resource-type: SSP.ssp.kubevirt.io
+    defaults.template.kubevirt.io/disk: rootdisk
+    name.os.template.kubevirt.io/rhel10.0: Red Hat Enterprise Linux 10.0 or higher
+    template.kubevirt.io/editable: |
+      /objects[0].spec.template.spec.domain.cpu.sockets
+      /objects[0].spec.template.spec.domain.cpu.cores
+      /objects[0].spec.template.spec.domain.cpu.threads
+      /objects[0].spec.template.spec.domain.memory.guest
+      /objects[0].spec.template.spec.domain.devices.disks
+      /objects[0].spec.template.spec.volumes
+      /objects[0].spec.template.spec.networks
+    template.openshift.io/bindable: 'false'
+    openshift.kubevirt.io/pronounceable-suffix-for-name-expression: 'true'
+    operator-sdk/primary-resource: openshift-cnv/ssp-kubevirt-hyperconverged
+    tags: 'hidden,kubevirt,virtualmachine,linux,rhel'
+    template.kubevirt.io/provider-support-level: Full
+    description: Template for Red Hat Enterprise Linux 10 VM or newer. A PVC with the RHEL disk image must be available.
+    openshift.io/support-url: 'https://github.com/kubevirt/common-templates/issues'
+    iconClass: icon-rhel
+    openshift.io/provider-display-name: Red Hat
+objects:
+  - apiVersion: kubevirt.io/v1
+    kind: VirtualMachine
+    metadata:
+      annotations:
+        vm.kubevirt.io/validations: |
+          [
+            {
+              "name": "minimal-required-memory",
+              "path": "jsonpath::.spec.domain.memory.guest",
+              "rule": "integer",
+              "message": "This VM requires more memory.",
+              "min": 1610612736
+            }
+          ]
+      labels:
+        app: '${NAME}'
+        kubevirt.io/dynamic-credentials-support: 'true'
+        vm.kubevirt.io/template: rhel10-server-small
+        vm.kubevirt.io/template.revision: '1'
+        vm.kubevirt.io/template.version: v0.34.0
+      name: '${NAME}'
+    spec:
+      dataVolumeTemplates:
+        - apiVersion: cdi.kubevirt.io/v1beta1
+          kind: DataVolume
+          metadata:
+            name: '${NAME}'
+          spec:
+            sourceRef:
+              kind: DataSource
+              name: '${DATA_SOURCE_NAME}'
+              namespace: '${DATA_SOURCE_NAMESPACE}'
+            storage:
+              resources:
+                requests:
+                  storage: 30Gi
+      runStrategy: Halted
+      template:
+        metadata:
+          annotations:
+            vm.kubevirt.io/flavor: small
+            vm.kubevirt.io/os: rhel10
+            vm.kubevirt.io/workload: server
+          labels:
+            kubevirt.io/domain: '${NAME}'
+            kubevirt.io/size: small
+        spec:
+          architecture: amd64
+          domain:
+            cpu:
+              cores: 1
+              sockets: 1
+              threads: 1
+            devices:
+              disks:
+                - disk:
+                    bus: virtio
+                  name: rootdisk
+                - disk:
+                    bus: virtio
+                  name: cloudinitdisk
+              interfaces:
+                - masquerade: {}
+                  model: virtio
+                  name: default
+              rng: {}
+            features:
+              smm:
+                enabled: true
+            firmware:
+              bootloader:
+                efi: {}
+            memory:
+              guest: 2Gi
+          networks:
+            - name: default
+              pod: {}
+          terminationGracePeriodSeconds: 180
+          volumes:
+            - dataVolume:
+                name: '${NAME}'
+              name: rootdisk
+            - cloudInitNoCloud:
+                userData: |-
+                  #cloud-config
+                  user: cloud-user
+                  password: ${CLOUD_USER_PASSWORD}
+                  chpasswd: { expire: False }
+              name: cloudinitdisk
+parameters:
+  - name: NAME
+    description: VM name
+    generate: expression
+    from: 'rhel10-[a-z0-9]{16}'
+  - name: DATA_SOURCE_NAME
+    description: Name of the DataSource to clone
+    value: rhel10
+  - name: DATA_SOURCE_NAMESPACE
+    description: Namespace of the DataSource
+    value: openshift-virtualization-os-images
+  - name: CLOUD_USER_PASSWORD
+    description: Randomized password for the cloud-init user cloud-user
+    generate: expression
+    from: '[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}'
