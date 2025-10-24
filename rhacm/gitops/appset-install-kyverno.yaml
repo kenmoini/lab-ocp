@@ -34,6 +34,14 @@ spec:
             values: |
               config:
                 preserve: false
+              reportsController:
+                resources:
+                  requests:
+                    cpu: 100m
+                    memory: 128Mi
+                  limits:
+                    cpu: 250m
+                    memory: 256Mi
               webhookLabels:
                 app.kubernetes.io/managed-by: argocd
             #valueFiles:
