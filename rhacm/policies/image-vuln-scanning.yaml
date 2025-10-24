@@ -16,7 +16,7 @@ spec:
         metadata:
           name: operatorpolicy-imagemanifestvuln
         spec:
-          remediationAction: inform
+          remediationAction: enforce
           severity: high
           complianceType: musthave
           subscription:
