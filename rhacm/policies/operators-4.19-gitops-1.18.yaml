@@ -1,0 +1,36 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: operators-4.19-gitops-1.18
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Installs the OpenShift GitOps Operator v1.18 on OCP 4.19 clusters
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitops-1.18-subscription
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: Subscription
+                metadata:
+                  name: openshift-gitops-operator
+                  namespace: openshift-gitops-operator
+                spec:
+                  channel: gitops-1.18
+                  installPlanApproval: Automatic
+                  name: openshift-gitops-operator
+                  source: redhat-operators
+                  sourceNamespace: openshift-marketplace

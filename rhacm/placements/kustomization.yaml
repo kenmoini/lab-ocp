@@ -5,6 +5,7 @@ namespace: open-cluster-management-policies
 
 resources:
   - all-openshift-clusters.yaml
+  - openshift-4.19-clusters.yaml
   - global.yaml
   - acs-central.yaml
   - acs-secured-cluster.yaml

@@ -18,6 +18,15 @@ subjects:
   - name: cluster-info-header
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: operators-gitops-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: encrypt-etcd
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: image-vuln-scanning
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   #- name: kyverno-outbound-proxy
   #  apiGroup: policy.open-cluster-management.io
   #  kind: Policy

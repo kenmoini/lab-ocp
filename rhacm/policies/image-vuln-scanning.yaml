@@ -1,0 +1,45 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: image-vuln-scanning
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/categories: SI System and Information Integrity
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/controls: SI-4 Information System Monitoring
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1beta1
+        kind: OperatorPolicy
+        metadata:
+          name: operatorpolicy-imagemanifestvuln
+        spec:
+          remediationAction: inform
+          severity: high
+          complianceType: musthave
+          subscription:
+            name: container-security-operator
+            namespace: openshift-operators
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+          upgradeApproval: Automatic
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-imagemanifestvuln-imv
+        spec:
+          remediationAction: inform
+          severity: high
+          namespaceSelector:
+            exclude:
+              - kube-*
+            include:
+              - "*"
+          object-templates:
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: secscan.quay.redhat.com/v1alpha1
+                kind: ImageManifestVuln

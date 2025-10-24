@@ -18,6 +18,8 @@ resources:
 
   # Global/Common Policies
   - console-info-header.yaml
+  - encrypt-etcd.yaml
+  - image-vuln-scanning.yaml
   - openshift-samples-config.yaml
   - enable-internal-registry.yaml
   - hcp-bmh-infra-creds.yaml
@@ -27,6 +29,9 @@ resources:
   #- hub-ocp-update-svc.yaml
 
   # Operator Installation Policies
+  - operators-gitops-base.yaml
+  - operators-4.19-gitops-1.18.yaml
+
   - operators-aap.yaml
   - operators-cco.yaml
   - operators-compliance.yaml
