@@ -1,8 +1,19 @@
 ---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: console-info-header-colors
+  #namespace: open-cluster-management-policies
+data:
+  hub-cluster-bkg: '#4f002f'
+  hub-cluster-text: '#FFF'
+
+---
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   name: cluster-info-header
+  #namespace: open-cluster-management-policies
   annotations:
     policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
@@ -30,7 +41,7 @@ spec:
                 metadata:
                   name: cluster-info-header
                 spec:
-                  backgroundColor: '#0088ce'
-                  color: '#fff'
+                  backgroundColor: '{{hub default "#000" (fromConfigMap "open-cluster-management-policies" "console-info-header-colors" (list .ManagedClusterName "bkg" | join "-")) hub}}'
+                  color: '{{hub default "#FFF" (fromConfigMap "open-cluster-management-policies" "console-info-header-colors" (list .ManagedClusterName "text" | join "-")) hub}}'
                   location: BannerTop
                   text: 'You are on {{hub .ManagedClusterName hub}} cluster!'
