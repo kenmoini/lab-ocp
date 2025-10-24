@@ -14,7 +14,9 @@ metadata:
       In some cases you would need to trust custom CA certificates for all the containers of a Pod.
       It makes sense to be in a ConfigMap so that you can automount them by only setting an annotation.
       This policy adds a volume to all containers in a Pod containing the certificate if the namespace is
-      labeled with `attach-root-ca: rhel` and if the pod is labeled with `attachRootCA: rhel`.
+      labeled with `attach-root-ca: true | enabled` and if the pod is labeled with `attachRootCA: rhel` it
+      will mount the volume at `/etc/pki/ca-trust/extracted/pem`, and if the pod is labeled with `attachRootCA: debian` it
+      will mount the volume at `/etc/ssl/certs`.
 spec:
   background: false
   rules:
@@ -33,15 +35,13 @@ spec:
                 - key: attach-root-ca
                   operator: In
                   values:
-                  - rhel
-            selector:
-              matchLabels:
-                attachRootCA: rhel
+                  - "true"
+                  - "enabled"
     generate:
       synchronize: false
       apiVersion: v1
       kind: ConfigMap
-      name: root-ca-rhel
+      name: auto-root-ca
       namespace: "{{ request.object.metadata.namespace }}"
       data:
         kind: ConfigMap
@@ -64,7 +64,8 @@ spec:
                 - key: attach-root-ca
                   operator: In
                   values:
-                  - rhel
+                  - "true"
+                  - "enabled"
             selector:
               matchLabels:
                 attachRootCA: rhel
@@ -87,12 +88,50 @@ spec:
             - name: "{{ element.name }}"
               volumeMounts:
                 - mountPath: /etc/pki/ca-trust/extracted/pem
-                  name: root-ca-rhel
+                  name: auto-root-ca
                   readOnly: true
             volumes:
-            - name: root-ca-rhel
+            - name: auto-root-ca
               configMap:
-                name: root-ca-rhel
+                name: auto-root-ca
                 items:
                   - key: ca-bundle.crt
                     path: tls-ca-bundle.pem
+
+  - name: add-debian-ssl-certs
+    match:
+      any:
+        - resources:
+            kinds:
+            - Pod
+            operations:
+              - CREATE
+              - UPDATE
+            namespaceSelector:
+              matchExpressions:
+                - key: attach-root-ca
+                  operator: In
+                  values:
+                  - "true"
+                  - "enabled"
+            selector:
+              matchLabels:
+                attachRootCA: debian
+    mutate:
+      foreach:
+      - list: "request.object.spec.containers"
+        patchStrategicMerge:
+          spec:
+            containers:
+            - name: "{{ element.name }}"
+              volumeMounts:
+                - mountPath: /etc/ssl/certificates/
+                  name: auto-root-ca
+                  readOnly: true
+            volumes:
+            - name: auto-root-ca
+              configMap:
+                name: auto-root-ca
+                items:
+                  - key: ca-bundle.crt
+                    path: ca-certificates.crt
