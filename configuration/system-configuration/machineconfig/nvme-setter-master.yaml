@@ -28,7 +28,7 @@ spec:
             ConditionPathExists=!/etc/nvme/sentinel-hostid
             [Service]
             Type=oneshot
-            ExecStart=/usr/bin/sh -c 'UUU=$(uuidgen) echo "$UUU" > /etc/nvme/sentinel-hostid && echo "$UUU" > /etc/nvme/hostid'
+            ExecStart=/usr/bin/sh -c 'UUU=$(uuidgen); echo "$UUU" > /etc/nvme/sentinel-hostid && echo "$UUU" > /etc/nvme/hostid'
             RemainAfterExit=yes
             [Install]
             WantedBy=multi-user.target
