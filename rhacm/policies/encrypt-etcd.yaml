@@ -16,7 +16,7 @@ spec:
         metadata:
           name: enable-etcd-encryption
         spec:
-          remediationAction: inform
+          remediationAction: enforce
           severity: low
           object-templates:
             - complianceType: musthave
