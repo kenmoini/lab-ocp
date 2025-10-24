@@ -42,7 +42,7 @@ spec:
       apiVersion: v1
       kind: ConfigMap
       name: root-ca-rhel
-      namespace: '{{ "{{ request.object.metadata.namespace }}" }}'
+      namespace: "{{ request.object.metadata.namespace }}"
       data:
         kind: ConfigMap
         metadata:
