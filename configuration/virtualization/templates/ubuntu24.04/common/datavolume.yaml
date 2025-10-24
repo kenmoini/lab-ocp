@@ -8,7 +8,7 @@ metadata:
   labels:
     #instancetype.kubevirt.io/default-instancetype: u1.medium
     instancetype.kubevirt.io/default-preference: ubuntu2404
-  namespace: openshift-virtualization-os-images
+  #namespace: openshift-virtualization-os-images
 spec:
   source:
     registry:

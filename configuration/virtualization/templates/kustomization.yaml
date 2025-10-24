@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: openshift-virtualization-os-images
+resources:
+  - common/
+  - rhel10/
+  - ubuntu24.04/
+  - windows10/
+  - windows11/
+  - windowsServer2016/
+  - windowsServer2019/
+  - windowsServer2022/
+  - windowsServer2025/

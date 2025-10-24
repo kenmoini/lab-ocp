@@ -1,8 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
+namespace: openshift-virtualization-os-images
 resources:
-  - overlays/server-small
-  - overlays/server-medium
-  - overlays/highperf-medium
-  - overlays/desktop-small
+  - common/
+  - overlays/server-small/
+  - overlays/server-medium/
+  - overlays/highperf-medium/
+  - overlays/desktop-small/

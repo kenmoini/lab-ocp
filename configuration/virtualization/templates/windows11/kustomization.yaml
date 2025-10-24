@@ -5,4 +5,4 @@ resources:
   # Let's just use the built-in templates and just add the datavolume and CA configmap
   #- template.yaml
   - datavolume.yaml
-  - root-ca-configmap.yaml
+  # - root-ca-configmap.yaml

@@ -5,7 +5,7 @@ metadata:
   name: ubuntu2404
   annotations:
     iconClass: icon-ubuntu
-  namespace: openshift-virtualization-os-images
+  #namespace: openshift-virtualization-os-images
   labels:
     #instancetype.kubevirt.io/default-instancetype: u1.medium
     instancetype.kubevirt.io/default-preference: ubuntu2404

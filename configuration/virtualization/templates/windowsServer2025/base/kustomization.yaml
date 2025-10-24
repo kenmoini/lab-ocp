@@ -3,5 +3,5 @@ kind: Kustomization
 
 resources:
   - template.yaml
-  - datavolume.yaml
-  - root-ca-configmap.yaml
+  #- datavolume.yaml
+  # - root-ca-configmap.yaml
