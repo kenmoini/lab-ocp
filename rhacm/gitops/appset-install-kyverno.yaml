@@ -32,6 +32,8 @@ spec:
         - chart: '{{helmChartName}}'
           helm:
             values: |
+              config:
+                preserve: false
               webhookLabels:
                 app.kubernetes.io/managed-by: argocd
             #valueFiles:
