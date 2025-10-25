@@ -12,7 +12,7 @@ spec:
   sources:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: clusters/tri-force/infrastructure/networking/
+      path: clusters/hub-cluster/infrastructure/networking/
       kustomize: {}
 
   project: default
