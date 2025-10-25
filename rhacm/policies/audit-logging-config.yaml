@@ -7,7 +7,6 @@ metadata:
     policy.open-cluster-management.io/categories: AU Audit and Accountability
     policy.open-cluster-management.io/controls: AU-3 Content of Audit Records
 spec:
-  remediationAction: inform
   disabled: false
   policy-templates:
     - objectDefinition:
