@@ -128,6 +128,14 @@ spec:
                   name: local-lokistack
                   namespace: openshift-logging
                 spec:
+                  collector:
+                    resources:
+                      limits:
+                        memory: 6Gi
+                        cpu: 6
+                      requests:
+                        memory: 2Gi
+                        cpu: 2
                   serviceAccount:
                     name: logging-collector
                   outputs:
