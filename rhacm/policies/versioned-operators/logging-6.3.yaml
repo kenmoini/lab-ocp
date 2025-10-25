@@ -129,15 +129,15 @@ spec:
                 kind: ClusterLogForwarder
                 metadata:
                   name: local-lokistack
-                  namespace: openshift-logging 
+                  namespace: openshift-logging
                 spec:
                   serviceAccount:
-                    name: logging-collector 
+                    name: logging-collector
                   outputs:
                     - name: local-lokistack
-                      type: lokiStack 
+                      type: lokiStack
                       lokiStack:
-                        target: 
+                        target:
                           name: logging-loki
                           namespace: openshift-logging
                         authentication:
@@ -149,7 +149,7 @@ spec:
                           configMapName: openshift-service-ca.crt
                   pipelines:
                     - name: infra-app-logs
-                      inputRefs: 
+                      inputRefs:
                       - application
                       - infrastructure
                       outputRefs:
