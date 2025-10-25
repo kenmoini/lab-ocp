@@ -7,6 +7,7 @@ namespace: open-cluster-management-policies
 resources:
   - aap.yaml
   - cco.yaml
+  - cert-manager.yaml
   - compliance.yaml
   - descheduler.yaml
   - eso.yaml

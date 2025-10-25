@@ -45,6 +45,9 @@ subjects:
     apiGroup: policy.open-cluster-management.io
     kind: Policy
 
+  - name: operators-rh-cert-manager
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: operators-rhacs
     apiGroup: policy.open-cluster-management.io
     kind: Policy
