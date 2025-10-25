@@ -45,18 +45,18 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
-                kind: ServiceAccount
                 apiVersion: v1
+                kind: ServiceAccount
                 metadata:
                   name: logging-collector
                   namespace: openshift-logging
+
             - complianceType: musthave
               objectDefinition:
-                kind: RoleBinding
+                kind: ClusterRoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
                   name: logging-loki-collector
-                  namespace: openshift-logging
                 subjects:
                   - kind: ServiceAccount
                     name: logging-collector
@@ -68,11 +68,10 @@ spec:
 
             - complianceType: musthave
               objectDefinition:
-                kind: RoleBinding
+                kind: ClusterRoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
                   name: logging-loki-app-logs
-                  namespace: openshift-logging
                 subjects:
                   - kind: ServiceAccount
                     name: logging-collector
@@ -84,11 +83,10 @@ spec:
 
             - complianceType: musthave
               objectDefinition:
-                kind: RoleBinding
+                kind: ClusterRoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
                   name: logging-loki-infra-logs
-                  namespace: openshift-logging
                 subjects:
                   - kind: ServiceAccount
                     name: logging-collector
@@ -100,11 +98,10 @@ spec:
 
             - complianceType: musthave
               objectDefinition:
-                kind: RoleBinding
+                kind: ClusterRoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
                   name: logging-loki-audit-logs
-                  namespace: openshift-logging
                 subjects:
                   - kind: ServiceAccount
                     name: logging-collector
