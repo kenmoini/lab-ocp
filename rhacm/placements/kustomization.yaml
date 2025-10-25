@@ -16,7 +16,7 @@ resources:
   - hub-cluster.yaml
   - kyverno-policies.yaml
 
-  - enabled-eso.yaml
+  - community-eso.yaml
   - nvidia-gpu.yaml
   - bmh-lso-odf.yaml
   - virtualization.yaml

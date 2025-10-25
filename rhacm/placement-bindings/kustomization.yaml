@@ -13,7 +13,7 @@ resources:
   - hcp-kubevirt.yaml
   - hub-cluster.yaml
 
-  - enabled-eso.yaml
+  - community-eso.yaml
   - bmh-lso-odf.yaml
   - nvidia-gpu.yaml
   - virtualization.yaml

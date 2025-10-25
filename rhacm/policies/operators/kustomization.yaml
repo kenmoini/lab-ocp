@@ -10,7 +10,7 @@ resources:
   - cert-manager.yaml
   - compliance.yaml
   - descheduler.yaml
-  - eso.yaml
+  - community-eso.yaml
   - far.yaml
   - lso.yaml
   - metallb.yaml

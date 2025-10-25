@@ -1,9 +1,9 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: operators-eso
+  name: operators-community-eso
   annotations:
-    policy.open-cluster-management.io/description: Installs the External Secrets Operator
+    policy.open-cluster-management.io/description: Installs the community External Secrets Operator
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
     policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
@@ -14,7 +14,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: eso-namespace
+          name: community-eso-namespace
         spec:
           remediationAction: enforce
           severity: critical
@@ -32,7 +32,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: eso-subscription
+          name: community-eso-subscription
         spec:
           remediationAction: enforce
           severity: high
