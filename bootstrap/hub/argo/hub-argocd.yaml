@@ -2,19 +2,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hub-aoa
+  name: hub-argocd
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/manifest-generate-paths: ".;.."
-    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+    argocd.argoproj.io/sync-wave: "-20"
 spec:
   destination:
     server: 'https://kubernetes.default.svc'
   sources:
-    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+    - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
       targetRevision: main
-      path: bootstrap/hub/argo/
+      path: openshift/openshift-gitops/instance/overlays/default/
       kustomize: {}
+
   project: default
   syncPolicy:
     syncOptions:
