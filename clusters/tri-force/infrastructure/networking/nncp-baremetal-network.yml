@@ -1,0 +1,12 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: baremetal-network
+spec:
+  desiredState:
+    ovn:
+      bridge-mappings:
+        - bridge: br-ex
+          localnet: baremetal-network
+          state: present
