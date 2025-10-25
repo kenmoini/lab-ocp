@@ -72,3 +72,53 @@ spec:
                   name: secrets-store-csi-driver-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: sscsi-operator-install-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: ClusterServiceVersion
+                metadata:
+                  namespace: openshift-cluster-csi-drivers
+                spec:
+                  displayName: Secrets Store CSI Driver Operator
+                status:
+                  phase: Succeeded
+                  reason: InstallSucceeded
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: sscsi-subscription
+          namespace: ""
+          compliance: Compliant
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: sscsi-clustercsidriver
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1
+                kind: ClusterCSIDriver
+                metadata:
+                    name: secrets-store.csi.k8s.io
+                spec:
+                  managementState: Managed
+          pruneObjectBehavior: DeleteIfCreated
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: sscsi-operator-install-check
+          namespace: ""
+          compliance: Compliant
