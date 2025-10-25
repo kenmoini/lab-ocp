@@ -1,0 +1,61 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-config
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  cluster-gitops-config: enabled
+          - list:
+              elements:
+              - appName: cluster-config
+                namespace: openshift-gitops
+  template:
+    metadata:
+      name: "{{name}}-{{appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+    spec:
+      ignoreDifferences:
+        - group: apiextensions.k8s.io
+          jsonPointers:
+            - /status
+          kind: CustomResourceDefinition
+        # For some reason ArgoCD marks Applications as OutOfSync due to metadata.generation changes
+        - group: 'argoproj.io'
+          kind: 'Application'
+          jsonPointers:
+            - '/metadata/generation'
+        - group: 'argoproj.io'
+          kind: 'ApplicationSet'
+          jsonPointers:
+            - '/metadata/generation'
+      project: spoke-cluster-config
+      sources:
+        - kustomize: {}
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          ## Path is the repo directory that containers the cluster(s) configuration and deployment manifests
+          path: clusters/{{name}}/gitops-config/
+    
+      destination:
+        name: "{{name}}"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+        retry:
+          limit: 2
