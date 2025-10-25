@@ -1,0 +1,30 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub-acm-policy-generators
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  sources:
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: rhacm/policy-generators/machineconfigs/
+      kustomize: {}
+
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true # overrides changes made on the cluster that drift from git state
+    retry:
+      limit: 2

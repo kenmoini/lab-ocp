@@ -1,0 +1,24 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: kubelet-configuration
+  #annotations:
+  #  argocd.argoproj.io/compare-options: IgnoreExtraneous
+#placementBindingDefaults:
+#  name: machineconfiguration
+policyDefaults:
+  namespace: open-cluster-management-policies
+  categories: NIST SP 800-53
+  controls: CM Configuration Management
+  standards: CM-2 Baseline Configuration
+  # Use the name of an existing placement rule
+  #placement:
+  #  placementRuleName: management-clusters
+  remediationAction: inform
+  severity: high
+  pruneObjectBehavior: None
+  consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
+policies:
+  - name: kubelet-configuration
+    manifests:
+      - path: manifests

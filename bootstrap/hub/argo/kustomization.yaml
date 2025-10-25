@@ -9,3 +9,4 @@ resources:
   - hub-acm-glue.yaml
   - hub-acm-placements.yaml
   - hub-acm-policies.yaml
+  - hub-acm-policy-generators.yaml

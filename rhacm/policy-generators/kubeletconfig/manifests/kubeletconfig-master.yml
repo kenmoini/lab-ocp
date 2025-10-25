@@ -1,0 +1,29 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: KubeletConfig
+metadata:
+  name: master-set-kubeletconfig
+spec:
+  autoSizingReserved: true
+  kubeletConfig:
+    podsPerCore: 0
+    maxPods: 1000
+    containerLogMaxSize: 5Mi
+    # Enable CPU Manager
+    cpuManagerPolicy: static
+    cpuManagerReconcilePeriod: 15s
+    # The following settings help improve performance for clusters with a high volume of API requests
+    kubeAPIBurst: 200
+    kubeAPIQPS: 100
+    # The following tells the scheduler to ignore image count when scheduling pods
+    nodeStatusMaxImages: -1
+    #eventRecordQPS: 1000
+    #systemReserved:
+    #  cpu: 20000m
+    #  memory: 16Gi
+    #kubeReserved:
+    #  cpu: 20000m
+    #  memory: 16Gi
+
+  machineConfigPoolSelector:
+    matchLabels:
+      pools.operator.machineconfiguration.openshift.io/master: ""

@@ -18,6 +18,12 @@ subjects:
   - name: cluster-info-header
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: machine-configuration
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: kubelet-configuration
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: disable-self-provisioner
     apiGroup: policy.open-cluster-management.io
     kind: Policy
@@ -70,5 +76,8 @@ subjects:
     apiGroup: policy.open-cluster-management.io
     kind: Policy
   - name: instance-nmstate
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-oadp
     apiGroup: policy.open-cluster-management.io
     kind: Policy

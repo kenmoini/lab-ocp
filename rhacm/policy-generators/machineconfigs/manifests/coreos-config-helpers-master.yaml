@@ -1,0 +1,48 @@
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: master
+  name: 98-master-coreos-systemd-helpers
+spec:
+  config:
+    ignition:
+      version: 3.2.0
+    systemd:
+      units:
+        - name: coreos-reload-udev.service
+          enabled: false
+          contents: |
+            [Unit]
+            Description=A oneshot service that reloads udev rules and triggers them
+            [Service]
+            Type=oneshot
+            RemainAfterExit=yes
+            ExecStart=udevadm control --reload-rules
+            ExecStart=udevadm trigger
+
+        - name: custom-coreos-generate-nvme-hostnqn.service
+          enabled: true
+          contents: |
+            [Unit]
+            Description=Custom CoreOS Generate NVMe Hostnqn
+            [Service]
+            Type=oneshot
+            ExecStart=/usr/bin/sh -c '/usr/sbin/nvme gen-hostnqn > /etc/nvme/hostnqn'
+            RemainAfterExit=yes
+            [Install]
+            WantedBy=multi-user.target
+          
+        - name: custom-coreos-generate-nvme-hostid.service
+          enabled: true
+          contents: |
+            [Unit]
+            Description=Custom CoreOS Generate NVMe Hostid
+            ConditionPathExists=!/etc/nvme/sentinel-hostid
+            [Service]
+            Type=oneshot
+            ExecStart=/usr/bin/sh -c 'UUU=$(uuidgen); echo "$UUU" > /etc/nvme/sentinel-hostid && echo "$UUU" > /etc/nvme/hostid'
+            RemainAfterExit=yes
+            [Install]
+            WantedBy=multi-user.target
