@@ -1,0 +1,36 @@
+# Shamelessly stolen from https://github.com/bry-tam/acm-policy-samples/blob/main/policies/cluster-health/clusteroperator.yml
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: label-nodes-egressip
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Labels all nodes with the egress IP label for OVN-Kubernetes egress IP assignment.
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: label-nodes-egressip
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates-raw: |
+            {{/* ## Loop through the Nodes to ensure they have the labels we want ## */}}
+            {{- range $nodes := (lookup "v1" "Node" "" "").items }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Node
+                metadata:
+                  name: {{ $node.metadata.name }}
+                  labels:
+                    k8s.ovn.org/egress-assignable: ""
+              {{- end }}
+            {{- end }}

@@ -21,6 +21,9 @@ subjects:
   - name: kubelet-configuration
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: label-nodes-egressip
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
 
   # Configuration
   - name: cluster-info-header

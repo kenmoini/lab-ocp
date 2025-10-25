@@ -18,6 +18,7 @@ resources:
 
   # Global/Common Policies
   - console-info-header.yaml
+  - label-nodes-egressip.yaml
   - audit-logging-config.yaml
   - encrypt-etcd.yaml
   - disable-self-provisioner.yaml
