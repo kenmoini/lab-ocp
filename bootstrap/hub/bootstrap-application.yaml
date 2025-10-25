@@ -8,6 +8,16 @@ metadata:
     argocd.argoproj.io/manifest-generate-paths: ".;.."
     argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
 spec:
+  ignoreDifferences:
+    # For some reason ArgoCD marks Applications as OutOfSync due to metadata.generation changes
+    - group: 'argoproj.io'
+      kind: 'Application'
+      jsonPointers:
+        - '/metadata/generation'
+    - group: 'argoproj.io'
+      kind: 'ApplicationSet'
+      jsonPointers:
+        - '/metadata/generation'
   destination:
     server: 'https://kubernetes.default.svc'
   sources:
