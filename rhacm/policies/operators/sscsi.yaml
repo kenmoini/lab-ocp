@@ -2,9 +2,9 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: operators-coo
+  name: operators-sscsi
   annotations:
-    policy.open-cluster-management.io/description: Installs the Cluster Observability Operator
+    policy.open-cluster-management.io/description: Installs the Secrets Store CSI Operator
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
     policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
@@ -15,27 +15,27 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: cco-namespace
+          name: sscsi-namespace
         spec:
           remediationAction: enforce
           severity: critical
           namespaceSelector:
             include:
-              - openshift-cluster-observability-operator
+              - openshift-cluster-csi-drivers
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
                 kind: Namespace
                 metadata:
-                  name: openshift-cluster-observability-operator
+                  name: openshift-cluster-csi-drivers
                   labels:
                     openshift.io/cluster-monitoring: 'true'
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: cco-operator-group
+          name: sscsi-operator-group
         spec:
           remediationAction: enforce
           severity: high
@@ -45,8 +45,8 @@ spec:
                 apiVersion: operators.coreos.com/v1
                 kind: OperatorGroup
                 metadata:
-                  name: cco-group
-                  namespace: openshift-cluster-observability-operator
+                  name: cluster-csi-drivers-group
+                  namespace: openshift-cluster-csi-drivers
                 spec:
                   upgradeStrategy: Default
           pruneObjectBehavior: DeleteIfCreated
@@ -54,7 +54,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: cco-subscription
+          name: sscsi-subscription
         spec:
           remediationAction: enforce
           severity: high
@@ -64,11 +64,11 @@ spec:
                 apiVersion: operators.coreos.com/v1alpha1
                 kind: Subscription
                 metadata:
-                  name: cluster-observability-operator
-                  namespace: openshift-cluster-observability-operator
+                  name: secrets-store-csi-driver-operator
+                  namespace: openshift-cluster-csi-drivers
                 spec:
                   channel: stable
                   installPlanApproval: Automatic
-                  name: cluster-observability-operator
+                  name: secrets-store-csi-driver-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace

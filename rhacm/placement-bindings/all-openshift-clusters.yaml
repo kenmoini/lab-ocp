@@ -86,3 +86,9 @@ subjects:
   - name: operators-oadp
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: operators-coo
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-sscsi
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

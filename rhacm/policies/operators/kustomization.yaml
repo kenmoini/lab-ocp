@@ -24,6 +24,7 @@ resources:
   - odf.yaml
   - pipelines.yaml
   - rhacs.yaml
+  - sscsi.yaml
   - snr.yaml
   - virtualization.yaml
   - web-terminal.yaml

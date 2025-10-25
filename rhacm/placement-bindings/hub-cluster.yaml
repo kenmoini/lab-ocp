@@ -20,7 +20,7 @@ subjects:
     kind: Policy
 
   # Operators
-  - name: operators-cco
+  - name: operators-coo
     apiGroup: policy.open-cluster-management.io
     kind: Policy
 
