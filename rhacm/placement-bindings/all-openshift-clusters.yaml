@@ -14,14 +14,16 @@ subjects:
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
 
-  # Configuration
-  - name: cluster-info-header
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
+  # Policy Generators
   - name: machine-configuration
     apiGroup: policy.open-cluster-management.io
     kind: Policy
   - name: kubelet-configuration
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+  # Configuration
+  - name: cluster-info-header
     apiGroup: policy.open-cluster-management.io
     kind: Policy
   - name: disable-self-provisioner
