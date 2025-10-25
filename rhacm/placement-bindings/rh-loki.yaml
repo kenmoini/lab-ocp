@@ -15,3 +15,6 @@ subjects:
   - name: operators-rh-loki-6.3
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: operators-cco
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
