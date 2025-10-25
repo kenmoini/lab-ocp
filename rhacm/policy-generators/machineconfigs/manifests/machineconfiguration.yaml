@@ -2,6 +2,8 @@ apiVersion: operator.openshift.io/v1
 kind: MachineConfiguration
 metadata:
   name: cluster
+  annotations:
+    argocd.argoproj.io/sync-wave: "-20"
 spec:
   nodeDisruptionPolicy:
     files:
