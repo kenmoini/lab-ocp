@@ -18,6 +18,7 @@ resources:
 
   # Global/Common Policies
   - console-info-header.yaml
+  - audit-logging-config.yaml
   - encrypt-etcd.yaml
   - image-vuln-scanning.yaml
   - openshift-samples-config.yaml

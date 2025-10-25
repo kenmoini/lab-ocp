@@ -18,6 +18,9 @@ subjects:
   - name: cluster-info-header
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: audit-logging-config
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: encrypt-etcd
     apiGroup: policy.open-cluster-management.io
     kind: Policy
