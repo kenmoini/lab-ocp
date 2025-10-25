@@ -32,5 +32,4 @@ spec:
                   name: {{ $node.metadata.name }}
                   labels:
                     k8s.ovn.org/egress-assignable: ""
-              {{- end }}
             {{- end }}
