@@ -6,9 +6,10 @@ metadata:
   #  argocd.argoproj.io/compare-options: IgnoreExtraneous
 #placementBindingDefaults:
 #  name: machineconfiguration
+policySetDefaults:
+  generatePolicySetPlacement: false
 policyDefaults:
   generatePolicyPlacement: false
-  generatePolicySetPlacement: false
   namespace: open-cluster-management-policies
   categories: 
   - NIST SP 800-53
