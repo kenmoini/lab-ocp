@@ -6,3 +6,6 @@ resources:
   - appset-democratic-csi-nfs.yaml
   - appset-install-kyverno.yaml
   - rhacm-integration.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

@@ -21,6 +21,9 @@ subjects:
   - name: operators-gitops-base
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: operators-logging-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: encrypt-etcd
     apiGroup: policy.open-cluster-management.io
     kind: Policy

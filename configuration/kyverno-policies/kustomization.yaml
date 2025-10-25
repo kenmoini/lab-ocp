@@ -8,3 +8,4 @@ resources:
 - outbound-proxy.yaml
 - root-certs.yaml
 - configmap-secret-reloader.yaml
+- rbac.yaml # needed for configmap-secret-reloader

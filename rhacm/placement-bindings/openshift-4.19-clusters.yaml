@@ -12,3 +12,7 @@ subjects:
   - name: operators-4.19-gitops-1.18
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+
+  - name: operators-logging-6.3
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

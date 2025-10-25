@@ -7,3 +7,8 @@ resources:
   - global-o-c-m-p.yaml
   # the stackrox namespace must exist for the stackrox policies to work
   #- global-stackrox.yaml
+#transformers:
+#  - annotations-transformer.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

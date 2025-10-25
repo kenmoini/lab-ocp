@@ -29,30 +29,8 @@ resources:
   #- hub-ocp-update-svc.yaml
 
   # Operator Installation Policies
-  - operators-gitops-base.yaml
-  - operators-4.19-gitops-1.18.yaml
-
-  - operators-aap.yaml
-  - operators-cco.yaml
-  - operators-compliance.yaml
-  - operators-descheduler.yaml
-  - operators-eso.yaml
-  - operators-far.yaml
-  - operators-lso.yaml
-  - operators-metallb.yaml
-  - operators-mtv.yaml
-  - operators-nfd.yaml
-  - operators-nmstate.yaml
-  - operators-nmo.yaml
-  - operators-nhc.yaml
-  - operators-nvidia-gpu.yaml
-  - operators-oadp.yaml
-  - operators-odf.yaml
-  - operators-pipelines.yaml
-  - operators-rhacs.yaml
-  - operators-snr.yaml
-  - operators-virtualization.yaml
-  - operators-web-terminal.yaml
+  - versioned-operators/
+  - operators/
 
   # Hosted Control Plane, Bare Metal Policies
   - hcp-bmh-console.yaml
@@ -71,3 +49,6 @@ resources:
   - instance-nmstate.yaml
   - instance-nvidia-gpu.yaml
   - instance-virtualization.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

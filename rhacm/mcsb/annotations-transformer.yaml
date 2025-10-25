@@ -1,0 +1,10 @@
+apiVersion: builtin
+kind: AnnotationsTransformer
+metadata:
+  name: notImportantHere
+annotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+fieldSpecs:
+- kind: ManagedClusterSetBinding
+  path: metadata/annotations
+  create: true

@@ -12,3 +12,7 @@ resources:
   - instance-bundle-virt.yaml
   - instance-bundle-nvidia.yaml
   - instance-bundle-odf-lso-bmh.yaml
+
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

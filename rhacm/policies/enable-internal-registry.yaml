@@ -47,15 +47,6 @@ spec:
           remediationAction: enforce
           severity: critical
           object-templates:
-            - complianceType: mustnothave
-              objectDefinition:
-                apiVersion: imageregistry.operator.openshift.io/v1
-                kind: Config
-                metadata:
-                  name: cluster
-                spec:
-                  storage:
-                    emptyDir: {}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: imageregistry.operator.openshift.io/v1

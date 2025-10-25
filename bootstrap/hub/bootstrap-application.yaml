@@ -1,0 +1,27 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub-aoa
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: ".;.."
+    argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  sources:
+    - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
+      targetRevision: main
+      path: openshift/openshift-gitops/instance/overlays/default/
+      kustomize: {}
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: bootstrap/hub/argo/
+      kustomize: {}
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true # overrides changes made on the cluster that drift from git state
