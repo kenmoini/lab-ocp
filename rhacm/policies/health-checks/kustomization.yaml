@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: open-cluster-management-policies
+
+resources:
+  # Health Signals
+  - failing-ns.yaml
+  - health-clusteroperator.yaml
+  - health-node.yaml
+  - health-clusterversion.yaml
+  - health-machineconfigpool.yaml
+  - health-mc-addons.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

@@ -1,0 +1,24 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: open-cluster-management-policies
+
+resources:
+
+  # Operator instances
+  - acs-central.yaml
+  - acs-secured-cluster.yaml
+  - descheduler.yaml
+  - eso.yaml
+  #- lso.yaml
+  - metallb.yaml
+  - mtv.yaml
+  - nfd.yaml
+  - nmstate.yaml
+  - nvidia-gpu.yaml
+  #- odf.yaml
+  - virtualization.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

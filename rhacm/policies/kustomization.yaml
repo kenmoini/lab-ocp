@@ -9,12 +9,7 @@ resources:
   - root-ca.yaml
 
   # Health Signals
-  - failing-ns.yaml
-  - health-clusteroperator.yaml
-  - health-node.yaml
-  - health-clusterversion.yaml
-  - health-machineconfigpool.yaml
-  - health-mc-addons.yaml
+  - health-checks/
 
   # Global/Common Policies
   - console-info-header.yaml
@@ -29,30 +24,20 @@ resources:
   - hcp-bmh-infra-creds.yaml
   - kyverno-outbound-proxy.yaml
 
-  # RHACM Hub Policies
-  #- hub-ocp-update-svc.yaml
-
   # Operator Installation Policies
   - versioned-operators/
   - operators/
+
+  # Operator instances
+  - operator-instances/
+
+  # RHACM Hub Policies
+  #- hub-ocp-update-svc.yaml
 
   # Hosted Control Plane, Bare Metal Policies
   - hcp-bmh-console.yaml
 
   # Hosted Control Plane, KubeVirt Policies
-
-  # Operator instances
-  - instance-acs-central.yaml
-  - instance-acs-secured-cluster.yaml
-  - instance-descheduler.yaml
-  - instance-eso.yaml
-  #- instance-lso.yaml
-  - instance-metallb.yaml
-  - instance-mtv.yaml
-  - instance-nfd.yaml
-  - instance-nmstate.yaml
-  - instance-nvidia-gpu.yaml
-  - instance-virtualization.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
