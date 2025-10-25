@@ -113,3 +113,75 @@ spec:
                   conditions:
                     - status: 'True'
                       type: Ready
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: logging-cco-ui-plugin
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: observability.openshift.io/v1alpha1
+                kind: UIPlugin
+                metadata:
+                  name: logging
+                spec:
+                  type: Logging
+                  logging:
+                    lokiStack:
+                      name: logging-loki
+                    logsLimit: 50
+                    timeout: 30s
+                    schema: otel
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: logging-cluster-log-forwarder
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: observability.openshift.io/v1
+                kind: ClusterLogForwarder
+                metadata:
+                  name: local-lokistack
+                  namespace: openshift-logging
+                spec:
+                  collector:
+                    resources:
+                      limits:
+                        memory: 6Gi
+                        cpu: 6
+                      requests:
+                        memory: 2Gi
+                        cpu: 2
+                  serviceAccount:
+                    name: logging-collector
+                  outputs:
+                    - name: local-lokistack
+                      type: lokiStack
+                      lokiStack:
+                        target:
+                          name: logging-loki
+                          namespace: openshift-logging
+                        authentication:
+                          token:
+                            from: serviceAccount
+                      tls:
+                        ca:
+                          key: service-ca.crt
+                          configMapName: openshift-service-ca.crt
+                  pipelines:
+                    - name: infra-app-logs
+                      inputRefs:
+                      - application
+                      - infrastructure
+                      outputRefs:
+                      - local-lokistack
