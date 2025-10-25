@@ -57,6 +57,9 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - `nvidia-gpu=true` Deploys the NFD and NVIDIA GPU Operators and Instances
   - `virtualization=true` Deploys the Virtualization related Operators and Instances
   - `cluster-gitops-config=enabled` Deploys a per-cluster GitOps ApplicationSet of Applications.  Points to `clusters/{{name}}/gitops-config/`
+  - `appset/kyverno=enabled` AppSet that deploys Kyverno via Helm and Policies.
+  - `appset/helm-vault=enabled` AppSet that deploys Hashicorp Vault via Helm.  Not really used since bootstrap needs managed Secrets but can be helpful for providing Vault as a service on managed clusters.
+  - `appset/democratic-csi=enabled` AppSet that deploys Democratic CSI.
 
 - **Kyverno Policies**
   - Add Root CA Certificates to Pods
