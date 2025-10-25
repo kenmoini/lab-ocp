@@ -13,6 +13,9 @@ resources:
   - logging-base.yaml
   - logging-6.3.yaml
 
+  - rh-loki-base.yaml
+  - rh-loki-6.3.yaml
+
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

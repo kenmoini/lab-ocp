@@ -18,6 +18,7 @@ resources:
   - bmh-lso-odf.yaml
   - nvidia-gpu.yaml
   - virtualization.yaml
+  - rh-loki.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

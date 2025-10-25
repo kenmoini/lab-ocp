@@ -18,12 +18,6 @@ subjects:
   - name: cluster-info-header
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: operators-gitops-base
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-logging-base
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
   - name: encrypt-etcd
     apiGroup: policy.open-cluster-management.io
     kind: Policy
@@ -35,6 +29,13 @@ subjects:
   #  kind: Policy
 
   # Operator Deployment
+  - name: operators-gitops-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-logging-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
   - name: operators-rhacs
     apiGroup: policy.open-cluster-management.io
     kind: Policy
