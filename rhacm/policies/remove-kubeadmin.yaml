@@ -5,7 +5,7 @@ metadata:
   annotations:
     policy.open-cluster-management.io/standards: NIST SP 800-53
     policy.open-cluster-management.io/categories: SC System and Communications Protection
-    policy.open-cluster-management.io/controls: SC-1 SYSTEM AND COMMUNICATIONS PROTECTION POLICY AND PROCEDURES
+    policy.open-cluster-management.io/controls: SC-1 System and Communications Protection Policy and Procedures
 spec:
   disabled: false
   policy-templates:
