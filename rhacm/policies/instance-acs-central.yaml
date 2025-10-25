@@ -47,8 +47,6 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
-            - complianceType: musthave
-              objectDefinition:
                 # This lets us bootstrap the SecuredCluster instance policy allowing secrets to be created
                 apiVersion: cluster.open-cluster-management.io/v1beta2
                 kind: ManagedClusterSetBinding

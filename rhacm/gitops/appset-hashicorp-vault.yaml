@@ -12,7 +12,7 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  helmVault: enabled
+                  appset/helm-vault: enabled
           - list:
               elements:
               - appName: vault

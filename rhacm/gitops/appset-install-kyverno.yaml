@@ -12,7 +12,7 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  kyverno: enabled
+                  appset/kyverno: enabled
           - list:
               elements:
               - appName: kyverno
