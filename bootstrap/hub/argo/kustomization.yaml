@@ -11,3 +11,4 @@ resources:
   - hub-acm-placements.yaml
   - hub-acm-policies.yaml
   - hub-acm-policy-generators.yaml
+  - hub-acm-targeted-policies.yaml
