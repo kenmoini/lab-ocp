@@ -3,7 +3,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: label-nodes-egressip
+  name: label-nodes
   #namespace: open-cluster-management-policies
   annotations:
     policy.open-cluster-management.io/description: Labels all nodes with the egress IP label for OVN-Kubernetes egress IP assignment.
@@ -13,6 +13,27 @@ metadata:
 spec:
   disabled: false
   policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: label-nodes-cpu-manager
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates-raw: |
+            {{/* ## Loop through the Nodes to ensure they have the labels we want ## */}}
+            {{- $nodeList := (lookup "v1" "Node" "" "").items }}
+            {{- range $node := $nodeList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Node
+                metadata:
+                  name: {{ $node.metadata.name }}
+                  labels:
+                    cpumanager: "true"
+            {{- end }}
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
