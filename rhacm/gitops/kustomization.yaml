@@ -6,6 +6,7 @@ resources:
   - appproject.yaml
   - appset-democratic-csi-nfs.yaml
   - appset-install-kyverno.yaml
+  - appset-hashicorp-vault.yaml
   - appset-cluster-config.yaml
   - rhacm-integration.yaml
 
