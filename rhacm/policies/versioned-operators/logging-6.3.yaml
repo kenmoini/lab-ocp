@@ -55,7 +55,7 @@ spec:
                 kind: RoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
-                  name: logging-loki-metrics-discovery
+                  name: logging-loki-collector
                   namespace: openshift-logging
                 subjects:
                   - kind: ServiceAccount
@@ -71,7 +71,7 @@ spec:
                 kind: RoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
-                  name: logging-loki-metrics-discovery
+                  name: logging-loki-app-logs
                   namespace: openshift-logging
                 subjects:
                   - kind: ServiceAccount
@@ -87,7 +87,7 @@ spec:
                 kind: RoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
-                  name: logging-loki-metrics-discovery
+                  name: logging-loki-infra-logs
                   namespace: openshift-logging
                 subjects:
                   - kind: ServiceAccount
@@ -103,7 +103,7 @@ spec:
                 kind: RoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
-                  name: logging-loki-metrics-discovery
+                  name: logging-loki-audit-logs
                   namespace: openshift-logging
                 subjects:
                   - kind: ServiceAccount
