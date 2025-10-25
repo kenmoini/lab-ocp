@@ -22,7 +22,6 @@ resources:
   - openshift-samples-config.yaml
   - enable-internal-registry.yaml
   - hcp-bmh-infra-creds.yaml
-  - kyverno-outbound-proxy.yaml
 
   # Operator Installation Policies
   - versioned-operators/

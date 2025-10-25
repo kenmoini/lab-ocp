@@ -44,9 +44,6 @@ subjects:
   - name: image-vuln-scanning
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  #- name: kyverno-outbound-proxy
-  #  apiGroup: policy.open-cluster-management.io
-  #  kind: Policy
 
   # Operator Deployment
   - name: operators-gitops-base
