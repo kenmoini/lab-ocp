@@ -7,6 +7,7 @@ metadata:
 #placementBindingDefaults:
 #  name: machineconfiguration
 policyDefaults:
+  generatePolicyPlacement: false
   namespace: open-cluster-management-policies
   categories: 
   - NIST SP 800-53
