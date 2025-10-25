@@ -8,6 +8,7 @@ metadata:
 #  name: machineconfiguration
 policyDefaults:
   generatePolicyPlacement: false
+  generatePolicySetPlacement: false
   namespace: open-cluster-management-policies
   categories:
   - NIST SP 800-53
@@ -15,10 +16,7 @@ policyDefaults:
   - CM Configuration Management
   standards:
   - CM-2 Baseline Configuration
-  # Use the name of an existing placement rule
-  #placement:
-  #  placementRuleName: management-clusters
-  remediationAction: inform
+  remediationAction: enforce
   severity: high
   pruneObjectBehavior: None
   consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
