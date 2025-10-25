@@ -7,6 +7,7 @@ resources:
   - hub-acm-operator.yaml
   - hub-acm-instance.yaml
   - hub-acm-glue.yaml
+  - hub-acm-o11y.yaml
   - hub-acm-placements.yaml
   - hub-acm-policies.yaml
   - hub-acm-policy-generators.yaml
