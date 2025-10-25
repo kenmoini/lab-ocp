@@ -25,6 +25,19 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
+                apiVersion: console.openshift.io/v1
+                kind: ConsoleLink
+                metadata:
+                  name: rhacs-console-link
+                spec:
+                  applicationMenu:
+                    imageURL: 'https://d7umqicpi7263.cloudfront.net/img/product/f27b2400-a8de-4e69-a7e0-96a7db12bed3/1e769715-a188-40fc-99eb-1b6439509773.png'
+                    section: Red Hat applications
+                  href: 'https://{{ (lookup "route.openshift.io/v1" "Route" "stackrox" "central").spec.host }}'
+                  location: ApplicationMenu
+                  text: Advanced Cluster Security
+            - complianceType: musthave
+              objectDefinition:
                 # This lets us bootstrap the SecuredCluster instance policy allowing secrets to be created
                 apiVersion: cluster.open-cluster-management.io/v1beta2
                 kind: ManagedClusterSetBinding
