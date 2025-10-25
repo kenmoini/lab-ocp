@@ -115,6 +115,29 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: logging-cco-ui-plugin
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: observability.openshift.io/v1alpha1
+                kind: UIPlugin
+                metadata:
+                  name: logging
+                spec:
+                  type: Logging
+                  logging:
+                    lokiStack:
+                      name: logging-loki
+                    logsLimit: 50
+                    timeout: 30s
+                    schema: otel
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: logging-cluster-log-forwarder
         spec:
           remediationAction: enforce
