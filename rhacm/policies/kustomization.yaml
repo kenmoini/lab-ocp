@@ -20,6 +20,8 @@ resources:
   - console-info-header.yaml
   - audit-logging-config.yaml
   - encrypt-etcd.yaml
+  - disable-self-provisioner.yaml
+  - remove-kubeadmin.yaml
   - image-vuln-scanning.yaml
   - openshift-samples-config.yaml
   - enable-internal-registry.yaml

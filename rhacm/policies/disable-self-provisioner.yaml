@@ -1,0 +1,34 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: disable-self-provisioner
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: SC System and Communications Protection
+    policy.open-cluster-management.io/controls: SC-1 System and Communications Protection Policy and Procedures
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: disable-self-provisioner
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                kind: ClusterRoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: self-provisioners
+                  annotations:
+                    rbac.authorization.kubernetes.io/autoupdate: 'false'
+                subjects: []
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: self-provisioner

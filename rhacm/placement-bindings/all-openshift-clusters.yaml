@@ -18,6 +18,12 @@ subjects:
   - name: cluster-info-header
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: disable-self-provisioner
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: remove-kubeadmin
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: audit-logging-config
     apiGroup: policy.open-cluster-management.io
     kind: Policy
