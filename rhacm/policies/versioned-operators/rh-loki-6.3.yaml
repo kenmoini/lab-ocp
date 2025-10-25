@@ -92,3 +92,24 @@ spec:
                   storageClassName: ocs-storagecluster-cephfs
                   tenants:
                     mode: openshift-logging
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rh-loki-6.3-lokistack-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: loki.grafana.com/v1
+                kind: LokiStack
+                metadata:
+                  name: logging-loki
+                  namespace: openshift-logging
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Ready
