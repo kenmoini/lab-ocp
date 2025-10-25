@@ -16,6 +16,28 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: rh-loki-obc
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: loki
+                  namespace: openshift-operators-redhat
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  generateBucketName: loki
+                  objectBucketName: obc-openshift-storage-loki
+                  storageClassName: openshift-storage.noobaa.io
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: rh-loki-6.3-subscription
         spec:
           remediationAction: enforce
