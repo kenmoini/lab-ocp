@@ -23,7 +23,8 @@ spec:
           severity: high
           object-templates-raw: |
             {{/* ## Loop through the Nodes to ensure they have the labels we want ## */}}
-            {{- range $nodes := (lookup "v1" "Node" "" "").items }}
+            {{- $nodeList := (lookup "v1" "Node" "" "").items }}
+            {{- range $node := $nodeList }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
