@@ -34,3 +34,123 @@ spec:
                   name: cluster-logging
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: logging-rbac
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: ServiceAccount
+                apiVersion: v1
+                metadata:
+                  name: logging-collector
+                  namespace: openshift-logging
+            - complianceType: musthave
+              objectDefinition:
+                kind: RoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: logging-loki-metrics-discovery
+                  namespace: openshift-logging
+                subjects:
+                  - kind: ServiceAccount
+                    name: logging-collector
+                    namespace: openshift-logging
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: logging-collector-logs-writer
+
+            - complianceType: musthave
+              objectDefinition:
+                kind: RoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: logging-loki-metrics-discovery
+                  namespace: openshift-logging
+                subjects:
+                  - kind: ServiceAccount
+                    name: logging-collector
+                    namespace: openshift-logging
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: collect-application-logs
+
+            - complianceType: musthave
+              objectDefinition:
+                kind: RoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: logging-loki-metrics-discovery
+                  namespace: openshift-logging
+                subjects:
+                  - kind: ServiceAccount
+                    name: logging-collector
+                    namespace: openshift-logging
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: collect-infrastructure-logs
+
+            - complianceType: musthave
+              objectDefinition:
+                kind: RoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: logging-loki-metrics-discovery
+                  namespace: openshift-logging
+                subjects:
+                  - kind: ServiceAccount
+                    name: logging-collector
+                    namespace: openshift-logging
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: collect-audit-logs
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: logging-cluster-log-forwarder
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: observability.openshift.io/v1
+                kind: ClusterLogForwarder
+                metadata:
+                  name: local-lokistack
+                  namespace: openshift-logging 
+                spec:
+                  serviceAccount:
+                    name: logging-collector 
+                  outputs:
+                    - name: local-lokistack
+                      type: lokiStack 
+                      lokiStack:
+                        target: 
+                          name: logging-loki
+                          namespace: openshift-logging
+                        authentication:
+                          token:
+                            from: serviceAccount
+                      tls:
+                        ca:
+                          key: service-ca.crt
+                          configMapName: openshift-service-ca.crt
+                  pipelines:
+                    - name: infra-app-logs
+                      inputRefs: 
+                      - application
+                      - infrastructure
+                      outputRefs:
+                      - local-lokistack
