@@ -27,7 +27,7 @@ spec:
                 kind: ObjectBucketClaim
                 metadata:
                   name: loki
-                  namespace: openshift-operators-redhat
+                  namespace: openshift-logging
                 spec:
                   additionalConfig:
                     bucketclass: noobaa-default-bucket-class
@@ -56,3 +56,32 @@ spec:
                   name: loki-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rh-loki-6.3-lokistack
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: loki.grafana.com/v1
+                kind: LokiStack
+                metadata:
+                  name: logging-loki 
+                  namespace: openshift-logging 
+                spec:
+                  size: 1x.pico
+                  storage:
+                    schemas:
+                    - version: v13
+                      effectiveDate: "2025-10-01" 
+                    secret:
+                      name: logging-loki-s3
+                      type: s3 
+                  storageClassName: ocs-storagecluster-cephfs
+                  tenants:
+                    mode: openshift-logging

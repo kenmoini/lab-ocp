@@ -70,3 +70,13 @@ spec:
                   namespace: openshift-operators-redhat
                 spec:
                   clusterSet: global
+            - complianceType: musthave
+              objectDefinition:
+                # This lets us bootstrap the Policy to mux credentials
+                apiVersion: cluster.open-cluster-management.io/v1beta2
+                kind: ManagedClusterSetBinding
+                metadata:
+                  name: global
+                  namespace: openshift-logging
+                spec:
+                  clusterSet: global
