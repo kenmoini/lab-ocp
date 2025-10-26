@@ -1,0 +1,18 @@
+---
+apiVersion: k8s.cni.cncf.io/v1
+kind: NetworkAttachmentDefinition
+metadata:
+  name: lab-lan
+  namespace: default
+spec:
+  config: |-
+    {
+      "cniVersion": "0.4.0",
+      "type": "ovn-k8s-cni-overlay",
+      "topology": "localnet",
+      "physicalNetworkName": "vmnet",
+      "netAttachDefName": "default/lab-lan",
+      "name": "lab-lan",
+      "vlanID": 1,
+      "mtu": 9000
+    }

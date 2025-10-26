@@ -1,0 +1,23 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: bond0-vmnet
+spec:
+  desiredState:
+    interfaces:
+    - name: ovs-br0
+      description: A dedicated OVS bridge with bond0 as a port allowing all VLANs and untagged traffic
+      type: ovs-bridge
+      state: up
+      bridge:
+        allow-extra-patch-ports: true
+        options:
+          stp: false
+        port:
+        - name: bond0
+    ovn:
+      bridge-mappings:
+        - bridge: ovs-br0
+          localnet: vmnet
+          state: present
