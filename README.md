@@ -10,7 +10,7 @@ A base script installs GitOps, configures it with an AppOfApps pattern, includin
 
 - Vault - Some things like IDP Secrets need to easily be added where needed.  Sealed Secrets is lame.
 - An OpenShift cluster or few.
-- ODF on the clusters - if not, you just need to change some `storageClassName` definitions.
+- ODF on the clusters - if not, you just need to change some `storageClassName` definitions and do something different for MCO and Loki object storage.
 
 ## Hub Cluster
 
@@ -20,6 +20,8 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
 
 - **All OpenShift Clusters** `vendor=OpenShift`
   - [Policy] Health Checks
+  - [Policy] Root CA Certificates
+  - [Policy] Identity Providers
   - [Policy] MachineConfig{uration}s
   - [Policy] KubeletConfig
   - [Policy] Node Labeler
@@ -56,6 +58,7 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - `acs-central=true` Deploys the ACS Central CR to any cluster
   - `nvidia-gpu=true` Deploys the NFD and NVIDIA GPU Operators and Instances
   - `virtualization=true` Deploys the Virtualization related Operators and Instances
+  - `community-eso=true` Deploys the community External Secrets Operator with a ClusterSecretStore connecting to Vault.  Required for bootstrapping IDP and whatnot.
   - `cluster-gitops-config=enabled` Deploys a per-cluster GitOps ApplicationSet of Applications.  Points to `clusters/{{name}}/gitops-config/`
   - `appset/kyverno=enabled` AppSet that deploys Kyverno via Helm and Policies.
   - `appset/helm-vault=enabled` AppSet that deploys Hashicorp Vault via Helm.  Not really used since bootstrap needs managed Secrets but can be helpful for providing Vault as a service on managed clusters.
@@ -65,3 +68,12 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - Add Root CA Certificates to Pods
   - Add Proxy (and optionally Root CA Certificates) to Pods
   - Reload Pods with Changed ConfigMaps/Secrets
+
+---
+
+## Kemo Notes
+
+- Deploy Hub Cluster
+- Install LSO+ODF
+- Create Vault Userpass secret
+- Run bootstrap script
