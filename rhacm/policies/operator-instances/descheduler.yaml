@@ -67,15 +67,12 @@ spec:
                   deschedulingIntervalSeconds: 30
                   profiles:
                     - DevKubeVirtRelieveAndMigrate
+                    - LongLifecycle
                   profileCustomizations:
                     devEnableSoftTainter: true
+                    LowNodeUtilization: true
                     devDeviationThresholds: AsymmetricLow
                     devActualUtilizationProfile: PrometheusCPUCombined
-                  #profileCustomizations:
-                    # This is important - raises thresholds to reasonable limits
-                    #devLowNodeUtilizationThresholds: High
-                    # Also required for VMs
-                    #devEnableEvictionsInBackground: true
                     namespaces:
                       excluded:
                         - cpuload
@@ -94,6 +91,7 @@ spec:
                         - hive
                         - kube-node-lease
                         - local-cluster
+                        - hub-cluster
                         - stackrox
                         - rhacs-operator
                   # observedConfig:
