@@ -1,0 +1,158 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-far
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Fence Agents Remediation Operator
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: eso-vault-clustersecretstore
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: far-bmc-password-external-secret
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: external-secrets.io/v1beta1
+                kind: ExternalSecret
+                metadata:
+                  name: far-bmc-password-secret
+                  namespace: openshift-workload-availability
+                spec:
+                  refreshInterval: "3600s"
+                  secretStoreRef:
+                    name: kemo-labs-vault
+                    kind: ClusterSecretStore
+                  target:
+                    name: far-kemo-labs-bmc-pass # name of the k8s Secret to make in this namespace
+                    creationPolicy: Owner
+                    deletionPolicy: Retain
+                    template:
+                      engineVersion: v2
+                      type: Opaque # type of k8s Secret to make
+                  data:
+                    - secretKey: '--password' # name of the key in the k8s Secret to create
+                      remoteRef:
+                        key: kemo.labs/infrastructure/oobm # name of the secret under the target Vault path
+                        property: endurance_bmc_pass # name of the key in that named Vault secret
+                    - secretKey: '--username' # name of the key in the k8s Secret to create
+                      remoteRef:
+                        key: kemo.labs/infrastructure/oobm # name of the secret under the target Vault path
+                        property: endurance_bmc_user # name of the key in that named Vault secret
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: far-bmc-password-external-secret
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: far-bmc-secret-check
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: far-bmc-password-secret
+                  namespace: openshift-workload-availability
+                type: Opaque
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: far-bmc-secret-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: far-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: FenceAgentsRemediationTemplate
+                apiVersion: fence-agents-remediation.medik8s.io/v1alpha1
+                metadata:
+                  name: kemo-labs-fart
+                  namespace: openshift-workload-availability
+                spec:
+                  template:
+                    spec:
+                      remediationStrategy: OutOfServiceTaint
+                      retrycount: 5
+                      retryinterval: 5s
+                      timeout: 60s
+                      agent: fence_redfish
+                      sharedSecretName: far-kemo-labs-bmc-pass
+                      sharedparameters:
+                        '--systems-uri': "/redfish/v1/Systems/1"
+                        '--hostname': "{{.NodeName}}.mgmt.kemo.labs"
+                        '--action': reboot
+                        #'--username': ansible
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: far-instance
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: far-nhc-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: remediation.medik8s.io/v1alpha1
+                kind: NodeHealthCheck
+                metadata:
+                  name: nhc-far
+                  namespace: openshift-workload-availability
+                spec:
+                  selector:
+                    matchExpressions:
+                      # Uncomment if you want only non-control-plane nodes to be managed
+                      # The following as is targets all worker nodes, including schedulable masters (3 node clusters)
+                      #- key: node-role.kubernetes.io/control-plane
+                      #  operator: DoesNotExist
+                      #- key: node-role.kubernetes.io/master
+                      #  operator: DoesNotExist
+                      - key: node-role.kubernetes.io/worker
+                        operator: Exists
+                  remediationTemplate: # Note: mutually exclusive with escalatingRemediations
+                    apiVersion: fence-agents-remediation.medik8s.io/v1alpha1
+                    kind: FenceAgentsRemediationTemplate
+                    namespace: openshift-workload-availability
+                    name: kemo-labs-fart
+                  minHealthy: 51%

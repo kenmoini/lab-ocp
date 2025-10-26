@@ -15,6 +15,35 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: descheduler-operator-status
+        spec:
+          remediationAction: inform
+          namespaceSelector:
+            include:
+              - openshift-kube-descheduler-operator
+          severity: high
+          object-templates-raw: |
+            {{/* ## Loop through the Pods in the namespace to ensure they are healthy ## */}}
+            {{- range $pod := (lookup "v1" "Pod" "openshift-kube-descheduler-operator" "").items }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                  name: {{ $pod.metadata.name }}
+                status:
+                  phase: Running
+            {{- end }}
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: descheduler-operator-status
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: descheduler-instance
         spec:
           remediationAction: enforce

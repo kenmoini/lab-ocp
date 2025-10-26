@@ -12,3 +12,4 @@ spec:
     - instance-mtv
     - instance-virtualization
     - instance-descheduler
+    - instance-far
