@@ -1,0 +1,36 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: creds-copy-vault-userpass
+  namespace: kube-system
+  annotations:
+    policy.open-cluster-management.io/description: Copies the Vault userpass credentials to Managed Spoke Clusters from the Hub Cluster
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: creds-copy-vault-userpass
+        spec:
+          remediationAction: enforce
+          severity: critical
+          namespaceSelector:
+            include:
+              - kube-system
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: vault-userpass
+                  namespace: kube-system
+                type: Opaque
+                data:
+                  password: '{{hub fromSecret "kube-system" "bootstrap-vault-userpass" "password" hub}}'

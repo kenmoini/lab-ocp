@@ -2,7 +2,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: instance-eso
+  name: instance-community-eso
   annotations:
     policy.open-cluster-management.io/description: Deploys the External Secrets Operator connected to Vault
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
@@ -11,13 +11,19 @@ metadata:
 spec:
   disabled: false
   policy-templates:
-    - objectDefinition:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: community-eso-subscription
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: eso-vault-token
+          name: community-eso-vault-userpass-secret-check
         spec:
-          remediationAction: enforce
+          remediationAction: inform
           severity: critical
           object-templates:
             - complianceType: musthave
@@ -25,17 +31,21 @@ spec:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: eso-vault-token
-                  namespace: external-secrets
+                  name: vault-userpass
+                  namespace: kube-system
                 type: Opaque
-                data:
-                  token: '{{hub fromSecret "open-cluster-management-policies" "eso-vault-token" "token" hub}}'
 
-    - objectDefinition:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: community-eso-vault-userpass-secret-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: eso-operatorconfig
+          name: community-eso-operatorconfig
         spec:
           remediationAction: enforce
           severity: critical
@@ -94,7 +104,6 @@ spec:
                   fullnameOverride: ''
                   image:
                     pullPolicy: IfNotPresent
-                    #repository: oci.external-secrets.io/external-secrets/external-secrets
                     repository: ghcr.io/external-secrets/external-secrets
                     #tag: ''
                     flavour: "ubi"
@@ -161,7 +170,13 @@ spec:
                       name: ''
                     tolerations: []
 
-    - objectDefinition:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: community-eso-operatorconfig
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
@@ -180,10 +195,18 @@ spec:
                   provider:
                     vault:
                       auth:
-                        tokenSecretRef:
-                          key: token
-                          name: eso-vault-token
-                          namespace: external-secrets
+                        userPass:
+                          # Path where the UserPass authentication backend is mounted
+                          path: "userpass"
+                          username: "openshift"
+                          secretRef:
+                            name: "vault-userpass"
+                            namespace: kube-system
+                            key: "password"
+                        #tokenSecretRef:
+                        #  key: token
+                        #  name: eso-vault-token
+                        #  namespace: external-secrets
                       path: kv
                       server: 'https://vault.apps.kemo.labs'
                       version: v2

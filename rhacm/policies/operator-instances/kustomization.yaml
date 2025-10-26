@@ -10,7 +10,7 @@ resources:
   - acs-central.yaml
   - acs-secured-cluster.yaml
   - descheduler.yaml
-  - eso.yaml
+  - community-eso.yaml
   #- lso.yaml
   - metallb.yaml
   - mtv.yaml

@@ -3,15 +3,12 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
   name: community-eso
-  #namespace: open-cluster-management-policies
+  namespace: kube-system
 placementRef:
   name: community-eso
   apiGroup: cluster.open-cluster-management.io
   kind: Placement
 subjects:
-  - name: operators-community-eso
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: instance-community-eso
+  - name: creds-copy-vault-userpass
     apiGroup: policy.open-cluster-management.io
     kind: Policy
