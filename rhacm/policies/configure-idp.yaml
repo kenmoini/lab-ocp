@@ -269,7 +269,7 @@ spec:
         metadata:
           name: oauth-configuration
         spec:
-          remediationAction: inform
+          remediationAction: enforce
           severity: high
           object-templates:
             - complianceType: mustonlyhave
