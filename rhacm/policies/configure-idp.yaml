@@ -60,7 +60,7 @@ spec:
         metadata:
           name: external-secret-ldap-bind-check
         spec:
-          remediationAction: enforce
+          remediationAction: inform
           severity: high
           object-templates:
             - complianceType: musthave
