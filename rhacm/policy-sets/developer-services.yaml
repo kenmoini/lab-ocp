@@ -1,0 +1,13 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: developer-services
+  #namespace: open-cluster-management-policies
+spec:
+  description: "OpenShift developer services"
+  policies:
+    - operators-openshift-builds
+    - operators-pipelines
+    - operators-devspaces
+

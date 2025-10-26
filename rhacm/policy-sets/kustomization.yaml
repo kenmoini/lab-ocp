@@ -8,6 +8,7 @@ resources:
   - global-openshift-config.yaml
   - global-openshift-operators.yaml
   - hub-health-checks.yaml
+  - developer-services.yaml
   - operator-bundle-nvidia.yaml
   - operator-bundle-odf.yaml
   - operator-bundle-virt.yaml

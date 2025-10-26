@@ -10,6 +10,7 @@ resources:
   - cert-manager.yaml
   - compliance.yaml
   - descheduler.yaml
+  - devspaces.yaml
   - community-eso.yaml
   - far.yaml
   - lso.yaml
@@ -21,6 +22,7 @@ resources:
   - nhc.yaml
   - nvidia-gpu.yaml
   - oadp.yaml
+  - openshift-builds.yaml
   - odf.yaml
   - pipelines.yaml
   - rhacs.yaml

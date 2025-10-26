@@ -1,0 +1,15 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: developer-services
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: developer-services
+              operator: In
+              values:
+                - "true"
+                - "enabled"
