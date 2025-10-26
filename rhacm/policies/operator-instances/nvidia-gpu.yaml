@@ -15,6 +15,42 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: nvidia-gpu-operator-status
+        spec:
+          remediationAction: inform
+          namespaceSelector:
+            include:
+              - gpu-operator
+          severity: high
+          object-templates-raw: |
+            {{/* ## Loop through the Deployments in the namespace to ensure they are healthy ## */}}
+            {{- range $deployment := (lookup "apps/v1" "Deployment" "gpu-operator" "").items }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: {{ $deployment.metadata.name }}
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+            {{- end }}
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: operators-nvidia-gpu
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: nvidia-gpu-operator-status
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: nvidia-gpu-instance
         spec:
           remediationAction: enforce
