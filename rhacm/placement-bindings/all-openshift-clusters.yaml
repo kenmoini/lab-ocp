@@ -26,6 +26,9 @@ subjects:
     kind: Policy
 
   # Configuration
+  - name: root-ca-distribution
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: cluster-info-header
     apiGroup: policy.open-cluster-management.io
     kind: Policy
