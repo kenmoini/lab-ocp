@@ -2,7 +2,7 @@
 apiVersion: policy.open-cluster-management.io/v1beta1
 kind: PolicySet
 metadata:
-  name: operator-bundle-nvidia
+  name: operator-bundle-nvidia-gpu
   #namespace: open-cluster-management-policies
 spec:
   description: "Set of policies that will deploy basic NVIDIA GPU components"
