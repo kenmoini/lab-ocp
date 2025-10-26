@@ -46,7 +46,7 @@ spec:
                   data:
                     - secretKey: bindPassword
                       remoteRef:
-                        key: kemo-labs/services/idm.kemo.labs # name of the secret under the target Vault path
+                        key: kemo.labs/services/idm.kemo.labs # name of the secret under the target Vault path
                         property: ldapBindPassword # # name of the key in that named Vault secret
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
