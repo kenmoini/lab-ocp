@@ -26,6 +26,7 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - [Policy] MachineConfig{uration}s
   - [Policy] KubeletConfig
   - [Policy] Node Labeler
+  - [Policy] Console Samples Configuration
   - [Policy] Cluster Info Header with dynamic colors from a ConfigMap
   - [Policy] Removal of Kubeadmin
   - [Policy] Disabling of Self-Provisioner
