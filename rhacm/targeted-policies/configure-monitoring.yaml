@@ -68,5 +68,5 @@ spec:
                             name: hub-alertmanager-router-ca
                           insecureSkipVerify: false
                       externalLabels:
-                        managed_cluster: {{ (index .ManagedClusterLabels "clusterID") }}
+                        managed_cluster: {{ index .ManagedClusterLabels "clusterID" }}
 
