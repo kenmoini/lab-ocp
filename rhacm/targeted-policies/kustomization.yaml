@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - creds-copy-vault-userpass.yaml
   - loki-format-secret.yaml
+  - configure-monitoring.yaml

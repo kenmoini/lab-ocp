@@ -2,7 +2,7 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   name: configure-monitoring
-  #namespace: open-cluster-management-policies
+  namespace: openshift-monitoring
   annotations:
     policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025

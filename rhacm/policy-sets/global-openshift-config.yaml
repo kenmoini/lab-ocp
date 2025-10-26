@@ -1,0 +1,23 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: global-openshift-config
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Global OpenShift configuration policies"
+  policies:
+    # Policy Generators
+    - machine-configuration
+    - kubelet-configuration
+    - label-nodes
+
+    # Policies
+    - root-ca-distribution
+    - cluster-info-header
+    - configure-idp
+    - disable-self-provisioner
+    - remove-kubeadmin
+    - audit-logging-config
+    - encrypt-etcd
+    - image-vuln-scanning

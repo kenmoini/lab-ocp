@@ -14,87 +14,12 @@ subjects:
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
 
-  # Policy Generators
-  - name: machine-configuration
+  # Global OpenShift Configuration
+  - name: global-openshift-config
     apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: kubelet-configuration
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: label-nodes
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
+    kind: PolicySet
 
-  # Configuration
-  - name: root-ca-distribution
+  # Global OpenShift Operator Installation
+  - name: global-openshift-operators
     apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: cluster-info-header
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: configure-idp
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: configure-monitoring
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: disable-self-provisioner
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: remove-kubeadmin
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: audit-logging-config
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: encrypt-etcd
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: image-vuln-scanning
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-
-  # Operator Deployment
-  - name: operators-gitops-base
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-logging-base
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-
-  - name: operators-rh-cert-manager
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-rhacs
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-metallb
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: instance-metallb
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-web-terminal
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-compliance
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-nmo
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-nmstate
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: instance-nmstate
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-oadp
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-coo
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-sscsi
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
+    kind: PolicySet
