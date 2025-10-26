@@ -13,7 +13,7 @@ subjects:
   - name: hcp-bmh-console
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: hcp-openshift-samples-config
+  - name: openshift-samples-config
     apiGroup: policy.open-cluster-management.io
     kind: Policy
   - name: enable-internal-registry

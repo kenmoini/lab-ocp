@@ -2,7 +2,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: hcp-openshift-samples-config
+  name: openshift-samples-config
   annotations:
     policy.open-cluster-management.io/description: Configures the OpenShift Samples Operator
     policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management

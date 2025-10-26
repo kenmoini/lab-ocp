@@ -20,4 +20,5 @@ spec:
     - remove-kubeadmin
     - audit-logging-config
     - encrypt-etcd
+    - openshift-samples-config
     - image-vuln-scanning
