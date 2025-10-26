@@ -30,6 +30,7 @@ spec:
       - SkipDryRunOnMissingResource=true
       - ServerSideApply=true
       - RespectIgnoreDifferences=true
+      - ApplyOutOfSyncOnly=true
     automated:
       prune: true
       allowEmpty: true
