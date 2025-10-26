@@ -22,6 +22,7 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - [Policy] Health Checks
   - [Policy] Root CA Certificates
   - [Policy] Identity Providers
+  - [Policy] Monitoring Configuration (Persistence + ACM)
   - [Policy] MachineConfig{uration}s
   - [Policy] KubeletConfig
   - [Policy] Node Labeler
@@ -54,12 +55,12 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - [Policy] OpenShift Loki 6.3 Operator & Instance (with `rhLoki=true` cluster label)
 
 - **Cluster Label Flagged**
-  - `acs-secured-cluster=true` Deploys the ACS SecuredCluster CR integrated to the Hub ACS
-  - `acs-central=true` Deploys the ACS Central CR to any cluster
-  - `nvidia-gpu=true` Deploys the NFD and NVIDIA GPU Operators and Instances
-  - `virtualization=true` Deploys the Virtualization related Operators and Instances
-  - `community-eso=true` Deploys the community External Secrets Operator with a ClusterSecretStore connecting to Vault.  Required for bootstrapping IDP and whatnot.
   - `cluster-gitops-config=enabled` Deploys a per-cluster GitOps ApplicationSet of Applications.  Points to `clusters/{{name}}/gitops-config/`
+  - `acs-secured-cluster=enabled` Deploys the ACS SecuredCluster CR integrated to the Hub ACS
+  - `acs-central=enabled` Deploys the ACS Central CR to any cluster, by default an ACS Hub will be deployed on the ACM Hub
+  - `nvidia-gpu=enabled` Deploys the NFD and NVIDIA GPU Operators and Instances
+  - `virtualization=enabled` Deploys the Virtualization related Operators and Instances
+  - `community-eso=enabled` Deploys the community External Secrets Operator with a ClusterSecretStore connecting to Vault.  Required for bootstrapping IDP and whatnot.
   - `appset/kyverno=enabled` AppSet that deploys Kyverno via Helm and Policies.
   - `appset/helm-vault=enabled` AppSet that deploys Hashicorp Vault via Helm.  Not really used since bootstrap needs managed Secrets but can be helpful for providing Vault as a service on managed clusters.
   - `appset/democratic-csi=enabled` AppSet that deploys Democratic CSI.
@@ -69,6 +70,11 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - Add Proxy (and optionally Root CA Certificates) to Pods
   - Reload Pods with Changed ConfigMaps/Secrets
 
+- **Per-Cluster GitOps**
+  - Hub Cluster
+    - Networking Configuration (NNCPs, NADs, EgressIPs, MetalLB)
+    - Virtualization Hydration (Templates, Migration Providers)
+
 ---
 
 ## Kemo Notes
@@ -77,3 +83,15 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
 - Install LSO+ODF
 - Create Vault Userpass secret
 - Run bootstrap script
+- Label hub-cluster in ACM with:
+
+```bash
+until $(oc get managedclusters.cluster.open-cluster-management.io/hub-cluster &>/dev/null); do echo "Waiting for ACM and Hub Cluster init..." && sleep 5; done
+
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/kyverno=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster community-eso=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster rhLoki=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster nvidia-gpu=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster virtualization=enabled
+```
