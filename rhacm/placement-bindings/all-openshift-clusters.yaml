@@ -29,6 +29,9 @@ subjects:
   - name: cluster-info-header
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: configure-idp
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: disable-self-provisioner
     apiGroup: policy.open-cluster-management.io
     kind: Policy

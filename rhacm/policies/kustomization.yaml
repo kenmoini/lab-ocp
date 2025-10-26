@@ -22,6 +22,7 @@ resources:
   - openshift-samples-config.yaml
   - enable-internal-registry.yaml
   - hcp-bmh-infra-creds.yaml
+  - configure-idp.yaml
 
   # Operator Installation Policies
   - versioned-operators/
