@@ -64,6 +64,7 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - `appset/kyverno=enabled` AppSet that deploys Kyverno via Helm and Policies.
   - `appset/helm-vault=enabled` AppSet that deploys Hashicorp Vault via Helm.  Not really used since bootstrap needs managed Secrets but can be helpful for providing Vault as a service on managed clusters.
   - `appset/democratic-csi=enabled` AppSet that deploys Democratic CSI.
+  - `developer-services=enabled` Deploys Developer Services (OpenShift Builds, DevSpaces, Pipelines, RHDP, etc)
 
 - **Kyverno Policies**
   - Add Root CA Certificates to Pods
@@ -95,3 +96,10 @@ oc label managedclusters.cluster.open-cluster-management.io/hub-cluster rhLoki=e
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster nvidia-gpu=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster virtualization=enabled
 ```
+
+---
+
+## Todo
+
+- Add ExternalDNS with PowerDNS and Route53
+- Add cert-manager with sub-ca, StepCA ACME, and Let's Encrypt with R53
