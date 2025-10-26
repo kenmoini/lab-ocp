@@ -112,7 +112,7 @@ spec:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: ldap-bind-passs
+                  name: ldap-bind-pass
                   namespace: openshift-config
                 type: Opaque
 
@@ -238,7 +238,7 @@ spec:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: google-oauths
+                  name: google-oauth
                   namespace: openshift-config
                 type: Opaque
 
