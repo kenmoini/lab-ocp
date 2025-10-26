@@ -17,6 +17,7 @@ resources:
   - audit-logging-config.yaml
   - encrypt-etcd.yaml
   - disable-self-provisioner.yaml
+  - root-ca-distribution.yaml
   - remove-kubeadmin.yaml
   - image-vuln-scanning.yaml
   - openshift-samples-config.yaml
