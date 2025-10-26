@@ -3,7 +3,7 @@ apiVersion: cluster.open-cluster-management.io/v1beta1
 kind: Placement
 metadata:
   name: all-openshift-clusters
-  namespace: openshift-monitoring
+  namespace: open-cluster-management-observability
 spec:
   predicates:
     - requiredClusterSelector:

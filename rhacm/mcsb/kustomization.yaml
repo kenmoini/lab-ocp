@@ -7,6 +7,7 @@ resources:
   - global-o-c-m-p.yaml
   - global-kube-system.yaml
   - global-openshift-monitoring.yaml
+  - global-open-cluster-management-observability.yaml
   # the stackrox namespace must exist for the stackrox policies to work - we make this with a policy
   #- global-stackrox.yaml
 #transformers:
