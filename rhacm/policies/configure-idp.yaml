@@ -9,6 +9,50 @@ metadata:
 spec:
   disabled: false
   policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: idp-ldap-ca-configmap
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: ConfigMap
+                apiVersion: v1
+                metadata:
+                  name: ldap-ca-cert
+                  namespace: openshift-config
+                data:
+                  ca.crt: |
+                    -----BEGIN CERTIFICATE-----
+                    MIIERjCCAq6gAwIBAgIBATANBgkqhkiG9w0BAQsFADA0MRIwEAYDVQQKDAlLRU1P
+                    LkxBQlMxHjAcBgNVBAMMFUNlcnRpZmljYXRlIEF1dGhvcml0eTAeFw0yNTAyMTEw
+                    MzA3NDNaFw00NTAyMTEwMzA3NDNaMDQxEjAQBgNVBAoMCUtFTU8uTEFCUzEeMBwG
+                    A1UEAwwVQ2VydGlmaWNhdGUgQXV0aG9yaXR5MIIBojANBgkqhkiG9w0BAQEFAAOC
+                    AY8AMIIBigKCAYEAy9PsdJtKeuBj9CM9xkVE5ejToCL2ZGxTL7AfogJDkFv5ZAIN
+                    YumTC9naOCgdyoe0EZlctnu6nQZXcwaM9Z4hseRmVkI5SpGBM/My/ZGsLVvmU5Kb
+                    e9vW1ehUEefnxFaWmJGAiVmTl5ziIh6N2yeZ2ePQzMf1NRzH7UrrItKbWneKkOGL
+                    HFSxQ5jixndVLeI5FIE8CprinyZerByXMXyrEWCLtdTxUxDYOsF8CnvK36FQy4zW
+                    i3W645/pcLHVvrib2IzCjW//HUGzynkK4hG5RpRwtmC41LXpgcusuOhwZxYKpMoC
+                    hV37TxBvDrR5QVH9NCBdnriTico6VdnNp1UpBJ5tnorXsizQEycHInU/rWnuIB+T
+                    iuz6m64dO1YmgBiPqVXOiVKOIXWf1xVHW3ORwyroHUJioyVymoyhDkhqU5xS0xWO
+                    12zj0f/u1xJ28NInk/GxULdNXfaGvE5yOiMXAImfPY0ga57eWb3ysn9PshGxmOYb
+                    dNzEOC/INBdABWOrAgMBAAGjYzBhMB0GA1UdDgQWBBRSPxso4Q5l5CIoYi9Oq/9Y
+                    E6eYizAfBgNVHSMEGDAWgBRSPxso4Q5l5CIoYi9Oq/9YE6eYizAPBgNVHRMBAf8E
+                    BTADAQH/MA4GA1UdDwEB/wQEAwIBxjANBgkqhkiG9w0BAQsFAAOCAYEAP8kJ9WSu
+                    +zufpFZzYwfjyKFPrP91SYmYYsCGCYV4oKvnx2Z+yZGCzkv2RUVspAVkhqfYib5v
+                    K+APjR48kQqUHywpUU0mWFxAq4Xs7Vf8i9thwDrz6GHn/T2VqUXKDX0PuvaSujhP
+                    skZBYuzw9H09cDI277JvlMHEM7c5yIFk3bi9eUTULIBYFRy1Jw0u6jne4XW75vns
+                    lC+fcKWdBVs81+0tuKNgZiit9eCVSTal9GJgeC0OcCz7KhNxgwcep16tWZ19V3BP
+                    FtPMIdPoA8qpyrW/oZd0BByxvt/OdceZO6kVaCo3m1zIMw3WebsMYcBW/p4ieai7
+                    SIgB/EhfoE2BHisH5vf2QHfsa069K/PXFEY942Z/Ie3yX+z0p7dpybDxbmb+iv1Q
+                    j40sSNPxCeZNojxx058J3hscJ1qekcy7aPv7UUZ07uhCvZ6zOosUhrcuWZ2IqGDi
+                    H4smBPViOKyxP0qdzoncPgdof7X2qb6Og+EZRP4PbP2+3YbmctJ8YvqL
+                    -----END CERTIFICATE-----
+
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
@@ -135,7 +179,6 @@ spec:
                   namespace: openshift-config
                 type: Opaque
 
-
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
@@ -195,6 +238,91 @@ spec:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: google-oauth
+                  name: google-oauths
                   namespace: openshift-config
                 type: Opaque
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: idp-ldap-ca-configmap
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: external-secret-ldap-bind-check
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: external-secret-keycloak-client-check
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: external-secret-google-oauth-client
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: oauth-configuration
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: config.openshift.io/v1
+                kind: OAuth
+                metadata:
+                  name: cluster
+                spec:
+                  identityProviders:
+                    - ldap:
+                        attributes:
+                          email:
+                            - mail
+                          id:
+                            - dn
+                          name:
+                            - cn
+                          preferredUsername:
+                            - uid
+                        bindDN: 'uid=admin,cn=users,cn=accounts,dc=kemo,dc=labs'
+                        bindPassword:
+                          name: ldap-bind-pass
+                        ca:
+                          name: ldap-ca-cert
+                        insecure: false
+                        url: 'ldaps://idm.kemo.labs:636'
+                      mappingMethod: add
+                      name: LabDAP
+                      type: LDAP
+                    - google:
+                        clientID: 1005185173510-l99vvs6cdfhfbu84s4tck5tj6kalt8p5.apps.googleusercontent.com
+                        clientSecret:
+                          name: google-oauth
+                        hostedDomain: redhat.com
+                      mappingMethod: add
+                      name: RedHatSSO
+                      type: Google
+                    - mappingMethod: add
+                      name: KemoLabsSSO
+                      openID:
+                        ca:
+                          name: kemo-labs-sso-oidc
+                        claims:
+                          email:
+                            - email
+                          name:
+                            - name
+                          preferredUsername:
+                            - preferred_username
+                        clientID: tri-force-ocp
+                        clientSecret:
+                          name: sso-kemo-labs
+                        extraScopes: []
+                        issuer: 'https://sso.kemo.labs/realms/KemoLabs'
+                      type: OpenID
