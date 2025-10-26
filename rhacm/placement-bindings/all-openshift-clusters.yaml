@@ -35,6 +35,9 @@ subjects:
   - name: configure-idp
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: configure-monitoring
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: disable-self-provisioner
     apiGroup: policy.open-cluster-management.io
     kind: Policy

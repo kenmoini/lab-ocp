@@ -23,6 +23,7 @@ resources:
   - enable-internal-registry.yaml
   - hcp-bmh-infra-creds.yaml
   - configure-idp.yaml
+  - configure-monitoring.yaml
 
   # Operator Installation Policies
   - versioned-operators/

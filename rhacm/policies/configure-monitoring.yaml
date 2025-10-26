@@ -1,0 +1,72 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: configure-monitoring
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: configure-monitoring-cm
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: ConfigMap
+                apiVersion: v1
+                metadata:
+                  name: cluster-monitoring-config
+                  namespace: openshift-monitoring
+                data:
+                  config.yaml: |
+                    enableUserWorkload: true
+                    nodeExporter:
+                      collectors:
+                        buddyinfo: {}
+                        cpufreq: {}
+                        ksmd: {}
+                        mountstats: {}
+                        netclass: {}
+                        netdev: {}
+                        processes: {}
+                        systemd: {}
+                        tcpstat: {}
+                    alertmanagerMain:
+                      volumeClaimTemplate:
+                        spec:
+                          storageClassName: ocs-storagecluster-cephfs
+                          resources:
+                            requests:
+                              storage: 10Gi
+                    prometheusK8s:
+                      volumeClaimTemplate:
+                        spec:
+                          storageClassName: ocs-storagecluster-cephfs
+                          resources:
+                            requests:
+                              storage: 40Gi
+                      additionalAlertmanagerConfigs:
+                      - apiVersion: v2
+                        bearerToken:
+                          key: token
+                          name: observability-alertmanager-accessor
+                        scheme: https
+                        staticConfigs:
+                        - {{hub (lookup "route.openshift.io/v1" "Route" "open-cluster-management-observability" "alertmanager").spec.host hub}}
+                        tlsConfig:
+                          ca:
+                            key: service-ca.crt
+                            name: hub-alertmanager-router-ca
+                          insecureSkipVerify: false
+                      externalLabels:
+                        managed_cluster: {{ .ManagedClusterLabels.clusterID }}
+
