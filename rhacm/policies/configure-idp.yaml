@@ -68,6 +68,133 @@ spec:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: ldap-bind-pass
+                  name: ldap-bind-passs
+                  namespace: openshift-config
+                type: Opaque
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: eso-vault-clustersecretstore
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: external-secret-keycloak-client
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: external-secrets.io/v1beta1
+                kind: ExternalSecret
+                metadata:
+                  name: vault-keycloak-client-secret
+                  namespace: openshift-config
+                spec:
+                  refreshInterval: "3600s"
+                  secretStoreRef:
+                    name: kemo-labs-vault
+                    kind: ClusterSecretStore
+                  target:
+                    name: sso-kemo-labs # name of the k8s Secret to make in this namespace
+                    creationPolicy: Owner
+                    deletionPolicy: Retain
+                    template:
+                      engineVersion: v2
+                      type: Opaque # type of k8s Secret to make
+                  data:
+                    - secretKey: clientSecret
+                      remoteRef:
+                        key: kemo.labs/services/sso.kemo.labs # name of the secret under the target Vault path
+                        property: clientSecret # # name of the key in that named Vault secret
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: external-secret-keycloak-client
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: external-secret-keycloak-client-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: sso-kemo-labs
+                  namespace: openshift-config
+                type: Opaque
+
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: eso-vault-clustersecretstore
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: external-secret-google-oauth-client
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: external-secrets.io/v1beta1
+                kind: ExternalSecret
+                metadata:
+                  name: vault-google-oauth-client-secret
+                  namespace: openshift-config
+                spec:
+                  refreshInterval: "3600s"
+                  secretStoreRef:
+                    name: kemo-labs-vault
+                    kind: ClusterSecretStore
+                  target:
+                    name: google-oauth # name of the k8s Secret to make in this namespace
+                    creationPolicy: Owner
+                    deletionPolicy: Retain
+                    template:
+                      engineVersion: v2
+                      type: Opaque # type of k8s Secret to make
+                  data:
+                    - secretKey: clientSecret
+                      remoteRef:
+                        key: external/google/oauth # name of the secret under the target Vault path
+                        property: clientSecret # # name of the key in that named Vault secret
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: external-secret-google-oauth-client
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: external-secret-google-oauth-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: google-oauth
                   namespace: openshift-config
                 type: Opaque
