@@ -24,7 +24,7 @@ spec:
       - RespectIgnoreDifferences=true
       - ApplyOutOfSyncOnly=true
     automated:
-      prune: true
+      prune: false
       allowEmpty: true
       selfHeal: true # overrides changes made on the cluster that drift from git state
     retry:
