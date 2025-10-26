@@ -71,3 +71,4 @@ spec:
                   name: ldap-bind-pass
                   namespace: openshift-config
                 type: Opaque
+                data: {}
