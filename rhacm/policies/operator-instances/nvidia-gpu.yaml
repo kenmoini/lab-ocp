@@ -11,7 +11,13 @@ metadata:
 spec:
   disabled: false
   policy-templates:
-    - objectDefinition:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-nvidia-gpu
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
@@ -37,11 +43,6 @@ spec:
                       type: Available
             {{- end }}
     - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: Policy
-          name: operators-nvidia-gpu
-          namespace: ""
-          compliance: Compliant
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
           name: nvidia-gpu-operator-status
