@@ -5,6 +5,8 @@ metadata:
   name: monitoring
 spec:
   monitoring:
+    incidents:
+      enabled: true
     acm:
       enabled: true
       alertmanager:
