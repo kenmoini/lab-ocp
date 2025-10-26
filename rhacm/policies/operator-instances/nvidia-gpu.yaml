@@ -38,7 +38,7 @@ spec:
             {{- end }}
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
+          kind: Policy
           name: operators-nvidia-gpu
           namespace: ""
           compliance: Compliant
