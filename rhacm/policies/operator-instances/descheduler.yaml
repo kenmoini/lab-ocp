@@ -70,7 +70,7 @@ spec:
                     - LongLifecycle
                   profileCustomizations:
                     devEnableSoftTainter: true
-                    LowNodeUtilization: true
+                    lowNodeUtilization: true
                     devDeviationThresholds: AsymmetricLow
                     devActualUtilizationProfile: PrometheusCPUCombined
                     namespaces:
