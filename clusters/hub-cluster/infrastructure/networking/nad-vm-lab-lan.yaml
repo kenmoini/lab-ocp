@@ -13,6 +13,6 @@ spec:
       "physicalNetworkName": "vmnet",
       "netAttachDefName": "default/lab-lan",
       "name": "lab-lan",
-      "vlanID": 1,
+      "vlanID": 0,
       "mtu": 9000
     }
