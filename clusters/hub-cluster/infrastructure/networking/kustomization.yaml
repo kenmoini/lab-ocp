@@ -9,3 +9,4 @@ resources:
   - nad-vm-vlan70-disconnected.yaml
   - nad-vm-lab-lan.yaml
   - nad-baremetal-network.yaml
+  - nad-vlan66-dbnet.yaml
