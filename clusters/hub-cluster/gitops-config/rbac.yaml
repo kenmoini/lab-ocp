@@ -12,7 +12,7 @@ spec:
   sources:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: configuration/rbac/
+      path: configuration/rbac/groups/
       kustomize: {}
 
   project: default
