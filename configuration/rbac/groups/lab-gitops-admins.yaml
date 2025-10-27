@@ -1,7 +1,7 @@
 apiVersion: user.openshift.io/v1
 kind: Group
 metadata:
-  name: gitops-admins
+  name: lab-gitops-admins
 users:
   - kemo
   - kmoini@redhat.com
