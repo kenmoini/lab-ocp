@@ -11,8 +11,8 @@ spec:
       "type": "ovn-k8s-cni-overlay",
       "topology": "localnet",
       "physicalNetworkName": "vmnet",
-      "netAttachDefName": "default/vlan70",
-      "name": "vlan70",
+      "netAttachDefName": "default/vlan70-disconnected",
+      "name": "vlan70-disconnected",
       "vlanID": 70,
       "mtu": 9000
     }

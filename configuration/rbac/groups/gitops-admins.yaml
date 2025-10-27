@@ -1,0 +1,23 @@
+apiVersion: user.openshift.io/v1
+kind: Group
+metadata:
+  name: gitops-admins
+users:
+  - kemo
+  - kmoini@redhat.com
+  - ken@kenmoini.com
+  - kubeadmin
+
+  - mtipton@redhat.com
+  - tsikes@redhat.com
+  - takinosh@redhat.com
+  - ajhajj@redhat.com
+  - msolberg@redhat.com
+  - gfontana@redhat.com
+  - jedavis@redhat.com
+  - jnovotni@redhat.com
+  - jobrowni@redhat.com
+  - jfloristan
+  - jflorist@redhat.com
+  - lnichols@redhat.com
+  - sgurijal@redhat.com

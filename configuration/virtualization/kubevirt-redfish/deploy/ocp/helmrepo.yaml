@@ -1,0 +1,7 @@
+apiVersion: helm.openshift.io/v1beta1
+kind: HelmChartRepository
+metadata:
+  name: kubevirt-redfish
+spec:
+  connectionConfig:
+    url: 'https://v1k0d3n.github.io/charts'
