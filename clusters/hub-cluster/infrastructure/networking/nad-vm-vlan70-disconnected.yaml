@@ -12,5 +12,6 @@ spec:
       "topology": "localnet",
       "physicalNetworkName": "vmnet",
       "netAttachDefName": "default/vlan70-disconnected",
-      "vlanID": 70
+      "vlanID": 70,
+      "mtu": 9000
     }
