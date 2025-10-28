@@ -1,0 +1,50 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: servicemesh2
+spec:
+  tolerations:
+    - key: cluster.open-cluster-management.io/unreachable
+      operator: Exists
+    - key: cluster.open-cluster-management.io/unavailable
+      operator: Exists
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: servicemesh2
+              operator: In
+              values:
+                - "true"
+                - "enabled"
+            - key: servicemesh3
+              operator: NotIn
+              values:
+                - "true"
+                - "enabled"
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: servicemesh3
+spec:
+  tolerations:
+    - key: cluster.open-cluster-management.io/unreachable
+      operator: Exists
+    - key: cluster.open-cluster-management.io/unavailable
+      operator: Exists
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: servicemesh3
+              operator: In
+              values:
+                - "true"
+                - "enabled"
+            - key: servicemesh2
+              operator: NotIn
+              values:
+                - "true"
+                - "enabled"

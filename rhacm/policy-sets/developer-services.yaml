@@ -10,4 +10,6 @@ spec:
     - operators-openshift-builds
     - operators-pipelines
     - operators-devspaces
+    - operators-serverless
+    - operators-authorino
 

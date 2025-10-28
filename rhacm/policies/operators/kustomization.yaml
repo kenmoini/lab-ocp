@@ -30,6 +30,9 @@ resources:
   - snr.yaml
   - virtualization.yaml
   - web-terminal.yaml
+  - serverless.yaml
+  - servicemesh-3.yaml
+  - servicemesh-2.yaml
 
 
 commonAnnotations:

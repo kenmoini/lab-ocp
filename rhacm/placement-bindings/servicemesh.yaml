@@ -1,0 +1,28 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: servicemesh2
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: servicemesh2
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: operators-servicemesh-2
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: servicemesh3
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: servicemesh3
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: operators-servicemesh-3
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
