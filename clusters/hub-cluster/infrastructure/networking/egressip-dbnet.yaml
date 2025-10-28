@@ -1,0 +1,64 @@
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: dbnet-set1
+spec:
+  egressIPs:
+    - 192.168.66.60
+    - 192.168.66.61
+  namespaceSelector:
+    matchLabels:
+      egressip/dbnet: "set1"
+
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: dbnet-set2
+spec:
+  egressIPs:
+    - 192.168.66.62
+    - 192.168.66.63
+  namespaceSelector:
+    matchLabels:
+      egressip/dbnet: "set2"
+
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: dbnet-set3
+spec:
+  egressIPs:
+    - 192.168.66.64
+    - 192.168.66.65
+  namespaceSelector:
+    matchLabels:
+      egressip/dbnet: "set3"
+
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: dbnet-set4
+spec:
+  egressIPs:
+    - 192.168.66.66
+    - 192.168.66.67
+  namespaceSelector:
+    matchLabels:
+      egressip/dbnet: "set4"
+      
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: dbnet-set5
+spec:
+  egressIPs:
+    - 192.168.66.68
+    - 192.168.66.69
+  namespaceSelector:
+    matchLabels:
+      egressip/dbnet: "set5"

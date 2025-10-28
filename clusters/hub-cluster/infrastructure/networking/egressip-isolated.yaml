@@ -1,0 +1,64 @@
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: isolated-set1
+spec:
+  egressIPs:
+    - 192.168.86.60
+    - 192.168.86.61
+  namespaceSelector:
+    matchLabels:
+      egressip/isolated: "set1"
+
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: isolated-set2
+spec:
+  egressIPs:
+    - 192.168.86.62
+    - 192.168.86.63
+  namespaceSelector:
+    matchLabels:
+      egressip/isolated: "set2"
+
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: isolated-set3
+spec:
+  egressIPs:
+    - 192.168.86.64
+    - 192.168.86.65
+  namespaceSelector:
+    matchLabels:
+      egressip/isolated: "set3"
+
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: isolated-set4
+spec:
+  egressIPs:
+    - 192.168.86.66
+    - 192.168.86.67
+  namespaceSelector:
+    matchLabels:
+      egressip/isolated: "set4"
+
+---
+apiVersion: k8s.ovn.org/v1
+kind: EgressIP
+metadata:
+  name: isolated-set5
+spec:
+  egressIPs:
+    - 192.168.86.68
+    - 192.168.86.69
+  namespaceSelector:
+    matchLabels:
+      egressip/isolated: "set5"
