@@ -2,17 +2,17 @@
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
-  name: vlan66-dbnet
+  name: vlan62-scratch-lab
   namespace: default
   annotations:
-    k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br66
+    k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br62
 spec:
   config: |-
     {
       "cniVersion": "0.3.1",
-      "name": "vlan66-dbnet",
+      "name": "vlan62-scratch-lab",
       "type": "bridge",
-      "bridge": "br66",
+      "bridge": "br62",
       "macspoofchk": false,
       "disableContainerInterface": true,
       "preserveDefaultVlan": true

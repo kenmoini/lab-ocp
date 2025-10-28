@@ -1,0 +1,32 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: vlan62
+spec:
+  desiredState:
+    interfaces:
+      - description: VLAN 62 using bond0
+        ipv4:
+          dhcp: false
+          enabled: false
+        mtu: 9000
+        name: bond0.62
+        state: up
+        type: vlan
+        vlan:
+          base-iface: bond0
+          id: 62
+      - bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: bond0.62
+        description: Linux bridge with bond0 VLAN 62 as a port, used for EgressIPs and VMs
+        ipv4:
+          dhcp: true
+          enabled: true
+        mtu: 9000
+        name: br62
+        state: up
+        type: linux-bridge

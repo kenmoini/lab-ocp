@@ -1,0 +1,32 @@
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: vlan70
+spec:
+  desiredState:
+    interfaces:
+      - description: VLAN 70 using bond0
+        ipv4:
+          dhcp: false
+          enabled: false
+        mtu: 9000
+        name: bond0.70
+        state: up
+        type: vlan
+        vlan:
+          base-iface: bond0
+          id: 70
+      - bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: bond0.70
+        description: Linux bridge with bond0 VLAN 70 as a port, used for EgressIPs and VMs
+        ipv4:
+          dhcp: true
+          enabled: true
+        mtu: 9000
+        name: br70
+        state: up
+        type: linux-bridge
