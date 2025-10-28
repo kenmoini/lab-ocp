@@ -13,6 +13,35 @@ subjects:
   - name: operator-bundle-virt
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+  # Used for Storage Migration
+  - name: operators-mtc-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+  # Operator Deployment
+  - name: instance-bundle-virt
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: virtualization-4.19
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: virtualization-4.19
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  # Operators
+  - name: operator-bundle-virt
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+  # Used for Storage Migration
+  - name: operators-4.19-mtc-1.8
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
 
   # Operator Deployment
   - name: instance-bundle-virt

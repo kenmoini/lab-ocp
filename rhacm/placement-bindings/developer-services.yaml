@@ -12,3 +12,21 @@ subjects:
   - name: developer-services
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+  - name: operators-mtc-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: developer-services-4.19
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: developer-services-4.19
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: operators-4.19-mtc-1.8
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

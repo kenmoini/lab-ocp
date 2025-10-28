@@ -18,3 +18,22 @@ spec:
               values:
                 - "true"
                 - "enabled"
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: virtualization-4.19
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: virtualization
+              operator: In
+              values:
+                - "true"
+                - "enabled"
+            - key: openshiftVersion-major-minor
+              operator: In
+              values:
+                - "4.19"

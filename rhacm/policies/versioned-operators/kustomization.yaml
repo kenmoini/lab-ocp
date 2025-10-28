@@ -16,6 +16,9 @@ resources:
   - rh-loki-base.yaml
   - rh-loki-6.3.yaml
 
+  - mtc-base.yaml
+  - mtc-1.8.yaml
+
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

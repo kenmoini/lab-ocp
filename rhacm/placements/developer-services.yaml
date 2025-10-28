@@ -13,3 +13,22 @@ spec:
               values:
                 - "true"
                 - "enabled"
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: developer-services-4.19
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: developer-services
+              operator: In
+              values:
+                - "true"
+                - "enabled"
+            - key: openshiftVersion-major-minor
+              operator: In
+              values:
+                - "4.19"
