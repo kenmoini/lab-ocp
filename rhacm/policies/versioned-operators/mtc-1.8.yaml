@@ -29,7 +29,7 @@ spec:
                   name: mtc-operator
                   namespace: openshift-migration
                 spec:
-                  channel: release-1.8
+                  channel: release-v1.8
                   installPlanApproval: Automatic
                   name: mtc-operator
                   source: redhat-operators
