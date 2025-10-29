@@ -1,19 +1,37 @@
+# ---
+# apiVersion: k8s.cni.cncf.io/v1
+# kind: NetworkAttachmentDefinition
+# metadata:
+#   name: vlan70-disconnected
+#   namespace: default
+#   annotations:
+#     k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br70
+# spec:
+#   config: |-
+#     {
+#       "cniVersion": "0.3.1",
+#       "name": "vlan70-disconnected",
+#       "type": "bridge",
+#       "bridge": "br70",
+#       "macspoofchk": false,
+#       "disableContainerInterface": true,
+#       "preserveDefaultVlan": true
+#     }
+
 ---
 apiVersion: k8s.cni.cncf.io/v1
 kind: NetworkAttachmentDefinition
 metadata:
-  name: vlan70-disconnected
+  name: vmnet-vlan70-disconnected
   namespace: default
-  annotations:
-    k8s.v1.cni.cncf.io/resourceName: bridge.network.kubevirt.io/br70
 spec:
   config: |-
     {
-      "cniVersion": "0.3.1",
-      "name": "vlan70-disconnected",
-      "type": "bridge",
-      "bridge": "br70",
-      "macspoofchk": false,
-      "disableContainerInterface": true,
-      "preserveDefaultVlan": true
+      "cniVersion": "0.4.0", 
+      "type": "ovn-k8s-cni-overlay", 
+      "topology": "localnet",
+      "name": "vmnet-vlan70", 
+      "netAttachDefName": "default/vmnet-vlan70",
+      "physicalNetworkName": "vmnet-vlan70",
+      "mtu": 9000
     }
