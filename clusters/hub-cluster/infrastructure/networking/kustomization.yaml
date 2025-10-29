@@ -20,4 +20,4 @@ resources:
   - egressip-dbnet.yaml
   - egressip-isolated.yaml
   - egressip-scratch-lab.yaml
-  # - egressip-disconnected.yaml
+  - egressip-disconnected.yaml
