@@ -48,7 +48,7 @@ spec:
         state: up
         type: ovs-interface
         ipv4:
-          dhcp: false
+          dhcp: true
           enabled: true
           forwarding: true
           # address:
