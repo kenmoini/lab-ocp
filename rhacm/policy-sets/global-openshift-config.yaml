@@ -22,3 +22,4 @@ spec:
     - encrypt-etcd
     - openshift-samples-config
     - image-vuln-scanning
+    - enable-multinetworkpolicy
