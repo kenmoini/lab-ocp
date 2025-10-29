@@ -30,3 +30,27 @@ spec:
         name: br70
         state: absent
         type: linux-bridge
+
+      - name: ovs-br70
+        description: OVS bridge with bond0 VLAN 70 as a port, used for NNCP traffic isolation
+        type: ovs-bridge
+        state: up
+        bridge:
+          options:
+            stp: 
+              enabled: false
+          port:
+            - name: bond0.70
+            - name: br-ex70
+
+      - name: br-ex70
+        mtu: 9000
+        state: up
+        type: ovs-interface
+        ipv4:
+          dhcp: false
+          enabled: true
+          forwarding: true
+          # address:
+          #   - ip: 192.168.60.49
+          #     prefix-length: 23
