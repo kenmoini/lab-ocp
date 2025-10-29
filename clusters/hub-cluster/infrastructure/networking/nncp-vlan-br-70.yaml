@@ -54,3 +54,8 @@ spec:
           # address:
           #   - ip: 192.168.60.49
           #     prefix-length: 23
+    ovn:
+      bridge-mappings:
+        - bridge: ovs-br70
+          localnet: vmnet-vlan70
+          state: present
