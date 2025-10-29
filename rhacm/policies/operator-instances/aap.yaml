@@ -30,7 +30,7 @@ spec:
                   name: aap-ca-bundle
                   namespace: aap
                 data:
-                  bundle-ca.crt: {{ (fromConfigMap "open-cluster-management-policies" "root-ca-bundle" "ca-bundle.crt") | base64enc }}
+                  bundle-ca.crt: "{{ (fromConfigMap 'open-cluster-management-policies' 'root-ca-bundle' 'ca-bundle.crt') | base64enc }}"
       extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
