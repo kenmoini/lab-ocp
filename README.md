@@ -30,6 +30,7 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - [Policy] Cluster Info Header with dynamic colors from a ConfigMap
   - [Policy] Removal of Kubeadmin
   - [Policy] Disabling of Self-Provisioner
+  - [Policy] Enabling MultiNetworkPolicies
   - [Policy] Audit Log Configuration
   - [Policy] Etcd Encryption
   - [Policy] Image Vulnerability Scanning
@@ -49,6 +50,7 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - [Policy] Hub Health Checks
   - [Policy] HCP ACM Infrastructure Credentials Integration
   - [Policy] Deploy ACS Central
+  - [Policy] Deploy AAP 2.6
 
 - **OpenShift 4.19 Clusters** `openshiftVersion-major-minor=4.19`
   - [Policy] OpenShift GitOps 1.18 Operator & Instance
