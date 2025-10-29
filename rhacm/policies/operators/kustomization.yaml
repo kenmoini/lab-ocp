@@ -5,7 +5,7 @@ kind: Kustomization
 namespace: open-cluster-management-policies
 
 resources:
-  - aap.yaml
+  # - aap.yaml -- REPLACED BY VERSIONED OPERATOR POLICIES --
   - cco.yaml
   - cert-manager.yaml
   - compliance.yaml

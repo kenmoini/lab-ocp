@@ -23,6 +23,9 @@ subjects:
   - name: operators-coo
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: operators-aap-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
 
   # Hub Instances
   - name: instance-acs-central

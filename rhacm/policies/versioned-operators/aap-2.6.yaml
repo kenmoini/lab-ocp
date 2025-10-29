@@ -1,0 +1,73 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: operators-aap-2.6
+  annotations:
+    policy.open-cluster-management.io/description: Installs the Ansible Automation Platform 2.6 Operator in cluster-scoped mode
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: aap-2.6-subscription
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: Subscription
+                metadata:
+                  name: ansible-automation-platform-operator
+                  namespace: aap
+                spec:
+                  channel: stable-2.6-cluster-scoped
+                  installPlanApproval: Automatic
+                  name: ansible-automation-platform-operator
+                  source: redhat-operators 
+                  sourceNamespace: openshift-marketplace
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: aap-namespace
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: aap-operator-group
+          namespace: ""
+          compliance: Compliant
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: aap-operator-install-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: ClusterServiceVersion
+                metadata:
+                  namespace: aap
+                spec:
+                  displayName: Ansible Automation Platform Operator
+                status:
+                  phase: Succeeded
+                  reason: InstallSucceeded
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: aap-2.6-subscription
+          namespace: ""
+          compliance: Compliant

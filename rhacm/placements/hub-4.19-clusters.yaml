@@ -1,0 +1,23 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: hub-4.19-clusters
+spec:
+  tolerations:
+    - key: cluster.open-cluster-management.io/unreachable
+      operator: Exists
+    - key: cluster.open-cluster-management.io/unavailable
+      operator: Exists
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: local-cluster
+              operator: In
+              values:
+                - "true"
+            - key: openshiftVersion-major-minor
+              operator: In
+              values:
+                - "4.19"

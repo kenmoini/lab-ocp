@@ -12,6 +12,7 @@ resources:
   - hcp-inception.yaml
   - hcp-kubevirt.yaml
   - hub-cluster.yaml
+  - hub-4.19-clusters.yaml
 
   - community-eso.yaml
   - bmh-lso-odf.yaml
