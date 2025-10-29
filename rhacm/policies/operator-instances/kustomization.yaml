@@ -6,7 +6,8 @@ namespace: open-cluster-management-policies
 
 resources:
 
-  # Operator instances
+  # Operator instances 
+  - aap.yaml
   - acs-central.yaml
   - acs-secured-cluster.yaml
   - community-eso.yaml
