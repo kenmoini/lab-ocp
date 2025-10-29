@@ -1,0 +1,82 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-aap-2.6
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Ansible Automation Platform 2.6 instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: aap-ca-bundle-secret
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                type: Opaque
+                metadata:
+                  name: aap-ca-bundle
+                  namespace: aap
+                data:
+                  bundle-ca.crt: {{ (fromConfigMap "open-cluster-management-policies" "root-ca-bundle" "ca-bundle.crt") | base64enc }}
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: aap-operator-install-check
+          namespace: ""
+          compliance: Compliant
+
+    # - objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: aap-hub
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: critical
+    #       namespaceSelector:
+    #         include:
+    #           - aap
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: aap-consolelink
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: console.openshift.io/v1
+                kind: ConsoleLink
+                metadata:
+                  name: aap-console-link
+                spec:
+                  applicationMenu:
+                    imageURL: 'https://www.redhat.com/rhdc/managed-files/ansible-automation-platform-200.svg'
+                    section: Red Hat applications
+                  href: 'https://{{ (lookup "route.openshift.io/v1" "Route" "aap" "hub").spec.host }}'
+                  location: ApplicationMenu
+                  text: Ansible Automation Platform
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: aap-operator-install-check
+          namespace: ""
+          compliance: Compliant

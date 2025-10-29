@@ -31,3 +31,7 @@ subjects:
   - name: instance-acs-central
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+
+  - name: instance-aap-2.6
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
