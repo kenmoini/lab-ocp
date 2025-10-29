@@ -38,20 +38,70 @@ spec:
           namespace: ""
           compliance: Compliant
 
-    # - objectDefinition:
-    #     apiVersion: policy.open-cluster-management.io/v1
-    #     kind: ConfigurationPolicy
-    #     metadata:
-    #       name: aap-hub
-    #     spec:
-    #       remediationAction: enforce
-    #       severity: critical
-    #       namespaceSelector:
-    #         include:
-    #           - aap
-    #       object-templates:
-    #         - complianceType: musthave
-    #           objectDefinition:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: aap-hub-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: aap.ansible.com/v1alpha1
+                kind: AnsibleAutomationPlatform
+                metadata:
+                  name: hub
+                  namespace: aap
+                spec:
+                  bundle_cacert_secret: aap-ca-bundle
+                  api:
+                    log_level: INFO
+                    replicas: 1
+                  database:
+                    postgres_data_volume_init: false
+                  ingress_type: Route
+                  no_log: true
+                  redis_mode: standalone
+                  route_tls_termination_mechanism: Edge
+                  service_type: ClusterIP
+                  lightspeed:
+                    disabled: true
+                  hub:
+                    disabled: false
+                    file_storage_storage_class: ocs-storagecluster-cephfs
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: aap-ca-bundle-secret
+          namespace: ""
+          compliance: Compliant
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: aap-hub-route-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: route.openshift.io/v1
+                kind: Route
+                metadata:
+                  namespace: aap
+                  name: hub
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: aap-hub-instance
+          namespace: ""
+          compliance: Compliant
+
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -77,6 +127,6 @@ spec:
       extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
-          name: aap-operator-install-check
+          name: aap-instance-route-check
           namespace: ""
           compliance: Compliant
