@@ -127,6 +127,6 @@ spec:
       extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
-          name: aap-instance-route-check
+          name: aap-hub-route-check
           namespace: ""
           compliance: Compliant
