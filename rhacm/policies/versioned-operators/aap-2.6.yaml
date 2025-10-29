@@ -61,7 +61,7 @@ spec:
                 metadata:
                   namespace: aap
                 spec:
-                  displayName: Ansible Automation Platform Operator
+                  displayName: Ansible Automation Platform
                 status:
                   phase: Succeeded
                   reason: InstallSucceeded
