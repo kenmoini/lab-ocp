@@ -11,7 +11,7 @@ spec:
           enabled: false
         mtu: 9000
         name: bond0.70
-        state: absent
+        state: up
         type: vlan
         vlan:
           base-iface: bond0
