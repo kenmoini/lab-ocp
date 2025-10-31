@@ -59,7 +59,7 @@ spec:
             pod-security.kubernetes.io/audit: privileged
             pod-security.kubernetes.io/warn: privileged
         automated:
-          prune: true
+          prune: false
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
