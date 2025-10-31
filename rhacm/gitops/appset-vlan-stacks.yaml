@@ -15,7 +15,7 @@ spec:
                   appset/vlan-stacks: enabled
           - list:
               elements:
-              - appName: egress-ips
+              - appName: vlan-stacks
                 helmRepoURL: 'https://github.com/kenmoini/helm-things'
                 helmChartPath: 'ocp-networking'
                 valuesRepo: 'https://github.com/kenmoini/lab-ocp'
