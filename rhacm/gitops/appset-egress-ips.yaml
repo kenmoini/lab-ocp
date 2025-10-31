@@ -28,7 +28,7 @@ spec:
     spec:
       project: default
       sources:
-        - chart: '{{helmChartName}}'
+        - path: '{{helmChartPath}}'
           helm:
             valueFiles:
               - "{{valuesPath}}"
