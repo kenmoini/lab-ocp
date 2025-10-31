@@ -1,7 +1,7 @@
 deployTestJobs: true
 createEgressIPs: true
 
-targetCURLTestEndpoint: "https://debug-server-debug-server.apps.tri-force.lab.kemo.network"
+targetCURLTestEndpoint: "http://disconn-harbor.d70.kemo.labs:8080"
 
 egressIPList:
 - name: dbnet-set1
