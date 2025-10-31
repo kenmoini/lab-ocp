@@ -8,6 +8,7 @@ resources:
   - appset-install-kyverno.yaml
   - appset-hashicorp-vault.yaml
   - appset-cluster-config.yaml
+  - appset-egress-ips.yaml
   - rhacm-integration.yaml
 
 commonAnnotations:

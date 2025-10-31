@@ -17,7 +17,7 @@ resources:
   - nad-vmnet-lab-lan.yaml
   - nad-baremetal-network.yaml
 
-  - egressip-dbnet.yaml
+  # - egressip-dbnet.yaml
   - egressip-isolated.yaml
   - egressip-scratch-lab.yaml
   - egressip-disconnected.yaml

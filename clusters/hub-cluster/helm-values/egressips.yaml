@@ -1,0 +1,38 @@
+targetCURLTestEndpoint: "https://debug-server-debug-server.apps.tri-force.lab.kemo.network"
+
+egressIPList:
+- name: dbnet-set1
+  egressIPs:
+    - 192.168.66.60
+    - 192.168.66.61
+  selector:
+    matchLabels:
+      egressip/dbnet: "set1"
+- name: dbnet-set2
+  egressIPs:
+    - 192.168.66.62
+    - 192.168.66.63
+  selector:
+    matchLabels:
+      egressip/dbnet: "set2"
+- name: dbnet-set3
+  egressIPs:
+    - 192.168.66.64
+    - 192.168.66.65
+  selector:
+    matchLabels:
+      egressip/dbnet: "set3"
+- name: dbnet-set4
+  egressIPs:
+    - 192.168.66.66
+    - 192.168.66.67
+  selector:
+    matchLabels:
+      egressip/dbnet: "set4"
+- name: dbnet-set5
+  egressIPs:
+    - 192.168.66.68
+    - 192.168.66.69
+  selector:
+    matchLabels:
+      egressip/dbnet: "set5"
