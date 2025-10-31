@@ -1,4 +1,4 @@
-deployTestJobs: false
+deployTestJobs: true
 createEgressIPs: true
 
 targetCURLTestEndpoint: "https://debug-server-debug-server.apps.tri-force.lab.kemo.network"
