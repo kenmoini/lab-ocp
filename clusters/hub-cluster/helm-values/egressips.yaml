@@ -1,4 +1,4 @@
-deployTestJobs: true
+deployTestJobs: false
 createEgressIPs: true
 
 targetCURLTestEndpoint: "http://disconn-harbor.d70.kemo.labs:8080"
@@ -54,27 +54,27 @@ egressIPList:
   selector:
     matchLabels:
       egressip/disconnected: "set2"
-- name: disconnected-set3
-  egressIPs:
-    - 192.168.70.64
-    - 192.168.70.65
-  selector:
-    matchLabels:
-      egressip/disconnected: "set3"
-- name: disconnected-set4
-  egressIPs:
-    - 192.168.70.66
-    - 192.168.70.67
-  selector:
-    matchLabels:
-      egressip/disconnected: "set4"
-- name: disconnected-set5
-  egressIPs:
-    - 192.168.70.68
-    - 192.168.70.69
-  selector:
-    matchLabels:
-      egressip/disconnected: "set5"
+# - name: disconnected-set3
+#   egressIPs:
+#     - 192.168.70.64
+#     - 192.168.70.65
+#   selector:
+#     matchLabels:
+#       egressip/disconnected: "set3"
+# - name: disconnected-set4
+#   egressIPs:
+#     - 192.168.70.66
+#     - 192.168.70.67
+#   selector:
+#     matchLabels:
+#       egressip/disconnected: "set4"
+# - name: disconnected-set5
+#   egressIPs:
+#     - 192.168.70.68
+#     - 192.168.70.69
+#   selector:
+#     matchLabels:
+#       egressip/disconnected: "set5"
 
 # - name: isolated-set1
 #   egressIPs:
