@@ -3,10 +3,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - nncp-vlan-br-62.yaml
-  - nncp-vlan-br-66.yaml
-  - nncp-vlan-br-70.yaml
-  - nncp-vlan-br-86.yaml
+  # - nncp-vlan-br-62.yaml
+  # - nncp-vlan-br-66.yaml
+  # - nncp-vlan-br-70.yaml
+  # - nncp-vlan-br-86.yaml
   - nncp-baremetal-network.yml
   - nncp-bond0-vmnet.yaml
 
