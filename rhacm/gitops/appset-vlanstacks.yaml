@@ -1,0 +1,48 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: vlan-stacks
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  appset/vlan-stacks: enabled
+          - list:
+              elements:
+              - appName: egress-ips
+                helmRepoURL: 'https://github.com/kenmoini/helm-things'
+                helmChartPath: 'ocp-networking'
+                valuesRepo: 'https://github.com/kenmoini/lab-ocp'
+                valuesPath: "$values/clusters/{{name}}/helm-values/vlanstacks.yaml"
+  template:
+    metadata:
+      name: "{{name}}-{{appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+    spec:
+      project: default
+      sources:
+        - path: '{{helmChartPath}}'
+          helm:
+            valueFiles:
+              - "{{valuesPath}}"
+          repoURL: '{{helmRepoURL}}'
+        - ref: values
+          repoURL: '{{valuesRepo}}'
+          targetRevision: HEAD
+      destination:
+        name: "{{name}}"
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        retry:
+          limit: 2
