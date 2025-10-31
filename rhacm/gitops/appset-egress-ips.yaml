@@ -33,7 +33,6 @@ spec:
             valueFiles:
               - "{{valuesPath}}"
           repoURL: '{{helmRepoURL}}'
-          targetRevision: '{{helmRevision}}'
         - ref: values
           repoURL: '{{valuesRepo}}'
           targetRevision: HEAD
