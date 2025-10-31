@@ -1,4 +1,4 @@
-deployTestJobs: false
+deployTestJobs: true
 createEgressIPs: true
 
 targetCURLTestEndpoint: "http://disconn-harbor.d70.kemo.labs:8080"
