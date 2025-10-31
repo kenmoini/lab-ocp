@@ -1,0 +1,33 @@
+interfaceConfigurations:
+- name: disconnected-network
+  # nodeSelector:
+  #   node-role.kubernetes.io/worker: ''
+  vlanStack:
+  - name: disconnected
+    baseInterface: bond0
+    vlanID: 70
+    mtu: 9000
+- name: scratch-lab
+  # nodeSelector:
+  #   node-role.kubernetes.io/worker: ''
+  vlanStack:
+  - name: scratch-lab
+    baseInterface: bond0
+    vlanID: 62
+    mtu: 9000
+- name: db-net
+  # nodeSelector:
+  #   node-role.kubernetes.io/worker: ''
+  vlanStack:
+  - name: db-net
+    baseInterface: bond0
+    vlanID: 66
+    mtu: 9000
+- name: isolated
+  # nodeSelector:
+  #   node-role.kubernetes.io/worker: ''
+  vlanStack:
+  - name: isolated
+    baseInterface: bond0
+    vlanID: 86
+    mtu: 9000

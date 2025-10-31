@@ -10,10 +10,10 @@ resources:
   - nncp-baremetal-network.yml
   - nncp-bond0-vmnet.yaml
 
-  - nad-vlan62-scratch-lab.yaml
-  - nad-vlan66-dbnet.yaml
-  - nad-vlan86-isolated.yaml
-  - nad-vlan70-disconnected.yaml
+  # - nad-vlan62-scratch-lab.yaml
+  # - nad-vlan66-dbnet.yaml
+  # - nad-vlan86-isolated.yaml
+  # - nad-vlan70-disconnected.yaml
   - nad-vmnet-lab-lan.yaml
   - nad-baremetal-network.yaml
 

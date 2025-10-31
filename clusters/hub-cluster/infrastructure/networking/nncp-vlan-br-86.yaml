@@ -11,7 +11,7 @@ spec:
           enabled: false
         mtu: 9000
         name: bond0.86
-        state: up
+        state: absent
         type: vlan
         vlan:
           base-iface: bond0
@@ -28,5 +28,5 @@ spec:
           enabled: true
         mtu: 9000
         name: br86
-        state: up
+        state: absent
         type: linux-bridge

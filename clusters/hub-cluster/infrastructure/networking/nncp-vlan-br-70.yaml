@@ -11,7 +11,7 @@ spec:
           enabled: false
         mtu: 9000
         name: bond0.70
-        state: up
+        state: absent
         type: vlan
         vlan:
           base-iface: bond0
@@ -34,7 +34,7 @@ spec:
       - name: ovs-br70
         description: OVS bridge with bond0 VLAN 70 as a port, used for NNCP traffic isolation
         type: ovs-bridge
-        state: up
+        state: absent
         bridge:
           options:
             stp: 
@@ -45,7 +45,7 @@ spec:
 
       - name: br-ex70
         mtu: 9000
-        state: up
+        state: absent
         type: ovs-interface
         ipv4:
           dhcp: true
@@ -58,4 +58,4 @@ spec:
       bridge-mappings:
         - bridge: ovs-br70
           localnet: vmnet-vlan70
-          state: present
+          state: absent
