@@ -16,7 +16,8 @@ spec:
           - list:
               elements:
               - appName: egress-ips
-                helmRepoURL: 'https://github.com/kenmoini/helm-things/egressip'
+                helmRepoURL: 'https://github.com/kenmoini/helm-things'
+                helmChartPath: 'egressip'
                 valuesRepo: 'https://github.com/kenmoini/lab-ocp'
                 valuesPath: "$values/clusters/{{name}}/helm-values/egressips.yaml"
   template:
