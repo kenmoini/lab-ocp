@@ -76,5 +76,6 @@ spec:
           - SkipDryRunOnMissingResource=true
           - ServerSideApply=true
           - RespectIgnoreDifferences=true
+          - ApplyOutOfSyncOnly=true
         retry:
           limit: 2

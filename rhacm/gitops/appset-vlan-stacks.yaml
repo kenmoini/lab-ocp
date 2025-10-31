@@ -41,8 +41,13 @@ spec:
       syncPolicy:
         automated:
           prune: false
+          allowEmpty: true
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+          - ApplyOutOfSyncOnly=true
         retry:
           limit: 2
