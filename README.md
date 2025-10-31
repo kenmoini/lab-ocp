@@ -67,6 +67,8 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
   - `appset/kyverno=enabled` AppSet that deploys Kyverno via Helm and Policies.
   - `appset/helm-vault=enabled` AppSet that deploys Hashicorp Vault via Helm.  Not really used since bootstrap needs managed Secrets but can be helpful for providing Vault as a service on managed clusters.
   - `appset/democratic-csi=enabled` AppSet that deploys Democratic CSI.
+  - `appset/egress-ips=enabled` AppSet that deploys EgressIPs
+  - `appset/vlan-stacks=enabled` AppSet that creates NNCP interfaces and NetworkAttachmentDefinitions for them from a simple list.
   - `developer-services=enabled` Deploys Developer Services (OpenShift Builds, DevSpaces, Pipelines, RHDP, etc)
 
 - **Kyverno Policies**
@@ -93,8 +95,10 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
 until $(oc get managedclusters.cluster.open-cluster-management.io/hub-cluster &>/dev/null); do echo "Waiting for ACM and Hub Cluster init..." && sleep 5; done
 
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
-oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/kyverno=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster community-eso=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/kyverno=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/vlan-stacks=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/egress-ips=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster rhLoki=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster nvidia-gpu=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster virtualization=enabled
