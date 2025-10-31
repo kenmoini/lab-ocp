@@ -78,7 +78,7 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
 
 - **Per-Cluster GitOps**
   - Hub Cluster
-    - Networking Configuration (NNCPs, NADs, EgressIPs, MetalLB)
+    - Networking Configuration (NNCPs, NADs, MetalLB)
     - Virtualization Hydration (Templates, Migration Providers)
 
 ---
