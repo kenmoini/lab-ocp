@@ -2,12 +2,12 @@
 apiVersion: hypershift.openshift.io/v1beta1
 kind: NodePool
 metadata:
-  name: 'kiddie-pool'
+  name: {{ hcp_cluster_name }}-wp0
   namespace: {{ hcp_cluster_namespace }}
 spec:
   arch: amd64
   clusterName: {{ hcp_cluster_name }}
-  replicas: 2
+  replicas: {{ hcp_node_count }}
   management:
     autoRepair: true
     upgradeType: Replace
@@ -15,14 +15,14 @@ spec:
     type: KubeVirt
     kubevirt:
       compute:
-        cores: 4
-        memory: 8Gi
+        cores: {{ hcp_node_cpu }}
+        memory: {{ hcp_node_memory }}Gi
       rootVolume:
         type: Persistent
         persistent:
           size: 32Gi
-      additionalNetworks:
-      - name: default/d-vlan60
+      #additionalNetworks:
+      #- name: default/d-vlan60
       defaultPodNetwork: true
   release:
-    image: quay.io/openshift-release-dev/ocp-release:4.20.1-multi
+    image: {{ hcp_release_image }}
