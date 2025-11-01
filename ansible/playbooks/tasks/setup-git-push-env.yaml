@@ -1,0 +1,34 @@
+---
+- name: Get the Git Push Credentials
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Secret
+    namespace: "{{ git_push_credentials_secret_namespace }}"
+    name: "{{ git_push_credentials_secret_name }}"
+  register: git_push_secret
+
+- name: Fail if the Git Push credentials secret is not found
+  ansible.builtin.fail:
+    msg: "No Git Push credentials secret found! Looking for {{ git_push_credentials_secret_namespace }}/{{ git_push_credentials_secret_name }}"
+  when: git_push_secret.resources | length == 0
+
+- name: Determine transport type for Git Push repo
+  ansible.builtin.set_fact:
+    git_push_use_https_repo: "{{ (git_push_secret.resources[0].data.git_url | b64decode).startswith('https://') }}"
+    git_push_use_http_repo: "{{ (git_push_secret.resources[0].data.git_url | b64decode).startswith('http://') }}"
+    git_push_use_ssh_repo: "{{ (git_push_secret.resources[0].data.git_url | b64decode).startswith('git@') }}"
+
+- name: Set Git variables for actions
+  ansible.builtin.set_fact:
+    git_push_branch: "{{ (git_push_secret.resources[0].data.git_branch | b64decode) if git_push_secret.resources[0].data.git_branch is defined else 'HEAD' }}"
+    git_push_username: "{{ git_push_secret.resources[0].data.git_username | b64decode if git_push_secret.resources[0].data.git_username is defined else '' }}"
+    git_push_password: "{{ git_push_secret.resources[0].data.git_password | b64decode if git_push_secret.resources[0].data.git_password is defined else '' }}"
+    git_push_ssh_key: "{{ git_push_secret.resources[0].data.git_ssh_key | b64decode if git_push_secret.resources[0].data.git_ssh_key is defined else '' }}"
+    git_push_user_name: "{{ git_push_secret.resources[0].data.git_user_name | b64decode if git_push_secret.resources[0].data.git_user_name is defined else 'ZTP Bot' }}"
+    git_push_user_email: "{{ git_push_secret.resources[0].data.git_user_email | b64decode if git_push_secret.resources[0].data.git_user_email is defined else 'ztp-bot@example.com' }}"
+    git_push_url: "{{ git_push_secret.resources[0].data.git_url | b64decode }}"
+    git_push_host: "{{ (git_push_secret.resources[0].data.git_url | b64decode).split('//')[-1].split('@')[-1].split('/')[0].split(':')[0] }}"
+    git_push_endpoint: >-
+      {{ 'http://' if git_push_use_http_repo }}{{ 'https://' if git_push_use_https_repo }}{{ 'ssh://' if git_push_use_ssh_repo }}
+      {{- (git_push_secret.resources[0].data.git_username | b64decode)+':'+(git_push_secret.resources[0].data.git_password | b64decode) if (git_push_use_http_repo or git_push_use_https_repo) and (git_push_secret.resources[0].data.git_username is defined) and (git_push_secret.resources[0].data.git_password is defined) else '' }}
+      {{- (git_push_secret.resources[0].data.git_url | b64decode).split('://')[-1] if git_push_use_http_repo or git_push_use_https_repo else (git_push_secret.resources[0].data.git_url | b64decode) }}

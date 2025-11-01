@@ -1,0 +1,26 @@
+---
+- name: Get the Git Pull Credentials
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Secret
+    namespace: "{{ git_pull_credentials_secret_namespace }}"
+    name: "{{ git_pull_credentials_secret_name }}"
+  register: git_pull_secret
+
+- name: Fail if the Git Pull credentials secret is not found
+  ansible.builtin.fail:
+    msg: "No Git Pull credentials secret found! Looking for {{ git_pull_credentials_secret_namespace }}/{{ git_pull_credentials_secret_name }}"
+  when: git_pull_secret.resources | length == 0
+
+- name: Determine transport type for Git Pull repo
+  ansible.builtin.set_fact:
+    git_pull_use_https_repo: "{{ (git_pull_secret.resources[0].data.git_url | b64decode).startswith('https://') }}"
+    git_pull_use_http_repo: "{{ (git_pull_secret.resources[0].data.git_url | b64decode).startswith('http://') }}"
+    git_pull_use_ssh_repo: "{{ (git_pull_secret.resources[0].data.git_url | b64decode).startswith('git@') }}"
+
+- name: Set Git variables for actions
+  ansible.builtin.set_fact:
+    git_pull_endpoint: >-
+      {{ 'http://' if git_pull_use_http_repo }}{{ 'https://' if git_pull_use_https_repo }}{{ 'ssh://' if git_pull_use_ssh_repo }}
+      {{- (git_pull_secret.resources[0].data.git_username | b64decode)+':'+(git_pull_secret.resources[0].data.git_password | b64decode) if (git_pull_use_http_repo or git_pull_use_https_repo) and (git_pull_secret.resources[0].data.git_username is defined) and (git_pull_secret.resources[0].data.git_password is defined) else '' }}
+      {{- (git_pull_secret.resources[0].data.git_url | b64decode).split('://')[-1] if git_pull_use_http_repo or git_pull_use_https_repo else (git_pull_secret.resources[0].data.git_url | b64decode) }}

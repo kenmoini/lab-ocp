@@ -1,0 +1,41 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ztp-{{ hcp_cluster_name }}
+  namespace: openshift-gitops
+spec:
+  ignoreDifferences:
+    - group: hive.openshift.io
+      jsonPointers:
+        - /spec/installed
+      kind: ClusterDeployment
+    - group: hive.openshift.io
+      jsonPointers:
+        - /spec
+      kind: ClusterDeployment
+    - group: extensions.hive.openshift.io
+      jsonPointers:
+        - /spec
+      kind: AgentClusterInstall
+  destination:
+    name: {{ hcp_infrastructure_host }}
+  sources:
+    - repoURL: '{{ git_pull_secret.resources[0].data.git_url | b64decode }}'
+      targetRevision: {{ (git_pull_secret.resources[0].data.git_branch | b64decode) if git_pull_secret.resources[0].data.git_branch is defined else 'HEAD' }}
+      path: ztp-clusters/{{ hcp_infrastructure_host }}/spokes/{{ hcp_cluster_name }}/
+      kustomize: {}
+  project: ztp-clusters
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+      - ApplyOutOfSyncOnly=true
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: false
+    retry:
+      limit: 2

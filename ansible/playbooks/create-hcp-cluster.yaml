@@ -13,8 +13,8 @@
     hcp_release_image: quay.io/openshift-release-dev/ocp-release:4.20.1-multi
     hcp_etcd_storage_class: ocs-storagecluster-ceph-rbd
     hcp_etcd_storage_size: 20Gi
-    hcp_control_plane_availability: SingleReplica
-    hcp_infra_availability: SingleReplica
+    hcp_control_plane_availability: SingleReplica # SingleReplica, HighlyAvailable
+    hcp_infra_availability: SingleReplica # SingleReplica, HighlyAvailable
     hcp_cluster_network: "" # default is the podnetwork of the hosting cluster
     hcp_cluster_clusterset: "hcp-virt"
 
@@ -24,9 +24,9 @@
     git_push_credentials_secret_name: "ztp-git-push-creds"
 
   tasks:
-  - name: Setup Git Environment
+  - name: Setup Git Pull Environment
     ansible.builtin.include_tasks:
-      file: task/setup-git-env.yaml
+      file: tasks/setup-git-pull-env.yaml
 
   - name: Create Temporary Working Directory
     block:
@@ -46,7 +46,62 @@
           - secrets
         loop_control:
           loop_var: path_item
-  # - name: Clone down the Git repo
-  # - name: Create HCP Cluster folder
-  # - name: Template out cluster manifests
-  # - name: Synchronize to Git
+
+      - name: Set facts for easy reference
+        ansible.builtin.set_fact:
+          temp_git_dir: "{{ temp_dir.path }}/git"
+          temp_secrets_dir: "{{ temp_dir.path }}/secrets"
+
+  - name: Clone down the Git repo
+    ansible.builtin.include_tasks:
+      file: tasks/clone-repo.yaml
+    vars:
+      git_repo_url: "{{ git_pull_endpoint }}"
+      target_clone_path: "{{ temp_git_dir }}"
+      git_repo_branch: "{{ (git_pull_secret.resources[0].data.git_branch | b64decode) if git_pull_secret.resources[0].data.git_branch is defined else 'HEAD' }}"
+
+  - name: Create HCP Cluster folder
+    ansible.builtin.file:
+      path: "{{ temp_git_dir }}/ztp-clusters/{{ hcp_infrastructure_host }}/spokes/{{ hcp_cluster_name }}"
+      state: directory
+      mode: "0755"
+
+  - name: Set template and kustomization resources
+    ansible.builtin.set_fact:
+      kustomization_resources:
+        - namespace.yaml
+        - hostedcluster.yaml
+        - klusterletaddonconfig.yaml
+        - managedcluster.yaml
+        - nodepool.yaml
+        - pull-secret.yaml
+        - ssh-key.yaml
+
+  - name: Template out cluster manifests
+    when: hcp_cluster_type == "kubevirt"
+    ansible.builtin.template:
+      src: "hcp-virt/{{ template_file }}.j2"
+      dest: "{{ temp_git_dir }}/ztp-clusters/{{ hcp_infrastructure_host }}/spokes/{{ hcp_cluster_name }}/{{ template_file }}"
+      mode: "0644"
+    loop: "{{ kustomization_resources + ['kustomization.yaml'] }}"
+    loop_control:
+      loop_var: template_file
+
+  - name: Setup Git Push Environment
+    ansible.builtin.include_tasks:
+      file: tasks/setup-git-push-env.yaml
+
+  - name: Synchronize to Git Repo
+    ansible.builtin.include_tasks:
+      file: tasks/push-repo.yaml
+    vars:
+      target_repo_url: "{{ git_push_endpoint }}"
+      git_project_path: "{{ temp_git_dir }}"
+      git_add_target_paths:
+        - "ztp-clusters/{{ hcp_infrastructure_host }}/"
+      git_commit_message: "Add Hosted Control Plane Cluster {{ hcp_cluster_name }} deployment"
+
+  - name: Clean up Temporary Working Directory
+    ansible.builtin.file:
+      path: "{{ temp_dir.path }}"
+      state: absent
