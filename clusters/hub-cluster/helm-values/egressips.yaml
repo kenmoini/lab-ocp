@@ -4,41 +4,41 @@ createEgressIPs: true
 targetCURLTestEndpoint: "http://disconn-harbor.d70.kemo.labs:8080"
 
 egressIPList:
-# - name: dbnet-set1
-#   egressIPs:
-#     - 192.168.66.60
-#     - 192.168.66.61
-#   selector:
-#     matchLabels:
-#       egressip/dbnet: "set1"
-# - name: dbnet-set2
-#   egressIPs:
-#     - 192.168.66.62
-#     - 192.168.66.63
-#   selector:
-#     matchLabels:
-#       egressip/dbnet: "set2"
-# - name: dbnet-set3
-#   egressIPs:
-#     - 192.168.66.64
-#     - 192.168.66.65
-#   selector:
-#     matchLabels:
-#       egressip/dbnet: "set3"
-# - name: dbnet-set4
-#   egressIPs:
-#     - 192.168.66.66
-#     - 192.168.66.67
-#   selector:
-#     matchLabels:
-#       egressip/dbnet: "set4"
-# - name: dbnet-set5
-#   egressIPs:
-#     - 192.168.66.68
-#     - 192.168.66.69
-#   selector:
-#     matchLabels:
-#       egressip/dbnet: "set5"
+- name: dbnet-set1
+  egressIPs:
+    - 192.168.66.60
+    - 192.168.66.61
+  selector:
+    matchLabels:
+      egressip/dbnet: "set1"
+- name: dbnet-set2
+  egressIPs:
+    - 192.168.66.62
+    - 192.168.66.63
+  selector:
+    matchLabels:
+      egressip/dbnet: "set2"
+- name: dbnet-set3
+  egressIPs:
+    - 192.168.66.64
+    - 192.168.66.65
+  selector:
+    matchLabels:
+      egressip/dbnet: "set3"
+- name: dbnet-set4
+  egressIPs:
+    - 192.168.66.66
+    - 192.168.66.67
+  selector:
+    matchLabels:
+      egressip/dbnet: "set4"
+- name: dbnet-set5
+  egressIPs:
+    - 192.168.66.68
+    - 192.168.66.69
+  selector:
+    matchLabels:
+      egressip/dbnet: "set5"
 
 - name: disconnected-set1
   egressIPs:
@@ -54,96 +54,96 @@ egressIPList:
   selector:
     matchLabels:
       egressip/disconnected: "set2"
-# - name: disconnected-set3
-#   egressIPs:
-#     - 192.168.70.64
-#     - 192.168.70.65
-#   selector:
-#     matchLabels:
-#       egressip/disconnected: "set3"
-# - name: disconnected-set4
-#   egressIPs:
-#     - 192.168.70.66
-#     - 192.168.70.67
-#   selector:
-#     matchLabels:
-#       egressip/disconnected: "set4"
-# - name: disconnected-set5
-#   egressIPs:
-#     - 192.168.70.68
-#     - 192.168.70.69
-#   selector:
-#     matchLabels:
-#       egressip/disconnected: "set5"
+- name: disconnected-set3
+  egressIPs:
+    - 192.168.70.64
+    - 192.168.70.65
+  selector:
+    matchLabels:
+      egressip/disconnected: "set3"
+- name: disconnected-set4
+  egressIPs:
+    - 192.168.70.66
+    - 192.168.70.67
+  selector:
+    matchLabels:
+      egressip/disconnected: "set4"
+- name: disconnected-set5
+  egressIPs:
+    - 192.168.70.68
+    - 192.168.70.69
+  selector:
+    matchLabels:
+      egressip/disconnected: "set5"
 
-# - name: isolated-set1
-#   egressIPs:
-#     - 192.168.86.60
-#     - 192.168.86.61
-#   selector:
-#     matchLabels:
-#       egressip/isolated: "set1"
-# - name: isolated-set2
-#   egressIPs:
-#     - 192.168.86.62
-#     - 192.168.86.63
-#   selector:
-#     matchLabels:
-#       egressip/isolated: "set2"
-# - name: isolated-set3
-#   egressIPs:
-#     - 192.168.86.64
-#     - 192.168.86.65
-#   selector:
-#     matchLabels:
-#       egressip/isolated: "set3"
-# - name: isolated-set4
-#   egressIPs:
-#     - 192.168.86.66
-#     - 192.168.86.67
-#   selector:
-#     matchLabels:
-#       egressip/isolated: "set4"
-# - name: isolated-set5
-#   egressIPs:
-#     - 192.168.86.68
-#     - 192.168.86.69
-#   selector:
-#     matchLabels:
-#       egressip/isolated: "set5"
+- name: isolated-set1
+  egressIPs:
+    - 192.168.86.60
+    - 192.168.86.61
+  selector:
+    matchLabels:
+      egressip/isolated: "set1"
+- name: isolated-set2
+  egressIPs:
+    - 192.168.86.62
+    - 192.168.86.63
+  selector:
+    matchLabels:
+      egressip/isolated: "set2"
+- name: isolated-set3
+  egressIPs:
+    - 192.168.86.64
+    - 192.168.86.65
+  selector:
+    matchLabels:
+      egressip/isolated: "set3"
+- name: isolated-set4
+  egressIPs:
+    - 192.168.86.66
+    - 192.168.86.67
+  selector:
+    matchLabels:
+      egressip/isolated: "set4"
+- name: isolated-set5
+  egressIPs:
+    - 192.168.86.68
+    - 192.168.86.69
+  selector:
+    matchLabels:
+      egressip/isolated: "set5"
 
-# - name: scratch-lab-set1
-#   egressIPs:
-#     - 192.168.62.60
-#     - 192.168.62.61
-#   selector:
-#     matchLabels:
-#       egressip/scratch-lab: "set1"
-# - name: scratch-lab-set2
-#   egressIPs:
-#     - 192.168.62.62
-#     - 192.168.62.63
-#   selector:
-#     matchLabels:
-#       egressip/scratch-lab: "set2"
-# - name: scratch-lab-set3
-#   egressIPs:
-#     - 192.168.62.64
-#     - 192.168.62.65
-#   selector:
-#     matchLabels:
-#       egressip/scratch-lab: "set3"
-# - name: scratch-lab-set4
-#   egressIPs:
-#     - 192.168.62.66
-#     - 192.168.62.67
-#   selector:
-#     matchLabels:
-#       egressip/scratch-lab: "set4"
-# - name: scratch-lab-set5
-#   egressIPs:
-#     - 192.168.62.68
-#     - 192.168.62.69
-#   selector:
-#     matchLabels:
-#       egressip/scratch-lab: "set5"
+- name: scratch-lab-set1
+  egressIPs:
+    - 192.168.62.60
+    - 192.168.62.61
+  selector:
+    matchLabels:
+      egressip/scratch-lab: "set1"
+- name: scratch-lab-set2
+  egressIPs:
+    - 192.168.62.62
+    - 192.168.62.63
+  selector:
+    matchLabels:
+      egressip/scratch-lab: "set2"
+- name: scratch-lab-set3
+  egressIPs:
+    - 192.168.62.64
+    - 192.168.62.65
+  selector:
+    matchLabels:
+      egressip/scratch-lab: "set3"
+- name: scratch-lab-set4
+  egressIPs:
+    - 192.168.62.66
+    - 192.168.62.67
+  selector:
+    matchLabels:
+      egressip/scratch-lab: "set4"
+- name: scratch-lab-set5
+  egressIPs:
+    - 192.168.62.68
+    - 192.168.62.69
+  selector:
+    matchLabels:
+      egressip/scratch-lab: "set5"
