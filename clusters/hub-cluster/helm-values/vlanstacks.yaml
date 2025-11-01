@@ -28,7 +28,7 @@ interfaceConfigurations:
   nodeSelector:
     kubernetes.io/hostname: raza
   vlanStack:
-  - name: isolated
+  - name: isolated-raza
     baseInterface: bond0
     vlanID: 86
     mtu: 9000
@@ -37,7 +37,7 @@ interfaceConfigurations:
   nodeSelector:
     kubernetes.io/hostname: suki
   vlanStack:
-  - name: isolated
+  - name: isolated-suki
     baseInterface: bond0
     vlanID: 86
     mtu: 9000
@@ -46,7 +46,7 @@ interfaceConfigurations:
   nodeSelector:
     kubernetes.io/hostname: endurance
   vlanStack:
-  - name: isolated
+  - name: isolated-endurance
     baseInterface: bond0
     vlanID: 86
     mtu: 9000
