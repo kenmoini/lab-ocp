@@ -7,7 +7,7 @@ metadata:
     policy.open-cluster-management.io/description: Enables the internal OpenShift Registry
     policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
-    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+    policy.open-cluster-management.io/controls: CC - Capability Configuration
 spec:
   disabled: false
   policy-templates:

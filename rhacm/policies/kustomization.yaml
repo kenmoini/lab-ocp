@@ -25,6 +25,8 @@ resources:
   - hcp-bmh-infra-creds.yaml
   - configure-idp.yaml
   - enable-multinetworkpolicy.yaml
+  - enable-hcp.yaml
+
 
   # Operator Installation Policies
   - versioned-operators/

@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: hcp-services
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: hcp-services
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: enable-hostedcontrolplane
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
