@@ -99,7 +99,7 @@
     ansible.builtin.include_tasks:
       file: tasks/push-repo.yaml
     vars:
-      target_repo_url: "{{ git_push_endpoint }}"
+      target_repo_url: "{{ git_push_endpoint if (git_push_use_http_repo or git_push_use_https_repo) else git_push_url }}"
       git_project_path: "{{ temp_git_dir }}"
       git_add_target_paths:
         - "ztp-clusters/{{ hcp_infrastructure_host }}/"
