@@ -110,6 +110,7 @@ spec:
           kind: ConfigurationPolicy
           name: check-for-agentserviceconfig
           compliance: NonCompliant
+      ignorePending: true
       objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
