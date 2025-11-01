@@ -21,8 +21,8 @@ spec:
         type: Persistent
         persistent:
           size: 32Gi
+      #defaultPodNetwork: true
       #additionalNetworks:
       #- name: default/d-vlan60
-      defaultPodNetwork: true
   release:
     image: {{ hcp_release_image }}
