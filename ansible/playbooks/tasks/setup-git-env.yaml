@@ -1,0 +1,50 @@
+---
+- name: Get the Git Pull Credentials
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Secret
+    namespace: "{{ git_pull_credentials_secret_namespace }}"
+    name: "{{ git_pull_credentials_secret_name }}"
+  register: git_pull_secret
+
+- name: Fail if the Git Pull credentials secret is not found
+  ansible.builtin.fail:
+    msg: "No Git Pull credentials secret found! Looking for {{ git_pull_credentials_secret_namespace }}/{{ git_pull_credentials_secret_name }}"
+  when: git_pull_secret.resources | length == 0
+
+- name: Determine transport type for Git Pull repo
+  ansible.builtin.set_fact:
+    git_pull_use_https_repo: "{{ (git_pull_secret.resource[0].data.git_url | b64decode).startswith('https://') }}"
+    git_pull_use_http_repo: "{{ (git_pull_secret.resource[0].data.git_url | b64decode).startswith('http://') }}"
+    git_pull_use_ssh_repo: "{{ (git_pull_secret.resource[0].data.git_url | b64decode).startswith('git@') }}"
+
+- name: Get the Git Push Credentials
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Secret
+    namespace: "{{ git_push_credentials_secret_namespace }}"
+    name: "{{ git_push_credentials_secret_name }}"
+  register: git_push_secret
+
+- name: Fail if the Git Push credentials secret is not found
+  ansible.builtin.fail:
+    msg: "No Git Push credentials secret found! Looking for {{ git_push_credentials_secret_namespace }}/{{ git_push_credentials_secret_name }}"
+  when: git_push_secret.resources | length == 0
+
+- name: Determine transport type for Git Push repo
+  ansible.builtin.set_fact:
+    git_push_use_https_repo: "{{ (git_push_secret.resource[0].data.git_url | b64decode).startswith('https://') }}"
+    git_push_use_http_repo: "{{ (git_push_secret.resource[0].data.git_url | b64decode).startswith('http://') }}"
+    git_push_use_ssh_repo: "{{ (git_push_secret.resource[0].data.git_url | b64decode).startswith('git@') }}"
+
+- name: Set Git variables for actions
+  ansible.builtin.set_fact:
+    git_pull_endpoint: >-
+      {{ 'http://' if git_pull_use_http_repo }}{{ 'https://' if git_pull_use_https_repo }}
+      {{ (git_push_secret.resource[0].data.git_username | b64decode)+':'+(git_push_secret.resource[0].data.git_password | b64decode) if git_pull_use_http_repo and (git_push_secret.resource[0].data.git_username is defined) and (git_push_secret.resource[0].data.git_password is defined) else default(omit) }}
+      {{ 'git@' if git_pull_use_ssh_repo }}
+
+- name: Debug
+  ansible.builtin.debug:
+    msg:
+      - "Git Pull Endpoint: {{ git_pull_endpoint }}"

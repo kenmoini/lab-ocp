@@ -1,6 +1,7 @@
 ---
 - name: Create Hosted Control Plane Cluster
-  hosts: all
+  hosts: localhost
+  connection: local
   gather_facts: false
   vars:
     hcp_cluster_type: "kubevirt"
@@ -16,7 +17,17 @@
     hcp_infra_availability: SingleReplica
     hcp_cluster_network: "" # default is the podnetwork of the hosting cluster
     hcp_cluster_clusterset: "hcp-virt"
+
+    git_pull_credentials_secret_namespace: "ztp-system"
+    git_pull_credentials_secret_name: "ztp-git-pull-creds"
+    git_push_credentials_secret_namespace: "ztp-system"
+    git_push_credentials_secret_name: "ztp-git-push-creds"
+
   tasks:
+  - name: Setup Git Environment
+    ansible.builtin.include_tasks:
+      file: task/setup-git-env.yaml
+
   - name: Create Temporary Working Directory
     block:
       - name: Create a temporary directory
@@ -35,7 +46,7 @@
           - secrets
         loop_control:
           loop_var: path_item
-  - name: Clone down the Git repo
-  - name: Create HCP Cluster folder
-  - name: Template out cluster manifests
-  - name: Synchronize to Git
+  # - name: Clone down the Git repo
+  # - name: Create HCP Cluster folder
+  # - name: Template out cluster manifests
+  # - name: Synchronize to Git
