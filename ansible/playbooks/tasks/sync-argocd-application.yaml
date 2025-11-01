@@ -1,0 +1,15 @@
+---
+- name: Patch an ArgoCD Application to sync
+  kubernetes.core.k8s:
+    definition:
+      apiVersion: argoproj.io/v1alpha1
+      kind: Application
+      metadata:
+        name: "{{ sync_argo_application_name }}"
+        namespace: "{{ sync_argo_application_namespace }}"
+      operation:
+        initiatedBy:
+          username: ztp-bot
+        sync:
+          syncStrategy:
+            apply: {}

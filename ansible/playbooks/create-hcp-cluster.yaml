@@ -23,6 +23,9 @@
     git_push_credentials_secret_namespace: "ztp-system"
     git_push_credentials_secret_name: "ztp-git-push-creds"
 
+    sync_argo_application_name: "{{ hcp_infrastructure_host }}-ztp-sync"
+    sync_argo_application_namespace: "openshift-gitops"
+
   tasks:
   - name: Mutate Input Vars based on T-Shirt Size
     ansible.builtin.include_tasks:
@@ -116,3 +119,7 @@
     ansible.builtin.file:
       path: "{{ temp_dir.path }}"
       state: absent
+
+  - name: Sync ArgoCD Application for HCP Cluster
+    ansible.builtin.include_tasks:
+      file: tasks/sync-argocd-application.yaml
