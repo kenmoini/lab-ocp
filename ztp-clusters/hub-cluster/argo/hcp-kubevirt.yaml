@@ -18,6 +18,12 @@ spec:
       jsonPointers:
         - /spec
       kind: AgentClusterInstall
+    - group: external-secrets.io
+      kind: ExternalSecret
+      jqPathExpressions:
+        - .spec.data.remoteRef[].conversionStrategy
+        - .spec.data.remoteRef[].decodingStrategy
+        - .spec.data.remoteRef[].metadataPolicy
   destination:
     name: hub-cluster
   sources:
