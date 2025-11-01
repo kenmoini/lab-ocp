@@ -24,7 +24,14 @@ interfaceConfigurations:
     vlanID: 66
     mtu: 9000
 
+- name: isolated
+  skipNNCPCreation: true
+  vlanStack:
+  - name: isolated
+    vlanID: 86
+    mtu: 9000
 - name: isolated-raza
+  skipNADCreation: true
   nodeSelector:
     kubernetes.io/hostname: raza
   vlanStack:
@@ -34,6 +41,7 @@ interfaceConfigurations:
     mtu: 9000
     ipAddress: 192.168.86.40/24
 - name: isolated-suki
+  skipNADCreation: true
   nodeSelector:
     kubernetes.io/hostname: suki
   vlanStack:
@@ -43,6 +51,7 @@ interfaceConfigurations:
     mtu: 9000
     ipAddress: 192.168.86.46/24
 - name: isolated-endurance
+  skipNADCreation: true
   nodeSelector:
     kubernetes.io/hostname: endurance
   vlanStack:
