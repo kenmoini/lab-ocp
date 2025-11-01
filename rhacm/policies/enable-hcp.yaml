@@ -14,25 +14,6 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: enable-wildcard-ingress
-        spec:
-          remediationAction: enforce
-          severity: low
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: operator.openshift.io/v1
-                kind: IngressController
-                metadata:
-                  name: default
-                  namespace: openshift-ingress-operator
-                spec:
-                  routeAdmission:
-                    wildcardPolicy: WildcardsAllowed
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
           name: check-for-acm-mce
         spec:
           remediationAction: inform
@@ -48,3 +29,27 @@ spec:
               objectDefinition:
                 apiVersion: multicluster.openshift.io/v1
                 kind: MultiClusterEngine
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: check-for-acm-mce
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: enable-wildcard-ingress
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1
+                kind: IngressController
+                metadata:
+                  name: default
+                  namespace: openshift-ingress-operator
+                spec:
+                  routeAdmission:
+                    wildcardPolicy: WildcardsAllowed

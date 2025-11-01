@@ -27,7 +27,6 @@ resources:
   - enable-multinetworkpolicy.yaml
   - enable-hcp.yaml
 
-
   # Operator Installation Policies
   - versioned-operators/
   - operators/
