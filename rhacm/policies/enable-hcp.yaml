@@ -42,7 +42,6 @@ spec:
           kind: Policy
           name: instance-metallb
           compliance: Compliant
-          
       objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -62,3 +61,103 @@ spec:
                 spec:
                   routeAdmission:
                     wildcardPolicy: WildcardsAllowed
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: enable-wildcard-ingress
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: configure-hypershift-uwm
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: ConfigMap
+                apiVersion: v1
+                metadata:
+                  name: hypershift-operator-install-flags
+                  namespace: '{{hub .ManagedClusterName hub}}'
+                data:
+                  installFlagsToAdd: ""
+                  installFlagsToRemove: "--enable-uwm-telemetry-remote-write"
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: enable-wildcard-ingress
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: check-for-agentserviceconfig
+        spec:
+          remediationAction: inform
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: agent-install.openshift.io/v1beta1
+                kind: AgentServiceConfig
+                metadata:
+                  name: agent
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: check-for-agentserviceconfig
+          compliance: NonCompliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: create-missing-agentserviceconfig
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: assisted-service-config
+                  namespace: multicluster-engine
+                  labels:
+                    app: assisted-service
+                data:
+                  LOG_LEVEL: "debug"
+                  AUTH_TYPE: "none"
+                  SKIP_CERT_VERIFICATION: "True"
+                  ISO_IMAGE_TYPE: "full-iso"
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: agent-install.openshift.io/v1beta1
+                kind: AgentServiceConfig
+                metadata:
+                  name: agent
+                  annotations:
+                    unsupported.agent-install.openshift.io/assisted-service-configmap: "assisted-service-config"
+                    unsupported.agent-install.openshift.io/assisted-image-service-skip-verify-tls: "true"
+                spec:
+                  databaseStorage:
+                    accessModes:
+                      - ReadWriteOnce
+                    resources:
+                      requests:
+                        storage: 10Gi
+                  filesystemStorage:
+                    accessModes:
+                      - ReadWriteOnce
+                    resources:
+                      requests:
+                        storage: 50Gi
+                  imageStorage:
+                    accessModes:
+                      - ReadWriteOnce
+                    resources:
+                      requests:
+                        storage: 100Gi
