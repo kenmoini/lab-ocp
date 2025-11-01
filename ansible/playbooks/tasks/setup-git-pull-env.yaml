@@ -20,6 +20,8 @@
 
 - name: Set Git variables for actions
   ansible.builtin.set_fact:
+    git_pull_branch: "{{ (git_pull_secret.resources[0].data.git_branch | b64decode) if git_pull_secret.resources[0].data.git_branch is defined else 'HEAD' }}"
+    git_pull_url: "{{ git_pull_secret.resources[0].data.git_url | b64decode }}"
     git_pull_endpoint: >-
       {{ 'http://' if git_pull_use_http_repo }}{{ 'https://' if git_pull_use_https_repo }}{{ 'ssh://git@' if git_pull_use_ssh_repo }}
       {{- (git_pull_secret.resources[0].data.git_username | b64decode)+':'+(git_pull_secret.resources[0].data.git_password | b64decode)+'@' if (git_pull_use_http_repo or git_pull_use_https_repo) and (git_pull_secret.resources[0].data.git_username is defined) and (git_pull_secret.resources[0].data.git_password is defined) else '' }}

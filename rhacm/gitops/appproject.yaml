@@ -1,3 +1,4 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
@@ -9,6 +10,22 @@ spec:
       kind: Application
     - group: argoproj.io
       kind: ApplicationSet
+  sourceRepos:
+    - '*'
+  destinations:
+    - name: '*'
+      namespace: '*'
+      server: '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: ztp-clusters
+  namespace: openshift-gitops
+spec:
+  clusterResourceWhitelist:
+    - group: argoproj.io
+      kind: Application
   sourceRepos:
     - '*'
   destinations:

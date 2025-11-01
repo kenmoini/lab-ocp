@@ -91,6 +91,12 @@
     loop_control:
       loop_var: template_file
 
+  - name: Template out cluster ArgoCD Application manifest
+    ansible.builtin.template:
+      src: "argocd-application.yaml.j2"
+      dest: "{{ temp_git_dir }}/ztp-clusters/{{ hcp_infrastructure_host }}/argo/{{ hcp_cluster_name }}.yaml"
+      mode: "0644"
+
   - name: Setup Git Push Environment
     ansible.builtin.include_tasks:
       file: tasks/setup-git-push-env.yaml
