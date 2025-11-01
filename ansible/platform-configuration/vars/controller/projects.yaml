@@ -1,0 +1,11 @@
+---
+controller_projects:
+  - name: Lab OpenShift
+    organization: "{{ global_organization }}"
+    scm_branch: main
+    default_environment: ztp-ee
+    scm_clean: 'yes'
+    scm_delete_on_update: 'no'
+    scm_type: git
+    scm_update_on_launch: 'no'
+    scm_url: "{{ project_scm_url }}"

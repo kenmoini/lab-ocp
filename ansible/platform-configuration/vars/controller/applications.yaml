@@ -1,0 +1,8 @@
+
+controller_applications:
+  - name: "Hub OpenShift"
+    description: "Application used for token authentication between the Hub OpenShift cluster and AAP"
+    organization: "{{ global_organization }}"
+    state: "present"
+    client_type: "public"
+    authorization_grant_type: "password"

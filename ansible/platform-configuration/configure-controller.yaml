@@ -1,0 +1,43 @@
+- name: Configure an AAP2 Controller for use of the included automation
+  hosts: localhost
+  connection: local
+
+  vars:
+  # Define following vars here, or in controller_configs/controller_auth.yml
+    controller_hostname: aap2-controller.kemo.edge
+    controller_username: notadmin
+    controller_password: ozdyy312QUHRbHomF4cNFnWzisdMb4e6
+    controller_validate_certs: false
+
+    # Change to your fork of the repo
+    project_scm_url: https://github.com/kenmoini/lab-ocp
+
+    # If not using the default organization, change this to the organization name that you have created
+    global_organization: Default
+
+    # Location to the private key that will be used to create a Machine credential
+    #  for connecting to RHDE systems
+    ssh_private_key: ~/.ssh/MasterKemoKey
+
+    # Location to a file storing the Ansible Vault password
+    ansible_vault_password_file: ~/.vault_pass.txt
+
+  pre_tasks:
+    - name: Include vars from controller directory
+      ansible.builtin.include_vars:
+        dir: ./vars/controller/
+        ignore_files: [controller_config.yml.template]
+        extensions: ["yml", "yaml"]
+
+  roles:
+    - {role: infra.controller_configuration.execution_environments, when: controller_execution_environments is defined}
+    - {role: infra.controller_configuration.credentials, when: controller_credentials is defined}
+    - {role: infra.controller_configuration.applications, when: controller_applications is defined}
+
+    - {role: infra.controller_configuration.inventories, when: controller_inventories is defined}
+    - {role: infra.controller_configuration.hosts, when: controller_hosts is defined}
+    - {role: infra.controller_configuration.groups, when: controller_groups is defined}
+
+    - {role: infra.controller_configuration.projects, when: controller_projects is defined}
+    - {role: infra.controller_configuration.job_templates, when: controller_templates is defined}
+    - {role: infra.controller_configuration.workflow_job_templates, when: controller_workflows is defined}

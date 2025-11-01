@@ -1,6 +1,6 @@
 ---
 - name: Create Hosted Control Plane Cluster
-  hosts: localhost
+  hosts: all
   gather_facts: false
   vars:
     hcp_cluster_type: "kubevirt"
@@ -15,4 +15,27 @@
     hcp_control_plane_availability: SingleReplica
     hcp_infra_availability: SingleReplica
     hcp_cluster_network: "" # default is the podnetwork of the hosting cluster
+    hcp_cluster_clusterset: "hcp-virt"
   tasks:
+  - name: Create Temporary Working Directory
+    block:
+      - name: Create a temporary directory
+        ansible.builtin.tempfile:
+          state: directory
+          suffix: build
+        register: temp_dir
+
+      - name: Create subdirectories in temporary path
+        ansible.builtin.file:
+          path: "{{ temp_dir.path }}/{{ path_item }}"
+          state: directory
+          mode: "0755"
+        loop:
+          - git
+          - secrets
+        loop_control:
+          loop_var: path_item
+  - name: Clone down the Git repo
+  - name: Create HCP Cluster folder
+  - name: Template out cluster manifests
+  - name: Synchronize to Git
