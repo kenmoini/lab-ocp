@@ -13,6 +13,13 @@ chassis:
     vm_selector:
       labels:
         redfish-enabled: 'true'
+  - description: Virtual Bare Metal Cluster 1 KubeVirt chassis with virtual machines
+    name: vbmh1
+    namespace: vbmh1
+    service_account: kubevirt-redfish
+    vm_selector:
+      labels:
+        redfish-enabled: 'true'
 configMap:
   annotations: {}
   enabled: true
