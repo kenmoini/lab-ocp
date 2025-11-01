@@ -25,4 +25,4 @@ spec:
       #- name: default/d-vlan60
       #defaultPodNetwork: true
   release:
-    image: quay.io/openshift-release-dev/ocp-release:4.20.1-multi
+    image: quay.io/openshift-release-dev/ocp-release:4.19.0-multi
