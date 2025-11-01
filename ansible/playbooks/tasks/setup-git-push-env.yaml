@@ -29,6 +29,6 @@
     git_push_url: "{{ git_push_secret.resources[0].data.git_url | b64decode }}"
     git_push_host: "{{ (git_push_secret.resources[0].data.git_url | b64decode).split('//')[-1].split('@')[-1].split('/')[0].split(':')[0] }}"
     git_push_endpoint: >-
-      {{ 'http://' if git_push_use_http_repo }}{{ 'https://' if git_push_use_https_repo }}{{ 'ssh://' if git_push_use_ssh_repo }}
-      {{- (git_push_secret.resources[0].data.git_username | b64decode)+':'+(git_push_secret.resources[0].data.git_password | b64decode) if (git_push_use_http_repo or git_push_use_https_repo) and (git_push_secret.resources[0].data.git_username is defined) and (git_push_secret.resources[0].data.git_password is defined) else '' }}
+      {{ 'http://' if git_push_use_http_repo }}{{ 'https://' if git_push_use_https_repo }}{{ 'ssh://git' if git_push_use_ssh_repo }}
+      {{- (git_push_secret.resources[0].data.git_username | b64decode)+':'+(git_push_secret.resources[0].data.git_password | b64decode) if (git_push_use_http_repo or git_push_use_https_repo) and (git_push_secret.resources[0].data.git_username is defined) and (git_push_secret.resources[0].data.git_password is defined) else '' }}@
       {{- (git_push_secret.resources[0].data.git_url | b64decode).split('://')[-1] if git_push_use_http_repo or git_push_use_https_repo else (git_push_secret.resources[0].data.git_url | b64decode) }}
