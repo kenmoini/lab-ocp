@@ -35,11 +35,11 @@ spec:
           name: check-for-acm-mce
           compliance: Compliant
         - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
+          kind: Policy
           name: operators-metallb
           compliance: Compliant
         - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
+          kind: Policy
           name: instance-metallb
           compliance: Compliant
           
