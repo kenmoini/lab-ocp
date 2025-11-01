@@ -24,8 +24,8 @@ metadata:
   namespace: openshift-gitops
 spec:
   clusterResourceWhitelist:
-    - group: argoproj.io
-      kind: Application
+    - group: "*"
+      kind: '*'
   sourceRepos:
     - '*'
   destinations:
