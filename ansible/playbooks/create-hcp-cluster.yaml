@@ -24,6 +24,10 @@
     git_push_credentials_secret_name: "ztp-git-push-creds"
 
   tasks:
+  - name: Mutate Input Vars based on T-Shirt Size
+    ansible.builtin.include_tasks:
+      file: tasks/var-mux-hcp-virt.yaml
+
   - name: Setup Git Pull Environment
     ansible.builtin.include_tasks:
       file: tasks/setup-git-pull-env.yaml

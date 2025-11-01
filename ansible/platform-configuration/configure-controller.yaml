@@ -6,7 +6,7 @@
   # Define following vars here, or in controller_configs/controller_auth.yml
     controller_hostname: hub-controller-aap.apps.tri-force.lab.kemo.network
     controller_username: admin
-    controller_password: asdf
+    controller_password: asdfasdf
     controller_validate_certs: false
 
     # Change to your fork of the repo
@@ -22,12 +22,34 @@
     # Location to a file storing the Ansible Vault password
     ansible_vault_password_file: ~/.vault_pass.txt
 
+  environment:
+    http_proxy: "{{ http_proxy | default('') }}"
+    https_proxy: "{{ https_proxy | default('') }}"
+    no_proxy: "{{ no_proxy | default('') }}"
+    HTTP_PROXY: "{{ http_proxy | default('') }}"
+    HTTPS_PROXY: "{{ https_proxy | default('') }}"
+    NO_PROXY: "{{ no_proxy | default('') }}"
+    K8S_AUTH_PROXY: "{{ http_proxy | default('') }}"
+    K8S_AUTH_NO_PROXY: "{{ no_proxy | default('') }}"
+
+  module_defaults:
+    kubernetes.core.k8s_info:
+      validate_certs: false
+    kubernetes.core.k8s:
+      validate_certs: false
+    kubernetes.core.helm:
+      validate_certs: false
+
   pre_tasks:
     - name: Include vars from controller directory
       ansible.builtin.include_vars:
         dir: ./vars/controller/
         ignore_files: [controller_config.yml.template]
         extensions: ["yml", "yaml"]
+
+    - name: Setup the connected OpenShift Cluster
+      ansible.builtin.include_tasks:
+        file: tasks/setup-openshift-cluster.yaml
 
   roles:
     - {role: infra.controller_configuration.execution_environments, when: controller_execution_environments is defined}

@@ -12,3 +12,4 @@ controller_templates:
     # survey_enabled: true
     credentials:
       - SharedVault
+      - OCP-HubCluster

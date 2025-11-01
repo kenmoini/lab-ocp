@@ -1,0 +1,76 @@
+---
+- name: Make sure the ztp-system namespace exists
+  kubernetes.core.k8s:
+    state: present
+    apply: true
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: ztp-system
+
+- name: Generate Service Account in the ztp-system namespace
+  kubernetes.core.k8s:
+    state: present
+    apply: true
+    definition:
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: aap
+        namespace: ztp-system
+      secrets:
+        - name: aap-sa-token
+
+- name: Generate Service Account Token Secret in the ztp-system namespace
+  kubernetes.core.k8s:
+    state: present
+    apply: true
+    definition:
+      apiVersion: v1
+      kind: Secret
+      type: kubernetes.io/service-account-token
+      metadata:
+        name: aap-sa-token
+        namespace: ztp-system
+        annotations:
+          kubernetes.io/service-account.name: aap
+
+- name: Bind cluster-admin role to the ztp-system/aap Service Account
+  kubernetes.core.k8s:
+    state: present
+    apply: true
+    definition:
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: aap-ztp-cluster-admin
+      subjects:
+      - kind: ServiceAccount
+        name: aap
+        namespace: ztp-system
+      roleRef:
+        kind: ClusterRole
+        name: cluster-admin
+        apiGroup: rbac.authorization.k8s.io
+
+- name: Retrieve the Service Account Token for ztp-system/aap
+  kubernetes.core.k8s_info:
+    kind: Secret
+    namespace: ztp-system
+    name: aap-sa-token
+  register: sa_secret
+
+- name: Get the cluster Infrastructure object
+  kubernetes.core.k8s_info:
+    kind: Infrastructure
+    api_version: config.openshift.io/v1
+    name: cluster
+  register: infra_info
+
+- name: Set the OpenShift Cluster Token fact
+  ansible.builtin.set_fact:
+    openshift_cluster_token: "{{ sa_secret.resources[0].data.token | b64decode }}"
+    openshift_ca_crt: "{{ sa_secret.resources[0].data['ca.crt'] | b64decode }}"
+    openshift_service_ca_crt: "{{ sa_secret.resources[0].data['service-ca.crt'] | b64decode }}"
+    openshift_api_url: "{{ infra_info.resources[0].status.apiServerURL }}"
