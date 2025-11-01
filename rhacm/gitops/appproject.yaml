@@ -32,3 +32,21 @@ spec:
     - name: '*'
       namespace: '*'
       server: '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: app-syncs
+  namespace: openshift-gitops
+spec:
+  clusterResourceWhitelist:
+    - group: argoproj.io
+      kind: Application
+    - group: argoproj.io
+      kind: ApplicationSet
+  sourceRepos:
+    - '*'
+  destinations:
+    - name: '*'
+      namespace: '*'
+      server: '*'

@@ -10,6 +10,7 @@ resources:
   - appset-cluster-config.yaml
   - appset-egress-ips.yaml
   - appset-vlan-stacks.yaml
+  - appset-ztp-sync.yaml
   - rhacm-integration.yaml
 
 commonAnnotations:

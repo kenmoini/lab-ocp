@@ -3,7 +3,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: cluster-config
+  name: ztp-sync
   namespace: openshift-gitops
 spec:
   generators:
@@ -11,18 +11,15 @@ spec:
         generators:
           - clusters:
               selector:
-                # matchExpressions:
-                # - key: cluster-gitops-config
-                #   operator: In
-                #   values:
-                #   - enabled
-                #   - "true"
-                matchLabels:
-                  cluster-gitops-config: enabled
+                matchExpressions:
+                - key: hcpServices
+                  operator: In
+                  values:
+                  - enabled
+                  - "true"
           - list:
               elements:
-              - appName: cluster-config
-                namespace: openshift-gitops
+              - appName: ztp-sync
   template:
     metadata:
       name: "{{name}}-{{appName}}"
@@ -44,19 +41,19 @@ spec:
           kind: 'ApplicationSet'
           jsonPointers:
             - '/metadata/generation'
-      project: spoke-cluster-config
+      project: app-syncs
       sources:
-        - kustomize: {}
-          repoURL: 'https://github.com/kenmoini/lab-ocp'
+        - repoURL: 'https://github.com/kenmoini/lab-ocp'
           ## Path is the repo directory that containers the cluster(s) configuration and deployment manifests
-          path: clusters/{{name}}/gitops-config/
-    
+          path: ztp-clusters/{{name}}/argo/
+          directory:
+            recurse: false
       destination:
         name: "{{name}}"
-        namespace: "{{namespace}}"
       syncPolicy:
         automated:
-          prune: false
+          prune: true
+          allowEmpty: true
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
