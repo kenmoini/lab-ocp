@@ -31,13 +31,7 @@
         
     - name: Git set new remote # noqa: command-instead-of-module
       ansible.builtin.shell: |
-        git remote add private {{ git_push_url }}
-      args:
-        chdir: "{{ git_project_path }}"
-
-    - name: Git set new remote # noqa: command-instead-of-module
-      ansible.builtin.shell: |
-        git remote add private "{{ target_repo_url }}"
+        git remote add private {{ target_repo_url }}
       args:
         chdir: "{{ git_project_path }}"
 
