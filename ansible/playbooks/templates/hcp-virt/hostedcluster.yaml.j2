@@ -1,0 +1,62 @@
+---
+apiVersion: hypershift.openshift.io/v1beta1
+kind: HostedCluster
+metadata:
+  name: {{ hcp_cluster_name }}
+  namespace: {{ hcp_cluster_namespace }}
+  labels:
+    "cluster.open-cluster-management.io/clusterset": {{ hcp_cluster_clusterset | default('default') }}
+spec:
+  etcd:
+    managed:
+      storage:
+        persistentVolume:
+          size: {{ hcp_etcd_storage_size }}
+          storageClassName: {{ hcp_etcd_storage_class }}
+        type: PersistentVolume
+    managementType: Managed
+  release:
+    image: {{ hcp_release_image }}
+  pullSecret:
+    name: pullsecret-{{ hcp_cluster_name }}
+  sshKey:
+    name: sshkey-{{ hcp_cluster_name }}
+  networking:
+    clusterNetwork:
+      - cidr: 10.132.0.0/14
+    serviceNetwork:
+      - cidr: 172.31.0.0/16
+    networkType: OVNKubernetes
+  controllerAvailabilityPolicy: HighlyAvailable
+  infrastructureAvailabilityPolicy: SingleReplica
+  platform:
+    type: KubeVirt
+    kubevirt:
+      baseDomainPassthrough: true
+      storageDriver:
+        type: Manual
+        manual:
+          storageClassMapping:
+            - infraStorageClassName: ocs-storagecluster-cephfs
+              guestStorageClassName: ocs-storagecluster-cephfs
+            - infraStorageClassName: ocs-storagecluster-ceph-rbd
+              guestStorageClassName: ocs-storagecluster-ceph-rbd
+          volumeSnapshotClassMapping:
+            - infraVolumeSnapshotClassName: ocs-storagecluster-cephfsplugin-snapclass
+              guestVolumeSnapshotClassName: ocs-storagecluster-cephfsplugin-snapclass
+            - infraVolumeSnapshotClassName: ocs-storagecluster-rbdplugin-snapclass
+              guestVolumeSnapshotClassName: ocs-storagecluster-rbdplugin-snapclass
+  infraID: {{ hcp_cluster_name }}
+  services:
+    - service: OAuthServer
+      servicePublishingStrategy:
+        type: Route
+    - service: OIDC
+      servicePublishingStrategy:
+        type: Route
+    - service: Konnectivity
+      servicePublishingStrategy:
+        type: Route
+    - service: Ignition
+      servicePublishingStrategy:
+        type: Route

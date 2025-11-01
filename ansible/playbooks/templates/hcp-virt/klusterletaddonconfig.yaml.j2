@@ -1,0 +1,20 @@
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: {{ hcp_cluster_name }}
+  namespace: {{ hcp_cluster_name }}
+spec:
+  clusterName: {{ hcp_cluster_name }}
+  clusterNamespace: {{ hcp_cluster_name }}
+  clusterLabels:
+    cloud: KubeVirt
+    vendor: OpenShift
+  applicationManager:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  certPolicyController:
+    enabled: true

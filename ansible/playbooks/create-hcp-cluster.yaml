@@ -1,0 +1,18 @@
+---
+- name: Create Hosted Control Plane Cluster
+  hosts: localhost
+  gather_facts: false
+  vars:
+    hcp_cluster_type: "kubevirt"
+    hcp_infrastructure_host: "hub-cluster"
+    hcp_cluster_name: "hcp-kubevirt"
+    hcp_tshirt_size: medium # small, medium, large
+    hcp_cluster_namespace: "{{ hcp_cluster_name }}-infra"
+    hcp_cluster_domain: "" # default is the hosting cluster subdomain
+    hcp_release_image: quay.io/openshift-release-dev/ocp-release:4.20.1-multi
+    hcp_etcd_storage_class: ocs-storagecluster-ceph-rbd
+    hcp_etcd_storage_size: 20Gi
+    hcp_control_plane_availability: SingleReplica
+    hcp_infra_availability: SingleReplica
+    hcp_cluster_network: "" # default is the podnetwork of the hosting cluster
+  tasks:

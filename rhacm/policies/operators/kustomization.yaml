@@ -28,6 +28,7 @@ resources:
   - rhacs.yaml
   - sscsi.yaml
   - snr.yaml
+  - talm.yaml
   - virtualization.yaml
   - web-terminal.yaml
   - serverless.yaml
