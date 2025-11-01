@@ -50,4 +50,4 @@ spec:
           - RespectIgnoreDifferences=true
           - ApplyOutOfSyncOnly=true
         retry:
-          limit: 2
+          limit: 5

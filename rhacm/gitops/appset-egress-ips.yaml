@@ -28,11 +28,11 @@ spec:
     spec:
       project: default
       sources:
-        - path: '{{helmChartPath}}'
+        - repoURL: '{{helmRepoURL}}'
+          path: '{{helmChartPath}}'
           helm:
             valueFiles:
               - "{{valuesPath}}"
-          repoURL: '{{helmRepoURL}}'
         - ref: values
           repoURL: '{{valuesRepo}}'
           targetRevision: HEAD
