@@ -29,7 +29,7 @@
       kenmoini.powerdns_admin.zone_info:
         pdns_admin_url: "{{ powerdns_admin_url }}"
         pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
-        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
         id: "{{ pdns_zone }}"
       register: r_zone
 
@@ -41,7 +41,7 @@
       kenmoini.powerdns_admin.record_info:
         pdns_admin_url: "{{ powerdns_admin_url }}"
         pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
-        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
         zone: "{{ pdns_zone }}"
       register: r_records
 
@@ -53,7 +53,7 @@
     #   kenmoini.powerdns_admin.record:
     #     pdns_admin_url: "{{ powerdns_admin_url }}"
     #     pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
-    #     skip_tls_verify: true
+    #     skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
     #     zone: test.lab.kemo.network.
     #     name: testrecord.test.lab.kemo.network.
     #     value: 192.0.2.2
