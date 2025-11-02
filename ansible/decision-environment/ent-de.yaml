@@ -8,7 +8,12 @@ additional_build_files:
     dest: certs
 
 dependencies:
+  ansible_core:
+    package_pip: ansible-core
+  ansible_runner:
+    package_pip: ansible-runner
   python_interpreter:
+    package_system: "python3.11"
     python_path: /usr/bin/python3.11
   galaxy:
     collections:
@@ -36,12 +41,18 @@ dependencies:
     - krb5-devel [platform:rpm]
     - iputils [platform:rpm]
     - gcc [platform:rpm]
+    - which [platform:rpm]
 
 options:
   package_manager_path: /usr/bin/microdnf
 
 additional_build_steps:
   append_final:
+    - RUN for dir in /home/runner /home/runner/.ansible /home/runner/.ansible/tmp /runner /home/runner /runner/env /runner/inventory /runner/project /runner/artifacts ; do mkdir -m 0775 -p $dir ; chmod -R g+rwx $dir ; chgrp -R root $dir ; done && for file in /home/runner/.ansible/galaxy_token /etc/passwd /etc/group ; do touch $file ; chmod g+rw $file ; chgrp root $file ; done
+    - RUN rm -rf /usr/bin/python3 && ln -s python3.11 /usr/bin/python3
+    - VOLUME /runner
+    - WORKDIR /runner
+    - ENV HOME=/home/runner
     - COPY _build/certs/ /etc/pki/ca-trust/source/anchors/
     - RUN update-ca-trust
   # This is a workaround for the bug: https://issues.redhat.com/browse/AAP-32856
