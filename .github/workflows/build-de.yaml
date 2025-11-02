@@ -25,7 +25,7 @@ jobs:
       ENABLE_REDHAT_REGISTRY: true
       REGISTRY_HOSTNAME: quay.io
       REGISTRY_PATH: kenmoini
-      EE_IMAGE_NAME: 'ee-lab-ocp'
+      EE_IMAGE_NAME: 'de-lab-ocp'
       EE_IMAGE_TAG: 'latest'
       EE_FOLDER_NAME: 'ansible/decision-environment'
       #EE_FILE_NAME: decision-environment.yaml
