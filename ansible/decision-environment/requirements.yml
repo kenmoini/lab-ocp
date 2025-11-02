@@ -2,5 +2,6 @@ collections:
   - name: sabre1041.eda
     version: 1.0.2
   - name: ansible.eda
+  - name: juniper.eda
   - name: redhatinsights.eda
   - name: dynatrace.event_driven_ansible

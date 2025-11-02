@@ -18,6 +18,7 @@ dependencies:
   galaxy:
     collections:
       - ansible.eda
+      - name: juniper.eda
       - name: sabre1041.eda
         version: 1.0.2
   python:
