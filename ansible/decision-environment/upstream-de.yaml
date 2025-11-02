@@ -1,0 +1,23 @@
+# Shamelessly stolen from https://github.com/kubealex/eda-decision-environment/blob/main/de-builder.yml
+---
+version: 3
+images:
+  base_image:
+    name: "quay.io/ansible/ansible-rulebook:latest"
+additional_build_files:
+  - src: ansible.cfg
+    dest: configs
+  - src: root-ca/*.pem
+    dest: certs
+
+dependencies:
+  galaxy: requirements.yml
+  python: requirements.txt
+  system: bindep.txt
+additional_build_steps:
+  append_final:
+    - COPY _build/certs/ /etc/pki/ca-trust/source/anchors/
+    - RUN update-ca-trust
+    - VOLUME /runner
+    - WORKDIR /runner
+    - ENV HOME=/home/runner
