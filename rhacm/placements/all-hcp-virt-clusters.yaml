@@ -2,7 +2,7 @@
 apiVersion: cluster.open-cluster-management.io/v1beta1
 kind: Placement
 metadata:
-  name: openshift-4.19-clusters
+  name: all-hcp-virt-clusters
 spec:
   tolerations:
     - key: cluster.open-cluster-management.io/unreachable
@@ -13,11 +13,11 @@ spec:
     - requiredClusterSelector:
         labelSelector:
           matchExpressions:
-            - key: openshiftVersion-major-minor
+            - key: vendor
               operator: In
               values:
-                - "4.19"
+                - "OpenShift"
             - key: cloud
-              operator: NotIn
+              operator: In
               values:
                 - "KubeVirt"

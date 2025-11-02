@@ -1,0 +1,16 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: all-hcp-virt-clusters
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: all-hcp-virt-clusters
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+
+  # Global OpenShift Operator Installation
+  - name: global-openshift-operators
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
