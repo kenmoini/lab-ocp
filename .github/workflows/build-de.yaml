@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'ansible/decision-environment/**'
-      - 'ansible/rulebooks/**'
+      - 'extensions/eda/rulebooks/**'
       - '.github/workflows/build-ee.yml'
 
   # Schedule workflow run at 00:00 on Sunday
