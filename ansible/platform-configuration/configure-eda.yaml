@@ -6,7 +6,7 @@
   # Define following vars here, or in controller_configs/controller_auth.yml
     aap_hostname: hub-aap.apps.tri-force.lab.kemo.network
     aap_username: admin
-    aap_password: 8Y5RmGXgRdJyCTf43P546EADLXRtp0X8
+    aap_password: asdfsdf
     aap_validate_certs: false
 
     aap_namespace: aap
