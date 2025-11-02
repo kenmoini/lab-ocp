@@ -1,0 +1,6 @@
+---
+eda_projects:
+  - name: lab-ztp-project
+    description: Kemo Labs ZTP Project
+    organization: "{{ global_organization | default('Default') }}"
+    url: "{{ project_scm_url }}"
