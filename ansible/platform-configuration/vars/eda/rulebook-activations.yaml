@@ -1,0 +1,12 @@
+---
+eda_rulebook_activations:
+  - name: Loadbalancer to PDNS Record
+    organization: "{{ global_organization | default('Default') }}"
+    description: Hook to listen for Services being created and create PDNS Records
+    project: lab-ztp-project
+    rulebook: pdns-record-from-lb-svc.yaml
+    decision_environment: lab-ztp-de
+    eda_credentials:
+    - AAP-Hub
+    enabled: true
+    state: present

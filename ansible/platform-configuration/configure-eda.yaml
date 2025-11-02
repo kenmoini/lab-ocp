@@ -6,8 +6,11 @@
   # Define following vars here, or in controller_configs/controller_auth.yml
     aap_hostname: hub-aap.apps.tri-force.lab.kemo.network
     aap_username: admin
-    aap_password: asdf
+    aap_password: 8Y5RmGXgRdJyCTf43P546EADLXRtp0X8
     aap_validate_certs: false
+
+    aap_namespace: aap
+    aap_name: hub
 
     # If not using the default organization, change this to the organization name that you have created
     global_organization: Default
@@ -39,6 +42,39 @@
         dir: ./vars/eda/
         extensions: ["yml", "yaml"]
 
+    - name: Get the AAP2 Controller Route URL
+      kubernetes.core.k8s_info:
+        kind: Route
+        api_version: route.openshift.io/v1
+        namespace: "{{ aap_namespace }}"
+        name: "{{ aap_name }}-controller"
+      register: route_r
+
+    - name: Get the AAP2 Controller Admin Secret
+      kubernetes.core.k8s_info:
+        kind: Secret
+        api_version: v1
+        namespace: "{{ aap_namespace }}"
+        name: "{{ aap_name }}-controller-admin-password"
+      register: admin_secret_r
+
+    - name: Create RBAC needed for AAP to query Services
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRoleBinding
+          metadata:
+            name: aap-ztp-service-reader
+          subjects:
+          - kind: ServiceAccount
+            name: default
+            namespace: "{{ aap_namespace }}"
+          roleRef:
+            kind: ClusterRole
+            name: view
+            apiGroup: rbac.authorization.k8s.io
+
     # - name: Setup the connected OpenShift Cluster
     #   ansible.builtin.include_tasks:
     #     file: tasks/setup-openshift-cluster.yaml
@@ -47,3 +83,4 @@
     - {role: infra.aap_configuration.eda_decision_environments, when: eda_decision_environments is defined}
     - {role: infra.aap_configuration.eda_credentials, when: eda_credentials is defined}
     - {role: infra.aap_configuration.eda_projects, when: eda_projects is defined}
+    - {role: infra.aap_configuration.eda_rulebook_activations, when: eda_rulebook_activations is defined}
