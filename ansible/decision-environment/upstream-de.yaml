@@ -18,6 +18,9 @@ dependencies:
   galaxy: requirements.yml
   python: requirements.txt
   system: bindep.txt
+  python_interpreter:
+    package_system: "python3.11"
+    python_path: "/usr/bin/python3.11"
 additional_build_steps:
   append_final:
     - COPY _build/certs/ /etc/pki/ca-trust/source/anchors/
