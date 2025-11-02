@@ -1,0 +1,8 @@
+ansible-rulebook
+requests
+kubernetes
+asyncio
+aiokafka
+aiohttp
+aiosignal
+aiomqtt

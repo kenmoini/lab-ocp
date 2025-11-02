@@ -1,0 +1,35 @@
+# Shamelessly stolen from https://github.com/kubealex/eda-decision-environment/blob/main/de-builder.yml
+---
+version: 3
+images:
+  base_image:
+    name: "registry.access.redhat.com/ubi9-minimal:latest"
+additional_build_files:
+  - src: ansible.cfg
+    dest: configs
+  - src: root-ca/*.pem
+    dest: certs
+
+dependencies:
+  ansible_core:
+    package_pip: ansible-core
+  ansible_runner:
+    package_pip: ansible-runner
+
+  galaxy: requirements.yml
+  python: requirements.txt
+  python_interpreter:
+    package_system: "python3.11"
+    python_path: "/usr/bin/python3.11"
+  system: bindep.txt
+additional_build_steps:
+  append_final:
+    - COPY _build/certs/ /etc/pki/ca-trust/source/anchors/
+    - RUN update-ca-trust
+    - RUN for dir in /home/runner /home/runner/.ansible /home/runner/.ansible/tmp /runner /home/runner /runner/env /runner/inventory /runner/project /runner/artifacts ; do mkdir -m 0775 -p $dir ; chmod -R g+rwx $dir ; chgrp -R root $dir ; done && for file in /home/runner/.ansible/galaxy_token /etc/passwd /etc/group ; do touch $file ; chmod g+rw $file ; chgrp root $file ; done
+    - RUN rm -rf /usr/bin/python3 && ln -s /usr/bin/python3.11 /usr/bin/python3
+    - VOLUME /runner
+    - WORKDIR /runner
+    - ENV HOME=/home/runner
+options:
+  package_manager_path: /usr/bin/microdnf

@@ -1,0 +1,36 @@
+name: DE build and push
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ansible/decision-environment/**'
+      - 'ansible/rulebooks/**'
+      - '.github/workflows/build-ee.yml'
+
+  # Schedule workflow run at 00:00 on Sunday
+  schedule:
+    - cron: '0 0 * * 0'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  call-deploy-workflow:
+    uses: kenmoini/disconnected-openshift/.github/workflows/base-build-ee.yml@main
+    #uses: kenmoini/ansible-ee-builder/.github/workflows/build-ee-base.yml@main
+    with:
+      #ENABLE_REDHAT_REGISTRY: true
+      REGISTRY_HOSTNAME: quay.io
+      REGISTRY_PATH: kenmoini
+      EE_IMAGE_NAME: 'ee-lab-ocp'
+      EE_IMAGE_TAG: 'latest'
+      EE_FOLDER_NAME: 'ansible/decision-environment'
+      EE_FILE_NAME: decision-environment.yaml
+    secrets:
+      REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.REGISTRY_TOKEN }}
+      #REDHAT_USERNAME: ${{ secrets.REDHAT_USERNAME }}
+      #REDHAT_PASSWORD: ${{ secrets.REDHAT_PASSWORD }}
