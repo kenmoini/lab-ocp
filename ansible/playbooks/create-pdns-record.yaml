@@ -4,9 +4,9 @@
   connection: local
   gather_facts: false
   vars:
-    powerdns_admin_url: "http://pdns.example.com:8081/api/v1/servers/localhost/zones/"
-    powerdns_admin_api_key: "your-pdns-api-key"
-    powerdns_admin_skip_tls_verify: true
+    # powerdns_admin_url: "http://pdns.example.com:8081/api/v1/servers/localhost/zones/"
+    # powerdns_admin_api_key: "your-pdns-api-key"
+    # powerdns_admin_skip_tls_verify: true
     pdns_zone: "example.com."
     record_name: "test-record.example.com."
     record_type: "A"
@@ -15,6 +15,11 @@
       - "192.168.60.100"
 
   tasks:
+
+    - name: Include PowerDNS vars
+      ansible.builtin.include_vars:
+        file: vars/pdns.yaml
+
     - name: Trim the last dot of the zone and record names if present and then add them back for consistency
       ansible.builtin.set_fact:
         pdns_zone: "{{ pdns_zone.rstrip('.') }}."
