@@ -8,8 +8,8 @@
         validate_certs: false
         api_version: v1
         kind: Service
-        # label_selectors:
-        #   - hypershift.openshift.io/control-plane-component=kube-apiserver
+        label_selectors:
+          - hypershift.openshift.io/control-plane-component=kube-apiserver
 
   rules:
     - name: debug more lol
