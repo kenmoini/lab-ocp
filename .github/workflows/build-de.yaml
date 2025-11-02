@@ -22,16 +22,16 @@ jobs:
     uses: kenmoini/disconnected-openshift/.github/workflows/base-build-ee.yml@main
     #uses: kenmoini/ansible-ee-builder/.github/workflows/build-ee-base.yml@main
     with:
-      #ENABLE_REDHAT_REGISTRY: true
+      ENABLE_REDHAT_REGISTRY: true
       REGISTRY_HOSTNAME: quay.io
       REGISTRY_PATH: kenmoini
       EE_IMAGE_NAME: 'ee-lab-ocp'
       EE_IMAGE_TAG: 'latest'
       EE_FOLDER_NAME: 'ansible/decision-environment'
       #EE_FILE_NAME: decision-environment.yaml
-      EE_FILE_NAME: upstream-de.yaml
+      EE_FILE_NAME: ent-de.yaml
     secrets:
       REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_TOKEN }}
-      #REDHAT_USERNAME: ${{ secrets.REDHAT_USERNAME }}
-      #REDHAT_PASSWORD: ${{ secrets.REDHAT_PASSWORD }}
+      REDHAT_USERNAME: ${{ secrets.REDHAT_USERNAME }}
+      REDHAT_PASSWORD: ${{ secrets.REDHAT_PASSWORD }}
