@@ -18,7 +18,7 @@
         debug:
         
     - name: LoadBalancer Service Detected
-      condition: (event.type == "ADDED" or event.type == "MODIFIED") and event.resource.spec.type == "LoadBalancer"
+      condition: (event.type == "ADDED" or event.type == "MODIFIED") and event.resource.spec.type == "LoadBalancer" and event.resource.status.loadBalancer.ingress is defined
       action:
         run_job_template:
           name: Create PDNS Record
