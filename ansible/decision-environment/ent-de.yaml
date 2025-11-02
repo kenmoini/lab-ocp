@@ -9,8 +9,7 @@ additional_build_files:
 
 dependencies:
   python_interpreter:
-    # python_path: /usr/bin/python3.11
-    package_system: "python39"
+    python_path: /usr/bin/python3.11
   galaxy:
     collections:
       - ansible.eda
