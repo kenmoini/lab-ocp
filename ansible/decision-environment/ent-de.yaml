@@ -9,12 +9,13 @@ additional_build_files:
 
 dependencies:
   python_interpreter:
-    python_path: /usr/bin/python3.11 
+    # python_path: /usr/bin/python3.11
+    package_system: "python39"
   galaxy:
     collections:
       - ansible.eda
       - name: sabre1041.eda
-        version: 1.0.1
+        version: 1.0.2
       - ansible.eda
       - redhatinsights.eda
       - dynatrace.event_driven_ansible
@@ -26,6 +27,8 @@ dependencies:
     - aiohttp
     - aiosignal
     - aiomqtt
+    - six
+    - psutil
   system:
     - pkgconf-pkg-config [platform:rpm]
     - systemd-devel [platform:rpm]
