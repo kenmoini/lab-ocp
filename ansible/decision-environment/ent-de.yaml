@@ -23,6 +23,11 @@ dependencies:
     - aiohttp
     - aiosignal
     - aiomqtt
+  system:
+    - pkgconf-pkg-config [platform:rpm]
+    - systemd-devel [platform:rpm]
+    - krb5-devel [platform:rpm]
+    - iputils [platform:rpm]
 
 options:
   package_manager_path: /usr/bin/microdnf
