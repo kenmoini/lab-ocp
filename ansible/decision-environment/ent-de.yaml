@@ -8,6 +8,8 @@ additional_build_files:
     dest: certs
 
 dependencies:
+  python_interpreter:
+    python_path: /usr/bin/python3.11 
   galaxy:
     collections:
       - ansible.eda
