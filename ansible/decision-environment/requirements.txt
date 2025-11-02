@@ -1,5 +1,4 @@
 ansible-rulebook
-ansible-runner
 requests
 kubernetes
 asyncio
