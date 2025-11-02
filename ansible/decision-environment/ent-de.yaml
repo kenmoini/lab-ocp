@@ -12,7 +12,7 @@ dependencies:
     collections:
       - ansible.eda
       - name: sabre1041.eda
-        version: 1.0.2
+        version: 1.0.1
       - ansible.eda
       - redhatinsights.eda
       - dynatrace.event_driven_ansible
