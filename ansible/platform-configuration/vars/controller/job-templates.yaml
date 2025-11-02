@@ -13,3 +13,18 @@ controller_templates:
     credentials:
       - SharedVault
       - OCP-HubCluster
+
+
+  - name: Create Record in PowerDNS
+    organization: "{{ global_organization }}"
+    job_type: run
+    inventory: LocalAPI
+    execution_environment: ztp-ee
+    project: Lab OpenShift
+    playbook: ansible/playbooks/create-pdns-record.yaml
+    become_enabled: false
+    ask_variables_on_launch: true
+    # survey_enabled: true
+    credentials:
+      - SharedVault
+      - KemoLabs-PowerDNS

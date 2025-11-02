@@ -6,7 +6,7 @@
   # Define following vars here, or in controller_configs/controller_auth.yml
     controller_hostname: hub-controller-aap.apps.tri-force.lab.kemo.network
     controller_username: admin
-    controller_password: asdfasdf
+    controller_password: ZRDEGfOAIBDB32aY4gbm8DOrtmOK5Syw
     controller_validate_certs: false
 
     # Change to your fork of the repo
@@ -21,6 +21,11 @@
 
     # Location to a file storing the Ansible Vault password
     ansible_vault_password_file: ~/.vault_pass.txt
+    
+    pdns_admin_url: "https://pdns.kemo.labs"
+    pdns_admin_api_key: "djdOaTR1YXFYTnFuMlVL"
+    pdns_admin_username: "notansible"
+    pdns_admin_password: "n0tPassword"
 
   environment:
     http_proxy: "{{ http_proxy | default('') }}"
@@ -53,6 +58,7 @@
 
   roles:
     - {role: infra.controller_configuration.execution_environments, when: controller_execution_environments is defined}
+    - {role: infra.controller_configuration.credential_types, when: controller_credential_types is defined}
     - {role: infra.controller_configuration.credentials, when: controller_credentials is defined}
     - {role: infra.controller_configuration.applications, when: controller_applications is defined}
 

@@ -12,3 +12,8 @@
     record_ttl: 300
     record_values:
       - "192.168.60.100"
+
+  tasks:
+    - name: Create or update DNS record in PowerDNS
+      ansible.builtin.debug:
+        msg: "This is a placeholder for the PowerDNS record creation task."
