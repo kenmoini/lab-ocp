@@ -11,7 +11,8 @@ dependencies:
   galaxy:
     collections:
       - ansible.eda
-      - sabre1041.eda
+      - name: sabre1041.eda
+        version: 1.0.2
       - ansible.eda
       - redhatinsights.eda
       - dynatrace.event_driven_ansible
@@ -40,4 +41,4 @@ additional_build_steps:
     - COPY _build/certs/ /etc/pki/ca-trust/source/anchors/
     - RUN update-ca-trust
   # This is a workaround for the bug: https://issues.redhat.com/browse/AAP-32856
-    # - ENV PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.11/site-packages:/usr/local/lib64/python3.11/site-packages
+    - ENV PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.11/site-packages:/usr/local/lib64/python3.11/site-packages

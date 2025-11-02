@@ -22,6 +22,14 @@
         run_job_template:
           name: Create PDNS Record
           organization: Default
+
+    - name: LoadBalancer Service Modified
+      condition: event.type == "MODIFIED"
+      action:
+        run_job_template:
+          name: Create PDNS Record
+          organization: Default
+          
     - name: debug lol
       condition: true
       action:
