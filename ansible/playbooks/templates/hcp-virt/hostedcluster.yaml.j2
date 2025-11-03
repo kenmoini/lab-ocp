@@ -6,14 +6,14 @@ metadata:
   namespace: {{ hcp_cluster_namespace }}
   labels:
     "cluster.open-cluster-management.io/clusterset": {{ hcp_cluster_clusterset | default('default') }}
-{%- if hcp_cluster_domain != "" %}
+{% if hcp_cluster_domain != "" %}
     "hcp.kemo.dev/base-domain": "{{ hcp_cluster_domain }}"
-{%- endif %}
+{% endif %}
 spec:
-{%- if hcp_cluster_domain != "" %}
+{% if hcp_cluster_domain != "" %}
   dns:
     baseDomain: {{ hcp_cluster_domain }}
-{%- endif %}
+{% endif %}
   etcd:
     managed:
       storage:
