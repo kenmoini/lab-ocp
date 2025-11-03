@@ -39,7 +39,8 @@ spec:
   platform:
     type: KubeVirt
     kubevirt:
-      baseDomainPassthrough: {% if hcp_cluster_domain != "" %}false{% else %}true{% endif %}
+      baseDomainPassthrough: {{ hcp_base_domain_passthrough | default(false) | bool }}
+
       storageDriver:
         type: Manual
         manual:

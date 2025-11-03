@@ -43,6 +43,7 @@
     - name: Set the base domain to the hosting cluster subdomain
       ansible.builtin.set_fact:
         hcp_cluster_domain: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console.apps.', '') }}"
+        hcp_base_domain_passthrough: true
 
     - name: Pass variables to the next playbook
       ansible.builtin.set_stats:
@@ -56,6 +57,7 @@
           hcp_control_plane_availability: "{{ hcp_control_plane_availability }}"
           hcp_infra_availability: "{{ hcp_infra_availability }}"
           hcp_etcd_storage_size: "{{ hcp_etcd_storage_size }}"
+          hcp_base_domain_passthrough: true
 
 - name: Set cluster domain based on input
   when: input_hcp_cluster_domain != "Hosting Cluster Subdomain"
@@ -63,6 +65,7 @@
     - name: Set the base domain to the input value
       ansible.builtin.set_fact:
         hcp_cluster_domain: "{{ input_hcp_cluster_domain }}"
+        hcp_base_domain_passthrough: false
 
     - name: Pass variables to the next playbook
       ansible.builtin.set_stats:
@@ -76,3 +79,4 @@
           hcp_control_plane_availability: "{{ hcp_control_plane_availability }}"
           hcp_infra_availability: "{{ hcp_infra_availability }}"
           hcp_etcd_storage_size: "{{ hcp_etcd_storage_size }}"
+          hcp_base_domain_passthrough: false
