@@ -25,6 +25,11 @@
         pdns_zone: "{{ pdns_zone.rstrip('.') }}."
         record_name: "{{ record_name.rstrip('.') }}."
 
+        
+    - name: Debug EDA variables
+      ansible.builtin.debug:
+        var: ansible_eda
+
     - name: Get a specific zone from PowerDNS Admin
       kenmoini.powerdns_admin.zone_info:
         pdns_admin_url: "{{ powerdns_admin_url }}"
@@ -68,6 +73,3 @@
     # - name: Create or update DNS record in PowerDNS
     #   ansible.builtin.debug:
     #     msg: "This is a placeholder for the PowerDNS record creation task."
-    # - name: Create or update DNS record in PowerDNS
-    #   ansible.builtin.debug:
-    #     var: ansible_eda
