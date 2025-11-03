@@ -32,4 +32,4 @@
           record_type: "CNAME"
           record_ttl: 3600
           record_values:
-            - content: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console', 'router-default') }}"
+            - content: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console', 'router-default') }}."
