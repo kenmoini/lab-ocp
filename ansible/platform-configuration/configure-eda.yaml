@@ -75,10 +75,6 @@
             name: view
             apiGroup: rbac.authorization.k8s.io
 
-    # - name: Setup the connected OpenShift Cluster
-    #   ansible.builtin.include_tasks:
-    #     file: tasks/setup-openshift-cluster.yaml
-
   roles:
     - {role: infra.aap_configuration.eda_decision_environments, when: eda_decision_environments is defined}
     - {role: infra.aap_configuration.eda_credentials, when: eda_credentials is defined}
