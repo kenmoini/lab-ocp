@@ -1,0 +1,16 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1
+kind: ManagedCluster
+metadata:
+  annotations:
+    import.open-cluster-management.io/hosting-cluster-name: hub-cluster
+    import.open-cluster-management.io/klusterlet-deploy-mode: Hosted
+    open-cluster-management/created-via: hypershift
+  labels:
+    cloud: KubeVirt
+    vendor: OpenShift
+    name: hcp-virt-ztp-cluster
+    cluster.open-cluster-management.io/clusterset: hcp-virt
+  name: hcp-virt-ztp-cluster
+spec:
+  hubAcceptsClient: true

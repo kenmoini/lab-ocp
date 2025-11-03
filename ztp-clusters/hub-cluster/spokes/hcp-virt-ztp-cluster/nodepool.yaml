@@ -1,0 +1,28 @@
+---
+apiVersion: hypershift.openshift.io/v1beta1
+kind: NodePool
+metadata:
+  name: hcp-virt-ztp-cluster-wp0
+  namespace: hcp-virt-ztp-cluster-infra
+spec:
+  arch: amd64
+  clusterName: hcp-virt-ztp-cluster
+  replicas: 2
+  management:
+    autoRepair: true
+    upgradeType: Replace
+  platform:
+    type: KubeVirt
+    kubevirt:
+      compute:
+        cores: 4
+        memory: 8Gi
+      rootVolume:
+        type: Persistent
+        persistent:
+          size: 32Gi
+      #defaultPodNetwork: true
+      #additionalNetworks:
+      #- name: default/d-vlan60
+  release:
+    image: quay.io/openshift-release-dev/ocp-release:4.19.0-multi

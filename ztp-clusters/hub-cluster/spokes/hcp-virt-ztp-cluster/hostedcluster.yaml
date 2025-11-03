@@ -1,0 +1,67 @@
+---
+apiVersion: hypershift.openshift.io/v1beta1
+kind: HostedCluster
+metadata:
+  name: hcp-virt-ztp-cluster
+  namespace: hcp-virt-ztp-cluster-infra
+  labels:
+    cluster.open-cluster-management.io/clusterset: hcp-virt
+    hcp.kemo.dev/base-domain: "apps.tri-force.lab.kemo.network"
+spec:
+  dns:
+    baseDomain: apps.tri-force.lab.kemo.network
+  etcd:
+    managed:
+      storage:
+        persistentVolume:
+          size: 8Gi
+          storageClassName: ocs-storagecluster-ceph-rbd
+        type: PersistentVolume
+    managementType: Managed
+  release:
+    image: quay.io/openshift-release-dev/ocp-release:4.19.0-multi
+  pullSecret:
+    name: pullsecret-hcp-virt-ztp-cluster
+  sshKey:
+    name: sshkey-hcp-virt-ztp-cluster
+  networking:
+    clusterNetwork:
+      - cidr: 10.132.0.0/14
+    serviceNetwork:
+      - cidr: 172.31.0.0/16
+    networkType: OVNKubernetes
+  controllerAvailabilityPolicy: SingleReplica
+  infrastructureAvailabilityPolicy: SingleReplica
+  platform:
+    type: KubeVirt
+    kubevirt:
+      baseDomainPassthrough: false      storageDriver:
+        type: Manual
+        manual:
+          storageClassMapping:
+            - infraStorageClassName: ocs-storagecluster-cephfs
+              guestStorageClassName: ocs-storagecluster-cephfs
+            - infraStorageClassName: ocs-storagecluster-ceph-rbd
+              guestStorageClassName: ocs-storagecluster-ceph-rbd
+          volumeSnapshotClassMapping:
+            - infraVolumeSnapshotClassName: ocs-storagecluster-cephfsplugin-snapclass
+              guestVolumeSnapshotClassName: ocs-storagecluster-cephfsplugin-snapclass
+            - infraVolumeSnapshotClassName: ocs-storagecluster-rbdplugin-snapclass
+              guestVolumeSnapshotClassName: ocs-storagecluster-rbdplugin-snapclass
+  infraID: hcp-virt-ztp-cluster
+  services:
+    - service: OAuthServer
+      servicePublishingStrategy:
+        type: Route
+    - service: OIDC
+      servicePublishingStrategy:
+        type: Route
+    - service: Konnectivity
+      servicePublishingStrategy:
+        type: Route
+    - service: Ignition
+      servicePublishingStrategy:
+        type: Route
+    - service: APIServer
+      servicePublishingStrategy:
+        type: LoadBalancer
