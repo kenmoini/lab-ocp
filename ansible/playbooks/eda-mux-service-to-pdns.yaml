@@ -49,7 +49,7 @@
       ansible.builtin.set_stats:
         data:
           record_name: "api.{{ clusterOwner }}.{{ hostedCluster_result.resources[0].spec.dns.baseDomain }}."
-          pdns_zone: "{{ hostedCluster_result.resources[0].metadata.labels['hcp.kemo.dev/base-domain'] }}."
+          pdns_zone: "{{ clusterOwner }}.{{ hostedCluster_result.resources[0].metadata.labels['hcp.kemo.dev/base-domain'] }}."
           record_type: "A"
           record_ttl: 3600
           record_values:
