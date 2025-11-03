@@ -37,6 +37,8 @@ controller_workflows:
     ask_limit_on_launch: false
     destroy_current_nodes: true
     organization: "{{ global_organization }}"
+    extra_vars:
+      hcp_cluster_type: kubevirt
     workflow_nodes:
       - all_parents_must_converge: false
         identifier: Workflow Entrypoint
