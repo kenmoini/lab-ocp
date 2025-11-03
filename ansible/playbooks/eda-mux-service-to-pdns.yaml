@@ -35,7 +35,10 @@
 
     - name: Set PowerDNS record name from HostedCluster and pass to the next playbook
       ansible.builtin.set_stats:
-        record_name: "api.{{ clusterOwner }}.{{ hostedCluster_result.resources[0].spec.dns.baseDomain }}."
-        pdns_zone: "{{ hostedCluster_result.resources[0].metadata.labels['hcp.kemo.dev/base-domain'] }}."
-        record_type: "A"
-        record_ttl: 3600
+        data:
+          record_name: "api.{{ clusterOwner }}.{{ hostedCluster_result.resources[0].spec.dns.baseDomain }}."
+          pdns_zone: "{{ hostedCluster_result.resources[0].metadata.labels['hcp.kemo.dev/base-domain'] }}."
+          record_type: "A"
+          record_ttl: 3600
+          record_values:
+            - content: "{{ ansible_eda.event.resource.status.loadBalancer.ingress[0].ip }}"
