@@ -7,48 +7,62 @@
     # pdns_admin_url: "http://pdns.example.com:8081/api/v1/servers/localhost/zones/"
     # pdns_admin_api_key: "your-pdns-api-key"
     # pdns_admin_skip_tls_verify: true
+    force: false
     pdns_zone: "example.com."
     record_name: "test-record.example.com."
     record_type: "A"
     record_ttl: 300
     record_values:
-      - "192.168.60.100"
+      - content: "192.168.60.100"
+      - content: "192.168.60.101"
+        disabled: true
 
   tasks:
 
-    - name: Include PowerDNS vars
-      ansible.builtin.include_vars:
-        file: vars/pdns.yaml
-
     - name: Trim the last dot of the zone and record names if present and then add them back for consistency
       ansible.builtin.set_fact:
-        pdns_zone: "{{ pdns_zone.rstrip('.') }}."
-        record_name: "{{ record_name.rstrip('.') }}."
-
-    - name: Debug EDA variables
-      ansible.builtin.debug:
-        var: ansible_eda
+        f_pdns_zone: "{{ pdns_zone.rstrip('.') }}."
+        f_record_name: "{{ record_name.rstrip('.') }}."
 
     - name: Get a specific zone from PowerDNS Admin
       kenmoini.powerdns_admin.zone_info:
         pdns_admin_url: "{{ pdns_admin_url }}"
         pdns_admin_api_key: "{{ pdns_admin_api_key }}"
         pdns_admin_skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
-        id: "{{ pdns_zone }}"
+        id: "{{ f_pdns_zone }}"
       register: r_zone
 
-    - name: Debug the zone
-      ansible.builtin.debug:
-        var: r_zone
+    - name: Fail if the zone does not exist in PowerDNS Admin
+      ansible.builtin.fail:
+        msg: "Zone {{ f_pdns_zone }} does not exist in PowerDNS. Cannot create record."
+      when: r_zone.zones | length == 0
 
-    - name: Get all the records in a zone from PowerDNS Admin
-      kenmoini.powerdns_admin.record_info:
+    - name: Check to see if the record already exists
+      when: not force
+      block:
+        - name: Get the records the zone from PowerDNS Admin
+          kenmoini.powerdns_admin.record_info:
+            pdns_admin_url: "{{ pdns_admin_url }}"
+            pdns_admin_api_key: "{{ pdns_admin_api_key }}"
+            pdns_admin_skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
+            zone: "{{ f_pdns_zone }}"
+            type: "{{ record_type }}"
+            name: "{{ f_record_name }}"
+          register: r_records
+
+        - name: Fail if the record already exists in PowerDNS Admin
+          ansible.builtin.fail:
+            msg: "Record {{ f_record_name }} of type {{ record_type }} already exists in zone {{ f_pdns_zone }}. Use force=true to overwrite."
+          when: r_records.records | length > 0
+
+    - name: Create or Update the DNS record in PowerDNS Admin
+      kenmoini.powerdns_admin.record:
         pdns_admin_url: "{{ pdns_admin_url }}"
         pdns_admin_api_key: "{{ pdns_admin_api_key }}"
         pdns_admin_skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
-        zone: "{{ pdns_zone }}"
-      register: r_records
-
-    - name: Debug the records
-      ansible.builtin.debug:
-        var: r_records
+        zone: "{{ f_pdns_zone }}"
+        name: "{{ f_record_name }}"
+        type: "{{ record_type }}"
+        values: "{{ record_values }}"
+        ttl: "{{ record_ttl }}"
+        state: present

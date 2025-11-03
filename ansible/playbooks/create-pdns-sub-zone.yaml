@@ -6,7 +6,7 @@
   vars:
     # pdns_admin_url: "http://pdns.example.com:8081/api/v1/servers/localhost/zones/"
     # pdns_admin_api_key: "your-pdns-api-key"
-    # powerdns_admin_skip_tls_verify: true
+    # pdns_admin_skip_tls_verify: true
     new_pdns_zone: "sub.ocp.lab.kemo.network."
     parent_pdns_zone: "ocp.lab.kemo.network."
     # new_pdns_zone_account: "someaccount"
@@ -29,10 +29,6 @@
       skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
 
   tasks:
-
-    # - name: Include PowerDNS vars
-    #   ansible.builtin.include_vars:
-    #     file: vars/pdns.yaml
 
     - name: Trim the last dot of the zones if present and then add them back for consistency
       ansible.builtin.set_fact:
