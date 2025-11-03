@@ -1,5 +1,5 @@
 ---
-- name: Input - Create Hosted Control Plane Cluster
+- name: Workflow Entrypoint - Create Hosted Control Plane Cluster
   hosts: localhost
   connection: local
   gather_facts: false
@@ -19,4 +19,4 @@
       block:
         - name: Mutate Input Vars based on T-Shirt Size
           ansible.builtin.include_tasks:
-            file: tasks/var-mux-hcp-virt.yaml
+            file: tasks/var-mux-hcp-virt.yaml 

@@ -12,7 +12,7 @@ controller_workflows:
     ask_inventory_on_launch: false
     ask_scm_branch_on_launch: false
     ask_limit_on_launch: false
-    destroy_current_nodes: false
+    destroy_current_nodes: true
     organization: "{{ global_organization }}"
     simplified_workflow_nodes:
       - all_parents_must_converge: false
@@ -39,9 +39,22 @@ controller_workflows:
     organization: "{{ global_organization }}"
     workflow_nodes:
       - all_parents_must_converge: false
-        identifier: Create HCP ZTP Manifests
+        identifier: Workflow Entrypoint
         unified_job_template:
-          name: Create HCP ZTP Manifests
+          name: WEP - Create HCP ZTP Manifests
+          type: job_template
+          organization:
+            name: "{{ global_organization }}"
+        related:
+          success_nodes:
+            - workflow_job_template:
+                name: Create Sub-Zone in PowerDNS
+              identifier: Create OpenShift DNS Zone
+
+      - all_parents_must_converge: false
+        identifier: Create OpenShift DNS Zone
+        unified_job_template:
+          name: Create Sub-Zone in PowerDNS
           type: job_template
           organization:
             name: "{{ global_organization }}"
@@ -49,9 +62,10 @@ controller_workflows:
           success_nodes:
             - workflow_job_template:
                 name: Mux - HCP ZTP Request to App Ingress PowerDNS Record
-              identifier: Format and Lookup Variables
+              identifier: Determine Application Ingress Record
+
       - all_parents_must_converge: false
-        identifier: Format and Lookup Variables
+        identifier: Determine Application Ingress Record
         unified_job_template:
           name: Mux - HCP ZTP Request to App Ingress PowerDNS Record
           type: job_template
@@ -60,12 +74,25 @@ controller_workflows:
         related:
           success_nodes:
             - workflow_job_template:
-                name:  Create Record in PowerDNS
+                name: Create Record in PowerDNS
               identifier: Create Application Ingress PowerDNS Record
       - all_parents_must_converge: false
         identifier: Create Application Ingress PowerDNS Record
         unified_job_template:
           name: Create Record in PowerDNS
+          type: job_template
+          organization:
+            name: "{{ global_organization }}"
+        related:
+          success_nodes:
+            - workflow_job_template:
+                name: Create HCP ZTP Manifests
+              identifier: Create HCP ZTP Manifests
+
+      - all_parents_must_converge: false
+        identifier: Create HCP ZTP Manifests
+        unified_job_template:
+          name: Create HCP ZTP Manifests
           type: job_template
           organization:
             name: "{{ global_organization }}"

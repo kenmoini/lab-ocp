@@ -1,5 +1,5 @@
 ---
-- name: Mux - HCP Virt ZTP to PowerDNS Record
+- name: Mux - HCP ZTP Request to App Ingress PowerDNS Record
   hosts: all
   connection: local
   gather_facts: false
@@ -26,9 +26,10 @@
 
     - name: Set the PowerDNS record name and value from HCP Virt ZTP variables
       ansible.builtin.set_stats:
-        record_name: "*.apps.{{ hcp_cluster_name }}.{{ hcp_cluster_domain }}."
-        pdns_zone: "{{ hcp_cluster_name }}.{{ hcp_cluster_domain }}."
-        record_type: "CNAME"
-        record_ttl: 3600
-        record_value: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console', 'router-default') }}"
+        data:
+          record_name: "*.apps.{{ hcp_cluster_name }}.{{ hcp_cluster_domain }}."
+          pdns_zone: "{{ hcp_cluster_name }}.{{ hcp_cluster_domain }}."
+          record_type: "CNAME"
+          record_ttl: 3600
+          record_value: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console', 'router-default') }}"
 

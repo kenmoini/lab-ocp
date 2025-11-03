@@ -39,3 +39,20 @@
         name: "{{ hcp_infrastructure_host }}"
         namespace: "{{ hcp_infrastructure_host }}"
       register: mci_result
+
+    - name: Set the base domain to the hosting cluster subdomain
+      ansible.builtin.set_fact:
+        hcp_cluster_domain: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console.apps.', '') }}"
+
+- name: Pass variables to the next playbook
+  ansible.builtin.set_stats:
+    data:
+      hcp_cluster_domain: "{{ hcp_cluster_domain }}"
+      hcp_node_count: "{{ hcp_node_count }}"
+      hcp_node_cpu: "{{ hcp_node_cpu }}"
+      hcp_node_memory: "{{ hcp_node_memory }}"
+      hcp_control_plane_availability: "{{ hcp_control_plane_availability }}"
+      hcp_infra_availability: "{{ hcp_infra_availability }}"
+      hcp_etcd_storage_size: "{{ hcp_etcd_storage_size }}"
+      parent_pdns_zone: "{{ hcp_cluster_domain }}."
+      new_pdns_zone: "{{ hcp_cluster_name }}.{{ hcp_cluster_domain }}."
