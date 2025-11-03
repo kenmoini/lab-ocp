@@ -10,7 +10,7 @@
         that:
           - hcp_cluster_type is defined
           - hcp_cluster_type == "kubevirt"
-          - hcp_cluster_domain is defined
+          - input_hcp_cluster_domain is defined
           - hcp_cluster_name is defined
           - hcp_infrastructure_host is defined
         fail_msg: "Required HCP Virt ZTP variables are missing."
