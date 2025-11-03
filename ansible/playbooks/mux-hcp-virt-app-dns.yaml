@@ -1,0 +1,34 @@
+---
+- name: Mux - HCP Virt ZTP to PowerDNS Record
+  hosts: all
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+    - name: Check that the HCP Virt ZTP variables are present
+      ansible.builtin.assert:
+        that:
+          - hcp_cluster_type is defined
+          - hcp_cluster_type == "kubevirt"
+          - hcp_cluster_domain is defined
+          - hcp_cluster_name is defined
+          - hcp_infrastructure_host is defined
+        fail_msg: "Required HCP Virt ZTP variables are missing."
+
+    - name: Get the Application Ingress IP from the Hosting Cluster
+      kubernetes.core.k8s_info:
+        api_version: internal.open-cluster-management.io/v1beta1
+        kind: ManagedClusterInfo
+        name: "{{ hcp_infrastructure_host }}"
+        namespace: "{{ hcp_infrastructure_host }}"
+      register: mci_result
+
+    - name: Set the PowerDNS record name and value from HCP Virt ZTP variables
+      ansible.builtin.set_stats:
+        record_name: "*.apps.{{ hcp_cluster_name }}.{{ hcp_cluster_domain }}."
+        pdns_zone: "{{ hcp_cluster_domain }}."
+        record_type: "CNAME"
+        record_ttl: 3600
+        record_value: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console', 'router-default') }}"
+

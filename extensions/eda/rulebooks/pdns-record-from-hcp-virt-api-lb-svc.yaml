@@ -1,5 +1,5 @@
 ---
-- name: Create PDNS Record from LoadBalancer Service Rulebook
+- name: Create PDNS Record from ZTP HCP Virt API LoadBalancer Service Rulebook
   hosts: all
   match_multiple_rules: true
   execution_strategy: sequential
@@ -12,27 +12,20 @@
           - hypershift.openshift.io/control-plane-component=kube-apiserver
 
   rules:
-    - name: debug more lol
-      condition: true
-      action:
-        debug:
-        
+    # - name: debug more lol
+    #   condition: true
+    #   action:
+    #     debug:
+
     - name: LoadBalancer Service Detected
       condition: (event.type == "ADDED" or event.type == "MODIFIED") and event.resource.spec.type == "LoadBalancer" and event.resource.status.loadBalancer.ingress is defined
       action:
-        run_job_template:
-          name: Create Record in PowerDNS
+        run_workflow_template:
+          name: EDA Workflow - Create PowerDNS Record from HCP Virt Service
           organization: Default
 
-    # - name: LoadBalancer Service Modified
-    #   condition: event.type == "MODIFIED"
+    # - name: debug lol
+    #   condition: true
     #   action:
-    #     run_job_template:
-    #       name: Create PDNS Record
-    #       organization: Default
-          
-    - name: debug lol
-      condition: true
-      action:
-        print_event:
-          pretty: true
+    #     print_event:
+    #       pretty: true

@@ -1,0 +1,95 @@
+---
+controller_workflows:
+  - name: EDA Workflow - Create PowerDNS Record from HCP Virt Service
+    description: Create a PowerDNS record from a HCP Virt LoadBalancer service
+    # extra_vars: ''
+    survey_enabled: false
+    allow_simultaneous: false
+    ask_variables_on_launch: true
+    inventory: LocalAPI
+    limit: '1'
+    scm_branch: main
+    ask_inventory_on_launch: false
+    ask_scm_branch_on_launch: false
+    ask_limit_on_launch: false
+    destroy_current_nodes: false
+    organization: "{{ global_organization }}"
+    simplified_workflow_nodes:
+      - all_parents_must_converge: false
+        identifier: Prepare Variables
+        unified_job_template: Mux - EDA Stream to PowerDNS Record
+        success_nodes:
+          - Create PowerDNS Record
+      - all_parents_must_converge: false
+        identifier: Create PowerDNS Record
+        unified_job_template: Create Record in PowerDNS
+
+  - name: Catalog - Create HCP Virt ZTP Cluster
+    description: Create a HCP Virt ZTP Cluster
+    survey_enabled: true
+    allow_simultaneous: false
+    ask_variables_on_launch: false
+    inventory: LocalAPI
+    limit: '1'
+    scm_branch: main
+    ask_inventory_on_launch: false
+    ask_scm_branch_on_launch: false
+    ask_limit_on_launch: false
+    destroy_current_nodes: false
+    organization: "{{ global_organization }}"
+    simplified_workflow_nodes:
+      - all_parents_must_converge: false
+        identifier: Create HCP ZTP Manifests
+        unified_job_template: Create HCP ZTP Manifests
+        success_nodes:
+          - Mux - HCP Virt ZTP to PowerDNS Record
+
+      - all_parents_must_converge: false
+        identifier: Mux - HCP Virt ZTP to PowerDNS Record
+        unified_job_template: Mux - HCP Virt ZTP to PowerDNS Record
+        success_nodes:
+          - Create PowerDNS Record for App Ingress
+
+      - all_parents_must_converge: false
+        identifier: Create PowerDNS Record for App Ingress
+        unified_job_template: Create Record in PowerDNS
+    survey_spec:
+      name: HCP Virt ZTP Cluster Creation Survey
+      description: "By filling out this survey, you can easily deploy a HCP Virt cluster via ZTP."
+      spec:
+        - variable: hcp_cluster_name
+          type: text
+          required: true
+          question_name: "HCP Virt Cluster Name, must be DNS compliant and unique"
+          default: "hcp-virt-ztp-cluster"
+        - variable: hcp_cluster_domain
+          required: true
+          question_name: "HCP Virt Cluster Base Domain"
+          type: multiplechoice
+          default: "Hosting Cluster Subdomain"
+          choices:
+            - "Hosting Cluster Subdomain"
+            - "ocp.lab.kemo.network"
+        - variable: hcp_infrastructure_host
+          required: true
+          question_name: "Hosting Cluster Name"
+          type: multiplechoice
+          default: "hub-cluster"
+          choices:
+            - "hub-cluster"
+        - variable: hcp_openshift_release_image
+          type: multiplechoice
+          required: true
+          question_name: "OpenShift Release Image"
+          choices:
+            - quay.io/openshift-release-dev/ocp-release:4.19.0-multi
+          default: quay.io/openshift-release-dev/ocp-release:4.19.0-multi
+        - variable: hcp_tshirt_size
+          type: multiplechoice
+          required: true
+          question_name: "Control Plane Availability Policy"
+          choices:
+            - small
+            - medium
+            - large
+          default: small

@@ -14,6 +14,19 @@ controller_templates:
       - SharedVault
       - OCP-HubCluster
 
+  - name: Mux - HCP ZTP Request to App Ingress PowerDNS Record
+    organization: "{{ global_organization }}"
+    job_type: run
+    inventory: LocalAPI
+    execution_environment: ztp-ee
+    project: Lab OpenShift
+    playbook: ansible/playbooks/mux-hcp-virt-app-dns.yaml
+    become_enabled: false
+    ask_variables_on_launch: true
+    # survey_enabled: true
+    credentials:
+      - OCP-HubCluster
+
   - name: Mux - EDA Stream to PowerDNS Record
     organization: "{{ global_organization }}"
     job_type: run

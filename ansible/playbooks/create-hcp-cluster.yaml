@@ -67,6 +67,16 @@
       target_clone_path: "{{ temp_git_dir }}"
       git_repo_branch: "{{ (git_pull_secret.resources[0].data.git_branch | b64decode) if git_pull_secret.resources[0].data.git_branch is defined else 'HEAD' }}"
 
+  - name: Check to make sure the HCP Cluster does not already exist in Git
+    ansible.builtin.stat:
+      path: "{{ temp_git_dir }}/ztp-clusters/{{ hcp_infrastructure_host }}/spokes/{{ hcp_cluster_name }}/"
+    register: hcp_cluster_dir
+
+  - name: Fail if HCP Cluster already exists in Git
+    ansible.builtin.fail:
+      msg: "The HCP Cluster {{ hcp_cluster_name }} already exists in the Git repo under ztp-clusters/{{ hcp_infrastructure_host }}/spokes/. Please choose a different name."
+    when: hcp_cluster_dir.stat.exists
+
   - name: Create HCP Cluster folder
     ansible.builtin.file:
       path: "{{ temp_git_dir }}/ztp-clusters/{{ hcp_infrastructure_host }}/spokes/{{ hcp_cluster_name }}"

@@ -4,9 +4,9 @@
 
   vars:
   # Define following vars here, or in controller_configs/controller_auth.yml
-    controller_hostname: hub-controller-aap.apps.tri-force.lab.kemo.network
+    controller_hostname: hub-controller-aap.apps.example.com
     controller_username: admin
-    controller_password: ZRDEGfOAIBDB32aY4gbm8DOrtmOK5Syw
+    controller_password: password
     controller_validate_certs: false
 
     # Change to your fork of the repo
