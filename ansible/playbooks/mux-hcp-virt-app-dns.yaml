@@ -27,8 +27,8 @@
     - name: Set the PowerDNS record name and value from HCP Virt ZTP variables
       ansible.builtin.set_stats:
         data:
-          record_name: "*.apps.{{ hcp_cluster_name }}.{{ hcp_cluster_domain }}."
-          pdns_zone: "{{ hcp_cluster_name }}.{{ hcp_cluster_domain }}."
+          record_name: "*.apps.{{ hcp_cluster_name }}.{{ determined_hcp_cluster_domain | default(hcp_cluster_domain) }}."
+          pdns_zone: "{{ hcp_cluster_name }}.{{ determined_hcp_cluster_domain | default(hcp_cluster_domain) }}."
           record_type: "CNAME"
           record_ttl: 3600
           record_value: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console', 'router-default') }}"

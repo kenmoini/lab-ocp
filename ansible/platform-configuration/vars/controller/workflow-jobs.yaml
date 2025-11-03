@@ -107,7 +107,7 @@ controller_workflows:
           required: true
           question_name: "HCP Virt Cluster Name, must be DNS compliant and unique"
           default: "hcp-virt-ztp-cluster"
-        - variable: hcp_cluster_domain
+        - variable: input_hcp_cluster_domain
           required: true
           question_name: "HCP Virt Cluster Base Domain"
           type: multiplechoice

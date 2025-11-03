@@ -80,26 +80,28 @@
       state: directory
       mode: "0755"
 
-  - name: Set template and kustomization resources
-    ansible.builtin.set_fact:
-      kustomization_resources:
-        - namespace.yaml
-        - hostedcluster.yaml
-        - klusterletaddonconfig.yaml
-        - managedcluster.yaml
-        - nodepool.yaml
-        - pull-secret.yaml
-        - ssh-key.yaml
-
-  - name: Template out cluster manifests
+  - name: HCP Virt Processing
     when: hcp_cluster_type == "kubevirt"
-    ansible.builtin.template:
-      src: "hcp-virt/{{ template_file }}.j2"
-      dest: "{{ temp_git_dir }}/ztp-clusters/{{ hcp_infrastructure_host }}/spokes/{{ hcp_cluster_name }}/{{ template_file }}"
-      mode: "0644"
-    loop: "{{ kustomization_resources + ['kustomization.yaml'] }}"
-    loop_control:
-      loop_var: template_file
+    block:
+      - name: Set template and kustomization resources
+        ansible.builtin.set_fact:
+          kustomization_resources:
+            - namespace.yaml
+            - hostedcluster.yaml
+            - klusterletaddonconfig.yaml
+            - managedcluster.yaml
+            - nodepool.yaml
+            - pull-secret.yaml
+            - ssh-key.yaml
+
+      - name: Template out cluster manifests
+        ansible.builtin.template:
+          src: "hcp-virt/{{ template_file }}.j2"
+          dest: "{{ temp_git_dir }}/ztp-clusters/{{ hcp_infrastructure_host }}/spokes/{{ hcp_cluster_name }}/{{ template_file }}"
+          mode: "0644"
+        loop: "{{ kustomization_resources + ['kustomization.yaml'] }}"
+        loop_control:
+          loop_var: template_file
 
   - name: Template out cluster ArgoCD Application manifest
     ansible.builtin.template:
