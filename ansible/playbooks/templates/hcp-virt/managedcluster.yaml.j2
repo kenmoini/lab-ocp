@@ -11,6 +11,8 @@ metadata:
     vendor: OpenShift
     name: {{ hcp_cluster_name }}
     cluster.open-cluster-management.io/clusterset: {{ hcp_cluster_clusterset | default('default') }}
+    hcp.kemo.dev/hostedcluster-name: {{ hcp_cluster_name }}
+    hcp.kemo.dev/hostedcluster-namespace: {{ hcp_cluster_namespace }}
   name: {{ hcp_cluster_name }}
 spec:
   hubAcceptsClient: true

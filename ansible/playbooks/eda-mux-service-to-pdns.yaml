@@ -26,11 +26,19 @@
         clusterOwner: "{{ ansible_eda.event.resource.metadata.ownerReferences[0].name }}"
         record_value: "{{ ansible_eda.event.resource.status.loadBalancer.ingress[0].ip }}"
 
+    - name: Get the ManagedCluster 
+      kubernetes.core.k8s_info:
+        api_version: cluster.open-cluster-management.io/v1
+        kind: ManagedCluster
+        name: "{{ clusterOwner }}"
+      register: managedCluster_result
+
     - name: Get the HostedCluster 
       kubernetes.core.k8s_info:
         api_version: hypershift.openshift.io/v1beta1
         kind: HostedCluster
-        name: "{{ clusterOwner }}"
+        name: "{{ managedCluster_result.resources[0].metadata.labels['hcp.kemo.dev/hostedcluster-name'] }}"
+        namespace: "{{ managedCluster_result.resources[0].metadata.labels['hcp.kemo.dev/hostedcluster-namespace'] }}"
       register: hostedCluster_result
 
     - name: Debug HostedCluster result
