@@ -49,7 +49,7 @@
         data:
           hcp_cluster_domain: "apps.{{ determined_hcp_cluster_domain }}"
           parent_pdns_zone: "{{ determined_hcp_cluster_domain }}."
-          new_pdns_zone: "{{ hcp_cluster_name }}.apps.{{ hcp_cluster_domain }}."
+          new_pdns_zone: "{{ hcp_cluster_name }}.apps.{{ determined_hcp_cluster_domain }}."
           hcp_node_count: "{{ hcp_node_count }}"
           hcp_node_cpu: "{{ hcp_node_cpu }}"
           hcp_node_memory: "{{ hcp_node_memory }}"
