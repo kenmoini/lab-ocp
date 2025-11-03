@@ -2,5 +2,7 @@
 controller_execution_environments:
   - name: ztp-ee
     image: quay.io/kenmoini/ansible-ztp-ee:latest
+    pull: always
   - name: redfish-ee
     image: quay.io/kenmoini/ansible-redfish-ee:latest
+    pull: always
