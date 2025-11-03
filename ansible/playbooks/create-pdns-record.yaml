@@ -9,14 +9,14 @@
     # pdns_admin_skip_tls_verify: true
     force: false
     fail_on_existing: false
-    pdns_zone: "example.com."
-    record_name: "test-record.example.com."
-    record_type: "A"
-    record_ttl: 300
-    record_values:
-      - content: "192.168.60.100"
-      - content: "192.168.60.101"
-        disabled: true
+    # pdns_zone: "example.com."
+    # record_name: "test-record.example.com."
+    # record_type: "A"
+    # record_ttl: 300
+    # record_values:
+    #   - content: "192.168.60.100"
+    #   - content: "192.168.60.101"
+    #     disabled: true
 
   tasks:
 
