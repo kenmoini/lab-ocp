@@ -33,6 +33,10 @@
         name: "{{ clusterOwner }}"
       register: hostedCluster_result
 
+    - name: Debug HostedCluster result
+      ansible.builtin.debug:
+        var: hostedCluster_result
+
     - name: Set PowerDNS record name from HostedCluster and pass to the next playbook
       ansible.builtin.set_stats:
         data:
