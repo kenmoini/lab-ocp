@@ -31,5 +31,5 @@
           pdns_zone: "{{ hcp_cluster_name }}.{{ determined_hcp_cluster_domain | default(hcp_cluster_domain) }}."
           record_type: "CNAME"
           record_ttl: 3600
-          record_value: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console', 'router-default') }}"
-
+          record_values:
+            - content: "{{ mci_result.resources[0].status.consoleURL | regex_replace('^https?://console-openshift-console', 'router-default') }}"
