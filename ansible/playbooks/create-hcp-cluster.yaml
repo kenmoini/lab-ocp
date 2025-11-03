@@ -27,9 +27,6 @@
     sync_argo_application_namespace: "openshift-gitops"
 
   tasks:
-  - name: Mutate Input Vars based on T-Shirt Size
-    ansible.builtin.include_tasks:
-      file: tasks/var-mux-hcp-virt.yaml
 
   - name: Setup Git Pull Environment
     ansible.builtin.include_tasks:

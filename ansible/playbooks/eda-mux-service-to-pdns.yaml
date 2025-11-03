@@ -11,19 +11,20 @@
         that:
           - ansible_eda is defined
           - ansible_eda.event is defined
-          - ansible_eda.event.metadata is defined
-          - ansible_eda.event.metadata.name is defined
-          - ansible_eda.event.metadata.namespace is defined
-          - ansible_eda.event.metadata.labels is defined
-          - ansible_eda.event.metadata.ownerReferences is defined
-          - ansible_eda.event.status is defined
-          - ansible_eda.event.status.loadBalancer is defined
+          - ansible_eda.event.resource is defined
+          - ansible_eda.event.resource.metadata is defined
+          - ansible_eda.event.resource.metadata.name is defined
+          - ansible_eda.event.resource.metadata.namespace is defined
+          - ansible_eda.event.resource.metadata.labels is defined
+          - ansible_eda.event.resource.metadata.ownerReferences is defined
+          - ansible_eda.event.resource.status is defined
+          - ansible_eda.event.resource.status.loadBalancer is defined
         fail_msg: "Required EDA event variables are missing."
 
     - name: Get the cluster name and IP from EDA event metadata
       ansible.builtin.set_fact:
-        clusterOwner: "{{ ansible_eda.event.metadata.ownerReferences[0].name }}"
-        record_value: "{{ ansible_eda.event.status.loadBalancer.ingress[0].ip }}"
+        clusterOwner: "{{ ansible_eda.event.resource.metadata.ownerReferences[0].name }}"
+        record_value: "{{ ansible_eda.event.resource.status.loadBalancer.ingress[0].ip }}"
 
     - name: Get the HostedCluster 
       kubernetes.core.k8s_info:
