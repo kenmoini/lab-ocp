@@ -14,19 +14,19 @@
     kenmoini.powerdns_admin.zone_info:
       pdns_admin_url: "{{ pdns_admin_url }}"
       pdns_admin_api_key: "{{ pdns_admin_api_key }}"
-      skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+      skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
     kenmoini.powerdns_admin.record_info:
       pdns_admin_url: "{{ pdns_admin_url }}"
       pdns_admin_api_key: "{{ pdns_admin_api_key }}"
-      skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+      skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
     kenmoini.powerdns_admin.zone:
       pdns_admin_url: "{{ pdns_admin_url }}"
       pdns_admin_api_key: "{{ pdns_admin_api_key }}"
-      skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+      skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
     kenmoini.powerdns_admin.record:
       pdns_admin_url: "{{ pdns_admin_url }}"
       pdns_admin_api_key: "{{ pdns_admin_api_key }}"
-      skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+      skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
 
   tasks:
 
