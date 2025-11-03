@@ -20,7 +20,7 @@ controller_workflows:
         unified_job_template: Mux - EDA Stream to PowerDNS Record
         success_nodes:
           - Create PowerDNS Record
-      - all_parents_must_converge: false
+      - all_parents_must_converge: true
         identifier: Create PowerDNS Record
         unified_job_template: Create Record in PowerDNS
 
@@ -35,24 +35,40 @@ controller_workflows:
     ask_inventory_on_launch: false
     ask_scm_branch_on_launch: false
     ask_limit_on_launch: false
-    destroy_current_nodes: false
+    destroy_current_nodes: true
     organization: "{{ global_organization }}"
-    simplified_workflow_nodes:
+    workflow_nodes:
       - all_parents_must_converge: false
         identifier: Create HCP ZTP Manifests
-        unified_job_template: Create HCP ZTP Manifests
-        success_nodes:
-          - Mux - HCP Virt ZTP to PowerDNS Record
-
+        unified_job_template:
+          name: Create HCP ZTP Manifests
+          type: job_template
+          organization:
+            name: "{{ global_organization }}"
+        related:
+          success_nodes:
+            - workflow_job_template:
+                name: Mux - HCP ZTP Request to App Ingress PowerDNS Record
+              identifier: Format and Lookup Variables
       - all_parents_must_converge: false
-        identifier: Mux - HCP Virt ZTP to PowerDNS Record
-        unified_job_template: Mux - HCP Virt ZTP to PowerDNS Record
-        success_nodes:
-          - Create PowerDNS Record for App Ingress
-
+        identifier: Format and Lookup Variables
+        unified_job_template:
+          name: Mux - HCP ZTP Request to App Ingress PowerDNS Record
+          type: job_template
+          organization:
+            name: "{{ global_organization }}"
+        related:
+          success_nodes:
+            - workflow_job_template:
+                name:  Create Record in PowerDNS
+              identifier: Create Application Ingress PowerDNS Record
       - all_parents_must_converge: false
-        identifier: Create PowerDNS Record for App Ingress
-        unified_job_template: Create Record in PowerDNS
+        identifier: Create Application Ingress PowerDNS Record
+        unified_job_template:
+          name: Create Record in PowerDNS
+          type: job_template
+          organization:
+            name: "{{ global_organization }}"
     survey_spec:
       name: HCP Virt ZTP Cluster Creation Survey
       description: "By filling out this survey, you can easily deploy a HCP Virt cluster via ZTP."
@@ -87,7 +103,7 @@ controller_workflows:
         - variable: hcp_tshirt_size
           type: multiplechoice
           required: true
-          question_name: "Control Plane Availability Policy"
+          question_name: "Cluster T-Shirt Size"
           choices:
             - small
             - medium

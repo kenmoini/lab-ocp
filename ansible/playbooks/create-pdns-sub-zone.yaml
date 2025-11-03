@@ -1,0 +1,118 @@
+---
+- name: Create DNS Zone in PowerDNS as a Sub Zone of another
+  hosts: all
+  connection: local
+  gather_facts: false
+  vars:
+    # powerdns_admin_url: "http://pdns.example.com:8081/api/v1/servers/localhost/zones/"
+    # powerdns_admin_api_key: "your-pdns-api-key"
+    # powerdns_admin_skip_tls_verify: true
+    new_pdns_zone: "sub.example.com."
+    parent_pdns_zone: "example.com."
+    # new_pdns_zone_account: "someaccount"
+
+  tasks:
+
+    - name: Include PowerDNS vars
+      ansible.builtin.include_vars:
+        file: vars/pdns.yaml
+
+    - name: Trim the last dot of the zones if present and then add them back for consistency
+      ansible.builtin.set_fact:
+        new_pdns_zone: "{{ new_pdns_zone.rstrip('.') }}."
+        parent_pdns_zone: "{{ parent_pdns_zone.rstrip('.') }}."
+
+    - name: See if the parent zone exists in PowerDNS Admin
+      kenmoini.powerdns_admin.zone_info:
+        pdns_admin_url: "{{ powerdns_admin_url }}"
+        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        id: "{{ parent_pdns_zone }}"
+      register: r_zone
+
+    - name: Fail if the parent zone does not exist in the response
+      ansible.builtin.fail:
+        msg: "Parent zone {{ parent_pdns_zone }} does not exist in PowerDNS or permissions are insufficient. Cannot create sub-zone."
+      when: r_zone.zones | length == 0
+
+    - name: Get the NS record set from the parent zone from PowerDNS Admin
+      kenmoini.powerdns_admin.record_info:
+        pdns_admin_url: "{{ powerdns_admin_url }}"
+        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        zone: "{{ parent_pdns_zone }}"
+        type: NS
+        name: "{{ parent_pdns_zone }}"
+      register: r_records
+
+    - name: Fail if there were no records found
+      ansible.builtin.fail:
+        msg: "No NS records found in parent zone {{ parent_pdns_zone }}. Cannot create sub-zone."
+      when: r_records.records | length == 0
+
+    - name: See if the new zone exists in PowerDNS Admin
+      kenmoini.powerdns_admin.zone_info:
+        pdns_admin_url: "{{ powerdns_admin_url }}"
+        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        id: "{{ new_pdns_zone }}"
+      register: r_new_zone
+
+    - name: Create a Zone in PowerDNS Admin
+      when: r_new_zone.zones | length == 0
+      kenmoini.powerdns_admin.zone:
+        pdns_admin_url: "{{ powerdns_admin_url }}"
+        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        name: "{{ new_pdns_zone }}"
+        zone_type: Native
+        account: "{{ new_pdns_zone_account | default(omit) }}"
+        #state: absent
+      register: zone_creation
+
+    - name: Get the NS record set from the new zone from PowerDNS Admin
+      kenmoini.powerdns_admin.record_info:
+        pdns_admin_url: "{{ powerdns_admin_url }}"
+        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        zone: "{{ new_pdns_zone }}"
+        type: NS
+        name: "{{ new_pdns_zone }}"
+      register: r_new_records
+
+    - name: Create the default NS records in the new zone in PowerDNS Admin
+      when: r_new_records.records | length == 0
+      kenmoini.powerdns_admin.record:
+        pdns_admin_url: "{{ powerdns_admin_url }}"
+        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        zone: "{{ new_pdns_zone }}"
+        name: "{{ new_pdns_zone }}"
+        values: "{{ r_records.records[0].records }}"
+        type: NS
+        ttl: 86400
+        state: present
+
+    - name: Get the NS record set from the parent zone for the sub zone from PowerDNS Admin
+      kenmoini.powerdns_admin.record_info:
+        pdns_admin_url: "{{ powerdns_admin_url }}"
+        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        zone: "{{ parent_pdns_zone }}"
+        type: NS
+        name: "{{ new_pdns_zone }}"
+      register: r_new_ns_records
+
+    - name: Create the glue NS records in the parent zone in PowerDNS Admin
+      when: r_new_ns_records.records | length == 0
+      kenmoini.powerdns_admin.record:
+        pdns_admin_url: "{{ powerdns_admin_url }}"
+        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
+        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        zone: "{{ parent_pdns_zone }}"
+        name: "{{ new_pdns_zone }}"
+        values: "{{ r_records.records[0].records }}"
+        type: NS
+        ttl: 86400
+        state: present
+

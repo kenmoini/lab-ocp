@@ -22,8 +22,8 @@
     # Location to a file storing the Ansible Vault password
     ansible_vault_password_file: ~/.vault_pass.txt
     
-    pdns_admin_url: "https://pdns.kemo.labs"
-    pdns_admin_api_key: "djdOaTR1YXFYTnFuMlVL"
+    pdns_admin_url: "https://pdns.example.com"
+    pdns_admin_api_key: "asdfasdfasdfasdf"
     pdns_admin_username: "notansible"
     pdns_admin_password: "n0tPassword"
 

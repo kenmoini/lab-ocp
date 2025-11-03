@@ -53,3 +53,31 @@ controller_templates:
     credentials:
       - SharedVault
       - KemoLabs-PowerDNS
+
+  - name: Create Sub-Zone PowerDNS
+    organization: "{{ global_organization }}"
+    job_type: run
+    inventory: LocalAPI
+    execution_environment: ztp-ee
+    project: Lab OpenShift
+    playbook: ansible/playbooks/create-pdns-sub-zone.yaml
+    become_enabled: false
+    survey_enabled: true
+    credentials:
+      - SharedVault
+      - KemoLabs-PowerDNS
+    survey_spec:
+      name: Sub-Zone Creation
+      description: "This survey collects information to create a sub-zone in PowerDNS."
+      spec:
+        - variable: parent_pdns_zone
+          type: text
+          required: true
+          question_name: "Parent DNS Zone"
+          default: "ocp.lab.kemo.network"
+        - variable: new_pdns_zone
+          type: text
+          required: true
+          question_name: "New Sub DNS Zone"
+          default: "sub.ocp.lab.kemo.network"
+          
