@@ -8,6 +8,7 @@
     # pdns_admin_api_key: "your-pdns-api-key"
     # pdns_admin_skip_tls_verify: true
     force: false
+    fail_on_existing: false
     pdns_zone: "example.com."
     record_name: "test-record.example.com."
     record_type: "A"
@@ -37,25 +38,23 @@
         msg: "Zone {{ f_pdns_zone }} does not exist in PowerDNS. Cannot create record."
       when: r_zone.zones | length == 0
 
-    - name: Check to see if the record already exists
-      when: not force
-      block:
-        - name: Get the records the zone from PowerDNS Admin
-          kenmoini.powerdns_admin.record_info:
-            pdns_admin_url: "{{ pdns_admin_url }}"
-            pdns_admin_api_key: "{{ pdns_admin_api_key }}"
-            pdns_admin_skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
-            zone: "{{ f_pdns_zone }}"
-            type: "{{ record_type }}"
-            name: "{{ f_record_name }}"
-          register: r_records
+    - name: Get the records the zone from PowerDNS Admin
+      kenmoini.powerdns_admin.record_info:
+        pdns_admin_url: "{{ pdns_admin_url }}"
+        pdns_admin_api_key: "{{ pdns_admin_api_key }}"
+        pdns_admin_skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
+        zone: "{{ f_pdns_zone }}"
+        type: "{{ record_type }}"
+        name: "{{ f_record_name }}"
+      register: r_records
 
-        - name: Fail if the record already exists in PowerDNS Admin
-          ansible.builtin.fail:
-            msg: "Record {{ f_record_name }} of type {{ record_type }} already exists in zone {{ f_pdns_zone }}. Use force=true to overwrite."
-          when: r_records.records | length > 0
+    - name: Fail if the record already exists in PowerDNS Admin
+      when: fail_on_existing and r_records.records | length > 0
+      ansible.builtin.fail:
+        msg: "Record {{ f_record_name }} of type {{ record_type }} already exists in zone {{ f_pdns_zone }}. Use force=true to overwrite."
 
     - name: Create or Update the DNS record in PowerDNS Admin
+      when: (force and r_records.records | length > 0) or (r_records.records | length == 0)
       kenmoini.powerdns_admin.record:
         pdns_admin_url: "{{ pdns_admin_url }}"
         pdns_admin_api_key: "{{ pdns_admin_api_key }}"
