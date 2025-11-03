@@ -30,9 +30,9 @@
 
   tasks:
 
-    - name: Include PowerDNS vars
-      ansible.builtin.include_vars:
-        file: vars/pdns.yaml
+    # - name: Include PowerDNS vars
+    #   ansible.builtin.include_vars:
+    #     file: vars/pdns.yaml
 
     - name: Trim the last dot of the zones if present and then add them back for consistency
       ansible.builtin.set_fact:
