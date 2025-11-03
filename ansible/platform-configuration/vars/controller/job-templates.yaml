@@ -54,7 +54,7 @@ controller_templates:
       - SharedVault
       - KemoLabs-PowerDNS
 
-  - name: Create Sub-Zone PowerDNS
+  - name: Create Sub-Zone in PowerDNS
     organization: "{{ global_organization }}"
     job_type: run
     inventory: LocalAPI
@@ -80,4 +80,3 @@ controller_templates:
           required: true
           question_name: "New Sub DNS Zone"
           default: "sub.ocp.lab.kemo.network"
-          

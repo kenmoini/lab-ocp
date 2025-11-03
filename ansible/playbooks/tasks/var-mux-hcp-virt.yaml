@@ -28,3 +28,14 @@
     hcp_control_plane_availability: HighlyAvailable
     hcp_infra_availability: HighlyAvailable
     hcp_etcd_storage_size: 32Gi
+
+- name: Set cluster domain based on input
+  when: hcp_cluster_domain == "Hosting Cluster Subdomain"
+  block:
+    - name: Get the ManagedClusterInfo of the Hosting Cluster
+      kubernetes.core.k8s_info:
+        api_version: internal.open-cluster-management.io/v1beta1
+        kind: ManagedClusterInfo
+        name: "{{ hcp_infrastructure_host }}"
+        namespace: "{{ hcp_infrastructure_host }}"
+      register: mci_result

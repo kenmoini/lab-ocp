@@ -4,9 +4,9 @@
   connection: local
   gather_facts: false
   vars:
-    # powerdns_admin_url: "http://pdns.example.com:8081/api/v1/servers/localhost/zones/"
-    # powerdns_admin_api_key: "your-pdns-api-key"
-    # powerdns_admin_skip_tls_verify: true
+    # pdns_admin_url: "http://pdns.example.com:8081/api/v1/servers/localhost/zones/"
+    # pdns_admin_api_key: "your-pdns-api-key"
+    # pdns_admin_skip_tls_verify: true
     pdns_zone: "example.com."
     record_name: "test-record.example.com."
     record_type: "A"
@@ -25,16 +25,15 @@
         pdns_zone: "{{ pdns_zone.rstrip('.') }}."
         record_name: "{{ record_name.rstrip('.') }}."
 
-        
     - name: Debug EDA variables
       ansible.builtin.debug:
         var: ansible_eda
 
     - name: Get a specific zone from PowerDNS Admin
       kenmoini.powerdns_admin.zone_info:
-        pdns_admin_url: "{{ powerdns_admin_url }}"
-        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
-        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        pdns_admin_url: "{{ pdns_admin_url }}"
+        pdns_admin_api_key: "{{ pdns_admin_api_key }}"
+        pdns_admin_skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
         id: "{{ pdns_zone }}"
       register: r_zone
 
@@ -44,32 +43,12 @@
 
     - name: Get all the records in a zone from PowerDNS Admin
       kenmoini.powerdns_admin.record_info:
-        pdns_admin_url: "{{ powerdns_admin_url }}"
-        pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
-        skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
+        pdns_admin_url: "{{ pdns_admin_url }}"
+        pdns_admin_api_key: "{{ pdns_admin_api_key }}"
+        pdns_admin_skip_tls_verify: "{{ pdns_admin_skip_tls_verify | bool }}"
         zone: "{{ pdns_zone }}"
       register: r_records
 
     - name: Debug the records
       ansible.builtin.debug:
         var: r_records
-
-    # - name: Create/Update a record in a zone in PowerDNS Admin
-    #   kenmoini.powerdns_admin.record:
-    #     pdns_admin_url: "{{ powerdns_admin_url }}"
-    #     pdns_admin_api_key: "{{ powerdns_admin_api_key }}"
-    #     skip_tls_verify: "{{ powerdns_admin_skip_tls_verify | bool }}"
-    #     zone: test.lab.kemo.network.
-    #     name: testrecord.test.lab.kemo.network.
-    #     value: 192.0.2.2
-    #     type: A
-    #     ttl: 3600
-    #     state: present
-    #   register: record_change
-
-    # - name: Debug the record change
-    #   ansible.builtin.debug:
-    #     var: record_change
-    # - name: Create or update DNS record in PowerDNS
-    #   ansible.builtin.debug:
-    #     msg: "This is a placeholder for the PowerDNS record creation task."
