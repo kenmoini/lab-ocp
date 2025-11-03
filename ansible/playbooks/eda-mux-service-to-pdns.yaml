@@ -1,0 +1,35 @@
+---
+- name: EDA Mux - Set Variables for PowerDNS Record Creation from K8s EDA stream
+  hosts: all
+  connection: local
+  gather_facts: false
+  vars:
+    pdns_zone: "example.com."
+    record_name: "test-record.example.com."
+    record_type: "A"
+    record_ttl: 300
+    record_values:
+      - "192.168.60.100"
+
+  tasks:
+
+    - name: Check that the EDA variables are present
+      ansible.builtin.assert:
+        that:
+          - ansible_eda is defined
+          - ansible_eda.event is defined
+          - ansible_eda.event.metadata is defined
+          - ansible_eda.event.metadata.name is defined
+          - ansible_eda.event.metadata.namespace is defined
+          - ansible_eda.event.metadata.labels is defined
+          - ansible_eda.event.status is defined
+          - ansible_eda.event.status.loadBalancer is defined
+        fail_msg: "Required EDA event variables are missing."
+
+    - name: Get the namespace from EDA event metadata
+      ansible.builtin.set_fact:
+        eda_namespace: "{{ ansible_eda.event.metadata.namespace }}"
+
+    - name: Set PowerDNS record name from EDA event metadata
+      ansible.builtin.set_fact:
+        record_name: "{{ ansible_eda.event.metadata.name }}
