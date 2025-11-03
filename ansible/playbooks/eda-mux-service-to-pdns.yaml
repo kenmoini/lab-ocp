@@ -3,13 +3,6 @@
   hosts: all
   connection: local
   gather_facts: false
-  vars:
-    pdns_zone: "example.com."
-    record_name: "test-record.example.com."
-    record_type: "A"
-    record_ttl: 300
-    record_values:
-      - "192.168.60.100"
 
   tasks:
 
@@ -22,14 +15,26 @@
           - ansible_eda.event.metadata.name is defined
           - ansible_eda.event.metadata.namespace is defined
           - ansible_eda.event.metadata.labels is defined
+          - ansible_eda.event.metadata.ownerReferences is defined
           - ansible_eda.event.status is defined
           - ansible_eda.event.status.loadBalancer is defined
         fail_msg: "Required EDA event variables are missing."
 
-    - name: Get the namespace from EDA event metadata
+    - name: Get the cluster name and IP from EDA event metadata
       ansible.builtin.set_fact:
-        eda_namespace: "{{ ansible_eda.event.metadata.namespace }}"
+        clusterOwner: "{{ ansible_eda.event.metadata.ownerReferences[0].name }}"
+        record_value: "{{ ansible_eda.event.status.loadBalancer.ingress[0].ip }}"
 
-    - name: Set PowerDNS record name from EDA event metadata
-      ansible.builtin.set_fact:
-        record_name: "{{ ansible_eda.event.metadata.name }}
+    - name: Get the HostedCluster 
+      kubernetes.core.k8s_info:
+        api_version: hypershift.openshift.io/v1beta1
+        kind: HostedCluster
+        name: "{{ clusterOwner }}"
+      register: hostedCluster_result
+
+    - name: Set PowerDNS record name from HostedCluster and pass to the next playbook
+      ansible.builtin.set_stats:
+        record_name: "api.{{ clusterOwner }}.{{ hostedCluster_result.resources[0].spec.dns.baseDomain }}."
+        pdns_zone: "{{ hostedCluster_result.resources[0].metadata.labels['hcp.kemo.dev/base-domain'] }}."
+        record_type: "A"
+        record_ttl: 3600
