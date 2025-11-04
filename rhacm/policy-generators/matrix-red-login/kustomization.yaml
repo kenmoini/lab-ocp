@@ -4,10 +4,11 @@ generatorOptions:
   disableNameSuffixHash: true
 secretGenerator:
   - name: matrix-red-login-template
+    namespace: openshift-config
     files:
       - login.html
 commonAnnotations:
   argocd.argoproj.io/compare-options: IgnoreExtraneous
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 
-namespace: openshift-config
+# namespace: openshift-config
