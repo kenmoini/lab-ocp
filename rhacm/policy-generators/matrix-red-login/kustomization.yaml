@@ -1,5 +1,7 @@
 generators:
   - policy-generator.yaml
+generatorOptions:
+  disableNameSuffixHash: true
 secretGenerator:
   - name: matrix-red-login-template
     files:
