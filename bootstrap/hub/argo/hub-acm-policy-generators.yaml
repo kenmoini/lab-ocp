@@ -18,10 +18,6 @@ spec:
       targetRevision: main
       path: rhacm/policy-generators/kubeletconfig/
       kustomize: {}
-    - repoURL: 'https://github.com/kenmoini/lab-ocp'
-      targetRevision: main
-      path: rhacm/policy-generators/matrix-red-login/
-      kustomize: {}
 
   project: default
   syncPolicy:
