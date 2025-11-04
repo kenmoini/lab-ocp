@@ -10,5 +10,3 @@ secretGenerator:
 commonAnnotations:
   argocd.argoproj.io/compare-options: IgnoreExtraneous
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-
-# namespace: openshift-config
