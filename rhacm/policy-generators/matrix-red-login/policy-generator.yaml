@@ -1,0 +1,23 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: configure-idp-login-screen
+policySetDefaults:
+  generatePolicySetPlacement: false
+policyDefaults:
+  generatePolicyPlacement: false
+  namespace: open-cluster-management-policies
+  categories:
+  - OCPCM - OpenShift Configuration Management
+  controls:
+  - CBC - Cluster Baseline Configuration
+  standards:
+  - Kemo Labs 2025
+  remediationAction: enforce
+  severity: high
+  pruneObjectBehavior: None
+  consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
+policies:
+  - name: configure-idp-login-screen
+    manifests:
+      - path: manifests

@@ -10,7 +10,11 @@ placementRef:
   kind: Placement
 subjects:
 
-  # Global OpenShift Operator Installation
-  - name: global-openshift-operators
+  - name: global-hcp-virt-openshift-config
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+
+  # Global OpenShift HCP Operator Installation
+  - name: global-hcp-virt-openshift-operators
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet

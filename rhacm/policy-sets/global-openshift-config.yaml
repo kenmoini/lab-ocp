@@ -16,6 +16,7 @@ spec:
     - root-ca-distribution
     - cluster-info-header
     - configure-idp
+    - configure-idp-login-screen
     - disable-self-provisioner
     - remove-kubeadmin
     - audit-logging-config

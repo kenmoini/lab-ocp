@@ -1,0 +1,9 @@
+generators:
+  - policy-generator.yaml
+secretGenerator:
+  - name: matrix-red-login-template
+    files:
+      - login.html
+commonAnnotations:
+  argocd.argoproj.io/compare-options: IgnoreExtraneous
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

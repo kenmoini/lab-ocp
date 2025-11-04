@@ -1,0 +1,22 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: global-hcp-virt-openshift-operators
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Global OpenShift Operators to install for Hosted Control Plane on KubeVirt clusters"
+  policies:
+  - operators-gitops-base
+  - operators-logging-base
+  - operators-rh-cert-manager
+  - operators-rhacs
+  - operators-metallb
+  - operators-web-terminal
+  - operators-compliance
+  - operators-nmo
+  - operators-oadp
+  - operators-coo
+  - operators-sscsi
+
+  - instance-metallb

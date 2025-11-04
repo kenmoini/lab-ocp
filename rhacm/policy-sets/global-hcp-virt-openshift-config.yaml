@@ -1,0 +1,15 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: global-hcp-virt-openshift-config
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Global OpenShift configuration policies for Hosted Control Plane on KubeVirt clusters"
+  policies:
+    # Policies
+    - cluster-info-header
+    - disable-self-provisioner
+    - audit-logging-config
+    - image-vuln-scanning
+    - enable-multinetworkpolicy
