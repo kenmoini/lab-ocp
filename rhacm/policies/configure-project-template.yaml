@@ -126,4 +126,4 @@ spec:
                   name: cluster
                 spec:
                   projectRequestTemplate:
-                    name: To request a project, please use the Namespace as a Service request process.
+                    name: project-request
