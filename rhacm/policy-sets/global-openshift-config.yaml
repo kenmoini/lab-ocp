@@ -24,3 +24,4 @@ spec:
     - openshift-samples-config
     - image-vuln-scanning
     - enable-multinetworkpolicy
+    - compliance-cis-scan

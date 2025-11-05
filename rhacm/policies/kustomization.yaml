@@ -26,6 +26,7 @@ resources:
   - configure-idp.yaml
   - enable-multinetworkpolicy.yaml
   - enable-hcp.yaml
+  - compliance-scan-cis.yaml
 
   # Operator Installation Policies
   - versioned-operators/
