@@ -12,7 +12,7 @@ spec:
     - apiVersion: policy.open-cluster-management.io/v1
       kind: Policy
       name: operators-compliance
-      namespace: rhacm-rhacs-config
+      namespace: open-cluster-management-policies
       compliance: Compliant
   remediationAction: enforce
   disabled: false
