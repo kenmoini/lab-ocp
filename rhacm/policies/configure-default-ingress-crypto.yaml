@@ -1,0 +1,49 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: config-default-ingress-crypto
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/standards: CIS Benchmarks
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: CM-6 Configuration Settings
+spec:
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: operators-compliance
+      namespace: open-cluster-management-policies
+      compliance: Compliant
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: config-default-ingress-crypto
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              apiVersion: operator.openshift.io/v1
+              kind: IngressController
+              metadata:
+                name: default
+                namespace: openshift-ingress-operator
+              spec:
+                tlsSecurityProfile:
+                  custom:
+                    ciphers:
+                      - ECDHE-ECDSA-AES128-GCM-SHA256
+                      - ECDHE-RSA-AES128-GCM-SHA256
+                      - ECDHE-ECDSA-CHACHA20-POLY1305
+                      - ECDHE-RSA-AES256-GCM-SHA384
+                      - ECDHE-RSA-CHACHA20-POLY1305
+                      - ECDHE-ECDSA-AES256-GCM-SHA384
+                      - TLS_AES_128_GCM_SHA256
+                      - TLS_AES_256_GCM_SHA384
+                      - TLS_CHACHA20_POLY1305_SHA256
+                    minTLSVersion: VersionTLS12
+                  type: Custom

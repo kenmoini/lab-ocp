@@ -32,3 +32,21 @@ spec:
                   apiGroup: rbac.authorization.k8s.io
                   kind: ClusterRole
                   name: self-provisioner
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: project-request-message
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: config.openshift.io/v1
+                kind: Project
+                metadata:
+                  name: cluster
+                spec:
+                  projectRequestMessage: To request a project, please use the Namespace as a Service request process.

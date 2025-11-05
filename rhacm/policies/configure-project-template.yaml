@@ -1,0 +1,129 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: configure-project-template
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: create-project-template
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: template.openshift.io/v1
+                kind: Template
+                metadata:
+                  creationTimestamp: null
+                  name: project-request
+                  namespace: openshift-config
+                objects:
+                - apiVersion: project.openshift.io/v1
+                  kind: Project
+                  metadata:
+                    annotations:
+                      openshift.io/description: ${PROJECT_DESCRIPTION}
+                      openshift.io/display-name: ${PROJECT_DISPLAYNAME}
+                      openshift.io/requester: ${PROJECT_REQUESTING_USER}
+                    creationTimestamp: null
+                    name: ${PROJECT_NAME}
+                  spec: {}
+                  status: {}
+                - apiVersion: rbac.authorization.k8s.io/v1
+                  kind: RoleBinding
+                  metadata:
+                    creationTimestamp: null
+                    name: admin
+                    namespace: ${PROJECT_NAME}
+                  roleRef:
+                    apiGroup: rbac.authorization.k8s.io
+                    kind: ClusterRole
+                    name: admin
+                  subjects:
+                  - apiGroup: rbac.authorization.k8s.io
+                    kind: User
+                    name: ${PROJECT_ADMIN_USER}
+                - apiVersion: networking.k8s.io/v1
+                  kind: NetworkPolicy
+                  metadata:
+                    name: allow-from-same-namespace
+                  spec:
+                    podSelector: {}
+                    ingress:
+                    - from:
+                      - podSelector: {}
+                - apiVersion: networking.k8s.io/v1
+                  kind: NetworkPolicy
+                  metadata:
+                    name: allow-from-openshift-ingress
+                  spec:
+                    ingress:
+                    - from:
+                      - namespaceSelector:
+                          matchLabels:
+                            network.openshift.io/policy-group: ingress
+                    podSelector: {}
+                    policyTypes:
+                    - Ingress
+                - apiVersion: networking.k8s.io/v1
+                  kind: NetworkPolicy
+                  metadata:
+                    name: allow-from-kube-apiserver-operator
+                  spec:
+                    ingress:
+                    - from:
+                      - namespaceSelector:
+                          matchLabels:
+                            kubernetes.io/metadata.name: openshift-kube-apiserver-operator
+                        podSelector:
+                          matchLabels:
+                            app: kube-apiserver-operator
+                    policyTypes:
+                    - Ingress
+                - apiVersion: networking.k8s.io/v1
+                  kind: NetworkPolicy
+                  metadata:
+                    name: allow-from-openshift-monitoring
+                  spec:
+                    ingress:
+                    - from:
+                      - namespaceSelector:
+                          matchLabels:
+                            network.openshift.io/policy-group: monitoring
+                    podSelector: {}
+                    policyTypes:
+                    - Ingress
+                parameters:
+                - name: PROJECT_NAME
+                - name: PROJECT_DISPLAYNAME
+                - name: PROJECT_DESCRIPTION
+                - name: PROJECT_ADMIN_USER
+                - name: PROJECT_REQUESTING_USER
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: configure-project-template
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: config.openshift.io/v1
+                kind: Project
+                metadata:
+                  name: cluster
+                spec:
+                  projectRequestTemplate:
+                    name: To request a project, please use the Namespace as a Service request process.

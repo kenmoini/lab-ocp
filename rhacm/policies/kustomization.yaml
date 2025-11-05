@@ -24,6 +24,7 @@ resources:
   - enable-internal-registry.yaml
   - hcp-bmh-infra-creds.yaml
   - configure-idp.yaml
+  - configure-project-template.yaml
   - enable-multinetworkpolicy.yaml
   - enable-hcp.yaml
   - compliance-scan-cis.yaml

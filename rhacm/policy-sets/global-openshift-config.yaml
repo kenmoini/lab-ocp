@@ -18,6 +18,7 @@ spec:
     - configure-idp
     # - configure-idp-login-screen
     - disable-self-provisioner
+    - configure-project-template
     - remove-kubeadmin
     - audit-logging-config
     - encrypt-etcd
