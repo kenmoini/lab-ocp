@@ -10,6 +10,5 @@ spec:
     # Policies
     - cluster-info-header
     - disable-self-provisioner
-    - audit-logging-config
     - image-vuln-scanning
     - enable-multinetworkpolicy
