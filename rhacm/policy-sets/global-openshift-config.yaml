@@ -26,3 +26,4 @@ spec:
     - image-vuln-scanning
     - enable-multinetworkpolicy
     - compliance-cis-scan
+    - compliance-e8-scan

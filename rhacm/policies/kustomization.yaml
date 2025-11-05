@@ -28,6 +28,7 @@ resources:
   - enable-multinetworkpolicy.yaml
   - enable-hcp.yaml
   - compliance-scan-cis.yaml
+  - compliance-scan-e8.yaml
 
   # Operator Installation Policies
   - versioned-operators/
