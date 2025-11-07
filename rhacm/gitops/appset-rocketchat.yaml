@@ -1,5 +1,4 @@
 ---
-# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
@@ -52,12 +51,6 @@ spec:
         name: "{{name}}"
         namespace: "{{namespace}}"
       syncPolicy:
-        # managedNamespaceMetadata:
-        #   labels: # The labels to set on the application namespace
-        #     security.openshift.io/scc.podSecurityLabelSync: 'false'
-        #     pod-security.kubernetes.io/enforce: privileged
-        #     pod-security.kubernetes.io/audit: privileged
-        #     pod-security.kubernetes.io/warn: privileged
         automated:
           prune: true
           selfHeal: true
