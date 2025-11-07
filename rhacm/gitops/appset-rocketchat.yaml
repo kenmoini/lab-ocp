@@ -34,12 +34,17 @@ spec:
           kind: CustomResourceDefinition
       project: default
       sources:
+        - kustomize: {}
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          path: configuration/rbac/rocketchat/
+
         - chart: '{{helmChartName}}'
           helm:
             valueFiles:
               - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
           repoURL: '{{helmRepoURL}}'
           targetRevision: '{{helmRevision}}'
+
         - ref: values
           repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
