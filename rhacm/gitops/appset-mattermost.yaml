@@ -19,7 +19,7 @@ spec:
                 namespace: mattermost-operator
                 helmRepoURL: 'https://helm.mattermost.com'
                 helmChartName: mattermost-operator
-                helmRevision: 6.6.86
+                helmRevision: v6.6.86
   template:
     metadata:
       name: "{{name}}-{{appName}}"
