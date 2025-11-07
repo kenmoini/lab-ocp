@@ -1,4 +1,4 @@
-# host: rocketchat.your-domain-name.com # The hostname for the Rocket.Chat server. OpenShift will provide a default route
+host: rocketchat.apps.tri-force.lab.kemo.network # The hostname for the Rocket.Chat server. OpenShift will provide a default route
 ingress:
   enabled: true
   annotations:
