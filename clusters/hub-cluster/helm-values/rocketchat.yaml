@@ -50,3 +50,6 @@ mongodb:
     size: 8Gi
   architecture: replicaset
   replicaCount: 1
+
+microservices:
+  enabled: false
