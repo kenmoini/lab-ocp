@@ -21,12 +21,12 @@ mattermostOperator:
 # The values below are for Mattermost Custom Resource
 # Full spec example can be found here: https://github.com/mattermost/mattermost-operator/blob/master/docs/examples/mattermost_full.yaml
 # Examples for mattermost spec can be found here: https://github.com/mattermost/mattermost-operator/tree/master/docs/examples
-# mattermostCR:
-#   enabled: true
-#   name: mattermost-example
-#   spec:
-#     version: 10.10.1
-#     replicas: 1
-#     ingress:
-#       enabled: true
-#       host: example.mattermost-example.com
+mattermostCR:
+  enabled: true
+  name: hub-mm
+  spec:
+    version: 10.10.1
+    replicas: 1
+    ingress:
+      enabled: false
+      host: example.mattermost-example.com
