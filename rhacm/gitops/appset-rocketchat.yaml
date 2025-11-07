@@ -3,7 +3,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: mattermost-operator
+  name: rocketchat
   namespace: openshift-gitops
 spec:
   generators:
@@ -12,14 +12,14 @@ spec:
           - clusters:
               selector:
                 matchLabels:
-                  appset/helm-mattermost: enabled
+                  appset/helm-rocketchat: enabled
           - list:
               elements:
-              - appName: mattermost-operator
-                namespace: mattermost-operator
-                helmRepoURL: 'https://helm.mattermost.com'
-                helmChartName: mattermost-operator
-                helmRevision: 1.0.4
+              - appName: rocketchat
+                namespace: rocketchat
+                helmRepoURL: 'https://rocketchat.github.io/helm-charts'
+                helmChartName: rocketchat
+                helmRevision: 6.27.1
   template:
     metadata:
       name: "{{name}}-{{appName}}"
@@ -54,7 +54,7 @@ spec:
         #     pod-security.kubernetes.io/audit: privileged
         #     pod-security.kubernetes.io/warn: privileged
         automated:
-          prune: false
+          prune: true
           selfHeal: true
         syncOptions:
           - CreateNamespace=true
