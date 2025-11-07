@@ -1,0 +1,52 @@
+# host: rocketchat.your-domain-name.com # The hostname for the Rocket.Chat server. OpenShift will provide a default route
+ingress:
+  enabled: true
+  annotations:
+    route.openshift.io/termination: edge
+
+# OpenShift security context (restricted-v2 compatible)
+securityContext:
+  enabled: true
+  # runAsUser: 1013790000  # Set to the low end of your namespace's allowed UID range for explicit compliance
+  runAsNonRoot: true
+  # fsGroup: 1013790000  # Set to the low end of your namespace's allowed GID range (matches UID for consistency)
+  # fsGroupChangePolicy: "OnRootMismatch"
+
+containerSecurityContext:
+  # runAsUser: 1013790000  # Explicitly override if the chart supports container-level (fallback for potential hardcoding)
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+
+serviceAccount:
+  create: true
+
+# Override the container security context directly
+extraEnv: |
+  - name: DEPLOY_METHOD
+    value: helm-chart
+
+# MongoDB configurations tuned for OpenShift
+mongodb:
+  enabled: true
+  auth:
+    usernames:
+    - rocketchat
+    passwords:
+    - your-secure-password
+    databases:
+    - rocketchat
+    rootPassword: your-secure-password
+  # OpenShift-specific security settings for MongoDB
+  securityContext:
+    enabled: false
+  podSecurityContext:
+    enabled: false
+  containerSecurityContext:
+    enabled: false
+  volumePermissions:
+    enabled: false
+  persistence:
+    enabled: true
+    size: 8Gi
+  architecture: replicaset
+  replicaCount: 1
