@@ -9,6 +9,7 @@ resources:
   - appset-hashicorp-vault.yaml
   - appset-cluster-config.yaml
   - appset-egress-ips.yaml
+  - appset-mattermost.yaml
   - appset-vlan-stacks.yaml
   - appset-ztp-sync.yaml
   - rhacm-integration.yaml
