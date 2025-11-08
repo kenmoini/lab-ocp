@@ -1,0 +1,102 @@
+---
+- name: Render the template
+  community.okd.openshift_process:
+    name: "{{ burner_test.vm_template }}"
+    namespace: "{{ burner_test.vm_template_namespace }}"
+    parameters:
+      NAME: "{{ burner_test.vm_name_prefix }}-{{ vmID }}"
+    state: rendered
+  register: rendered_result
+
+- name: Alter the rendered VM definition
+  ansible.utils.update_fact:
+    updates:
+      - path: rendered_result.resources[0].spec.template.spec.volumes[1].cloudInitNoCloud.userData
+        value: |-
+          #cloud-config
+          user: {{ burner_test.vm_user.username }}
+          password: {{ burner_test.vm_user.password }}
+          chpasswd: { expire: False }
+          ssh_pwauth: True
+          runcmd:
+            - "base64 -d <<< \"{{ burner_test.script | b64encode }}\" | bash"
+      - path: rendered_result.resources[0].spec.dataVolumeTemplates[0].spec.storage.resources.requests.storage
+        value: "{{ burner_test.vm_volume_size | default('30Gi') }}"
+  register: new_rendered_result
+
+- name: Set rendered_result to new_rendered_result
+  ansible.builtin.set_fact:
+    rendered_result: "{{ new_rendered_result.rendered_result }}"
+
+- name: Debug updated VM definition
+  ansible.builtin.debug:
+    msg:  "{{ rendered_result }}"
+
+- name: Alter the rendered VM definition for different storageclasses
+  when: burner_test.vm_storage_class is defined
+  block:
+    - name: Set the StorageClass spec
+      ansible.utils.update_fact:
+        updates:
+          - path: rendered_result.resources[0].spec.dataVolumeTemplates[0].spec.storage.storageClassName
+            value: "{{ burner_test.vm_storage_class }}"
+      register: new_rendered_result
+
+    - name: Set rendered_result to new_rendered_result
+      ansible.builtin.set_fact:
+        rendered_result: "{{ new_rendered_result.rendered_result }}"
+
+- name: Alter the rendered VM definition for different networks
+  when: burner_test.vm_network is defined
+  block:
+    - name: Set the Network spec
+      ansible.utils.update_fact:
+        updates:
+          - path: rendered_result.resources[0].spec.template.spec.networks[0]
+            value:
+              multus:
+                networkName: "{{ burner_test.vm_network }}"
+              name: default
+      register: new_rendered_result
+
+    - name: Set rendered_result to new_rendered_result
+      ansible.builtin.set_fact:
+        rendered_result: "{{ new_rendered_result.rendered_result }}"
+
+- name: Alter the rendered VM definition for dedicated CPUs
+  when: burner_test.vm_dedicated_cpu is defined
+  block:
+    - name: Set the Dedicated CPU Placement spec
+      ansible.utils.update_fact:
+        updates:
+          - path: rendered_result.resources[0].spec.template.spec.domain.cpu.dedicatedCpuPlacement
+            value: true
+      register: new_rendered_result
+
+    - name: Set rendered_result to new_rendered_result
+      ansible.builtin.set_fact:
+        rendered_result: "{{ new_rendered_result.rendered_result }}"
+
+- name: Set Power State for the VM
+  ansible.utils.update_fact:
+    updates:
+      - path: rendered_result.resources[0].spec.runStrategy
+        value: "{{ 'RerunOnFailure' if burner_test.vm_state == 'started' else 'Halted' }}"
+  register: new_rendered_result
+
+- name: Set rendered_result to new_rendered_result
+  ansible.builtin.set_fact:
+    rendered_result: "{{ new_rendered_result.rendered_result }}"
+
+- name: Create the VM from the rendered template
+  when: burner_test.strategy == 'incremental'
+  kubernetes.core.k8s:
+    state: present
+    apply: true
+    namespace: "{{ burner_test.vm_namespace }}"
+    definition: "{{ rendered_result.resources[0] }}"
+
+- name: Add the VM to the batch list
+  when: burner_test.strategy == 'batch'
+  ansible.builtin.set_fact:
+    vm_batch_list: "{{ vm_batch_list | default([]) + [ rendered_result.resources[0] ] }}"

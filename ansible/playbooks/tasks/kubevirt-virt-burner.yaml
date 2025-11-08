@@ -1,0 +1,45 @@
+---
+
+- name: Create Burner Tests
+  when: burner_test.test_state == 'present'
+  block:
+    - name: Make sure the namespace exists
+      kubernetes.core.k8s:
+        state: present
+        apply: true
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: "{{ burner_test.vm_namespace }}"
+            labels:
+              kemo.dev/virt-burner: "true"
+
+    - name: Run through the render VM loop
+      ansible.builtin.include_tasks:
+        file: kubevirt-virt-vm-loop.yaml
+      with_sequence: start=1 end="{{ end_at }}"
+      vars:
+        end_at: "{{ burner_test.vm_count }}"
+      loop_control:
+        loop_var: vmID
+
+    - name: Create the VMs from the batch list
+      when: burner_test.strategy == 'batch'
+      kubernetes.core.k8s:
+        state: present
+        apply: true
+        namespace: "{{ burner_test.vm_namespace }}"
+        definition: "{{ vm_batch_list }}"
+
+- name: Delete Burner Tests
+  when: burner_test.test_state == 'absent'
+  block:
+    - name: Make sure the namespace exists
+      kubernetes.core.k8s:
+        state: absent
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: "{{ burner_test.vm_namespace }}"

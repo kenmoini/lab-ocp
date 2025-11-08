@@ -1,0 +1,70 @@
+---
+# Logs will be output in /var/log/cloud-init-output.log inside the VM
+# Individual stress-ng logs will be in /tmp/stress-ng-*.log inside the VM
+- name: KubeVirt Burner - Basic Scale and Performance Testing with OpenShift Virtualization
+  hosts: all
+  gather_facts: false
+
+  vars:
+    burner_tests:
+      - name: scale-test
+        description: "Scale Test: Deploy 100 VMs and measure performance"
+        test_state: absent # Options: present, absent
+        strategy: incremental # Options: batch, incremental
+        vm_state: "started" # Options: started, stopped
+        vm_count: 100
+        vm_template: "centos-stream9-server-medium"
+        vm_template_namespace: "openshift"
+        vm_name_prefix: "scale-vm"
+        vm_namespace: "scale-burner-test"
+        #vm_storage_class: "thin"
+        #vm_volume_size: "60Gi"
+        #vm_network: "default/baremetal-network"
+        #vm_state: "started" # Options: started, stopped
+        #vm_dedicated_cpu: true
+        vm_user:
+          username: "testuser"
+          password: "TestPassword123!"
+        script: |
+          #!/bin/bash
+          sleep 600
+          shutdown -h now
+
+      - name: performance-test
+        description: "Performance Test: Deploy 50 VMs with CPU and Memory stress"
+        test_state: absent # Options: present, absent
+        strategy: incremental # Options: batch, incremental
+        vm_state: "started" # Options: started, stopped
+        vm_count: 30
+        vm_template: "centos-stream9-server-medium"
+        vm_template_namespace: "openshift"
+        vm_name_prefix: "perf-vm"
+        vm_namespace: "perf-burner-test"
+        # vm_storage_class: "thin"
+        # vm_volume_size: "60Gi"
+        # vm_network: "default/baremetal-network"
+        # vm_dedicated_cpu: true
+        vm_user:
+          username: "testuser"
+          password: "TestPassword123!"
+        script: |
+          #!/bin/bash
+          set -x
+          sudo dnf install -y stress-ng
+          SLEEP_TIME=$(shuf -i 1-120 -n 1)
+          echo "Sleeping for $SLEEP_TIME seconds before starting stress tests..."
+          sleep $SLEEP_TIME
+          stress-ng --cpu 0 -t 5m --log-file /tmp/stress-ng-cpu.log
+          stress-ng --matrix 0 -t 7m --log-file /tmp/stress-ng-matrix.log
+          stress-ng --mq 0 -t 5m --log-file /tmp/stress-ng-mq.log
+          stress-ng --all 0 -t 8m --log-file /tmp/stress-ng-all.log
+          shutdown -h now
+
+  tasks:
+    - name: Run through the burner tests
+      ansible.builtin.include_tasks:
+        file: tasks/kubevirt-virt-burner.yaml
+      loop: "{{ burner_tests }}"
+      loop_control:
+        loop_var: burner_test
+        label: "{{ burner_test.name }}"
