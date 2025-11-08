@@ -8,9 +8,9 @@
   vars:
     burner_tests:
       - name: scale-test
-        description: "Scale Test: Deploy 100 VMs and measure performance"
+        description: "Scale Test: Deploy 100 VMs all at once and measure performance"
         test_state: absent # Options: present, absent
-        strategy: incremental # Options: batch, incremental
+        strategy: batch # Options: batch, incremental
         vm_state: "started" # Options: started, stopped
         vm_count: 100
         vm_template: "centos-stream9-server-medium"
