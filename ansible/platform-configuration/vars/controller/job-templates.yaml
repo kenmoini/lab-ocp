@@ -1,5 +1,18 @@
 ---
 controller_templates:
+  - name: OpenShift Virtualization - Kemo KubeBurner
+    organization: "{{ global_organization }}"
+    job_type: run
+    inventory: LocalAPI
+    execution_environment: ztp-ee
+    project: Lab OpenShift
+    playbook: ansible/playbooks/virt-burner.yaml
+    become_enabled: false
+    ask_variables_on_launch: true
+    credentials:
+      - SharedVault
+      - OCP-HubCluster
+
   - name: WEP - Create HCP ZTP Manifests
     organization: "{{ global_organization }}"
     job_type: run
