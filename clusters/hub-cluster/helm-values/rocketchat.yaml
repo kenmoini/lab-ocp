@@ -1,6 +1,7 @@
 host: rocketchat.apps.tri-force.lab.kemo.network # The hostname for the Rocket.Chat server. OpenShift will provide a default route
 ingress:
   enabled: true
+  ingressClassName: openshift-default
   annotations:
     route.openshift.io/termination: edge
 
