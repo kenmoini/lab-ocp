@@ -60,7 +60,7 @@ spec:
     spec:
       networks:
         - multus:
-            networkName: vlan70-disconnected
+            networkName: default/vmnet70-disconnected
           name: mgmt
       volumes:
         - dataVolume:
