@@ -20,6 +20,13 @@ chassis:
     vm_selector:
       labels:
         redfish-enabled: 'true'
+  - description: Test Virtual Bare Metal Cluster KubeVirt chassis with virtual machines
+    name: kvrf-test
+    namespace: kvrf-test
+    service_account: kubevirt-redfish
+    vm_selector:
+      labels:
+        redfish-enabled: 'true'
 configMap:
   annotations: {}
   enabled: true
