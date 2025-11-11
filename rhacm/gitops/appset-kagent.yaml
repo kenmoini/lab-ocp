@@ -41,9 +41,9 @@ spec:
               - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
           repoURL: '{{helmRepoURL}}'
           targetRevision: '{{helmRevision}}'
-        #- ref: values
-        #  repoURL: 'https://github.com/kenmoini/lab-ocp'
-        #  targetRevision: main
+        - ref: values
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
       destination:
         name: "{{name}}"
         namespace: "{{namespace}}"
