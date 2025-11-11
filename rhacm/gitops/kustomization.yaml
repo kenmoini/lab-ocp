@@ -13,6 +13,8 @@ resources:
   - appset-rocketchat.yaml
   - appset-vlan-stacks.yaml
   - appset-ztp-sync.yaml
+  - appset-kagent-crds.yaml
+  - appset-kagent.yaml
   - rhacm-integration.yaml
 
 commonAnnotations:
