@@ -36,9 +36,9 @@ spec:
       sources:
     
         - chart: '{{helmChartName}}'
-          helm: {}
-            #valueFiles:
-            #  - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
+          helm:
+            valueFiles:
+              - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
           repoURL: '{{helmRepoURL}}'
           targetRevision: '{{helmRevision}}'
         #- ref: values
