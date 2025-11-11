@@ -4,3 +4,7 @@ providers:
     model: openai/gpt-oss-120b
     config:
       host: http://192.168.43.80:1234
+controller:
+  resources:
+    limits:
+      memory: 1Gi	
