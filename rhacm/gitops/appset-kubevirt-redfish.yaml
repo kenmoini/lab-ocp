@@ -1,0 +1,63 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kubevirt-redfish
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: virtualization
+                    operator: In
+                    values:
+                      - enabled
+                      - "true"
+          - list:
+              elements:
+              - appName: kubevirt-redfish
+                namespace:  kubevirt-redfish
+                helmRepoURL: 'https://v1k0d3n.github.io/charts/'
+                helmChartName: kubevirt-redfish
+                helmRevision: 0.2.3
+  template:
+    metadata:
+      name: "{{name}}-{{appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+    spec:
+      ignoreDifferences:
+        - group: apiextensions.k8s.io
+          jsonPointers:
+            - /status
+          kind: CustomResourceDefinition
+      project: default
+      sources:
+        - chart: '{{helmChartName}}'
+          helm:
+            valueFiles:
+              - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
+          repoURL: '{{helmRepoURL}}'
+          targetRevision: '{{helmRevision}}'
+
+        - ref: values
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
+      destination:
+        name: "{{name}}"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+        retry:
+          limit: 2

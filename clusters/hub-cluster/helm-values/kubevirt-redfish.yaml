@@ -1,0 +1,155 @@
+affinity: {}
+authentication:
+  users:
+    - chassis:
+        - default
+      password: admin123
+      username: admin
+chassis:
+  - description: Default KubeVirt chassis with virtual machines
+    name: default
+    namespace: default
+    service_account: kubevirt-redfish
+    vm_selector:
+      labels:
+        redfish-enabled: 'true'
+  - description: Virtual Bare Metal Cluster 1 KubeVirt chassis with virtual machines
+    name: vbmh1
+    namespace: vbmh1
+    service_account: kubevirt-redfish
+    vm_selector:
+      labels:
+        redfish-enabled: 'true'
+  - description: Test Virtual Bare Metal Cluster KubeVirt chassis with virtual machines
+    name: kvrf-test
+    namespace: kvrf-test
+    service_account: kubevirt-redfish
+    vm_selector:
+      labels:
+        redfish-enabled: 'true'
+configMap:
+  annotations: {}
+  enabled: true
+  labels: {}
+  name: kubevirt-redfish-config
+datavolume:
+  allow_insecure_tls: true
+  helper_image: 'registry.access.redhat.com/ubi8/ubi-minimal:latest'
+  iso_download_timeout: 30m
+  storage_class: ''
+  storage_size: 3Gi
+  vm_update_timeout: 2m
+deployment:
+  container:
+    env:
+      CONFIG_PATH: /app/config/config.yaml
+      LOG_LEVEL: info
+      REDFISH_LOGGING_ENABLED: 'true'
+      REDFISH_LOG_LEVEL: INFO
+    livenessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /redfish/v1/
+        port: 8443
+        scheme: HTTP
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+    name: kubevirt-redfish
+    ports:
+      - containerPort: 8443
+        name: http
+        protocol: TCP
+    readinessProbe:
+      failureThreshold: 3
+      httpGet:
+        path: /redfish/v1/
+        port: 8443
+        scheme: HTTP
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 3
+    resources:
+      limits:
+        cpu: 500m
+        memory: 2Gi
+      requests:
+        cpu: 100m
+        memory: 512Mi
+    volumeMounts:
+      - mountPath: /app/config
+        name: config-volume
+        readOnly: true
+      - mountPath: /tmp
+        name: temp-storage
+        readOnly: false
+  labels: {}
+  replicas: 1
+global:
+  image:
+    pullPolicy: Always
+    repository: quay.io/bjozsa-redhat/kubevirt-redfish
+    tag: v0.2.3
+  namespace: kubevirt-redfish
+kubevirt:
+  allow_insecure_tls: true
+  api_version: v1
+  timeout: 30
+nodeSelector: {}
+podSecurityContext:
+  runAsNonRoot: true
+rbac:
+  clusterRole:
+    create: true
+    labels: {}
+    name: kubevirt-redfish-role
+  clusterRoleBinding:
+    create: true
+    labels: {}
+    name: kubevirt-redfish-binding
+  enabled: true
+  serviceAccount:
+    annotations: {}
+    create: true
+    labels: {}
+    name: kubevirt-redfish
+route:
+  annotations: {}
+  enabled: true
+  host: ''
+  labels: {}
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  runAsNonRoot: true
+server:
+  host: 0.0.0.0
+  port: 8443
+  system_id_convention: legacy
+  tls:
+    enabled: false
+service:
+  annotations: {}
+  enabled: true
+  labels: {}
+  ports:
+    - name: http
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+  type: ClusterIP
+tolerations: []
+volumes:
+  config:
+    configMap:
+      name: kubevirt-redfish-config
+    name: config-volume
+  temp:
+    emptyDir:
+      sizeLimit: 50Gi
+    name: temp-storage
