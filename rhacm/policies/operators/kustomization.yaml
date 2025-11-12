@@ -6,6 +6,7 @@ namespace: open-cluster-management-policies
 
 resources:
   # - aap.yaml -- REPLACED BY VERSIONED OPERATOR POLICIES --
+  - authorino.yaml
   - cco.yaml
   - cert-manager.yaml
   - compliance.yaml
