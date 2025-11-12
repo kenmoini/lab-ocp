@@ -9,4 +9,4 @@ kmcp:
   enabled: false
 
 kagent-tools:
-  fullnameOverride: 
+  fullnameOverride: hub-cluster-kagent-tools
