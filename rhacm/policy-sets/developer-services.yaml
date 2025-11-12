@@ -12,4 +12,5 @@ spec:
     - operators-devspaces
     - operators-serverless
     - operators-authorino
+    - operators-rhoai
 

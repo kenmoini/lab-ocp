@@ -27,6 +27,7 @@ resources:
   - odf.yaml
   - pipelines.yaml
   - rhacs.yaml
+  - rhoai.yaml
   - sscsi.yaml
   - snr.yaml
   - talm.yaml
