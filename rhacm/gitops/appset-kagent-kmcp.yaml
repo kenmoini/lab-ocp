@@ -38,6 +38,7 @@ spec:
         - chart: '{{helmChartName}}'
           helm:
             values: |
+              fullnameOverride: kagent-kmcp
               resources:
                 limits:
                   cpu: 500m

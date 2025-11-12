@@ -1,3 +1,5 @@
+fullnameOverride: kagent
+
 providers:
   default: ollama
   ollama:
@@ -9,4 +11,4 @@ kmcp:
   enabled: false
 
 kagent-tools:
-  fullnameOverride: hub-cluster-kagent-tools
+  fullnameOverride: kagent-tools
