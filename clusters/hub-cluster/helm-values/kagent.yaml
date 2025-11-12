@@ -7,3 +7,6 @@ providers:
 
 kmcp:
   enabled: false
+
+kagent-tools:
+  fullnameOverride: 
