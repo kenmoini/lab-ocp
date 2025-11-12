@@ -3,7 +3,7 @@ fullnameOverride: kagent
 providers:
   default: ollama
   ollama:
-    model: openai/gpt-oss-120b
+    model: gpt-oss-120b
     config:
       host: http://192.168.43.80:1234
 
