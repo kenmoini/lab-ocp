@@ -7,11 +7,15 @@ resources:
   - appset-democratic-csi-nfs.yaml
   - appset-install-kyverno.yaml
   - appset-hashicorp-vault.yaml
+  - appset-kubevirt-redfish.yaml
   - appset-cluster-config.yaml
   - appset-egress-ips.yaml
   - appset-rocketchat.yaml
   - appset-vlan-stacks.yaml
   - appset-ztp-sync.yaml
+  - appset-kagent-crds.yaml
+  - appset-kagent-kmcp.yaml
+  - appset-kagent.yaml
   - rhacm-integration.yaml
 
 commonAnnotations:

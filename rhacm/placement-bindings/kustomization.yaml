@@ -21,6 +21,7 @@ resources:
   - nvidia-gpu.yaml
   - virtualization.yaml
   - rh-loki.yaml
+  - developer-services.yaml
   - servicemesh.yaml
 
 commonAnnotations:

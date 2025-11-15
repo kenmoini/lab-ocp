@@ -94,6 +94,31 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: configure-provisioning
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: metal3.io/v1alpha1
+                kind: Provisioning
+                metadata:
+                  name: provisioning-configuration
+                spec:
+                  provisioningNetwork: "Disabled"
+                  watchAllNamespaces: true
+                  # https://docs.openshift.com/container-platform/4.16/edge_computing/ztp-deploying-far-edge-sites.html#ztp-troubleshooting-ztp-gitops-supermicro-tls_ztp-deploying-far-edge-sites
+                  disableVirtualMediaTLS: true
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: enable-wildcard-ingress
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: check-for-agentserviceconfig
         spec:
           remediationAction: inform

@@ -1,0 +1,14 @@
+fullnameOverride: kagent
+
+providers:
+  default: ollama
+  ollama:
+    model: gpt-oss-120b
+    config:
+      host: http://192.168.43.80:1234
+
+kmcp:
+  enabled: false
+
+kagent-tools:
+  fullnameOverride: kagent-tools

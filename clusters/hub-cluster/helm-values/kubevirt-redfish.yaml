@@ -3,6 +3,8 @@ authentication:
   users:
     - chassis:
         - default
+        - vbmh1
+        - kvrf-test
       password: admin123
       username: admin
 chassis:
