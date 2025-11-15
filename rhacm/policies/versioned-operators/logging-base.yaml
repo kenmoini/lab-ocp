@@ -50,4 +50,4 @@ spec:
                   namespace: openshift-logging
                 spec:
                   upgradeStrategy: Default
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None

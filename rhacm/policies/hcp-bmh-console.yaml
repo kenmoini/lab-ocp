@@ -31,7 +31,7 @@ spec:
                   name: metallb
                   annotations:
                     workload.openshift.io/allowed: management
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
@@ -51,7 +51,7 @@ spec:
                   namespace: metallb
                 spec:
                   upgradeStrategy: Default
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -91,7 +91,7 @@ spec:
     #         source: redhat-operators
     #         sourceNamespace: openshift-marketplace
     #       upgradeApproval: Automatic
-    #       pruneObjectBehavior: DeleteIfCreated
+    #       pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -113,7 +113,7 @@ spec:
                   namespace: metallb
                 spec:
                   bgpBackend: frr
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -146,4 +146,4 @@ spec:
                   selector:
                     ingresscontroller.operator.openshift.io/deployment-ingresscontroller: default
                   type: LoadBalancer
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None

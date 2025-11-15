@@ -55,4 +55,4 @@ spec:
                   namespace: openshift-gitops-operator
                 spec:
                   upgradeStrategy: Default
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None

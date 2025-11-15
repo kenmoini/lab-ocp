@@ -49,7 +49,7 @@ spec:
                   namespace: openshift-cluster-csi-drivers
                 spec:
                   upgradeStrategy: Default
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -115,7 +115,7 @@ spec:
                     name: secrets-store.csi.k8s.io
                 spec:
                   managementState: Managed
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None
       extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy

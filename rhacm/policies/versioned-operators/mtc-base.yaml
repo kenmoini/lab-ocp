@@ -49,4 +49,4 @@ spec:
                   upgradeStrategy: Default
                   targetNamespaces:
                     - openshift-migration
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None

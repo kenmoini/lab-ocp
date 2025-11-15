@@ -49,7 +49,7 @@ spec:
                   namespace: openshift-workload-availability
                 spec:
                   upgradeStrategy: Default
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy

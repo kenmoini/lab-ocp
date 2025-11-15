@@ -33,7 +33,7 @@ spec:
                 kind: Namespace
                 metadata:
                   name: stackrox
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -51,7 +51,7 @@ spec:
                   name: rhacs-operatorgroup
                   namespace: rhacs-operator
                 spec: {}
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -74,4 +74,4 @@ spec:
                   installPlanApproval: Automatic
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None

@@ -46,4 +46,4 @@ spec:
                   namespace: aap
                 spec:
                   upgradeStrategy: Default
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None

@@ -50,7 +50,7 @@ spec:
                   upgradeStrategy: Default
                   targetNamespaces:
                     - openshift-mtv
-          pruneObjectBehavior: DeleteIfCreated
+          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
