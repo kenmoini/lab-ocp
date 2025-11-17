@@ -1,0 +1,38 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub-storage-instance
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "-18"
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  sources:
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: clusters/hub-cluster/infrastructure/storage/networking/
+      kustomize: {}
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: clusters/hub-cluster/infrastructure/storage/lso/
+      kustomize: {}
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: clusters/hub-cluster/infrastructure/storage/odf/
+      kustomize: {}
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+      - ApplyOutOfSyncOnly=true
+    automated:
+      prune: false
+      allowEmpty: true
+      selfHeal: true # overrides changes made on the cluster that drift from git state
+    retry:
+      limit: 5

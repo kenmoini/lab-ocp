@@ -1,0 +1,44 @@
+---
+apiVersion: nmstate.io/v1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: ceph-public-net-shim-suki
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: suki
+  desiredState:
+    interfaces:
+      - name: bond0.500
+        description: VLAN 500 using bond0
+        type: vlan
+        state: up
+        vlan:
+          base-iface: bond0
+          id: 500
+      - name: bond0.510
+        description: VLAN 510 using bond0
+        type: vlan
+        state: up
+        vlan:
+          base-iface: bond0
+          id: 510
+      - name: odf-pub-shim
+        description: Shim interface to connect to ODF public network
+        type: mac-vlan
+        state: up
+        mac-vlan:
+          base-iface: bond0.500 # host public network interface
+          mode: bridge
+          promiscuous: true
+        ipv4:
+          enabled: true
+          dhcp: false
+          address:
+            - ip: 192.168.252.46 # static IP in node public network range
+              prefix-length: 23 # node public network range mask
+    routes:
+      config:
+        - destination: 192.168.240.0/21 # pod public network range
+          next-hop-interface: odf-pub-shim

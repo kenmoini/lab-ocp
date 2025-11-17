@@ -1,0 +1,43 @@
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: public-net
+  namespace: openshift-storage
+  annotations:
+    argocd.argoproj.io/sync-wave: "-8"
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.1",
+      "type": "macvlan",
+      "master": "bond0.500",
+      "mode": "bridge",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "192.168.240.0/21",
+        "routes": [
+          {"dst": "192.168.252.0/23"}
+        ]
+      }
+    }
+---
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: cluster-net
+  namespace: openshift-storage
+  annotations:
+    argocd.argoproj.io/sync-wave: "-8"
+spec:
+  config: |
+    {
+      "cniVersion": "0.3.1",
+      "type": "macvlan",
+      "master": "bond0.510",
+      "mode": "bridge",
+      "ipam": {
+        "type": "whereabouts",
+        "range": "192.168.248.0/22"
+      }
+    }

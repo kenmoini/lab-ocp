@@ -1,0 +1,42 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub-storage-operators
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "-19"
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  sources:
+    - repoURL: 'https://github.com/redhat-cop/gitops-catalog'
+      targetRevision: main
+      path: nmstate/operator/overlays/stable/
+      kustomize: {}
+    - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
+      targetRevision: main
+      path: openshift/local-storage/operator/overlays/stable/
+      kustomize: {}
+    - repoURL: 'https://github.com/redhat-cop/gitops-catalog'
+      targetRevision: main
+      path: openshift-data-foundation-operator/operator/overlays/stable-4.19/
+      kustomize: {}
+    - repoURL: 'https://github.com/redhat-cop/gitops-catalog'
+      targetRevision: main
+      path: nmstate/instance/overlays/default/
+      kustomize: {}
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+      - ApplyOutOfSyncOnly=true
+    automated:
+      prune: false
+      allowEmpty: true
+      selfHeal: true # overrides changes made on the cluster that drift from git state
+    retry:
+      limit: 5

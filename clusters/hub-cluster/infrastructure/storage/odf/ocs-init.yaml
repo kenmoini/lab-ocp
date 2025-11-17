@@ -1,0 +1,9 @@
+apiVersion: ocs.openshift.io/v1
+kind: OCSInitialization
+metadata:
+  name: ocsinit
+  namespace: openshift-storage
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  enableCephTools: true

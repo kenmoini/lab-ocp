@@ -1,0 +1,38 @@
+apiVersion: local.storage.openshift.io/v1alpha1
+kind: LocalVolumeSet
+metadata:
+  name: autodetect-odf
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  nodeSelector:
+    nodeSelectorTerms:
+      - matchExpressions:
+          - key: cluster.ocs.openshift.io/openshift-storage
+            operator: In
+            values:
+              - ''
+  storageClassName: lso-odf
+  volumeMode: Block
+  deviceInclusionSpec:
+    models:
+    # Suki
+    - Samsung SSD 990 PRO 2TB
+    - Dell DC NVMe PE8010 RI U.2 7.68TB
+    # HOPE NOT Samsung SSD 970 EVO Plus 2TB
+    # Endurance
+    - Sabrent Rocket 4.0 2TB
+    - HUSMR7676BHP3Y1
+    # Raza
+    # - Sabrent
+    # - Samsung SSD 990 PRO 2TB
+    # - Dell DC NVMe PE8010 RI U.2 7.68TB
+    deviceTypes:
+      - disk
+      - part
+    minSize: 1024G
+  tolerations:
+    - effect: NoSchedule
+      key: node.ocs.openshift.io/storage
+      operator: Equal
+      value: 'true'

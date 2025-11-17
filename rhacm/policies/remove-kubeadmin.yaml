@@ -9,7 +9,14 @@ metadata:
 spec:
   disabled: false
   policy-templates:
-    - objectDefinition:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: oauth-configuration
+          namespace: ""
+          compliance: Compliant
+
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
