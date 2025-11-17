@@ -30,11 +30,38 @@ spec:
                   name: openshift-nmstate
                   labels:
                     openshift.io/cluster-monitoring: "true"
-    - objectDefinition:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: nmstate-namespace
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: nmstate-operator-group
+          name: nmstate-operatorgroup-check
+        spec:
+          remediationAction: inform
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1
+                kind: OperatorGroup
+                metadata:
+                  namespace: openshift-nmstate
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: nmstate-operatorgroup-check
+          compliance: NonCompliant
+      ignorePending: true
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: nmstate-create-operator-group
         spec:
           remediationAction: enforce
           severity: high
@@ -50,8 +77,14 @@ spec:
                   targetNamespaces:
                     - openshift-nmstate
                   upgradeStrategy: Default
-          pruneObjectBehavior: None
-    - objectDefinition:
+          pruneObjectBehavior: DeleteIfCreated
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: nmstate-namespace
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
