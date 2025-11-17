@@ -94,8 +94,8 @@ I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it alway
 ```bash
 until $(oc get managedclusters.cluster.open-cluster-management.io/hub-cluster &>/dev/null); do echo "Waiting for ACM and Hub Cluster init..." && sleep 5; done
 
-oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster community-eso=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/kyverno=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/vlan-stacks=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/egress-ips=enabled

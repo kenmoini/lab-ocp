@@ -16,6 +16,7 @@ spec:
     - root-ca-distribution
     - cluster-info-header
     - configure-idp
+    - configure-ingress-certs
     # - configure-idp-login-screen
     - disable-self-provisioner
     - configure-project-template

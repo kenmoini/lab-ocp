@@ -1,0 +1,77 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: configure-ingress-certs
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: eso-vault-clustersecretstore
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: external-secret-ingress-cert
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: external-secrets.io/v1beta1
+                kind: ExternalSecret
+                metadata:
+                  name: vault-ingress-cert
+                  namespace: openshift-ingress
+                spec:
+                  refreshInterval: "3600s"
+                  secretStoreRef:
+                    name: kemo-labs-vault
+                    kind: ClusterSecretStore
+                  target:
+                    name: ingress-lb-tls # name of the k8s Secret to make in this namespace
+                    creationPolicy: Owner
+                    deletionPolicy: Retain
+                    template:
+                      engineVersion: v2
+                      type: kubernetes.io/tls # type of k8s Secret to make
+                  data:
+                    - secretKey: tls.crt
+                      remoteRef:
+                        key: 'certs/openshift/ingress/{{ "(lookup "v1" "Secret" "default" "my-hub-secret").data.message }}' # name of the secret under the target Vault path
+                        property: tls.crt # # name of the key in that named Vault secret
+                    - secretKey: tls.key
+                      remoteRef:
+                        key: 'certs/openshift/ingress/tri-force.lab.kemo.network' # name of the secret under the target Vault path
+                        property: tls.key # # name of the key in that named Vault secret
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: external-secret-ingress-cert
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: external-secret-ingress-cert-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: ingress-lb-tls
+                  namespace: openshift-ingress
+                type: kubernetes.io/tls
