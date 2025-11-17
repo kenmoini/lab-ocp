@@ -6,9 +6,9 @@ resources:
   - hub-argocd.yaml
   - hub-storage-operators.yaml
   - hub-storage-instance.yaml
-  # - hub-acm-operator.yaml
-  # - hub-acm-instance.yaml
-  # - hub-acm-glue.yaml
+  - hub-acm-operator.yaml
+  - hub-acm-instance.yaml
+  - hub-acm-glue.yaml
   # - hub-acm-o11y.yaml
   # - hub-acm-placements.yaml
   # - hub-acm-policies.yaml
