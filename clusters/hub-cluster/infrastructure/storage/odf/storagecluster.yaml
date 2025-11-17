@@ -1,0 +1,50 @@
+apiVersion: ocs.openshift.io/v1
+kind: StorageCluster
+metadata:
+  annotations:
+    cluster.ocs.openshift.io/local-devices: 'true'
+  name: ocs-storagecluster
+  namespace: openshift-storage
+spec:
+  storageDeviceSets:
+    - count: 15
+      dataPVCTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: '1'
+          storageClassName: lso-odf
+          volumeMode: Block
+      name: ocs-deviceset-lso-odf
+      placement: {}
+      portable: false
+      replica: 1
+      resources: {}
+  encryption:
+    clusterWide: false
+    enable: false
+    kms:
+      enable: false
+    storageClass: false
+  monDataDirHostPath: /var/lib/rook
+  managedResources:
+    cephBlockPools:
+      defaultStorageClass: true
+      defaultVirtualizationStorageClass: true
+  arbiter:
+    enable: false
+  manageNodes: false
+  network:
+    connections:
+      encryption:
+        enabled: false
+    provider: multus
+    selectors:
+      cluster: openshift-storage/cluster-net
+      public: openshift-storage/public-net
+  nodeTopologies:
+    arbiterLocation: ''
+  resourceProfile: balanced
+  flexibleScaling: true

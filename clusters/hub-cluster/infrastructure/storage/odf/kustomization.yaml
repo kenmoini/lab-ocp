@@ -4,3 +4,4 @@ kind: Kustomization
 
 resources:
   - ocs-init.yaml
+  - storagecluster.yaml

@@ -7,6 +7,11 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-18"
 spec:
+  ignoreDifferences:
+    - group: ocs.openshift.io
+      kind: StorageCluster
+      jsonPointers:
+        - /spec
   destination:
     server: 'https://kubernetes.default.svc'
   sources:
