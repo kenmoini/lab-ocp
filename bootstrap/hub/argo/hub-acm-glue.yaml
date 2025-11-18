@@ -36,4 +36,4 @@ spec:
       allowEmpty: true
       selfHeal: true # overrides changes made on the cluster that drift from git state
     retry:
-      limit: 2
+      limit: 5
