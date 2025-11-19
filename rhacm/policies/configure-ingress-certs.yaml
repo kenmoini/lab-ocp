@@ -46,7 +46,7 @@ spec:
                   data:
                     - secretKey: tls.crt
                       remoteRef:
-                        key: 'certs/openshift/ingress/{{ "(lookup "v1" "Secret" "default" "my-hub-secret").data.message }}' # name of the secret under the target Vault path
+                        key: 'certs/openshift/ingress/{{ (split "/" (fromClusterClaim "consoleurl.cluster.open-cluster-management.io"))[2] }}' # name of the secret under the target Vault path
                         property: tls.crt # # name of the key in that named Vault secret
                     - secretKey: tls.key
                       remoteRef:
