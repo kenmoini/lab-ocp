@@ -46,11 +46,11 @@ spec:
                   data:
                     - secretKey: tls.crt
                       remoteRef:
-                        key: 'certs/openshift/ingress/{{ "(lookup "v1" "Secret" "default" "my-hub-secret").data.message }}' # name of the secret under the target Vault path
+                        key: 'certs/openshift/ingress/{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console.apps." "" }}' # name of the secret under the target Vault path
                         property: tls.crt # # name of the key in that named Vault secret
                     - secretKey: tls.key
                       remoteRef:
-                        key: 'certs/openshift/ingress/tri-force.lab.kemo.network' # name of the secret under the target Vault path
+                        key: 'certs/openshift/ingress/{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console.apps." "" }}' # name of the secret under the target Vault path
                         property: tls.key # # name of the key in that named Vault secret
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
@@ -75,3 +75,28 @@ spec:
                   name: ingress-lb-tls
                   namespace: openshift-ingress
                 type: kubernetes.io/tls
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: external-secret-ingress-cert-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: configure-ingress-cert
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1
+                kind: IngressController
+                metadata:
+                  name: default
+                  namespace: openshift-ingress-operator
+                spec:
+                  defaultCertificate:
+                    name: ingress-lb-tls
