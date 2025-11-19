@@ -9,7 +9,6 @@ resources:
   # Operator instances 
   - aap.yaml
   - acs-central.yaml
-  - acs-secured-cluster.yaml
   - community-eso.yaml
   - descheduler.yaml
   - far.yaml
