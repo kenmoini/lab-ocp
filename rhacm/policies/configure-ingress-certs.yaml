@@ -50,7 +50,7 @@ spec:
                         property: tls.crt # # name of the key in that named Vault secret
                     - secretKey: tls.key
                       remoteRef:
-                        key: 'certs/openshift/ingress/tri-force.lab.kemo.network' # name of the secret under the target Vault path
+                        key: 'certs/openshift/ingress/{{ (split "/" (fromClusterClaim "consoleurl.cluster.open-cluster-management.io"))[2] }}' # name of the secret under the target Vault path
                         property: tls.key # # name of the key in that named Vault secret
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
