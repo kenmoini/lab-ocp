@@ -32,6 +32,9 @@ spec:
                   name: stackrox-secured-cluster-services
                   namespace: stackrox
                 spec:
+                  clusterLabels:
+                    vendor: OpenShift
+                    managed-by: hub-cluster
                   scannerV4:
                     db:
                       persistence:
