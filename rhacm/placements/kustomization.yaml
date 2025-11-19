@@ -9,7 +9,6 @@ resources:
   - openshift-4.19-clusters.yaml
   - global.yaml
   - acs-central.yaml
-  - acs-secured-cluster.yaml
   - global-hub-cluster.yaml
   - hcp-baremetal.yaml
   - hcp-inception.yaml

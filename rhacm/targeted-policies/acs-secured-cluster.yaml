@@ -3,6 +3,7 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   name: instance-acs-secured-cluster
+  namespace: stackrox
   annotations:
     policy.open-cluster-management.io/description: Deploys the ACS Secured Cluster instance
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
