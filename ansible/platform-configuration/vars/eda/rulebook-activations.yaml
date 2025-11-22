@@ -10,7 +10,7 @@ eda_rulebook_activations:
     - AAP-Hub
     enabled: true
     state: absent
-    log_level: INFO
+    log_level: info
 
   - name: ZTP HCP API Loadbalancer to PDNS Record
     organization: "{{ global_organization | default('Default') }}"
@@ -22,4 +22,4 @@ eda_rulebook_activations:
     - AAP-Hub
     enabled: true
     state: present
-    log_level: INFO
+    log_level: info

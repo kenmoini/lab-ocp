@@ -4,10 +4,10 @@
 
   vars:
   # Define following vars here, or in controller_configs/controller_auth.yml
-    controller_hostname: hub-controller-aap.apps.example.com
-    controller_username: admin
-    controller_password: password
-    controller_validate_certs: false
+    aap_hostname: hub-controller-aap.apps.example.com
+    aap_username: admin
+    aap_password: password
+    aap_validate_certs: false
 
     # Change to your fork of the repo
     project_scm_url: https://github.com/kenmoini/lab-ocp
@@ -57,15 +57,16 @@
         file: tasks/setup-openshift-cluster.yaml
 
   roles:
-    - {role: infra.controller_configuration.execution_environments, when: controller_execution_environments is defined}
-    - {role: infra.controller_configuration.credential_types, when: controller_credential_types is defined}
-    - {role: infra.controller_configuration.credentials, when: controller_credentials is defined}
-    - {role: infra.controller_configuration.applications, when: controller_applications is defined}
 
-    - {role: infra.controller_configuration.inventories, when: controller_inventories is defined}
-    - {role: infra.controller_configuration.hosts, when: controller_hosts is defined}
-    - {role: infra.controller_configuration.groups, when: controller_groups is defined}
+    - {role: infra.aap_configuration.controller_execution_environments, when: controller_execution_environments is defined}
+    - {role: infra.aap_configuration.controller_credential_types, when: controller_credential_types is defined}
+    - {role: infra.aap_configuration.controller_credentials, when: controller_credentials is defined}
+    - {role: infra.aap_configuration.controller_applications, when: controller_applications is defined}
 
-    - {role: infra.controller_configuration.projects, when: controller_projects is defined}
-    - {role: infra.controller_configuration.job_templates, when: controller_templates is defined}
-    - {role: infra.controller_configuration.workflow_job_templates, when: controller_workflows is defined}
+    - {role: infra.aap_configuration.controller_inventories, when: controller_inventories is defined}
+    - {role: infra.aap_configuration.controller_hosts, when: controller_hosts is defined}
+    - {role: infra.aap_configuration.controller_host_groups, when: controller_groups is defined}
+
+    - {role: infra.aap_configuration.controller_projects, when: controller_projects is defined}
+    - {role: infra.aap_configuration.controller_job_templates, when: controller_templates is defined}
+    - {role: infra.aap_configuration.controller_workflow_job_templates, when: controller_workflows is defined}

@@ -6,3 +6,9 @@ controller_execution_environments:
   - name: redfish-ee
     image: quay.io/kenmoini/ansible-redfish-ee:latest
     pull: always
+  - name: appliance-mode-ee
+    image: quay.io/kenmoini/openshift-appliance-ee:latest
+    pull: always
+  - name: agent-based-installer-ee
+    image: quay.io/kenmoini/openshift-agent-install-ee:latest
+    pull: always

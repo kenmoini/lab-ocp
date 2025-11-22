@@ -9,3 +9,23 @@ controller_projects:
     scm_type: git
     scm_update_on_launch: 'yes'
     scm_url: "{{ project_scm_url }}"
+
+  - name: Appliance Mode
+    organization: "{{ global_organization }}"
+    scm_branch: main
+    default_environment: appliance-mode-ee
+    scm_clean: 'yes'
+    scm_delete_on_update: 'no'
+    scm_type: git
+    scm_update_on_launch: 'yes'
+    scm_url: "https://github.com/kenmoini/ocp-appliance-gui"
+
+  - name: OCP Agent Based Installer
+    organization: "{{ global_organization }}"
+    scm_branch: main
+    default_environment: agent-based-installer-ee
+    scm_clean: 'yes'
+    scm_delete_on_update: 'no'
+    scm_type: git
+    scm_update_on_launch: 'yes'
+    scm_url: "https://github.com/kenmoini/openshift-agent-install"
