@@ -1,0 +1,51 @@
+---
+- name: Extracts the openshift-install binary from a release image
+  hosts: all
+  gather_facts: false
+
+  vars:
+    release_registry: "quay.io"
+    release_repository: "openshift-release-dev/ocp-release"
+    release_architecture: "x86_64"
+    release_version: "4.19.19"
+    release_image: ""
+    registry_auth_file: "/opt/registry-auth.json"
+
+    target_path: "./bin/"
+
+  tasks:
+  - name: Set release image if it is not set
+    ansible.builtin.set_fact:
+      release_image: "{{ release_registry }}/{{ release_repository }}:{{ release_version }}-{{ release_architecture }}"
+    when: release_image == ""
+    
+  - name: Create temporary directory for extraction
+    ansible.builtin.tempfile:
+      state: directory
+      prefix: ocp-install-
+    register: tempdir
+
+  - name: Extract openshift-install binary
+    ansible.builtin.shell:
+      cmd: >
+        oc adm -a {{ registry_auth_file }} --insecure=true release extract --command=openshift-install {{ release_image }}
+    args:
+      chdir: "{{ tempdir.path }}"
+
+  - name: Ensure target path exists
+    ansible.builtin.file:
+      path: "{{ target_path }}"
+      state: directory
+      mode: '0755'
+
+  - name: Move openshift-install to target path
+    ansible.builtin.copy:
+      src: "{{ tempdir.path }}/openshift-install"
+      dest: "{{ target_path }}"
+      remote_src: yes
+      mode: '0755'
+
+  - name: Remove temporary directory
+    ansible.builtin.file:
+      path: "{{ tempdir.path }}"
+      state: absent
