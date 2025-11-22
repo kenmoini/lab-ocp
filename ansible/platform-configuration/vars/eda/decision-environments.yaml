@@ -2,5 +2,5 @@
 eda_decision_environments:
   - name: lab-ztp-de
     description: Kemo Labs Default ZTP Decision Environment
-    image_url: "quay.io/kenmoini/ee-lab-ocp:latest"
+    image_url: "quay.io/kenmoini/de-lab-ocp:latest"
     organization: "{{ global_organization | default('Default') }}"
