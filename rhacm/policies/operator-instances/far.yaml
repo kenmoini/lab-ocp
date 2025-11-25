@@ -113,8 +113,9 @@ spec:
                       sharedSecretName: far-kemo-labs-bmc-pass
                       sharedparameters:
                         '--systems-uri': "/redfish/v1/Systems/1"
-                        '--hostname': "{{ `{{.NodeName}}` }}.mgmt.kemo.labs"
+                        '--ip': "{{ `{{.NodeName}}` }}.mgmt.kemo.labs"
                         '--action': reboot
+                        '--ssl-insecure': ''
                         #'--username': ansible
 
     - extraDependencies:
