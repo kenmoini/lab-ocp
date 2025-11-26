@@ -26,15 +26,17 @@ spec:
           remediationAction: inform
           severity: high
           object-templates:
-            apiVersion: apps/v1
-            kind: Deployment
-            metadata:
-              name: kepler-operator-controller
-              namespace: openshift-operators
-            status:
-              conditions:
-                - status: 'True'
-                  type: Available
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: kepler-operator-controller
+                  namespace: openshift-operators
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
