@@ -8,4 +8,4 @@ spec:
   description: "Additional monitoring and metrics services for OpenShift clusters"
   policies:
     - operators-power-monitoring
-    - operators-cost-management-metrics
+    - operators-cost-mgmt
