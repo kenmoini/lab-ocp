@@ -2,7 +2,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: operators-cost-management-metrics
+  name: operators-cost-mgmt
   annotations:
     policy.open-cluster-management.io/description: Installs the OpenShift Cost Management Metrics Operator
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
