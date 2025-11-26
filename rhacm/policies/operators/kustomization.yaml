@@ -10,6 +10,7 @@ resources:
   - cco.yaml
   - cert-manager.yaml
   - compliance.yaml
+  - cost-management-metrics.yaml
   - descheduler.yaml
   - devspaces.yaml
   - community-eso.yaml
@@ -26,6 +27,7 @@ resources:
   - openshift-builds.yaml
   - odf.yaml
   - pipelines.yaml
+  - power-monitoring.yaml
   - rhacs.yaml
   - rhoai.yaml
   - sscsi.yaml

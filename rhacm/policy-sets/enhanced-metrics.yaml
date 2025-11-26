@@ -1,0 +1,11 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: enhanced-metrics
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Additional monitoring and metrics services for OpenShift clusters"
+  policies:
+    - operators-power-monitoring
+    - operators-cost-management-metrics

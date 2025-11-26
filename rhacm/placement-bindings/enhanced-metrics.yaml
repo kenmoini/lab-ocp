@@ -1,0 +1,15 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: enhanced-metrics
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: enhanced-metrics
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  # Configuration
+  - name: enhanced-metrics
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet

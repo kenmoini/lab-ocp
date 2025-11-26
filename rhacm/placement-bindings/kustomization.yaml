@@ -8,6 +8,7 @@ resources:
   - all-hcp-virt-clusters.yaml
   - openshift-4.19-clusters.yaml
   - acs.yaml
+  - enhanced-metrics.yaml
   - global.yaml
   - hcp-baremetal.yaml
   - hcp-inception.yaml
