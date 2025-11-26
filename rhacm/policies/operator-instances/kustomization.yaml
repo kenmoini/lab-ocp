@@ -19,6 +19,7 @@ resources:
   - nmstate.yaml
   - nvidia-gpu.yaml
   #- odf.yaml
+  - power-monitoring.yaml
   - virtualization.yaml
 
 commonAnnotations:

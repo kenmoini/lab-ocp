@@ -1,0 +1,78 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-power-monitoring
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Power Monitoring Operator Instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-power-monitoring
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: power-monitor-operator-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: kepler-operator-controller
+              namespace: openshift-operators
+            status:
+              conditions:
+                - status: 'True'
+                  type: Available
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: power-monitor-operator-status
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: power-monitor-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: kepler.system.sustainable.computing.io/v1alpha1
+                kind: PowerMonitor
+                metadata:
+                  name: power-monitor
+                  labels:
+                    app.kubernetes.io/instance: powermonitor
+                    app.kubernetes.io/name: powermonitor
+                    app.kubernetes.io/part-of: kepler-operator
+                spec:
+                  kepler:
+                    config:
+                      logLevel: info
+                      maxTerminated: 500
+                      metricLevels:
+                        - node
+                        - pod
+                        - vm
+                      sampleRate: 5s
+                      staleness: 500ms
+                    deployment:
+                      security:
+                        mode: none
+                      tolerations:
+                        - operator: Exists

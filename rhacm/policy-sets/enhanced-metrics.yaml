@@ -9,3 +9,4 @@ spec:
   policies:
     - operators-power-monitoring
     - operators-cost-mgmt
+    - instance-power-monitoring
