@@ -68,7 +68,7 @@ fi
 
 if command -v operator-sdk &>/dev/null; then
   OPERATOR_SDK_VER=$(operator-sdk version | grep -oP 'operator-sdk version: "\K.*?(?="|$)')
-  append_ver "operator-sdk    |${OPERATOR_SDK_VER#core }     |Operator SDK CLI"
+  append_ver "operator-sdk    |${OPERATOR_SDK_VER}     |Operator SDK CLI"
 fi
 
 if command -v opm &>/dev/null; then
