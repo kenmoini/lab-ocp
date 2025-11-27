@@ -13,6 +13,7 @@ resources:
   - cost-management-metrics.yaml
   - descheduler.yaml
   - far.yaml
+  - gatekeeper.yaml
   #- lso.yaml
   - metallb.yaml
   - mtv.yaml

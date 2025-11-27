@@ -1,0 +1,76 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-gatekeeper
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Gatekeeper Operator Instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-gatekeeper
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gatekeeper-operator-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: gatekeeper-operator-controller
+                  namespace: openshift-operators
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: gatekeeper-operator-status
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gatekeeper-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.gatekeeper.sh/v1alpha1
+                kind: Gatekeeper
+                metadata:
+                  name: gatekeeper
+                spec:
+                  webhook:
+                    logLevel: WARNING
+                    logMutations: Enabled
+                    logDenies: Enabled
+                    emitAdmissionEvents: Enabled
+                    admissionEventsInvolvedNamespace: Enabled
+                    mutationAnnotations: Enabled
+                    replicas: 2
+                  audit:
+                    logLevel: INFO
+                    auditEventsInvolvedNamespace: Enabled
+                    emitAuditEvents: Enabled
+                    replicas: 2
+                  validatingWebhook: Enabled
+                  mutatingWebhook: Enabled

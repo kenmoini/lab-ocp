@@ -19,6 +19,7 @@ resources:
   - lso.yaml
   - metallb.yaml
   - mtv.yaml
+  - network-observability.yaml
   - nfd.yaml
   - nmstate.yaml
   - nmo.yaml
