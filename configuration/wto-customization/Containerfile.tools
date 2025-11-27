@@ -1,11 +1,25 @@
+# https://github.com/redhat-developer/web-terminal-tooling/tree/main
 ARG FILE_ARCH
 ARG PATH_ARCH
 
 #FROM quay.io/devfile/base-developer-image:ubi9-latest
 FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6-1760515502
 
-ENV FILE_ARCH=${FILE_ARCH:-amd64}
-ENV PATH_ARCH=${PATH_ARCH:-x86_64}
+ENV FILE_ARCH=${FILE_ARCH:-amd64} \
+    PATH_ARCH=${PATH_ARCH:-x86_64}
+
+ENV OC_VERSION=4.19 \
+    NETOBSERV_VERSION=1.9.0 \
+    OCM_VERSION=1.0.8 \
+    ROSA_VERSION=1.2.57 \
+    VIRTCTL_VERSION=v1.6.3 \
+    OPERATOR_SDK_VERSION="v0.17.2" \
+    OPM_VERSION="v1.13.1" \
+    ODO_VERSION=v3.16.1 \
+    KN_VERSION=1.17.0-3 \
+    KN_WORKFLOW_VERSION=1.36.0 \
+    ISTIOCTL_VERSION=1.27.3 \
+    OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}
 
 USER 0
 
@@ -13,18 +27,17 @@ USER 0
 # are copied into $HOME when the container starts up. This allows defining a default
 # configuration that can still be overridden if necessary (the copy does not overwrite
 # existing files)
-ENV INITIAL_CONFIG=/tmp/initial_config
-ENV WRAPPER_BINARIES=/wto/bin
-ENV DOWNLOADED_BINARIES=/wto/bin/downloaded
-ENV HOME=/home/user
+ENV INITIAL_CONFIG=/tmp/initial_config \
+    WRAPPER_BINARIES=/wto/bin \
+    DOWNLOADED_BINARIES=/wto/bin/downloaded \
+    HOME=/home/user
 WORKDIR /home/user
 
 COPY root-ca/* /etc/pki/ca-trust/source/anchors/
-RUN update-ca-trust
 
-# Install base packages
-
-RUN mkdir -p /home/user $INITIAL_CONFIG $WRAPPER_BINARIES $DOWNLOADED_BINARIES && \
+# Setup environment and install base packages
+RUN update-ca-trust && \
+    mkdir -p /home/user $INITIAL_CONFIG $WRAPPER_BINARIES $DOWNLOADED_BINARIES && \
     microdnf update -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms && \
     microdnf install -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms \
     gettext make which python3-pip wget curl-minimal zip unzip \
@@ -38,86 +51,74 @@ RUN mkdir -p /home/user $INITIAL_CONFIG $WRAPPER_BINARIES $DOWNLOADED_BINARIES &
     microdnf -y clean all && \
     pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests
 
-# Install the Operator SDK
-ENV OPERATOR_SDK_VERSION="v0.17.2"
-ENV OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}
-RUN curl -sSLO ${OPERATOR_SDK_DL_URL}/operator-sdk_linux_${FILE_ARCH} && \
-    chmod a+x operator-sdk_linux_${FILE_ARCH} && \
-    mv -v operator-sdk_linux_${FILE_ARCH} /usr/local/bin/operator-sdk
-
-# Install opm CLI
-ENV OPM_VERSION="v1.13.1"
-RUN curl -sSLO https://github.com/operator-framework/operator-registry/releases/download/${OPM_VERSION}/linux-${FILE_ARCH}-opm && \
-    chmod a+x linux-${FILE_ARCH}-opm && \
-    mv -v linux-${FILE_ARCH}-opm /usr/local/bin/opm
-
 # Install OC and Kubectl binaries
-ENV OC_VERSION=4.19
 RUN curl -L https://mirror.openshift.com/pub/openshift-v4/${PATH_ARCH}/clients/ocp/stable-${OC_VERSION}/openshift-client-linux.tar.gz | \
     tar -C /usr/local/bin -xz --no-same-owner && \
     chmod a+x /usr/local/bin/oc && \
     chmod a+x /usr/local/bin/kubectl
 
-# Install OCM
-ENV OCM_VERSION=1.0.8
-RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/ocm/${OCM_VERSION}/ocm_linux_${FILE_ARCH}.zip -o /tmp/ocm.zip && \
-    cd /tmp && unzip ocm.zip && chmod a+x ocm && rm ocm.zip && mv -v ocm /usr/local/bin/ocm
-
-# Install ODO
-ENV ODO_VERSION=v3.16.1
-RUN curl -L https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/odo/${ODO_VERSION}/odo-linux-${FILE_ARCH} \
-    -o /usr/local/bin/odo && \
-    chmod a+x /usr/local/bin/odo
+# Install kustomize
+RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash && \
+    mv -v kustomize /usr/local/bin/
 
 # Install Network Observability OC Plugin
-ENV NETOBSERV_VERSION=1.9.0
 RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/netobserv/${NETOBSERV_VERSION}/oc-netobserv-${FILE_ARCH} \
     -o /usr/local/bin/oc-netobserv && \
     chmod a+x /usr/local/bin/oc-netobserv
 
+# Install OCM
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/ocm/${OCM_VERSION}/ocm_linux_${FILE_ARCH}.zip -o /tmp/ocm.zip && \
+    cd /tmp && unzip ocm.zip && chmod a+x ocm && rm ocm.zip && mv -v ocm /usr/local/bin/ocm
+
 # Install rosa CLI
-ENV ROSA_VERSION=1.2.57
 RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/rosa/${ROSA_VERSION}/rosa-linux \
     -o /usr/local/bin/rosa && chmod a+x /usr/local/bin/rosa
 
-# Install Serverless (kn)
-ENV KN_VERSION=1.17.0-3
-ENV KN_WORKFLOW_VERSION=1.36.0
-RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/serverless/${KN_VERSION}/kn-linux-${FILE_ARCH} \
-    -o /usr/local/bin/kn && chmod a+x /usr/local/bin/kn && \
-    curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/serverless-logic/${KN_WORKFLOW_VERSION}/kn-workflow-linux-${FILE_ARCH} \
-    -o /usr/local/bin/kn-workflow && chmod a+x /usr/local/bin/kn-workflow
-
-# Install Servicemesh (istioctl)
-ENV ISTIOCTL_VERSION=1.27.3
-RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/servicemesh/${ISTIOCTL_VERSION}/istioctl-${ISTIOCTL_VERSION}-linux-${FILE_ARCH}.tar.gz | \
-    tar -C /tmp -xz --no-same-owner && \
-    mv -v /tmp/istioctl-linux-${FILE_ARCH}/istioctl /usr/local/bin/istioctl && chmod a+x /usr/local/bin/istioctl
-
-# Install butane
-RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-${FILE_ARCH} \
-    -o /usr/local/bin/butane && chmod a+x /usr/local/bin/butane
-
-# Install Tekton (tkn)
-RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/latest/tkn-linux-${FILE_ARCH}.tar.gz | \
-    tar -C /usr/local/bin -xz --no-same-owner && \
-    chmod a+x /usr/local/bin/tkn
-
 # Install virtctl (upstream)
-ENV VIRTCTL_VERSION=v1.6.3
 RUN curl -L https://github.com/kubevirt/kubevirt/releases/download/${VIRTCTL_VERSION}/virtctl-${VIRTCTL_VERSION}-linux-${FILE_ARCH} \
     -o /usr/local/bin/virtctl && chmod a+x /usr/local/bin/virtctl
 
 # Install Submariner CLI (subctl)
 RUN curl -Ls https://get.submariner.io | DESTDIR=/usr/local/bin bash
 
+# Install butane
+RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-${FILE_ARCH} \
+    -o /usr/local/bin/butane && chmod a+x /usr/local/bin/butane
+
+# Install the Operator SDK
+RUN curl -sSLO ${OPERATOR_SDK_DL_URL}/operator-sdk_linux_${FILE_ARCH} && \
+    chmod a+x operator-sdk_linux_${FILE_ARCH} && \
+    mv -v operator-sdk_linux_${FILE_ARCH} /usr/local/bin/operator-sdk
+
+# Install opm CLI
+RUN curl -sSLO https://github.com/operator-framework/operator-registry/releases/download/${OPM_VERSION}/linux-${FILE_ARCH}-opm && \
+    chmod a+x linux-${FILE_ARCH}-opm && \
+    mv -v linux-${FILE_ARCH}-opm /usr/local/bin/opm
+
+# Install ODO
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/odo/${ODO_VERSION}/odo-linux-${FILE_ARCH} \
+    -o /usr/local/bin/odo && \
+    chmod a+x /usr/local/bin/odo
+
+# Install Serverless (kn)
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/serverless/${KN_VERSION}/kn-linux-${FILE_ARCH} \
+    -o /usr/local/bin/kn && chmod a+x /usr/local/bin/kn && \
+    curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/serverless-logic/${KN_WORKFLOW_VERSION}/kn-workflow-linux-${FILE_ARCH} \
+    -o /usr/local/bin/kn-workflow && chmod a+x /usr/local/bin/kn-workflow
+
+# Install Servicemesh (istioctl)
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/servicemesh/${ISTIOCTL_VERSION}/istioctl-${ISTIOCTL_VERSION}-linux-${FILE_ARCH}.tar.gz | \
+    tar -C /tmp -xz --no-same-owner && \
+    mv -v /tmp/istioctl-linux-${FILE_ARCH}/istioctl /usr/local/bin/istioctl && chmod a+x /usr/local/bin/istioctl
+
+# Install Tekton (tkn)
+RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/latest/tkn-linux-${FILE_ARCH}.tar.gz | \
+    tar -C /usr/local/bin -xz --no-same-owner && \
+    chmod a+x /usr/local/bin/tkn
+
 # Install RHOAS
 RUN curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli/main/scripts/install.sh | bash && \
     mv -v ~/.local/bin/rhoas /usr/local/bin/
-
-# Install kustomize
-RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash && \
-    mv -v kustomize /usr/local/bin/
 
 # Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash \
@@ -130,32 +131,17 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | b
     && /usr/local/bin/helm repo add external-secrets https://charts.external-secrets.io \
     && /usr/local/bin/helm repo update
 
-# Install bash autocompletion
-# RUN COMPDIR=$(pkg-config --variable=completionsdir bash-completion) && \
-#     # install bash completions
-#     kubectl completion bash > $COMPDIR/kubectl && \
-#     oc completion bash > $COMPDIR/oc && \
-#     kn completion bash > $COMPDIR/kn && \
-#     helm completion bash > $COMPDIR/helm && \
-#     tkn completion bash > $COMPDIR/tkn && \
-#     virtctl completion bash > $COMPDIR/virtctl && \
-#     rhoas completion bash > $COMPDIR/rhoas && \
-#     subctl completion bash > $COMPDIR/subctl
-
 # Add upstream config
 ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.bashrc", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.zshrc", "/tmp/initial_config"]
 # ADD --chmod=755 https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/get-tooling-versions.sh /tmp/get-tooling-versions.sh
-COPY --chmod=755 etc/get-tooling-versions.sh /tmp/get-tooling-versions.sh
-COPY --chmod=755 etc/setup-completion.sh /tmp/setup-completion.sh
+COPY --chmod=755 scripts/* /tmp/
 ADD --chmod=755 https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/entrypoint.sh /entrypoint.sh
 ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl_help.sh", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl_jq.sh", "/usr/local/bin/"]
 ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/cli-wrappers/kn", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/cli-wrappers/tkn", "${WRAPPER_BINARIES}/"]
 
-# Install bash autocompletion
-RUN /tmp/setup-completion.sh
-
-# Change permissions to let root group access necessary files
-RUN for f in "${HOME}" "${INITIAL_CONFIG}" "${WRAPPER_BINARIES}" "${DOWNLOADED_BINARIES}" "/etc/passwd" "/etc/group"; do \
+# Setup completions, change permissions to let root group access necessary files, create tools index
+RUN /tmp/setup-completion.sh && \
+    for f in "${HOME}" "${INITIAL_CONFIG}" "${WRAPPER_BINARIES}" "${DOWNLOADED_BINARIES}" "/etc/passwd" "/etc/group"; do \
     echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
     chmod -R g+rwX ${f}; \
     done && \
