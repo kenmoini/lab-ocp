@@ -144,7 +144,8 @@ RUN COMPDIR=$(pkg-config --variable=completionsdir bash-completion) && \
 
 # Add upstream config
 ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.bashrc", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.zshrc", "/tmp/initial_config"]
-ADD --chmod=755 https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/get-tooling-versions.sh /tmp/get-tooling-versions.sh
+# ADD --chmod=755 https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/get-tooling-versions.sh /tmp/get-tooling-versions.sh
+COPY --chmod=755 etc/get-tooling-versions.sh /tmp/get-tooling-versions.sh
 ADD --chmod=755 https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/entrypoint.sh /entrypoint.sh
 ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl_help.sh", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl_jq.sh", "/usr/local/bin/"]
 ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/cli-wrappers/kn", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/cli-wrappers/tkn", "${WRAPPER_BINARIES}/"]
