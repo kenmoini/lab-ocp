@@ -1,0 +1,99 @@
+FROM quay.io/devfile/base-developer-image:ubi9-latest
+
+ENV FILE_ARCH=${FILE_ARCH:-amd64}
+ENV PATH_ARCH=${PATH_ARCH:-x86_64}
+
+USER root
+
+COPY root-ca/* /etc/pki/ca-trust/source/anchors/
+RUN update-ca-trust
+
+# Install base packages
+RUN dnf install -y gettext make jq git which tar python3-pip nano wget curl-minimal zip unzip && \
+    pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests
+
+# Install the Operator SDK
+ENV OPERATOR_SDK_VERSION="v0.17.2"
+ENV OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}
+RUN curl -sSLO ${OPERATOR_SDK_DL_URL}/operator-sdk_linux_${FILE_ARCH} && \
+    chmod +x operator-sdk_linux_${FILE_ARCH} && \
+    mv operator-sdk_linux_${FILE_ARCH} /usr/local/bin/operator-sdk
+
+# Install opm CLI
+ENV OPM_VERSION="v1.13.1"
+RUN curl -sSLO https://github.com/operator-framework/operator-registry/releases/download/${OPM_VERSION}/linux-${FILE_ARCH}-opm && \
+    chmod +x linux-${FILE_ARCH}-opm && \
+    mv linux-${FILE_ARCH}-opm /usr/local/bin/opm
+
+# Install OC and Kubectl binaries
+ENV OC_VERSION=4.19
+RUN curl -L https://mirror.openshift.com/pub/openshift-v4/${PATH_ARCH}/clients/ocp/stable-${OC_VERSION}/openshift-client-linux.tar.gz | \
+    tar -C /usr/local/bin -xz --no-same-owner && \
+    chmod +x /usr/local/bin/oc && \
+    chmod +x /usr/local/bin/kubectl
+
+# Install OCM
+ENV OCM_VERSION=1.0.8
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/ocm/${OCM_VERSION}/ocm_linux_${FILE_ARCH}.zip -o /tmp/ocm.zip && \
+    cd /tmp && unzip ocm.zip && chmod a+x ocm && rm ocm.zip && mv ocm /usr/local/bin/ocm
+
+# Install ODO
+ENV ODO_VERSION=v3.16.1
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/odo/${ODO_VERSION}/odo-linux-${FILE_ARCH} \
+    -o /usr/local/bin/odo && \
+    chmod a+x /usr/local/bin/odo
+
+# Install Network Observability OC Plugin
+ENV NETOBSERV_VERSION=1.9.0
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/netobserv/${NETOBSERV_VERSION}/oc-netobserv-${FILE_ARCH} \
+    -o /usr/local/bin/oc-netobserv && \
+    chmod a+x /usr/local/bin/oc-netobserv
+
+# Install rosa CLI
+ENV ROSA_VERSION=1.2.57
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/rosa/${ROSA_VERSION}/rosa-linux \
+    -o /usr/local/bin/rosa && chmod a+x /usr/local/bin/rosa
+
+# Install Serverless (kn)
+ENV KN_VERSION=1.17.0-3
+ENV KN_WORKFLOW_VERSION=1.36.0
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/serverless/${KN_VERSION}/kn-linux-${FILE_ARCH} \
+    -o /usr/local/bin/kn && chmod a+x /usr/local/bin/kn && \
+    curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/serverless-logic/${KN_WORKFLOW_VERSION}/kn-workflow-linux-${FILE_ARCH} \
+    -o /usr/local/bin/kn-workflow && chmod a+x /usr/local/bin/kn-workflow
+
+# Install Servicemesh (istioctl)
+ENV ISTIOCTL_VERSION=1.27.3
+RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/servicemesh/${ISTIOCTL_VERSION}/istioctl-${ISTIOCTL_VERSION}-linux-${FILE_ARCH}.tar.gz | \
+    tar -C /usr/local/bin -xz --no-same-owner && \
+    mv /usr/local/bin/istioctl-linux-${FILE_ARCH} /usr/local/bin/istioctl && chmod +x /usr/local/bin/istioctl
+
+# Install butane
+RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-${FILE_ARCH} \
+    -o /usr/local/bin/butane && chmod a+x /usr/local/bin/butane
+
+# Install Tekton (tkn)
+RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/latest/tkn-linux-${FILE_ARCH}.tar.gz | \
+    tar -C /usr/local/bin -xz --no-same-owner && \
+    chmod +x /usr/local/bin/tkn
+
+# Install virtctl (upstream)
+ENV VIRTCTL_VERSION=v1.6.3
+RUN curl -L https://github.com/kubevirt/kubevirt/releases/download/${VIRTCTL_VERSION}/virtctl-${VIRTCTL_VERSION}-linux-${FILE_ARCH} \
+    -o /usr/local/bin/virtctl && chmod a+x /usr/local/bin/virtctl
+
+# Install Submariner CLI (subctl)
+RUN curl -Ls https://get.submariner.io | DESTDIR=/usr/local/bin bash
+
+# Install Helm
+RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash \
+    && /usr/local/bin/helm repo add emberstack https://emberstack.github.io/helm-charts \
+    && /usr/local/bin/helm repo add kong https://charts.konghq.com \
+    && /usr/local/bin/helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx \
+    && /usr/local/bin/helm repo add jetstack https://charts.jetstack.io \
+    && /usr/local/bin/helm repo add hashicorp https://helm.releases.hashicorp.com \
+    && /usr/local/bin/helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets \
+    && /usr/local/bin/helm repo add external-secrets https://charts.external-secrets.io \
+    && /usr/local/bin/helm repo update
+
+USER 1001
