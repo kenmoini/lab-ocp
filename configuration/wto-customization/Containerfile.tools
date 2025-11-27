@@ -91,8 +91,8 @@ RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/serverles
 # Install Servicemesh (istioctl)
 ENV ISTIOCTL_VERSION=1.27.3
 RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/servicemesh/${ISTIOCTL_VERSION}/istioctl-${ISTIOCTL_VERSION}-linux-${FILE_ARCH}.tar.gz | \
-    tar -C /usr/local/bin -xz --no-same-owner && \
-    mv -v /usr/local/bin/istioctl-linux-${FILE_ARCH} /usr/local/bin/istioctl && chmod a+x /usr/local/bin/istioctl
+    tar -C /tmp -xz --no-same-owner && \
+    mv -v /tmp/istioctl-linux-${FILE_ARCH}/istioctl /usr/local/bin/istioctl && chmod a+x /usr/local/bin/istioctl
 
 # Install butane
 RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-${FILE_ARCH} \
@@ -131,24 +131,28 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | b
     && /usr/local/bin/helm repo update
 
 # Install bash autocompletion
-RUN COMPDIR=$(pkg-config --variable=completionsdir bash-completion) && \
-    # install bash completions
-    kubectl completion bash > $COMPDIR/kubectl && \
-    oc completion bash > $COMPDIR/oc && \
-    kn completion bash > $COMPDIR/kn && \
-    helm completion bash > $COMPDIR/helm && \
-    tkn completion bash > $COMPDIR/tkn && \
-    virtctl completion bash > $COMPDIR/virtctl && \
-    rhoas completion bash > $COMPDIR/rhoas && \
-    subctl completion bash > $COMPDIR/subctl
+# RUN COMPDIR=$(pkg-config --variable=completionsdir bash-completion) && \
+#     # install bash completions
+#     kubectl completion bash > $COMPDIR/kubectl && \
+#     oc completion bash > $COMPDIR/oc && \
+#     kn completion bash > $COMPDIR/kn && \
+#     helm completion bash > $COMPDIR/helm && \
+#     tkn completion bash > $COMPDIR/tkn && \
+#     virtctl completion bash > $COMPDIR/virtctl && \
+#     rhoas completion bash > $COMPDIR/rhoas && \
+#     subctl completion bash > $COMPDIR/subctl
 
 # Add upstream config
 ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.bashrc", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.zshrc", "/tmp/initial_config"]
 # ADD --chmod=755 https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/get-tooling-versions.sh /tmp/get-tooling-versions.sh
 COPY --chmod=755 etc/get-tooling-versions.sh /tmp/get-tooling-versions.sh
+COPY --chmod=755 etc/setup-completion.sh /tmp/setup-completion.sh
 ADD --chmod=755 https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/entrypoint.sh /entrypoint.sh
 ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl_help.sh", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl_jq.sh", "/usr/local/bin/"]
 ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/cli-wrappers/kn", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/cli-wrappers/tkn", "${WRAPPER_BINARIES}/"]
+
+# Install bash autocompletion
+RUN /tmp/setup-completion.sh
 
 # Change permissions to let root group access necessary files
 RUN for f in "${HOME}" "${INITIAL_CONFIG}" "${WRAPPER_BINARIES}" "${DOWNLOADED_BINARIES}" "/etc/passwd" "/etc/group"; do \

@@ -76,6 +76,26 @@ if command -v opm &>/dev/null; then
   append_ver "opm    |${OPM_VER}     |opm"
 fi
 
+if command -v ocm &>/dev/null; then
+  OCM_VER=$(ocm version)
+  append_ver "ocm    |${OCM_VER}     |OpenShift Cluster Manager CLI (ocm)"
+fi
+
+if command -v rosa &>/dev/null; then
+  ROSA_VER=$(rosa version --client | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+|release-[0-9]+\.[0-9]+')
+  append_ver "rosa    |${ROSA_VER}     |Red Hat OpenShift Serivce on AWS CLI (rosa)"
+fi
+
+if command -v odo &>/dev/null; then
+  ODO_VER=$(odo version --client | grep -oP 'odo v\K.*?(?= |$)')
+  append_ver "odo    |${ODO_VER}     |OpenShift Developer Tooling (odo)"
+fi
+
+if command -v istioctl &>/dev/null; then
+  ISTIOCTL_VER=$(istioctl version --short --remote=false -o json | jq -r '.clientVersion.version')
+  append_ver "istioctl    |${ISTIOCTL_VER}     |Istio CLI (istioctl)"
+fi
+
 if command -v butane &>/dev/null; then
   BUTANE_VER=$(butane --version | grep -oP 'Butane ?[0-9]+\.[0-9]+\.[0-9]+')
   append_ver "butane    |${BUTANE_VER#Butane }     |Butane"
