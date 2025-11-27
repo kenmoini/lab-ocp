@@ -1,15 +1,38 @@
-FROM quay.io/devfile/base-developer-image:ubi9-latest
+#FROM quay.io/devfile/base-developer-image:ubi9-latest
+FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6-1760515502
 
 ENV FILE_ARCH=${FILE_ARCH:-amd64}
 ENV PATH_ARCH=${PATH_ARCH:-x86_64}
 
-USER root
+USER 0
+
+# The $INITIAL_CONFIG dir stores dotfiles (e.g. .bashrc) for the web terminal, which
+# are copied into $HOME when the container starts up. This allows defining a default
+# configuration that can still be overridden if necessary (the copy does not overwrite
+# existing files)
+ENV INITIAL_CONFIG=/tmp/initial_config
+ENV WRAPPER_BINARIES=/wto/bin
+ENV DOWNLOADED_BINARIES=/wto/bin/downloaded
+ENV HOME=/home/user
+WORKDIR /home/user
 
 COPY root-ca/* /etc/pki/ca-trust/source/anchors/
 RUN update-ca-trust
 
 # Install base packages
-RUN dnf install -y gettext make jq git which tar python3-pip nano wget curl-minimal zip unzip && \
+
+RUN mkdir -p /home/user $INITIAL_CONFIG $WRAPPER_BINARIES $DOWNLOADED_BINARIES && \
+    microdnf update -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms && \
+    microdnf install -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms \
+    gettext make which python3-pip wget curl-minimal zip unzip \
+    bash-completion ncurses pkgconf-pkg-config findutils \
+    # zsh
+    zsh \
+    # terminal-based editors
+    vi vim nano \
+    # developer tools
+    tar git procps jq && \
+    microdnf -y clean all && \
     pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests
 
 # Install the Operator SDK
@@ -17,13 +40,13 @@ ENV OPERATOR_SDK_VERSION="v0.17.2"
 ENV OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}
 RUN curl -sSLO ${OPERATOR_SDK_DL_URL}/operator-sdk_linux_${FILE_ARCH} && \
     chmod +x operator-sdk_linux_${FILE_ARCH} && \
-    mv operator-sdk_linux_${FILE_ARCH} /usr/local/bin/operator-sdk
+    mv -v operator-sdk_linux_${FILE_ARCH} /usr/local/bin/operator-sdk
 
 # Install opm CLI
 ENV OPM_VERSION="v1.13.1"
 RUN curl -sSLO https://github.com/operator-framework/operator-registry/releases/download/${OPM_VERSION}/linux-${FILE_ARCH}-opm && \
     chmod +x linux-${FILE_ARCH}-opm && \
-    mv linux-${FILE_ARCH}-opm /usr/local/bin/opm
+    mv -v linux-${FILE_ARCH}-opm /usr/local/bin/opm
 
 # Install OC and Kubectl binaries
 ENV OC_VERSION=4.19
@@ -35,7 +58,7 @@ RUN curl -L https://mirror.openshift.com/pub/openshift-v4/${PATH_ARCH}/clients/o
 # Install OCM
 ENV OCM_VERSION=1.0.8
 RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/ocm/${OCM_VERSION}/ocm_linux_${FILE_ARCH}.zip -o /tmp/ocm.zip && \
-    cd /tmp && unzip ocm.zip && chmod a+x ocm && rm ocm.zip && mv ocm /usr/local/bin/ocm
+    cd /tmp && unzip ocm.zip && chmod a+x ocm && rm ocm.zip && mv -v ocm /usr/local/bin/ocm
 
 # Install ODO
 ENV ODO_VERSION=v3.16.1
@@ -66,7 +89,7 @@ RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/serverles
 ENV ISTIOCTL_VERSION=1.27.3
 RUN curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/servicemesh/${ISTIOCTL_VERSION}/istioctl-${ISTIOCTL_VERSION}-linux-${FILE_ARCH}.tar.gz | \
     tar -C /usr/local/bin -xz --no-same-owner && \
-    mv /usr/local/bin/istioctl-linux-${FILE_ARCH} /usr/local/bin/istioctl && chmod +x /usr/local/bin/istioctl
+    mv -v /usr/local/bin/istioctl-linux-${FILE_ARCH} /usr/local/bin/istioctl && chmod +x /usr/local/bin/istioctl
 
 # Install butane
 RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/butane/latest/butane-${FILE_ARCH} \
@@ -85,6 +108,14 @@ RUN curl -L https://github.com/kubevirt/kubevirt/releases/download/${VIRTCTL_VER
 # Install Submariner CLI (subctl)
 RUN curl -Ls https://get.submariner.io | DESTDIR=/usr/local/bin bash
 
+# Install RHOAS
+RUN curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli/main/scripts/install.sh | bash && \
+    mv -v ~/.local/bin/rhoas /usr/local/bin/
+
+# Install kustomize
+RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash && \
+    mv -v kustomize /usr/local/bin/
+
 # Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash \
     && /usr/local/bin/helm repo add emberstack https://emberstack.github.io/helm-charts \
@@ -96,4 +127,54 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | b
     && /usr/local/bin/helm repo add external-secrets https://charts.external-secrets.io \
     && /usr/local/bin/helm repo update
 
+# Install bash autocompletion
+RUN COMPDIR=$(pkg-config --variable=completionsdir bash-completion) && \
+    # install bash completions
+    kubectl completion bash > $COMPDIR/kubectl && \
+    oc completion bash > $COMPDIR/oc && \
+    kn completion bash > $COMPDIR/kn && \
+    helm completion bash > $COMPDIR/helm && \
+    tkn completion bash > $COMPDIR/tkn && \
+    virtctl completion bash > $COMPDIR/virtctl && \
+    rhoas completion bash > $COMPDIR/rhoas && \
+    subctl completion bash > $COMPDIR/subctl
+
+# Add upstream config
+ADD ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.bashrc", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.zshrc", "/tmp/initial_config"]
+ADD https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/get-tooling-versions.sh /tmp/get-tooling-versions.sh
+ADD https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/entrypoint.sh /entrypoint.sh
+ADD ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl_help.sh", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/wtoctl_jq.sh", "/usr/local/bin/"]
+ADD ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/cli-wrappers/kn", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/cli-wrappers/tkn", "${WRAPPER_BINARIES}/"]
+
+# Change permissions to let root group access necessary files
+RUN for f in "${HOME}" "${INITIAL_CONFIG}" "${WRAPPER_BINARIES}" "${DOWNLOADED_BINARIES}" "/etc/passwd" "/etc/group"; do \
+    echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
+    chmod -R g+rwX ${f}; \
+    done && \
+    /tmp/get-tooling-versions.sh > /tmp/installed_tools.txt && \
+    chmod g+rw /tmp/installed_tools.txt && \
+    echo "Installed tools:" && \
+    cat /tmp/installed_tools.txt
+
 USER 1001
+
+ENV SHELL=/bin/bash
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+ENV SUMMARY="Web Terminal - Tooling container" \
+    DESCRIPTION="Web Terminal - Tooling container" \
+    PRODNAME="web-terminal" \
+    COMPNAME="tooling"
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$DESCRIPTION" \
+      io.k8s.display-name="$DESCRIPTION" \
+      io.openshift.tags="$PRODNAME,$COMPNAME" \
+      com.redhat.component="$PRODNAME-$COMPNAME-container" \
+      name="$PRODNAME/$COMPNAME" \
+      license="MIT" \
+      maintainer="Ken Moini <dakwon@redhat.com>" \
+      io.openshift.expose-services="" \
+      usage=""
