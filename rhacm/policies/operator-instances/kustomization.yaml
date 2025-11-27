@@ -10,6 +10,7 @@ resources:
   - aap.yaml
   - acs-central.yaml
   - community-eso.yaml
+  - cost-management-metrics.yaml
   - descheduler.yaml
   - far.yaml
   #- lso.yaml

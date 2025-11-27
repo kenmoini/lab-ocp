@@ -1,0 +1,94 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-cost-mgmt
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Cost Management Metrics Operator Instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-cost-mgmt
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cost-mgmt-operator-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: costmanagement-metrics-operator
+                  namespace: costmanagement-metrics-operator
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: cost-mgmt-operator-status
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cost-mgmt-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: CostManagementMetricsConfig
+                apiVersion: costmanagement-metrics-cfg.openshift.io/v1beta1
+                metadata:
+                  name: costmanagementmetricscfg
+                  namespace: costmanagement-metrics-operator
+                spec:
+                  authentication:
+                    type: token
+                  packaging:
+                    max_reports_to_store: 30
+                    max_size_MB: 100
+                  upload:
+                    upload_toggle: false
+                    ingress_path: /api/ingress/v1/upload
+                    upload_cycle: 360
+                    validate_cert: true
+                  prometheus_config:
+                    collect_previous_data: true
+                    context_timeout: 120
+                    disable_metrics_collection_cost_management: false
+                    disable_metrics_collection_resource_optimization: false
+                    service_address: 'https://thanos-querier.openshift-monitoring.svc:9091'
+                    skip_tls_verification: false
+                  source:
+                    create_source: false
+                    check_cycle: 1440
+                    sources_path: /api/sources/v1.0/
+                  volume_claim_template:
+                    apiVersion: v1
+                    kind: PersistentVolumeClaim
+                    metadata:
+                      name: costmanagement-metrics-operator-data
+                    spec:
+                      accessModes:
+                        - ReadWriteOnce
+                      resources:
+                        requests:
+                          storage: 20Gi

@@ -10,3 +10,4 @@ spec:
     - operators-power-monitoring
     - operators-cost-mgmt
     - instance-power-monitoring
+    - instance-cost-mgmt
