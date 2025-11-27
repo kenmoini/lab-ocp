@@ -33,3 +33,124 @@ spec:
                   name: web-terminal
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
+
+    # Check for the Operator Installation via CSV
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: wto-subscription
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: wto-csv-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: ClusterServiceVersion
+                metadata:
+                  namespace: openshift-operators
+                spec:
+                  displayName: Web Terminal
+                status:
+                  phase: Succeeded
+                  reason: InstallSucceeded
+
+    # Check for the readiness of the controller
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: wto-csv-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: wto-controller-status
+        spec:
+          remediationAction: inform
+          namespaceSelector:
+            include:
+              - openshift-operators
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: web-terminal-controller
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+
+    # Check for the existence of the default DevWorkspaceTemplates
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: wto-controller-status
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: wto-template-check
+        spec:
+          remediationAction: inform
+          namespaceSelector:
+            include:
+              - openshift-operators
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: workspace.devfile.io/v1alpha2
+                kind: DevWorkspaceTemplate
+                metadata:
+                  name: web-terminal-tooling
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+
+    # Modify the template to override the tooling container
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: wto-template-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: wto-tools-overrides
+        spec:
+          remediationAction: enforce
+          namespaceSelector:
+            include:
+              - openshift-operators
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: workspace.devfile.io/v1alpha2
+                kind: DevWorkspaceTemplate
+                metadata:
+                  name: web-terminal-tooling
+                  annotations:
+                    web-terminal.redhat.com/unmanaged-state: 'true'
+                spec:
+                  components:
+                    - name: web-terminal-tooling
+                      container:
+                        image: 'quay.io/kenmoini/wto-tools:latest'
