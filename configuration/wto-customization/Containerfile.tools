@@ -1,3 +1,6 @@
+ARG FILE_ARCH
+ARG PATH_ARCH
+
 #FROM quay.io/devfile/base-developer-image:ubi9-latest
 FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6-1760515502
 
