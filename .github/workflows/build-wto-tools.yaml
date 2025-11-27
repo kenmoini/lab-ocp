@@ -11,7 +11,7 @@ on:
     branches:
       - main
     paths:
-      - configuration/wto-customization
+      - configuration/wto-customization/**
       - .github/workflows/build-wto-tools.yml
 
   # Schedule workflow run at 00:00 on Sunday
