@@ -19,6 +19,7 @@ spec:
   - operators-oadp
   - operators-coo
   - operators-sscsi
+  - operators-gatekeeper
 
   - instance-metallb
   - instance-nmstate

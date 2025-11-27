@@ -15,6 +15,7 @@ resources:
   - devspaces.yaml
   - community-eso.yaml
   - far.yaml
+  - gatekeeper.yaml
   - lso.yaml
   - metallb.yaml
   - mtv.yaml
