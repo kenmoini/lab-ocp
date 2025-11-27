@@ -117,10 +117,6 @@ spec:
                 kind: DevWorkspaceTemplate
                 metadata:
                   name: web-terminal-tooling
-                status:
-                  conditions:
-                    - status: 'True'
-                      type: Available
 
     # Modify the template to override the tooling container
     - extraDependencies:
