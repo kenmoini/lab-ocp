@@ -149,3 +149,56 @@
           - "disabledByNamespaceLabel: {{ disabledByNamespaceLabel }}"
           - "disabledByStorageClassLabel: {{ disabledByStorageClassLabel }}"
           - "base_expansion_increment_gi: {{ base_expansion_increment_gi }}"
+
+    - name: Check if auto-expansion is disabled by any label
+      ansible.builtin.assert:
+        that:
+          - disabledByPVCLabel | bool
+          - disabledByNamespaceLabel | bool
+          - disabledByStorageClassLabel | bool
+        fail_msg: "Auto-expansion is disabled for this PVC by one of the labels."
+
+
+    # Get the Thanos Route
+    # Read in the EE ServiceAccount token
+    # Use the token to query the Thanos API for the current PVC size
+    # Get the current size of the PVC
+    # Check the size type, if Mi then just convert to Gi
+    # If Gi then just add the increment
+
+    - name: Get the Thanos Route
+      kubernetes.core.k8s_info:
+        api_version: route.openshift.io/v1
+        kind: Route
+        namespace: openshift-monitoring
+        name: thanos-querier
+      register: thanos_route_info
+
+    - name: Debug Thanos Route info
+      when: debug_output | bool
+      ansible.builtin.debug:
+        var: thanos_route_info
+
+    - name: Read in the EE ServiceAccount token
+      ansible.builtin.slurp:
+        src: /var/run/secrets/kubernetes.io/serviceaccount/token
+      register: sa_token
+
+    - name: Debug ServiceAccount token
+      when: debug_output | bool
+      ansible.builtin.debug:
+        var: sa_token
+
+    - name: Use the token to query the Thanos API for the current PVC size
+      ansible.builtin.uri:
+        url: "https://{{ thanos_route_info.resources[0].spec.host }}/api/v1/query?query=kube_persistentvolumeclaim_resource_requests_storage_bytes%7Bnamespace%3D%22{{ ansible_eda.event.alert.labels.namespace }}%22%2Cpersistentvolumeclaim%3D%22{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}%22%7D"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ sa_token.content | b64decode }}"
+        validate_certs: false
+      register: thanos_query_response
+
+    - name: Debug Thanos query response
+      when: debug_output | bool
+      ansible.builtin.debug:
+        var: thanos_query_response
