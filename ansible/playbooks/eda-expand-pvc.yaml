@@ -5,7 +5,7 @@
   gather_facts: false
 
   vars:
-    debug_output: false
+    debug_output: true
     expansion_increment_gi: 10
     auto_expand_prevent_label: "eda.kemo.dev/auto-expand-disabled"
     auto_expand_increment_label: "eda.kemo.dev/auto-expand-increment-gi"
