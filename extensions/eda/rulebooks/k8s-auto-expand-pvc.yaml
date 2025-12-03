@@ -9,7 +9,7 @@
         port: 8000
   rules:
     - name: PVC Size Exceeded Critical Threshold - Expand PVC
-      condition: event.alert.labels.alertname == "PersistentVolumeUsageNearFull" and event.alert.status == "firing"
+      condition: (event.alert.labels.alertname == "PersistentVolumeUsageNearFull" or event.alert.labels.alertname == "PersistentVolumeUsageCritical") and event.alert.status == "firing"
       action:
         run_job_template:
           name: EDA - Auto Expand PVC

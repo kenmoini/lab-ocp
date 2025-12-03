@@ -4,6 +4,9 @@
   connection: local
   gather_facts: false
 
+  vars:
+    expansion_increment_gi: 10
+
   tasks:
 
     - name: Check that the EDA variables are present
@@ -11,7 +14,49 @@
         that:
           - ansible_eda is defined
           - ansible_eda.event is defined
+          - ansible_eda.event.alert is defined
+          - ansible_eda.event.alert.labels is defined
+          - ansible_eda.event.alert.labels.prometheus is defined
+          - ansible_eda.event.alert.labels.provisioner is defined
+          - ansible_eda.event.alert.labels.storageclass is defined
+          - ansible_eda.event.alert.labels.persistentvolumeclaim is defined
+          - ansible_eda.event.alert.labels.namespace is defined
+          - ansible_eda.event.alert.labels.alertname is defined
 
     - name: Debug EDA event
       ansible.builtin.debug:
         var: ansible_eda
+
+    - name: Get the PVC in question
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: PersistentVolumeClaim
+        namespace: "{{ ansible_eda.event.alert.labels.namespace }}"
+        name: "{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}"
+      register: pvc_info
+
+    - name: Debug PVC info
+      ansible.builtin.debug:
+        var: pvc_info
+
+    - name: Get the associated StorageClass
+      kubernetes.core.k8s_info:
+        api_version: storage.k8s.io/v1
+        kind: StorageClass
+        name: "{{ ansible_eda.event.alert.labels.storageclass }}"
+      register: sc_info
+
+    - name: Debug StorageClass info
+      ansible.builtin.debug:
+        var: sc_info
+
+    - name: Get the associated PersistentVolume
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: PersistentVolume
+        name: "{{ pvc_info.resources[0].spec.volumeName }}"
+      register: pv_info
+
+    - name: Debug PersistentVolume info
+      ansible.builtin.debug:
+        var: pv_info

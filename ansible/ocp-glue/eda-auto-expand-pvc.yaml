@@ -1,0 +1,40 @@
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: eda-pvc-expander
+rules:
+  - verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+    apiGroups:
+      - v1
+    resources:
+      - persistentvolumeclaims
+      - persistentvolumes
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: eda-auto-expand-pvc-token
+  namespace: aap
+  annotations:
+    kubernetes.io/service-account.name: eda-auto-expand-pvc
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: eda-auto-mirror-image
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: aap
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: eda-pvc-expander
