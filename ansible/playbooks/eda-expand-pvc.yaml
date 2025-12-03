@@ -347,19 +347,31 @@
               - "resized_volume_size_megabytes: {{ resized_volume_size_megabytes | default('N/A') }} Mi"
               - "resized_volume_size_gigabytes: {{ resized_volume_size_gigabytes | default('N/A') }} Gi"
 
-        # - name: Expand the PVC
-        #   when: finalAction == "expand" and pvc_size_type in ['Mi', 'Gi']
-        #   kubernetes.core.k8s:
-        #     definition:
-        #       apiVersion: v1
-        #       kind: PersistentVolumeClaim
-        #       metadata:
-        #         namespace: "{{ ansible_eda.event.alert.labels.namespace }}"
-        #         name: "{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}"
-        #       spec:
-        #         resources:
-        #           requests:
-        #             storage: "{{ resized_volume_size_megabytes + 'Mi' if pvc_size_type == 'Mi' else resized_volume_size_gigabytes + 'Gi' }}"
+        - name: Expand the PV
+          when: finalAction == "expand" and pvc_size_type in ['Mi', 'Gi']
+          kubernetes.core.k8s:
+            definition:
+              apiVersion: v1
+              kind: PersistentVolume
+              metadata:
+                name: "{{ pv_info.resources[0].metadata.name }}"
+              spec:
+                capacity:
+                  storage: "{{ resized_volume_size_megabytes + 'Mi' if pvc_size_type == 'Mi' else resized_volume_size_gigabytes + 'Gi' }}"
+
+        - name: Expand the PVC
+          when: finalAction == "expand" and pvc_size_type in ['Mi', 'Gi']
+          kubernetes.core.k8s:
+            definition:
+              apiVersion: v1
+              kind: PersistentVolumeClaim
+              metadata:
+                namespace: "{{ ansible_eda.event.alert.labels.namespace }}"
+                name: "{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}"
+              spec:
+                resources:
+                  requests:
+                    storage: "{{ resized_volume_size_megabytes + 'Mi' if pvc_size_type == 'Mi' else resized_volume_size_gigabytes + 'Gi' }}"
 
 # - name: Maths
 #   hosts: localhost
