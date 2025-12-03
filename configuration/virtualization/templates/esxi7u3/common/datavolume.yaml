@@ -1,0 +1,23 @@
+---
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataVolume
+metadata:
+  name: esxi7u3
+  annotations:
+    iconClass: icon-esxi
+  labels:
+    #instancetype.kubevirt.io/default-instancetype: u1.medium
+    instancetype.kubevirt.io/default-preference: esxi
+  namespace: openshift-virtualization-os-images
+spec:
+  source:
+    http:
+      certConfigMap: vm-src-certs
+      url: 'https://dropbox.kemo.labs/VMware-VMvisor-Installer-7.0U3-18644231.x86_64.iso'
+  storage:
+    resources:
+      requests:
+        storage: 1Gi
+
+
+

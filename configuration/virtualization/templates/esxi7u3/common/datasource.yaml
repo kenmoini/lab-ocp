@@ -1,0 +1,14 @@
+apiVersion: cdi.kubevirt.io/v1beta1
+kind: DataSource
+metadata:
+  name: esxi7u3
+  namespace: openshift-virtualization-os-images
+  labels:
+    app.kubernetes.io/component: templating
+    app.kubernetes.io/name: data-sources
+    instancetype.kubevirt.io/default-preference: esxi
+spec:
+  source:
+    pvc:
+      name: esxi7u3
+      namespace: openshift-virtualization-os-images
