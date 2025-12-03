@@ -12,8 +12,8 @@
 
   tasks:
     - name: Display all environment variables
-      ansible.builtin.debug:
-        var: ansible_env
+      ansible.builtin.shell:
+        cmd: env
 
     - name: Set initial facts
       block:
