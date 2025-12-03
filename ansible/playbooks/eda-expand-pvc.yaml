@@ -330,7 +330,7 @@
           when: finalAction == "expand"
           ansible.builtin.set_fact:
             resized_volume_size_megabytes: "{{ (( resized_volume_size_bytes | int ) / 1048576) | round(1) | int }}"
-            resized_volume_size_gigabytes: "{{ (( resized_volume_size_bytes | int ) / 1073741824) | round(1) }}"
+            resized_volume_size_gigabytes: "{{ (( resized_volume_size_bytes | int ) / 1073741824) | round(0, 'ceil') | int }}"
 
         - name: Debug final facts
           when: debug_output | bool
