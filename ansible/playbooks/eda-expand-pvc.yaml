@@ -183,22 +183,12 @@
       ansible.builtin.debug:
         var: thanos_route_info
 
-    - name: Read in the EE ServiceAccount token
-      ansible.builtin.slurp:
-        src: /var/run/secrets/kubernetes.io/serviceaccount/token
-      register: sa_token
-
-    - name: Debug ServiceAccount token
-      when: debug_output | bool
-      ansible.builtin.debug:
-        var: sa_token
-
     - name: Use the token to query the Thanos API for the current PVC size
       ansible.builtin.uri:
         url: "https://{{ thanos_route_info.resources[0].spec.host }}/api/v1/query?query=kube_persistentvolumeclaim_resource_requests_storage_bytes%7Bnamespace%3D%22{{ ansible_eda.event.alert.labels.namespace }}%22%2Cpersistentvolumeclaim%3D%22{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}%22%7D"
         method: GET
         headers:
-          Authorization: "Bearer {{ sa_token.content | b64decode }}"
+          Authorization: "Bearer {{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
         validate_certs: false
       register: thanos_query_response
 
