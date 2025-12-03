@@ -314,14 +314,14 @@
 
         - name: Set facts for thresholds
           ansible.builtin.set_fact:
-            above_warning_threshold: "{{ ((pvc_used_size_bytes / pvc_requested_size_bytes * 100) | round | int) > warning_threshold_percentage }}"
-            above_critical_threshold: "{{ ((pvc_used_size_bytes / pvc_requested_size_bytes * 100) | round | int) > critical_threshold_percentage }}"
+            above_warning_threshold: "{{ (((pvc_used_size_bytes | int) / (pvc_requested_size_bytes | int) * 100) | round | int) > warning_threshold_percentage }}"
+            above_critical_threshold: "{{ (((pvc_used_size_bytes | int) / (pvc_requested_size_bytes | int) * 100) | round | int) > critical_threshold_percentage }}"
 
         - name: Set fact for final action determination and sizing
           when: above_critical_threshold | bool or above_warning_threshold | bool
           ansible.builtin.set_fact:
             finalAction: expand
-            resized_volume_size_bytes: "{{ (pvc_requested_size_bytes + ( (pvc_requested_size_bytes / 100) * base_expansion_increment_percentage )) | round | int }}"
+            resized_volume_size_bytes: "{{ ((pvc_requested_size_bytes | int) + ( ((pvc_requested_size_bytes | int) / 100) * base_expansion_increment_percentage )) | round | int }}"
 
         - name: Debug final facts
           when: debug_output | bool
