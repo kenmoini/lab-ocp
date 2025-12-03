@@ -25,7 +25,7 @@
     critical_threshold_percentage: 85
     auto_expand_enable_label: "eda.kemo.dev/auto-expand-enabled"
     auto_expand_prevent_label: "eda.kemo.dev/auto-expand-disabled"
-    auto_expand_increment_label: "eda.kemo.dev/auto-expand-increment-gi"
+    auto_expand_increment_label: "eda.kemo.dev/auto-expand-increment"
 
   tasks:
     - name: Display all environment variables
@@ -162,7 +162,7 @@
         - name: Set Namespace expansion increment fact
           when: ns_info.resources[0].metadata.labels is defined and ns_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
           ansible.builtin.set_fact:
-            base_expansion_increment_percentage: "{{ ns_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_percentage) }}"
+            base_expansion_increment_percentage: "{{ ns_info.resources[0].metadata.labels[auto_expand_increment_label] | default(expansion_increment_percentage) }}"
 
     - name: Check if the StorageClass has a label to enable/prevent auto-expansion
       when: sc_info.resources[0].metadata.labels is defined
@@ -180,7 +180,7 @@
         - name: Set StorageClass expansion increment fact
           when: sc_info.resources[0].metadata.labels is defined and sc_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
           ansible.builtin.set_fact:
-            base_expansion_increment_percentage: "{{ sc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_percentage) }}"
+            base_expansion_increment_percentage: "{{ sc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(expansion_increment_percentage) }}"
 
     - name: Check if auto-expansion is disabled by any label when in opt-out mode
       when: operation_mode == "opt-out"
@@ -212,7 +212,6 @@
           when: enabledByPVCLabel | lower == 'true' and disabledByNamespaceLabel | lower == 'true'
           ansible.builtin.set_fact:
             determinedAction: expand
-            
 
     - name: Check if auto-expansion is enabled by any label when in opt-in mode
       when: operation_mode == "opt-in"
