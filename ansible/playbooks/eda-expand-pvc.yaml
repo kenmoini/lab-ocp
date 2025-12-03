@@ -6,7 +6,7 @@
 
   vars:
     debug_output: true
-    expansion_increment_gi: 10
+    expansion_increment_percentage: 10
     auto_expand_prevent_label: "eda.kemo.dev/auto-expand-disabled"
     auto_expand_increment_label: "eda.kemo.dev/auto-expand-increment-gi"
 
@@ -22,7 +22,7 @@
             disabledByPVCLabel: "false"
             disabledByNamespaceLabel: "false"
             disabledByStorageClassLabel: "false"
-            base_expansion_increment_gi: "{{ expansion_increment_gi }}"
+            base_expansion_increment_percentage: "{{ expansion_increment_percentage }}"
 
     - name: Check that the EDA variables are present
       ansible.builtin.assert:
@@ -117,7 +117,7 @@
         - name: Set PVC expansion increment fact
           when: pvc_info.resources[0].metadata.labels is defined and pvc_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
           ansible.builtin.set_fact:
-            base_expansion_increment_gi: "{{ pvc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(expansion_increment_gi) }}"
+            base_expansion_increment_percentage: "{{ pvc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(expansion_increment_percentage) }}"
 
     - name: Check if the Namespace has a label to prevent auto-expansion
       when: ns_info.resources[0].metadata.labels is defined
@@ -130,7 +130,7 @@
         - name: Set Namespace expansion increment fact
           when: ns_info.resources[0].metadata.labels is defined and ns_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
           ansible.builtin.set_fact:
-            base_expansion_increment_gi: "{{ ns_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_gi) }}"
+            base_expansion_increment_percentage: "{{ ns_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_percentage) }}"
 
     - name: Check if the StorageClass has a label to prevent auto-expansion
       when: sc_info.resources[0].metadata.labels is defined
@@ -143,7 +143,7 @@
         - name: Set StorageClass expansion increment fact
           when: sc_info.resources[0].metadata.labels is defined and sc_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
           ansible.builtin.set_fact:
-            base_expansion_increment_gi: "{{ sc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_gi) }}"
+            base_expansion_increment_percentage: "{{ sc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_percentage) }}"
 
     - name: Debug determined facts
       when: debug_output | bool
@@ -152,7 +152,7 @@
           - "disabledByPVCLabel: {{ disabledByPVCLabel }}"
           - "disabledByNamespaceLabel: {{ disabledByNamespaceLabel }}"
           - "disabledByStorageClassLabel: {{ disabledByStorageClassLabel }}"
-          - "base_expansion_increment_gi: {{ base_expansion_increment_gi }}"
+          - "base_expansion_increment_percentage: {{ base_expansion_increment_percentage }}"
 
     - name: Check if auto-expansion is disabled by any label
       ansible.builtin.assert:
@@ -161,14 +161,6 @@
           - disabledByNamespaceLabel | lower != 'true'
           - disabledByStorageClassLabel | lower != 'true'
         fail_msg: "Auto-expansion is disabled for this PVC by one of the labels."
-
-
-    # Get the Thanos Route
-    # Read in the EE ServiceAccount token
-    # Use the token to query the Thanos API for the current PVC size
-    # Get the current size of the PVC
-    # Check the size type, if Mi then just convert to Gi
-    # If Gi then just add the increment
 
     - name: Get the Thanos Route
       kubernetes.core.k8s_info:
@@ -183,16 +175,39 @@
       ansible.builtin.debug:
         var: thanos_route_info
 
-    - name: Use the token to query the Thanos API for the current PVC size
+    - name: Use the token to query the Thanos API for the current PVC requested size
+      ansible.builtin.uri:
+        url: "https://{{ thanos_route_info.resources[0].spec.host }}/api/v1/query?query=kube_persistentvolumeclaim_resource_requests_storage_bytes%7Bnamespace%3D%22{{ ansible_eda.event.alert.labels.namespace }}%22%2Cpersistentvolumeclaim%3D%22{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}%22%7D"
+        method: GET
+        headers:
+          Authorization: "Bearer {{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
+        validate_certs: false
+      register: pvc_requested_size_response
+
+    - name: Debug Thanos query response
+      when: debug_output | bool
+      ansible.builtin.debug:
+        var: pvc_requested_size_response
+
+    - name: Use the token to query the Thanos API for the current PVC consumption
       ansible.builtin.uri:
         url: "https://{{ thanos_route_info.resources[0].spec.host }}/api/v1/query?query=kubelet_volume_stats_used_bytes%7Bnamespace%3D%22{{ ansible_eda.event.alert.labels.namespace }}%22%2Cpersistentvolumeclaim%3D%22{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}%22%7D"
         method: GET
         headers:
           Authorization: "Bearer {{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
         validate_certs: false
-      register: thanos_query_response
+      register: pvc_used_size_response
 
     - name: Debug Thanos query response
       when: debug_output | bool
       ansible.builtin.debug:
-        var: thanos_query_response
+        var: pvc_used_size_response
+
+    - name: Set facts for sizes
+      ansible.builtin.set_fact:
+        pvc_requested_size_bytes: "{{ pvc_requested_size_response.json.data.result[0].value[1] | float }}"
+        pvc_used_size_bytes: "{{ pvc_used_size_response.json.data.result[0].value[1] | float }}"
+        pvc_requested_size_megabytes: "{{ (pvc_requested_size_response.json.data.result[0].value[1] | float) / 1048576 | round | int }}"
+        pvc_used_size_megabytes: "{{ ((pvc_used_size_response.json.data.result[0].value[1] | float) / 1048576) | round | int }}"
+        pvc_requested_size_gigabytes: "{{ (pvc_requested_size_response.json.data.result[0].value[1] | float) / 1073741824 | round | int }}"
+        pvc_used_size_gigabytes: "{{ ((pvc_used_size_response.json.data.result[0].value[1] | float) / 1073741824) | round | int }}"
