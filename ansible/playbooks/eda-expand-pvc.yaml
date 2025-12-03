@@ -316,6 +316,7 @@
 
         - name: Set facts for thresholds
           ansible.builtin.set_fact:
+            pvc_used_percentage: "{{ ((pvc_used_size_bytes | int) / (pvc_requested_size_bytes | int) * 100) | round | int }}"
             above_warning_threshold: "{{ (((pvc_used_size_bytes | int) / (pvc_requested_size_bytes | int) * 100) | round | int) > warning_threshold_percentage }}"
             above_critical_threshold: "{{ (((pvc_used_size_bytes | int) / (pvc_requested_size_bytes | int) * 100) | round | int) > critical_threshold_percentage }}"
 
@@ -342,6 +343,7 @@
               - "pvc_used_size_megabytes: {{ pvc_used_size_megabytes }} Mi"
               - "pvc_used_size_gigabytes: {{ pvc_used_size_gigabytes }} Gi"
               - "pvc_size_type: {{ pvc_size_type }}"
+              - "pvc_used_percentage: {{ pvc_used_percentage }} %"
               - "above_warning_threshold: {{ above_warning_threshold }}"
               - "above_critical_threshold: {{ above_critical_threshold }}"
               - "finalAction: {{ finalAction | default('none') }}"
