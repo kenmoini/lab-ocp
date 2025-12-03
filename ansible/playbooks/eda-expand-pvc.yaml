@@ -153,9 +153,9 @@
     - name: Check if auto-expansion is disabled by any label
       ansible.builtin.assert:
         that:
-          - disabledByPVCLabel | bool
-          - disabledByNamespaceLabel | bool
-          - disabledByStorageClassLabel | bool
+          - disabledByPVCLabel | toLower != 'true'
+          - disabledByNamespaceLabel | toLower != 'true'
+          - disabledByStorageClassLabel | toLower != 'true'
         fail_msg: "Auto-expansion is disabled for this PVC by one of the labels."
 
 

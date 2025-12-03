@@ -16,6 +16,29 @@ rules:
     resources:
       - persistentvolumeclaims
       - persistentvolumes
+
+  - verbs:
+      - get
+      - list
+      - watch
+    apiGroups:
+      - storage.k8s.io
+    resources:
+      - storageclasses
+
+  - verbs:
+      - get
+    apiGroups:
+      - ""
+    resources:
+      - namespaces
+
+  - verbs:
+      - get
+    apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
 ---
 apiVersion: v1
 kind: Secret
