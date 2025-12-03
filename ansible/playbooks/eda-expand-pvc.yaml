@@ -323,6 +323,12 @@
             finalAction: expand
             resized_volume_size_bytes: "{{ ((pvc_requested_size_bytes | int) + ( ((pvc_requested_size_bytes | int) / 100) * base_expansion_increment_percentage )) | round | int }}"
 
+        - name: Additional expanded sizing facts
+          when: finalAction == "expand"
+          ansible.builtin.set_fact:
+            resized_volume_size_megabytes: "{{ (( resized_volume_size_bytes | int ) / 1048576) | round(1) | int }}"
+            resized_volume_size_gigabytes: "{{ (( resized_volume_size_bytes | int ) / 1073741824) | round(1) }}"
+
         - name: Debug final facts
           when: debug_output | bool
           ansible.builtin.debug:
@@ -338,11 +344,11 @@
               - "above_critical_threshold: {{ above_critical_threshold }}"
               - "finalAction: {{ finalAction | default('none') }}"
               - "resized_volume_size_bytes: {{ resized_volume_size_bytes | default('N/A') }} bytes"
-              - "resized_volume_size_megabytes: {{ (( resized_volume_size_bytes | int ) / 1048576) | round(1) | int | default('N/A') }} Mi"
-              - "resized_volume_size_gigabytes: {{ (( resized_volume_size_bytes | int ) / 1073741824) | round(1) | default('N/A') }} Gi"
+              - "resized_volume_size_megabytes: {{ resized_volume_size_megabytes | default('N/A') }} Mi"
+              - "resized_volume_size_gigabytes: {{ resized_volume_size_gigabytes | default('N/A') }} Gi"
 
         # - name: Expand the PVC
-        #   when: finalAction == "expand"
+        #   when: finalAction == "expand" and pvc_size_type in ['Mi', 'Gi']
         #   kubernetes.core.k8s:
         #     definition:
         #       apiVersion: v1
@@ -353,7 +359,7 @@
         #       spec:
         #         resources:
         #           requests:
-        #             storage: "{{ resized_volume_size_bytes }}"
+        #             storage: "{{ resized_volume_size_megabytes + 'Mi' if pvc_size_type == 'Mi' else resized_volume_size_gigabytes + 'Gi' }}"
 
 # - name: Maths
 #   hosts: localhost
