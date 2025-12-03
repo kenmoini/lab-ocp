@@ -344,11 +344,11 @@
               - "above_critical_threshold: {{ above_critical_threshold }}"
               - "finalAction: {{ finalAction | default('none') }}"
               - "resized_volume_size_bytes: {{ resized_volume_size_bytes | default('N/A') }} bytes"
-              - "resized_volume_size_megabytes: {{ resized_volume_size_megabytes | default('N/A') }} Mi"
-              - "resized_volume_size_gigabytes: {{ resized_volume_size_gigabytes | default('N/A') }} Gi"
+              - "resized_volume_size_megabytes: {{ resized_volume_size_megabytes | default('N/A') }}Mi"
+              - "resized_volume_size_gigabytes: {{ resized_volume_size_gigabytes | default('N/A') }}Gi"
 
-        - name: Expand the PV
-          when: finalAction == "expand" and pvc_size_type in ['Mi', 'Gi']
+        - name: Expand the PV - Gi
+          when: finalAction == "expand" and pvc_size_type == 'Gi'
           kubernetes.core.k8s:
             definition:
               apiVersion: v1
@@ -357,10 +357,22 @@
                 name: "{{ pv_info.resources[0].metadata.name }}"
               spec:
                 capacity:
-                  storage: "{{ resized_volume_size_megabytes + 'Mi' if pvc_size_type == 'Mi' else resized_volume_size_gigabytes + 'Gi' }}"
+                  storage: "{{ resized_volume_size_gigabytes }}Gi"
 
-        - name: Expand the PVC
-          when: finalAction == "expand" and pvc_size_type in ['Mi', 'Gi']
+        - name: Expand the PV - Mi
+          when: finalAction == "expand" and pvc_size_type == 'Mi'
+          kubernetes.core.k8s:
+            definition:
+              apiVersion: v1
+              kind: PersistentVolume
+              metadata:
+                name: "{{ pv_info.resources[0].metadata.name }}"
+              spec:
+                capacity:
+                  storage: "{{ resized_volume_size_megabytes }}Mi"
+
+        - name: Expand the PVC - Gi
+          when: finalAction == "expand" and pvc_size_type == 'Gi'
           kubernetes.core.k8s:
             definition:
               apiVersion: v1
@@ -371,7 +383,21 @@
               spec:
                 resources:
                   requests:
-                    storage: "{{ resized_volume_size_megabytes + 'Mi' if pvc_size_type == 'Mi' else resized_volume_size_gigabytes + 'Gi' }}"
+                    storage: "{{ resized_volume_size_gigabytes }}Gi"
+
+        - name: Expand the PVC - Mi
+          when: finalAction == "expand" and pvc_size_type == 'Mi'
+          kubernetes.core.k8s:
+            definition:
+              apiVersion: v1
+              kind: PersistentVolumeClaim
+              metadata:
+                namespace: "{{ ansible_eda.event.alert.labels.namespace }}"
+                name: "{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}"
+              spec:
+                resources:
+                  requests:
+                    storage: "{{ resized_volume_size_megabytes }}Mi"
 
 # - name: Maths
 #   hosts: localhost
