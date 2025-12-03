@@ -1,4 +1,17 @@
 ---
+# Ansible Playbook to expand PVCs based on EDA events
+# Supports opt-in and opt-out modes via labels on PVC, Namespace, or StorageClass
+# In Opt-Out mode (default), all PVCs are eligible unless labeled to prevent expansion
+# In Opt-In mode, only PVCs labeled to enable expansion are eligible
+# Labels can also specify expansion increment percentage
+# Labels:
+#   eda.kemo.dev/auto-expand-enabled: "true"  # Enables auto-expansion (Opt-In mode)
+#   eda.kemo.dev/auto-expand-disabled: "true" # Disables auto-expansion (Opt-Out mode)
+#   eda.kemo.dev/auto-expand-increment-gi: "15" # Sets expansion increment percentage
+# Precedence of labels: PVC > Namespace > StorageClass
+# Ie, PVC labels override Namespace and StorageClass labels
+# In Opt-Out mode, any label set to disable auto-expansion takes precedence but PVC label has highest precedence and can re-enable it
+# In Opt-In mode, any label set to enable auto-expansion takes precedence but PVC label has highest precedence and can disable it
 - name: EDA - PVC Expansion
   hosts: all
   connection: local
@@ -6,7 +19,9 @@
 
   vars:
     debug_output: true
+    operation_mode: "opt-out"  # "opt-in" or "opt-out"
     expansion_increment_percentage: 10
+    auto_expand_enable_label: "eda.kemo.dev/auto-expand-enabled"
     auto_expand_prevent_label: "eda.kemo.dev/auto-expand-disabled"
     auto_expand_increment_label: "eda.kemo.dev/auto-expand-increment-gi"
 
@@ -19,6 +34,9 @@
       block:
         - name: Set override facts
           ansible.builtin.set_fact:
+            enabledByPVCLabel: "false"
+            enabledByNamespaceLabel: "false"
+            enabledByStorageClassLabel: "false"
             disabledByPVCLabel: "false"
             disabledByNamespaceLabel: "false"
             disabledByStorageClassLabel: "false"
@@ -92,7 +110,7 @@
       ansible.builtin.debug:
         var: pv_info
 
-    - name: Make sure we have all the target resources
+    - name: Make sure we have all the target resources - prevents weird finalizer issues
       ansible.builtin.assert:
         that:
           - pvc_info.resources | length > 0
@@ -106,7 +124,7 @@
           - (sc_info.resources[0].allowVolumeExpansion | default(false)) | bool
         fail_msg: "The StorageClass {{ pv_info.resources[0].spec.storageClassName }} does not allow volume expansion. Cannot proceed."
 
-    - name: Check if the PVC has a label to prevent auto-expansion
+    - name: Check if the PVC has a label to enable/prevent auto-expansion
       when: pvc_info.resources[0].metadata.labels is defined
       block:
         - name: Set PVC auto expand prevent fact
@@ -114,12 +132,17 @@
           ansible.builtin.set_fact:
             disabledByPVCLabel: "{{ pvc_info.resources[0].metadata.labels[auto_expand_prevent_label] | default('false') }}"
 
+        - name: Set PVC auto expand enable fact
+          when: pvc_info.resources[0].metadata.labels is defined and pvc_info.resources[0].metadata.labels[auto_expand_enable_label] is defined
+          ansible.builtin.set_fact:
+            enabledByPVCLabel: "{{ pvc_info.resources[0].metadata.labels[auto_expand_enable_label] | default('false') }}"
+
         - name: Set PVC expansion increment fact
           when: pvc_info.resources[0].metadata.labels is defined and pvc_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
           ansible.builtin.set_fact:
             base_expansion_increment_percentage: "{{ pvc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(expansion_increment_percentage) }}"
 
-    - name: Check if the Namespace has a label to prevent auto-expansion
+    - name: Check if the Namespace has a label to enable/prevent auto-expansion
       when: ns_info.resources[0].metadata.labels is defined
       block:
         - name: Set Namespace auto expand prevent fact
@@ -127,87 +150,185 @@
           ansible.builtin.set_fact:
             disabledByNamespaceLabel: "{{ ns_info.resources[0].metadata.labels[auto_expand_prevent_label] | default('false') }}"
 
+        - name: Set Namespace auto expand enable fact
+          when: ns_info.resources[0].metadata.labels is defined and ns_info.resources[0].metadata.labels[auto_expand_enable_label] is defined
+          ansible.builtin.set_fact:
+            enabledByNamespaceLabel: "{{ ns_info.resources[0].metadata.labels[auto_expand_enable_label] | default('false') }}"
+
         - name: Set Namespace expansion increment fact
           when: ns_info.resources[0].metadata.labels is defined and ns_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
           ansible.builtin.set_fact:
             base_expansion_increment_percentage: "{{ ns_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_percentage) }}"
 
-    - name: Check if the StorageClass has a label to prevent auto-expansion
+    - name: Check if the StorageClass has a label to enable/prevent auto-expansion
       when: sc_info.resources[0].metadata.labels is defined
       block:
         - name: Set StorageClass auto expand prevent fact
           when: sc_info.resources[0].metadata.labels is defined and sc_info.resources[0].metadata.labels[auto_expand_prevent_label] is defined
           ansible.builtin.set_fact:
             disabledByStorageClassLabel: "{{ sc_info.resources[0].metadata.labels[auto_expand_prevent_label] | default('false') }}"
+            
+        - name: Set StorageClass auto expand enable fact
+          when: sc_info.resources[0].metadata.labels is defined and sc_info.resources[0].metadata.labels[auto_expand_enable_label] is defined
+          ansible.builtin.set_fact:
+            enabledByStorageClassLabel: "{{ sc_info.resources[0].metadata.labels[auto_expand_enable_label] | default('false') }}"
 
         - name: Set StorageClass expansion increment fact
           when: sc_info.resources[0].metadata.labels is defined and sc_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
           ansible.builtin.set_fact:
             base_expansion_increment_percentage: "{{ sc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_percentage) }}"
 
+    - name: Check if auto-expansion is disabled by any label when in opt-out mode
+      when: operation_mode == "opt-out"
+      block:
+        - name: Set determined action fact
+          ansible.builtin.set_fact:
+            determinedAction: expand
+
+        - name: Set StorageClass disable takes precedence
+          when: disabledByStorageClassLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: noexpand
+
+        - name: Set Namespace disable takes precedence
+          when: disabledByNamespaceLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: noexpand
+
+        - name: Set Namespace enable takes precedence over StorageClass disable
+          when: enabledByNamespaceLabel | lower == 'true' and disabledByStorageClassLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: expand
+
+        - name: Set PVC disable takes precedence
+          when: disabledByPVCLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: noexpand
+        - name: Set PVC enable takes precedence over Namespace disable
+          when: enabledByPVCLabel | lower == 'true' and disabledByNamespaceLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: expand
+            
+
+    - name: Check if auto-expansion is enabled by any label when in opt-in mode
+      when: operation_mode == "opt-in"
+      block:
+        - name: Set determined action fact
+          ansible.builtin.set_fact:
+            determinedAction: noexpand
+            
+        - name: Set StorageClass enable takes precedence
+          when: enabledByStorageClassLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: expand
+
+        - name: Set Namespace enable takes precedence
+          when: enabledByNamespaceLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: expand
+
+        - name: Set Namespace disable takes precedence over StorageClass enable
+          when: disabledByNamespaceLabel | lower == 'true' and enabledByStorageClassLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: noexpand
+
+        - name: Set PVC enable takes precedence
+          when: enabledByPVCLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: expand
+
+        - name: Set PVC disable takes precedence over Namespace enable
+          when: disabledByPVCLabel | lower == 'true' and enabledByNamespaceLabel | lower == 'true'
+          ansible.builtin.set_fact:
+            determinedAction: noexpand
+
     - name: Debug determined facts
       when: debug_output | bool
       ansible.builtin.debug:
         msg:
+          - "operation_mode: {{ operation_mode }}"
+          - "enabledByPVCLabel: {{ enabledByPVCLabel }}"
+          - "enabledByNamespaceLabel: {{ enabledByNamespaceLabel }}"
+          - "enabledByStorageClassLabel: {{ enabledByStorageClassLabel }}"
           - "disabledByPVCLabel: {{ disabledByPVCLabel }}"
           - "disabledByNamespaceLabel: {{ disabledByNamespaceLabel }}"
           - "disabledByStorageClassLabel: {{ disabledByStorageClassLabel }}"
           - "base_expansion_increment_percentage: {{ base_expansion_increment_percentage }}"
+          - "determinedAction: {{ determinedAction }}"
 
-    - name: Check if auto-expansion is disabled by any label
-      ansible.builtin.assert:
-        that:
-          - disabledByPVCLabel | lower != 'true'
-          - disabledByNamespaceLabel | lower != 'true'
-          - disabledByStorageClassLabel | lower != 'true'
-        fail_msg: "Auto-expansion is disabled for this PVC by one of the labels."
+    - name: Proceed with expansion if determinedAction is expand
+      when: determinedAction == "expand"
+      block:
+        - name: Get the Thanos Route
+          kubernetes.core.k8s_info:
+            api_version: route.openshift.io/v1
+            kind: Route
+            namespace: openshift-monitoring
+            name: thanos-querier
+          register: thanos_route_info
 
-    - name: Get the Thanos Route
-      kubernetes.core.k8s_info:
-        api_version: route.openshift.io/v1
-        kind: Route
-        namespace: openshift-monitoring
-        name: thanos-querier
-      register: thanos_route_info
+        - name: Debug Thanos Route info
+          when: debug_output | bool
+          ansible.builtin.debug:
+            var: thanos_route_info
 
-    - name: Debug Thanos Route info
-      when: debug_output | bool
-      ansible.builtin.debug:
-        var: thanos_route_info
+        - name: Use the token to query the Thanos API for the current PVC requested size
+          ansible.builtin.uri:
+            url: "https://{{ thanos_route_info.resources[0].spec.host }}/api/v1/query?query=kube_persistentvolumeclaim_resource_requests_storage_bytes%7Bnamespace%3D%22{{ ansible_eda.event.alert.labels.namespace }}%22%2Cpersistentvolumeclaim%3D%22{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}%22%7D"
+            method: GET
+            headers:
+              Authorization: "Bearer {{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
+            validate_certs: false
+          register: pvc_requested_size_response
 
-    - name: Use the token to query the Thanos API for the current PVC requested size
-      ansible.builtin.uri:
-        url: "https://{{ thanos_route_info.resources[0].spec.host }}/api/v1/query?query=kube_persistentvolumeclaim_resource_requests_storage_bytes%7Bnamespace%3D%22{{ ansible_eda.event.alert.labels.namespace }}%22%2Cpersistentvolumeclaim%3D%22{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}%22%7D"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
-        validate_certs: false
-      register: pvc_requested_size_response
+        - name: Debug Thanos query response
+          when: debug_output | bool
+          ansible.builtin.debug:
+            var: pvc_requested_size_response
 
-    - name: Debug Thanos query response
-      when: debug_output | bool
-      ansible.builtin.debug:
-        var: pvc_requested_size_response
+        - name: Use the token to query the Thanos API for the current PVC consumption
+          ansible.builtin.uri:
+            url: "https://{{ thanos_route_info.resources[0].spec.host }}/api/v1/query?query=kubelet_volume_stats_used_bytes%7Bnamespace%3D%22{{ ansible_eda.event.alert.labels.namespace }}%22%2Cpersistentvolumeclaim%3D%22{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}%22%7D"
+            method: GET
+            headers:
+              Authorization: "Bearer {{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
+            validate_certs: false
+          register: pvc_used_size_response
 
-    - name: Use the token to query the Thanos API for the current PVC consumption
-      ansible.builtin.uri:
-        url: "https://{{ thanos_route_info.resources[0].spec.host }}/api/v1/query?query=kubelet_volume_stats_used_bytes%7Bnamespace%3D%22{{ ansible_eda.event.alert.labels.namespace }}%22%2Cpersistentvolumeclaim%3D%22{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}%22%7D"
-        method: GET
-        headers:
-          Authorization: "Bearer {{ lookup('ansible.builtin.env', 'K8S_AUTH_API_KEY') }}"
-        validate_certs: false
-      register: pvc_used_size_response
+        - name: Debug Thanos query response
+          when: debug_output | bool
+          ansible.builtin.debug:
+            var: pvc_used_size_response
 
-    - name: Debug Thanos query response
-      when: debug_output | bool
-      ansible.builtin.debug:
-        var: pvc_used_size_response
+        - name: Set facts for sizes
+          ansible.builtin.set_fact:
+            pvc_requested_size_bytes: "{{ pvc_requested_size_response.json.data.result[0].value[1] | float }}"
+            pvc_used_size_bytes: "{{ pvc_used_size_response.json.data.result[0].value[1] | float }}"
+            pvc_size_type: "{{ pvc_info.resources[0].spec.resources.requests.storage | regex_replace('[0-9]+', '') }}"
+            pvc_requested_size_megabytes: "{{ (pvc_requested_size_response.json.data.result[0].value[1] | float) / 1048576 | round | int }}"
+            pvc_used_size_megabytes: "{{ ((pvc_used_size_response.json.data.result[0].value[1] | float) / 1048576) | round | int }}"
+            pvc_requested_size_gigabytes: "{{ (pvc_requested_size_response.json.data.result[0].value[1] | float) / 1073741824 | round | int }}"
+            pvc_used_size_gigabytes: "{{ ((pvc_used_size_response.json.data.result[0].value[1] | float) / 1073741824) | round | int }}"
 
-    - name: Set facts for sizes
-      ansible.builtin.set_fact:
-        pvc_requested_size_bytes: "{{ pvc_requested_size_response.json.data.result[0].value[1] | float }}"
-        pvc_used_size_bytes: "{{ pvc_used_size_response.json.data.result[0].value[1] | float }}"
-        pvc_requested_size_megabytes: "{{ (pvc_requested_size_response.json.data.result[0].value[1] | float) / 1048576 | round | int }}"
-        pvc_used_size_megabytes: "{{ ((pvc_used_size_response.json.data.result[0].value[1] | float) / 1048576) | round | int }}"
-        pvc_requested_size_gigabytes: "{{ (pvc_requested_size_response.json.data.result[0].value[1] | float) / 1073741824 | round | int }}"
-        pvc_used_size_gigabytes: "{{ ((pvc_used_size_response.json.data.result[0].value[1] | float) / 1073741824) | round | int }}"
+# - name: Maths
+#   hosts: localhost
+#   gather_facts: false
+#   vars:
+#     increment_percentage: 10
+#     current_size: 1073741824
+#     current_used: 812675072
+
+#   tasks:
+#   - name: Debug calculation
+#     ansible.builtin.debug:
+#       msg:
+#         - "Current size: {{ current_size }} bytes"
+#         - "Current size in Gi: {{ (current_size / 1048576 / 1024 ) | round | int }}Gi"
+#         - "Current used: {{ current_used }} bytes"
+#         - "Current used in Gi: {{ (current_used / 1048576 / 1024) | round | int }}Gi"
+#         - "Consumed percentage: {{ (current_used / current_size * 100) | round | int }}%"
+#         - "Above Warning Threshold: {{ ((current_used / current_size * 100) | round | int) > 75 }}"
+#         - "Above Critical Threshold: {{ ((current_used / current_size * 100) | round | int) > 85 }}"
+#         - "Increment Percentage: {{ increment_percentage }}%"
+#         - "New Size in Gi: {{ ((current_size + ( (current_size / 100) * increment_percentage )) )  / 1048576 / 1024 | round | int }}Gi"
+#         - "New Size in Bytes: {{ (current_size + ( (current_size / 100) * increment_percentage )) | round | int }} bytes"
