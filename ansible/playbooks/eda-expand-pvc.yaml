@@ -338,8 +338,8 @@
               - "above_critical_threshold: {{ above_critical_threshold }}"
               - "finalAction: {{ finalAction | default('none') }}"
               - "resized_volume_size_bytes: {{ resized_volume_size_bytes | default('N/A') }} bytes"
-              - "resized_volume_size_megabytes: {{ (( resized_volume_size_bytes | int ) / 1048576) | round | int | default('N/A') }} Mi"
-              - "resized_volume_size_gigabytes: {{ (( resized_volume_size_bytes | int ) / 1073741824) | round | int | default('N/A') }} Gi"
+              - "resized_volume_size_megabytes: {{ (( resized_volume_size_bytes | int ) / 1048576) | round(1) | int | default('N/A') }} Mi"
+              - "resized_volume_size_gigabytes: {{ (( resized_volume_size_bytes | int ) / 1073741824) | round(1) | int | default('N/A') }} Gi"
 
         # - name: Expand the PVC
         #   when: finalAction == "expand"
