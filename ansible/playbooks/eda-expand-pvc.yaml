@@ -417,5 +417,5 @@
 #         - "Above Warning Threshold: {{ ((current_used / current_size * 100) | round | int) > 75 }}"
 #         - "Above Critical Threshold: {{ ((current_used / current_size * 100) | round | int) > 85 }}"
 #         - "Increment Percentage: {{ increment_percentage }}%"
-#         - "New Size in Gi: {{ ((current_size + ( (current_size / 100) * increment_percentage )) )  / 1048576 / 1024 | round | int }}Gi"
+#         - "New Size in Gi: {{ (((current_size + ( (current_size / 100) * increment_percentage )) )  / 1048576 / 1024) | round(0, 'ceil') | int }}Gi"
 #         - "New Size in Bytes: {{ (current_size + ( (current_size / 100) * increment_percentage )) | round | int }} bytes"
