@@ -11,6 +11,10 @@
     auto_expand_increment_label: "eda.kemo.dev/auto-expand-increment-gi"
 
   tasks:
+    - name: Display all environment variables
+      ansible.builtin.debug:
+        var: ansible_env
+
     - name: Set initial facts
       block:
         - name: Set override facts
