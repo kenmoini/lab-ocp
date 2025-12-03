@@ -23,3 +23,15 @@ eda_rulebook_activations:
     enabled: true
     state: present
     log_level: info
+
+  - name: EDA - Auto Expand PVC
+    organization: "{{ global_organization | default('Default') }}"
+    description: Hook to listen for PVC usage alerts and automatically expand PVCs
+    project: lab-ztp-project
+    rulebook: k8s-auto-expand-pvc.yaml
+    decision_environment: lab-ztp-de
+    eda_credentials:
+    - AAP-Hub
+    enabled: true
+    state: present
+    log_level: info

@@ -1,0 +1,17 @@
+---
+- name: EDA - PVC Expansion
+  hosts: all
+  connection: local
+  gather_facts: false
+
+  tasks:
+
+    - name: Check that the EDA variables are present
+      ansible.builtin.assert:
+        that:
+          - ansible_eda is defined
+          - ansible_eda.event is defined
+
+    - name: Debug EDA event
+      ansible.builtin.debug:
+        var: ansible_eda

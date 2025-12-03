@@ -66,6 +66,19 @@ controller_templates:
     credentials:
       - OCP-HubCluster
 
+  - name: EDA - Auto Expand PVC
+    organization: "{{ global_organization }}"
+    job_type: run
+    inventory: LocalAPI
+    execution_environment: ztp-ee
+    project: Lab OpenShift
+    playbook: ansible/playbooks/eda-expand-pvc.yaml
+    become_enabled: false
+    ask_variables_on_launch: true
+    # survey_enabled: true
+    credentials:
+      - OCP-HubCluster
+
   - name: Create Record in PowerDNS
     organization: "{{ global_organization }}"
     job_type: run
