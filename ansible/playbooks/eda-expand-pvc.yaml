@@ -377,31 +377,25 @@
 
         - name: Expand the PVC - Gi
           when: finalAction == "expand" and pvc_size_type == 'Gi'
-          kubernetes.core.k8s:
-            definition:
-              apiVersion: v1
-              kind: PersistentVolumeClaim
-              metadata:
-                namespace: "{{ ansible_eda.event.alert.labels.namespace }}"
-                name: "{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}"
-              spec:
-                resources:
-                  requests:
-                    storage: "{{ resized_volume_size_gigabytes }}Gi"
+          kubernetes.core.k8s_json_patch:
+            kind: PersistentVolumeClaim
+            name: "{{ pvc_info.resources[0].metadata.name }}"
+            namespace: "{{ pvc_info.resources[0].metadata.namespace }}"
+            patch:
+              - op: replace
+                path: /spec/resources/requests/storage
+                value: "{{ resized_volume_size_gigabytes }}Gi"
 
         - name: Expand the PVC - Mi
           when: finalAction == "expand" and pvc_size_type == 'Mi'
-          kubernetes.core.k8s:
-            definition:
-              apiVersion: v1
-              kind: PersistentVolumeClaim
-              metadata:
-                namespace: "{{ ansible_eda.event.alert.labels.namespace }}"
-                name: "{{ ansible_eda.event.alert.labels.persistentvolumeclaim }}"
-              spec:
-                resources:
-                  requests:
-                    storage: "{{ resized_volume_size_megabytes }}Mi"
+          kubernetes.core.k8s_json_patch:
+            kind: PersistentVolumeClaim
+            name: "{{ pvc_info.resources[0].metadata.name }}"
+            namespace: "{{ pvc_info.resources[0].metadata.namespace }}"
+            patch:
+              - op: replace
+                path: /spec/resources/requests/storage
+                value: "{{ resized_volume_size_megabytes }}Mi"
 
 # - name: Maths
 #   hosts: localhost
