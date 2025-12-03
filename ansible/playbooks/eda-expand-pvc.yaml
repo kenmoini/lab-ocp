@@ -5,9 +5,20 @@
   gather_facts: false
 
   vars:
+    debug_output: false
     expansion_increment_gi: 10
+    auto_expand_prevent_label: "eda.kemo.dev/auto-expand-disabled"
+    auto_expand_increment_label: "eda.kemo.dev/auto-expand-increment-gi"
 
   tasks:
+    - name: Set initial facts
+      block:
+        - name: Set override facts
+          ansible.builtin.set_fact:
+            disabledByPVCLabel: "false"
+            disabledByNamespaceLabel: "false"
+            disabledByStorageClassLabel: "false"
+            base_expansion_increment_gi: "{{ expansion_increment_gi }}"
 
     - name: Check that the EDA variables are present
       ansible.builtin.assert:
@@ -24,6 +35,7 @@
           - ansible_eda.event.alert.labels.alertname is defined
 
     - name: Debug EDA event
+      when: debug_output | bool
       ansible.builtin.debug:
         var: ansible_eda
 
@@ -36,8 +48,21 @@
       register: pvc_info
 
     - name: Debug PVC info
+      when: debug_output | bool
       ansible.builtin.debug:
         var: pvc_info
+
+    - name: Get the associated Namespace
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Namespace
+        name: "{{ ansible_eda.event.alert.labels.namespace }}"
+      register: ns_info
+
+    - name: Debug Namespace info
+      when: debug_output | bool
+      ansible.builtin.debug:
+        var: ns_info
 
     - name: Get the associated StorageClass
       kubernetes.core.k8s_info:
@@ -47,6 +72,7 @@
       register: sc_info
 
     - name: Debug StorageClass info
+      when: debug_output | bool
       ansible.builtin.debug:
         var: sc_info
 
@@ -58,5 +84,68 @@
       register: pv_info
 
     - name: Debug PersistentVolume info
+      when: debug_output | bool
       ansible.builtin.debug:
         var: pv_info
+
+    - name: Make sure we have all the target resources
+      ansible.builtin.assert:
+        that:
+          - pvc_info.resources | length > 0
+          - ns_info.resources | length > 0
+          - sc_info.resources | length > 0
+          - pv_info.resources | length > 0
+
+    - name: Check if the StorageClass allows volume expansion
+      ansible.builtin.assert:
+        that:
+          - (sc_info.resources[0].allowVolumeExpansion | default(false)) | bool
+        fail_msg: "The StorageClass {{ pv_info.resources[0].spec.storageClassName }} does not allow volume expansion. Cannot proceed."
+
+    - name: Check if the PVC has a label to prevent auto-expansion
+      when: pvc_info.resources[0].metadata.labels is defined
+      block:
+        - name: Set PVC auto expand prevent fact
+          when: pvc_info.resources[0].metadata.labels is defined and pvc_info.resources[0].metadata.labels[auto_expand_prevent_label] is defined
+          ansible.builtin.set_fact:
+            disabledByPVCLabel: "{{ pvc_info.resources[0].metadata.labels[auto_expand_prevent_label] | default('false') }}"
+
+        - name: Set PVC expansion increment fact
+          when: pvc_info.resources[0].metadata.labels is defined and pvc_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
+          ansible.builtin.set_fact:
+            base_expansion_increment_gi: "{{ pvc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(expansion_increment_gi) }}"
+
+    - name: Check if the Namespace has a label to prevent auto-expansion
+      when: ns_info.resources[0].metadata.labels is defined
+      block:
+        - name: Set Namespace auto expand prevent fact
+          when: ns_info.resources[0].metadata.labels is defined and ns_info.resources[0].metadata.labels[auto_expand_prevent_label] is defined
+          ansible.builtin.set_fact:
+            disabledByNamespaceLabel: "{{ ns_info.resources[0].metadata.labels[auto_expand_prevent_label] | default('false') }}"
+
+        - name: Set Namespace expansion increment fact
+          when: ns_info.resources[0].metadata.labels is defined and ns_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
+          ansible.builtin.set_fact:
+            base_expansion_increment_gi: "{{ ns_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_gi) }}"
+
+    - name: Check if the StorageClass has a label to prevent auto-expansion
+      when: sc_info.resources[0].metadata.labels is defined
+      block:
+        - name: Set StorageClass auto expand prevent fact
+          when: sc_info.resources[0].metadata.labels is defined and sc_info.resources[0].metadata.labels[auto_expand_prevent_label] is defined
+          ansible.builtin.set_fact:
+            disabledByStorageClassLabel: "{{ sc_info.resources[0].metadata.labels[auto_expand_prevent_label] | default('false') }}"
+
+        - name: Set StorageClass expansion increment fact
+          when: sc_info.resources[0].metadata.labels is defined and sc_info.resources[0].metadata.labels[auto_expand_increment_label] is defined
+          ansible.builtin.set_fact:
+            base_expansion_increment_gi: "{{ sc_info.resources[0].metadata.labels[auto_expand_increment_label] | default(base_expansion_increment_gi) }}"
+
+    - name: Debug determined facts
+      when: debug_output | bool
+      ansible.builtin.debug:
+        msg:
+          - "disabledByPVCLabel: {{ disabledByPVCLabel }}"
+          - "disabledByNamespaceLabel: {{ disabledByNamespaceLabel }}"
+          - "disabledByStorageClassLabel: {{ disabledByStorageClassLabel }}"
+          - "base_expansion_increment_gi: {{ base_expansion_increment_gi }}"
