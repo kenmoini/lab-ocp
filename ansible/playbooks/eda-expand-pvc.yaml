@@ -36,6 +36,8 @@
       block:
         - name: Set override facts
           ansible.builtin.set_fact:
+            finalAction: "none"
+            determinedAction: "none"
             enabledByPVCLabel: "false"
             enabledByNamespaceLabel: "false"
             enabledByStorageClassLabel: "false"
