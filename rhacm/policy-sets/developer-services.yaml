@@ -13,4 +13,5 @@ spec:
     - operators-serverless
     - operators-authorino
     - operators-rhoai
+    - operators-dev-hub
 

@@ -12,6 +12,7 @@ resources:
   - compliance.yaml
   - cost-management-metrics.yaml
   - descheduler.yaml
+  - dev-hub.yaml
   - devspaces.yaml
   - community-eso.yaml
   - far.yaml
