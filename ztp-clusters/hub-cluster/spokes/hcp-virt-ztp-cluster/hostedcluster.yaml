@@ -18,6 +18,7 @@ spec:
           storageClassName: ocs-storagecluster-ceph-rbd
         type: PersistentVolume
     managementType: Managed
+  channel: stable-4.19
   release:
     image: quay.io/openshift-release-dev/ocp-release:4.19.0-multi
   pullSecret:

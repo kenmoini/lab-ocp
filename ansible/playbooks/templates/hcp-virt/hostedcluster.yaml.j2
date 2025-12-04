@@ -24,6 +24,7 @@ spec:
     managementType: Managed
   release:
     image: {{ hcp_release_image }}
+  channel: {{ hcp_release_channel }}
   pullSecret:
     name: pullsecret-{{ hcp_cluster_name }}
   sshKey:
