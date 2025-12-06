@@ -18,7 +18,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: low
-          object-templates:
+          object-templates-raw: |
             - complianceType: musthave
               objectDefinition:
                 kind: ConfigMap
@@ -41,6 +41,12 @@ spec:
                         systemd: {}
                         tcpstat: {}
                     alertmanagerMain:
+                      enableUserAlertmanagerConfig: true
+                      nodeSelector:
+                        node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+                      tolerations:
+                        - operator: Exists
+                          key: node-role.kubernetes.io/infra
                       volumeClaimTemplate:
                         spec:
                           storageClassName: ocs-storagecluster-cephfs
@@ -48,6 +54,11 @@ spec:
                             requests:
                               storage: 10Gi
                     prometheusK8s:
+                      nodeSelector:
+                        node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+                      tolerations:
+                        - operator: Exists
+                          key: node-role.kubernetes.io/infra
                       volumeClaimTemplate:
                         spec:
                           storageClassName: ocs-storagecluster-cephfs
@@ -69,4 +80,15 @@ spec:
                           insecureSkipVerify: false
                       externalLabels:
                         managed_cluster: {{hub index .ManagedClusterLabels "clusterID" hub}}
+                        instance_name: {{ $n := split "." (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.apiServerURL }}{{ $n._1 }}
+                        product: {{ fromClusterClaim "product.open-cluster-management.io" }}
 
+            {{/* ##  group all remaining components together since the only config is for infra nodes  ## */}}
+            {{- range $key := (list "prometheusOperator" "kubeStateMetrics" "openshiftStateMetrics" "telemeterClient" "thanosQuerier")}}
+                    {{ $key }}:
+                      nodeSelector:
+                        node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+                      tolerations:
+                        - operator: Exists
+                          key: node-role.kubernetes.io/infra
+            {{- end }}
