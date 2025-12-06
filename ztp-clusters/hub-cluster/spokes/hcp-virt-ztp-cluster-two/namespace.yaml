@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hcp-virt-ztp-cluster-two
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hcp-virt-ztp-cluster-two-infra
