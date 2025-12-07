@@ -74,7 +74,7 @@ spec:
         syncOptions:
           - CreateNamespace=true
           - SkipDryRunOnMissingResource=true
-          - ServerSideApply=true
+          # - ServerSideApply=true
           - RespectIgnoreDifferences=true
           - ApplyOutOfSyncOnly=true
           - Validate=false
