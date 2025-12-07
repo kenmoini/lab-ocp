@@ -19,7 +19,7 @@ spec:
                 namespace: kyverno
                 helmRepoURL: 'https://kyverno.github.io/kyverno'
                 helmChartName: kyverno
-                helmRevision: 3.5.2
+                helmRevision: 3.6.1
   template:
     metadata:
       name: "{{name}}-{{appName}}"
