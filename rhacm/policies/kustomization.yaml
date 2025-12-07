@@ -6,6 +6,7 @@ namespace: open-cluster-management-policies
 
 resources:
   - namespace.yaml
+  - global-base-namespaces.yaml
   - root-ca.yaml
 
   # Health Signals
