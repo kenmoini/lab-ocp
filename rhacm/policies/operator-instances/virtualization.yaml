@@ -343,7 +343,29 @@ spec:
                     #           resources:
                     #             requests:
                     #               storage: 30Gi
+
     - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: truenas-nfs-sc-check
+        spec:
+          remediationAction: inform
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: storage.k8s.io/v1
+                kind: StorageClass
+                metadata:
+                  name: truenas-nfs-csi
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: truenas-nfs-sc-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:

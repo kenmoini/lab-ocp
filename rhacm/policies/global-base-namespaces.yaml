@@ -27,3 +27,21 @@ spec:
                 kind: Namespace
                 metadata:
                   name: netobserv
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gbns-openshift-operators
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: openshift-operators
+                  labels:
+                    openshift.io/cluster-monitoring: "true"
