@@ -63,4 +63,4 @@ spec:
           - ServerSideApply=true
           - RespectIgnoreDifferences=true
         retry:
-          limit: 2
+          limit: 5

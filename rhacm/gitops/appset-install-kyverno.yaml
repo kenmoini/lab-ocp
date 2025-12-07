@@ -29,11 +29,11 @@ spec:
     spec:
       ignoreDifferences:
         - group: apiextensions.k8s.io
-          jsonPointers:
-            - /status
-            - /status/storedVersions
-            - /status/storedVersions/0
-            - /status/storedVersions/1
+          # jsonPointers:
+          #   - /status
+          #   - /status/storedVersions
+          #   - /status/storedVersions/0
+          #   - /status/storedVersions/1
           kind: CustomResourceDefinition
       project: default
       sources:
@@ -78,4 +78,4 @@ spec:
           - RespectIgnoreDifferences=true
           - ApplyOutOfSyncOnly=true
         retry:
-          limit: 2
+          limit: 5
