@@ -77,5 +77,6 @@ spec:
           - ServerSideApply=true
           - RespectIgnoreDifferences=true
           - ApplyOutOfSyncOnly=true
+          - Validate=false
         retry:
           limit: 5
