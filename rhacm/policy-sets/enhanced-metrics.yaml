@@ -12,3 +12,4 @@ spec:
     - instance-power-monitoring
     - instance-cost-mgmt
     - operators-net-obsv
+    - instance-netobserv
