@@ -9,6 +9,8 @@ resources:
   - loki-format-secret-binding.yaml
   - kube-system_community-eso.yaml
   - kube-system_community-eso_binding.yaml
+  - netobserv-loki.yaml
+  - netobserv-loki-binding.yaml
   - open-cluster-management-observability-all-openshift-clusters.yaml
   - open-cluster-management-observability-all-openshift-clusters-binding.yaml
 
