@@ -43,7 +43,7 @@ spec:
                 apiVersion: objectbucket.io/v1alpha1
                 kind: ObjectBucketClaim
                 metadata:
-                  name: loki
+                  name: netobserv-loki
                   namespace: netobserv
                 spec:
                   additionalConfig:
