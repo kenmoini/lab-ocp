@@ -17,9 +17,11 @@ resources:
   #- lso.yaml
   - metallb.yaml
   - mtv.yaml
+  - network-observability.yaml
   - nfd.yaml
   - nmstate.yaml
   - nvidia-gpu.yaml
+  - openshift-logging.yaml
   #- odf.yaml
   - power-monitoring.yaml
   - virtualization.yaml

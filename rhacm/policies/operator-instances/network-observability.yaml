@@ -1,0 +1,110 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-netobserv
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Installs the Red Hat OpenShift Network Observability Operator with the Loki Stack
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: netobserv-ns
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: netobserv
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: netobserv-loki-obc
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: loki
+                  namespace: netobserv
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  bucketName: netobserv-loki
+                  objectBucketName: obc-odf-netobserv-loki
+                  storageClassName: openshift-storage.noobaa.io
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: netobserv-lokistack
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: loki.grafana.com/v1
+                kind: LokiStack
+                metadata:
+                  name: netobserv-loki
+                  namespace: netobserv
+                spec:
+                  size: 1x.pico
+                  limits:
+                    global:
+                      retention:
+                        days: 1
+                  storage:
+                    schemas:
+                    - version: v13
+                      effectiveDate: "2025-10-01" 
+                    secret:
+                      name: netobserv-loki-s3
+                      type: s3
+                    tls:
+                      caName: openshift-service-ca.crt
+                      caKey: service-ca.crt
+                  storageClassName: ocs-storagecluster-cephfs
+                  tenants:
+                    mode: openshift-network
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: netobserv-lokistack-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: loki.grafana.com/v1
+                kind: LokiStack
+                metadata:
+                  name: netobserv-loki
+                  namespace: netobserv
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Ready

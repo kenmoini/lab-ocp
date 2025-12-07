@@ -1,0 +1,165 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-ocp-logging
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Installs the Red Hat OpenShift Logging Operator with the Loki Stack
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rh-loki-obc
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: loki
+                  namespace: openshift-logging
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  generateBucketName: loki
+                  objectBucketName: obc-openshift-storage-loki
+                  storageClassName: openshift-storage.noobaa.io
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rh-loki-6.3-lokistack
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: loki.grafana.com/v1
+                kind: LokiStack
+                metadata:
+                  name: logging-loki 
+                  namespace: openshift-logging 
+                spec:
+                  size: 1x.pico
+                  limits:
+                    global:
+                      retention:
+                        days: 1
+                  storage:
+                    schemas:
+                    - version: v13
+                      effectiveDate: "2025-10-01" 
+                    secret:
+                      name: logging-loki-s3
+                      type: s3
+                    tls:
+                      caName: openshift-service-ca.crt
+                      caKey: service-ca.crt
+                  storageClassName: ocs-storagecluster-cephfs
+                  tenants:
+                    mode: openshift-logging
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rh-loki-6.3-lokistack-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: loki.grafana.com/v1
+                kind: LokiStack
+                metadata:
+                  name: logging-loki
+                  namespace: openshift-logging
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Ready
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: logging-cco-ui-plugin
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: observability.openshift.io/v1alpha1
+                kind: UIPlugin
+                metadata:
+                  name: logging
+                spec:
+                  type: Logging
+                  logging:
+                    lokiStack:
+                      name: logging-loki
+                    logsLimit: 50
+                    timeout: 30s
+                    schema: otel
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: logging-cluster-log-forwarder
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: observability.openshift.io/v1
+                kind: ClusterLogForwarder
+                metadata:
+                  name: local-lokistack
+                  namespace: openshift-logging
+                spec:
+                  collector:
+                    resources:
+                      limits:
+                        memory: 6Gi
+                        cpu: 6
+                      requests:
+                        memory: 2Gi
+                        cpu: 2
+                  serviceAccount:
+                    name: logging-collector
+                  outputs:
+                    - name: local-lokistack
+                      type: lokiStack
+                      lokiStack:
+                        target:
+                          name: logging-loki
+                          namespace: openshift-logging
+                        authentication:
+                          token:
+                            from: serviceAccount
+                      tls:
+                        ca:
+                          key: service-ca.crt
+                          configMapName: openshift-service-ca.crt
+                  pipelines:
+                    - name: infra-app-logs
+                      inputRefs:
+                      - application
+                      - infrastructure
+                      outputRefs:
+                      - local-lokistack
