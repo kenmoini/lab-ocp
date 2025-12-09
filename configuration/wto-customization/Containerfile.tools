@@ -122,7 +122,7 @@ RUN curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli
 
 # Install roxctl
 RUN arch="$(uname -m | sed "s/x86_64//")"; arch="${arch:+-$arch}" && \
-    curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.9.1/bin/Linux/roxctl${arch}"
+    curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.9.1/bin/Linux/roxctl${arch}" && \
     chmod a+x roxctl && \
     mv -v roxctl /usr/local/bin/roxctl
 
