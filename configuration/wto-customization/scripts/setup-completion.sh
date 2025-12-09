@@ -56,3 +56,7 @@ fi
 if command -v istioctl &>/dev/null; then
   istioctl completion bash > $COMPDIR/istioctl
 fi
+
+if command -v roxctl &>/dev/null; then
+  roxctl completion bash > $COMPDIR/roxctl
+fi

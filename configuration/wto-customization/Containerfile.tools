@@ -120,6 +120,12 @@ RUN curl -L https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/late
 RUN curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli/main/scripts/install.sh | bash && \
     mv -v ~/.local/bin/rhoas /usr/local/bin/
 
+# Install roxctl
+RUN arch="$(uname -m | sed "s/x86_64//")"; arch="${arch:+-$arch}" && \
+    curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.9.1/bin/Linux/roxctl${arch}"
+    chmod a+x roxctl && \
+    mv -v roxctl /usr/local/bin/roxctl
+
 # Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash \
     && /usr/local/bin/helm repo add emberstack https://emberstack.github.io/helm-charts \

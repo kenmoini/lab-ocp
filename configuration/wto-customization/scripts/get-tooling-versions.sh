@@ -101,6 +101,11 @@ if command -v butane &>/dev/null; then
   append_ver "butane    |${BUTANE_VER#Butane }     |Butane"
 fi
 
+if command -v roxctl &>/dev/null; then
+  ROXCTL_VER=$(roxctl version)
+  append_ver "roxctl    |${ROXCTL_VER}     |Red Hat OpenShift Advanced Cluster Security CLI (roxctl)"
+fi
+
 JQ_VER=$(jq --version)
 JQ_VER=${JQ_VER#jq-}
 append_ver "jq       |${JQ_VER#v}        |jq"
