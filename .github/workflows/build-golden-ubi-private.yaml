@@ -34,6 +34,10 @@ jobs:
           - linux/amd64
           - linux/arm64
     steps:
+
+      - name: Check out code
+        uses: actions/checkout@v5
+        
       - name: Prepare
         run: |
           platform=${{ matrix.platform }}
@@ -53,9 +57,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Check out code
-        uses: actions/checkout@v5
 
       - name: Docker meta
         id: meta
