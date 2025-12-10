@@ -19,6 +19,8 @@ ENV OC_VERSION=4.19 \
     KN_VERSION=1.17.0-3 \
     KN_WORKFLOW_VERSION=1.36.0 \
     ISTIOCTL_VERSION=1.27.3 \
+    ROXCTL_VERSION=4.9.1 \
+    MILLER_VERSION=6.15.0 \
     OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/${OPERATOR_SDK_VERSION}
 
 USER 0
@@ -122,9 +124,13 @@ RUN curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli
 
 # Install roxctl
 RUN arch="$(uname -m | sed "s/x86_64//")"; arch="${arch:+-$arch}" && \
-    curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/4.9.1/bin/Linux/roxctl${arch}" && \
+    curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/${ROXCTL_VERSION}/bin/Linux/roxctl${arch}" && \
     chmod a+x roxctl && \
     mv -v roxctl /usr/local/bin/roxctl
+
+# # Install Miller (mlr)
+# RUN curl -L https://github.com/johnkerl/miller/releases/download/v${MILLER_VERSION}/miller-${MILLER_VERSION}-linux-amd64.rpm -o /tmp/miller.rpm && \
+#     rpm -ihv /tmp/miller.rpm && rm -f /tmp/miller.rpm
 
 # Install Helm
 RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | bash \
