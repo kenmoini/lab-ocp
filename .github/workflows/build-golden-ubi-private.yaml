@@ -45,8 +45,8 @@ jobs:
 
       - name: Prepare
         run: |
-          sudo mkdir -p /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}:443 && \
-          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}:443/ca.crt
+          sudo mkdir -p /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }} && \
+          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt
           sudo systemctl restart docker
 
       - name: Login to Container Registry
