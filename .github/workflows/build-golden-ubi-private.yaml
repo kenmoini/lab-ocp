@@ -170,3 +170,49 @@ jobs:
       - name: Inspect image
         run: |
           docker buildx imagetools inspect ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.version }}
+
+  scan:
+    runs-on: ubuntu-latest
+    needs:
+      - merge
+    steps:
+
+      - name: Check out code
+        uses: actions/checkout@v5
+
+      - name: Prepare
+        run: |
+          sudo mkdir -p /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }} && \
+          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt && \
+          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /usr/local/share/ca-certificates/kemo-labs.crt && \
+          sudo update-ca-certificates && \
+          sudo systemctl restart docker
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: "${{ env.REGISTRY_HOSTNAME }}"
+          username: "${{ secrets.PRIVATE_REGISTRY_USERNAME }}"
+          password: "${{ secrets.PRIVATE_REGISTRY_TOKEN }}"
+
+      - name: Install roxctl
+        uses: stackrox/roxctl-installer-action@v1
+        with:
+          central-endpoint: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
+          central-token: ${{ secrets.ROX_API_TOKEN }}
+
+      - name: Scan image with roxctl
+        shell: bash
+        env:
+          ROX_ENDPOINT: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
+          ROX_API_TOKEN: ${{ secrets.ROX_API_TOKEN }}
+        run: |
+          roxctl image scan --output=table --image="${{ env.REGISTRY_IMAGE }}:latest"
+
+      - name: Check image with roxctl
+        shell: bash
+        env:
+          ROX_ENDPOINT: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
+          ROX_API_TOKEN: ${{ secrets.ROX_API_TOKEN }}
+        run: |
+          roxctl image check --output=table --image="${{ env.REGISTRY_IMAGE }}:latest"
