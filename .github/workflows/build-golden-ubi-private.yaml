@@ -37,7 +37,7 @@ jobs:
 
       - name: Check out code
         uses: actions/checkout@v5
-        
+
       - name: Prepare
         run: |
           platform=${{ matrix.platform }}
@@ -45,7 +45,7 @@ jobs:
           sudo mkdir -p /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}
           sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt
 
-      - name: Login to Quay Container Registry
+      - name: Login to Container Registry
         uses: docker/login-action@v3
         with:
           registry: "${{ env.REGISTRY_HOSTNAME }}"
@@ -103,6 +103,15 @@ jobs:
     needs:
       - build
     steps:
+
+      - name: Check out code
+        uses: actions/checkout@v5
+
+      - name: Prepare
+        run: |
+          sudo mkdir -p /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}
+          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt
+
       - name: Download digests
         uses: actions/download-artifact@v6
         with:
