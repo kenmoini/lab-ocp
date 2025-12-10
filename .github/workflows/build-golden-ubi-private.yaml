@@ -173,6 +173,9 @@ jobs:
 
   scan:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      security-events: write
     needs:
       - merge
     steps:
