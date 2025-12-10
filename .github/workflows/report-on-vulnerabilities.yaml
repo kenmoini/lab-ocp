@@ -48,7 +48,7 @@ jobs:
       - name: Get Last 3 Tags
         id: get-tags
         run: |
-          tags=$(skopeo list-tags docker://${{ env.REGISTRY }}/${{ env.REPO_NAME }} | jq -r '.Tags[] | select(. | length > 10)' | head -n 3)
+          tags=$(skopeo list-tags docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} | jq -r '.Tags[] | select(. | length > 10)' | head -n 3)
           tag1=$(echo "$tags" | sed -n 1p)
           tag2=$(echo "$tags" | sed -n 2p)
           tag3=$(echo "$tags" | sed -n 3p)
