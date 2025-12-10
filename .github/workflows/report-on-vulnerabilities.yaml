@@ -2,7 +2,9 @@
 
 name: report-on-vulnerabilities
 
-permissions: {}
+permissions:
+  id-token: write
+  security-events: write
 
 on:
   workflow_dispatch: {}
