@@ -47,7 +47,7 @@ jobs:
         run: |
           sudo mkdir -p /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }} && \
           sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt && \
-          sudo cp your-root-ca.crt /usr/local/share/ca-certificates/kemo-labs.crt && \
+          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /usr/local/share/ca-certificates/kemo-labs.crt && \
           sudo update-ca-certificates && \
           sudo systemctl restart docker
 
