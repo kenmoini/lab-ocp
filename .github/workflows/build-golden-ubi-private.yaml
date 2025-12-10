@@ -209,6 +209,20 @@ jobs:
         run: |
           roxctl image scan --output=table --image="${{ env.REGISTRY_IMAGE }}:latest"
 
+      - name: Scan image with roxctl and save to GitHub Artifact
+        shell: bash
+        env:
+          ROX_ENDPOINT: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
+          ROX_API_TOKEN: ${{ secrets.ROX_API_TOKEN }}
+        run: |
+          roxctl image scan --output=sarif --image="${{ env.REGISTRY_IMAGE }}:latest" > results.sarif
+          
+      - name: Upload roxctl scan results to GitHub code scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          category: stackrox-io/main
+          sarif_file: results.sarif
+
       - name: Check image with roxctl
         shell: bash
         env:
