@@ -38,7 +38,7 @@ jobs:
         run: |
           platform=${{ matrix.platform }}
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
-          mkdir -o /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}
+          mkdir -p /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}
           cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt
 
       - name: Login to Quay Container Registry
