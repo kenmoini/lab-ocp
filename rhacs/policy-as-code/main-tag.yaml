@@ -2,6 +2,7 @@ apiVersion: config.stackrox.io/v1alpha1
 kind: SecurityPolicy
 metadata:
   name: main-tag
+  namespace: stackrox
 spec:
   policyName: Main Tag
   description: Alert on deployments with images using tag 'main'

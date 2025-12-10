@@ -82,7 +82,7 @@ spec:
                       route:
                         enabled: true
                         reencrypt:
-                          enabled: false
+                          enabled: true
                     telemetry:
                       enabled: true
                     db:
