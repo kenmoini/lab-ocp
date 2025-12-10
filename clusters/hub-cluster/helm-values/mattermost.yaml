@@ -25,6 +25,10 @@ route:
 
 mysql:
   enabled: true
+  mysqlRootPassword: "notarealrootpassword"
+  mysqlUser: "mattermost"
+  mysqlPassword: "notamattermostpassword"
+
 
 config:
   MM_PLUGINSETTINGS_CLIENTDIRECTORY: "./client/plugins"
@@ -41,6 +45,10 @@ extraInitContainers:
     volumeMounts:
       - mountPath: /client/plugins
         name: mattermost-plugins
+
+serviceAccount:
+  create: true
+  name: mattermost
 
 securityContext:
   fsGroup: 2000

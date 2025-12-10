@@ -5,8 +5,8 @@ metadata:
   # namespace: mattermost
 subjects:
   - kind: ServiceAccount
-    name: default
-    namespace: mattermost
+    name: mattermost
+    # namespace: mattermost
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
