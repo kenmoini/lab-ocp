@@ -1,0 +1,15 @@
+FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
+
+RUN microdnf update -y && \
+    microdnf install -y ca-certificates && \
+    microdnf clean all
+
+# Add Internal Root CAs
+COPY root-ca/* /etc/pki/ca-trust/source/anchors/
+RUN update-ca-trust
+
+# Default to a non-root user
+USER 1001
+
+# Workdir should be not the user's home directory
+WORKDIR /opt/workdir
