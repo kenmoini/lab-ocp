@@ -197,16 +197,17 @@ jobs:
 
       - name: Install roxctl
         uses: stackrox/roxctl-installer-action@v1
-        with:
-          central-endpoint: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
-          central-token: ${{ secrets.ROX_API_TOKEN }}
-          skip-tls-verify: true
+        # with:
+        #   central-endpoint: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
+        #   central-token: ${{ secrets.ROX_API_TOKEN }}
+        #   skip-tls-verify: true
 
       - name: Scan image with roxctl
         shell: bash
         env:
           ROX_ENDPOINT: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
           ROX_API_TOKEN: ${{ secrets.ROX_API_TOKEN }}
+          ROX_INSECURE_CLIENT_SKIP_TLS_VERIFY: true
         run: |
           roxctl image scan --output=table --image="${{ env.REGISTRY_IMAGE }}:latest"
 
@@ -215,6 +216,7 @@ jobs:
         env:
           ROX_ENDPOINT: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
           ROX_API_TOKEN: ${{ secrets.ROX_API_TOKEN }}
+          ROX_INSECURE_CLIENT_SKIP_TLS_VERIFY: true
         run: |
           roxctl image scan --output=sarif --image="${{ env.REGISTRY_IMAGE }}:latest" > results.sarif
           
@@ -229,5 +231,6 @@ jobs:
         env:
           ROX_ENDPOINT: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
           ROX_API_TOKEN: ${{ secrets.ROX_API_TOKEN }}
+          ROX_INSECURE_CLIENT_SKIP_TLS_VERIFY: true
         run: |
           roxctl image check --output=table --image="${{ env.REGISTRY_IMAGE }}:latest"
