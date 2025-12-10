@@ -49,6 +49,7 @@ jobs:
         id: get-tags
         run: |
           tags=$(skopeo list-tags docker://${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} | jq -r '.Tags[] | select(. | length > 10)' | head -n 3)
+          echo $tags
           tag1=$(echo "$tags" | sed -n 1p)
           tag2=$(echo "$tags" | sed -n 2p)
           tag3=$(echo "$tags" | sed -n 3p)
