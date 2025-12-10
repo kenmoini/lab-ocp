@@ -200,6 +200,7 @@ jobs:
         with:
           central-endpoint: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
           central-token: ${{ secrets.ROX_API_TOKEN }}
+          skip-tls-verify: true
 
       - name: Scan image with roxctl
         shell: bash
