@@ -22,8 +22,8 @@ spec:
               - appName: mattermost
                 namespace: mattermost
                 helmRepoURL: https://helm.mattermost.com
-                helmChartName: mattermost
-                helmRevision: 1.0.4
+                helmChartName: mattermost-team-edition
+                helmRevision: 6.6.84 
   template:
     metadata:
       name: "{{name}}-{{appName}}"
