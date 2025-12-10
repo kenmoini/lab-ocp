@@ -138,7 +138,7 @@ jobs:
         with:
           buildkitd-config-inline: |
             [registry."${{ env.REGISTRY_HOSTNAME }}"]
-              insecure = true
+              ca = ["/etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt"]
 
       - name: Docker meta
         id: meta
