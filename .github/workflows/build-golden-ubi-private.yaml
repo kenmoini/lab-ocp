@@ -120,7 +120,10 @@ jobs:
       - name: Prepare
         run: |
           sudo mkdir -p /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }} && \
-          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt
+          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt && \
+          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /usr/local/share/ca-certificates/kemo-labs.crt && \
+          sudo update-ca-certificates && \
+          sudo systemctl restart docker
 
       - name: Download digests
         uses: actions/download-artifact@v6
