@@ -41,7 +41,7 @@ jobs:
           echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
 
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Prepare
         run: |
@@ -115,7 +115,7 @@ jobs:
     steps:
 
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Prepare
         run: |
@@ -178,7 +178,7 @@ jobs:
     steps:
 
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Prepare
         run: |
