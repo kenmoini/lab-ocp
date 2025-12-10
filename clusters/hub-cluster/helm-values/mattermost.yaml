@@ -39,7 +39,7 @@ extraInitContainers:
   - command:
       - sh
       - '-c'
-      - chown -R 2000:2000 /client/plugins
+      - chown -Rv 2000:2000 /client/plugins
     image: busybox
     name: changeowner
     volumeMounts:
