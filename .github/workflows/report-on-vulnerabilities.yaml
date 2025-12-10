@@ -8,6 +8,9 @@ on:
   workflow_dispatch: {}
   schedule:
     - cron: '23 2 * * *' # Every day at 02:23
+  push:
+    paths:
+      - .github/workflows/report-on-vulnerabilities.yaml
 
 env:
   REGISTRY: quay.io
