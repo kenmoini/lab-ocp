@@ -62,7 +62,7 @@ jobs:
         uses: docker/setup-buildx-action@v3 
         with:
           buildkitd-config-inline: |
-            [${{ env.REGISTRY_HOSTNAME }}]
+            [registry."${{ env.REGISTRY_HOSTNAME }}"]
               insecure = true
 
       - name: Docker meta
