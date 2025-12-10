@@ -12,11 +12,15 @@ spec:
           - clusters:
               selector:
                 matchExpressions:
-                  - key: acs-central
+                  - key: local-cluster
                     operator: In
                     values:
                       - "true"
-                      - "enabled"
+                  # - key: acs-central
+                  #   operator: In
+                  #   values:
+                  #     - "true"
+                  #     - "enabled"
           - list:
               elements:
               - appName: acs-policies
