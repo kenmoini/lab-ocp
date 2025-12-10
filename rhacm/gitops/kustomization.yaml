@@ -4,6 +4,7 @@ kind: Kustomization
 
 resources:
   - appproject.yaml
+  - appset-acs-central.yaml
   - appset-democratic-csi-nfs.yaml
   - appset-install-kyverno.yaml
   - appset-hashicorp-vault.yaml

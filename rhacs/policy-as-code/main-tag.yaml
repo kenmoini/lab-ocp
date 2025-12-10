@@ -1,0 +1,81 @@
+apiVersion: config.stackrox.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: main-tag
+spec:
+  policyName: Main Tag
+  description: Alert on deployments with images using tag 'main'
+  rationale: Using main tag can result in running heterogeneous versions of code. Many Docker hosts cache the Docker images, which means newer versions of the main tag will not be picked up. See https://docs.docker.com/develop/dev-best-practices for more best practices.
+  remediation: Consider moving to semantic versioning based on code releases (semver.org) or using the first 12 characters of the source control SHA. This will allow you to tie the Docker image to the code.
+  categories:
+    - Devops Best Practices
+    - Supply Chain Security
+  lifecycleStages:
+    - BUILD
+    - DEPLOY
+  eventSource: NOT_APPLICABLE
+  exclusions:
+    - deployment:
+        name: sre-pod-network-connectivity-check-pruner
+        scope:
+          namespace: openshift-network-diagnostics
+    - deployment:
+        name: osd-delete-ownerrefs-serviceaccounts
+        scope:
+          namespace: openshift-sre-pruning
+    - deployment:
+        name: sre-build-test
+        scope:
+          namespace: openshift-build-test
+    - deployment:
+        name: osd-delete-backplane-script-resources
+        scope:
+          namespace: openshift-backplane-managed-scripts
+    - deployment:
+        name: sre-ebs-iops-reporter
+        scope:
+          namespace: openshift-monitoring
+    - deployment:
+        name: sre-stuck-ebs-vols
+        scope:
+          namespace: openshift-monitoring
+    - deployment:
+        name: osd-delete-backplane-serviceaccounts
+        scope:
+          namespace: openshift-backplane
+    - deployment:
+        name: deployments-pruner
+        scope:
+          namespace: openshift-sre-pruning
+    - deployment:
+        name: osd-patch-subscription-source
+        scope:
+          namespace: openshift-marketplace
+    - deployment:
+        name: sre-dns-latency-exporter
+        scope:
+          namespace: openshift-monitoring
+    - deployment:
+        name: osd-rebalance-infra-nodes
+        scope:
+          namespace: openshift-monitoring
+    - deployment:
+        name: osd-rebalance-infra-node
+        scope:
+          namespace: openshift-monitoring
+    - deployment:
+        scope:
+          namespace: kube-system
+    - deployment:
+        scope:
+          namespace: istio-system
+  severity: LOW_SEVERITY
+  policySections:
+    - policyGroups:
+        - fieldName: Image Tag
+          booleanOperator: OR
+          values:
+            - value: main
+  criteriaLocked: false
+  mitreVectorsLocked: false
+  isDefault: false
