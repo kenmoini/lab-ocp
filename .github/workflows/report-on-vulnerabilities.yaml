@@ -23,7 +23,7 @@ jobs:
     - name: Get Branches Name
       id: get-branches
       run: |
-        curl -s 'https://api.github.com/repos/${{ env.REPO_NAME }}/commits?per_page=3'
+        curl -s 'https://api.github.com/repos/${{ env.REPO_NAME }}/commits?per_page=3' | jq -r '.[].sha'
   #       all_branches=$(curl -s 'https://api.github.com/repos/${{ env.REPO_NAME }}/commits/master?per_page=10' | jq -r '.[].name | select(startswith("release-"))' | sort -rV | head -n 2)
   #       releasebranch1=$(echo "$all_branches" | sed -n 1p)
   #       releasebranch2=$(echo "$all_branches" | sed -n 2p)
