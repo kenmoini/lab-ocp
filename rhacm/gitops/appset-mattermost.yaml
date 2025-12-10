@@ -38,13 +38,17 @@ spec:
           kind: CustomResourceDefinition
       project: default
       sources:
-    
+        - kustomize: {}
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          path: configuration/rbac/mattermost/
+
         - chart: '{{helmChartName}}'
           helm:
             valueFiles:
               - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
           repoURL: '{{helmRepoURL}}'
           targetRevision: '{{helmRevision}}'
+
         - ref: values
           repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
@@ -52,6 +56,9 @@ spec:
         name: "{{name}}"
         namespace: "{{namespace}}"
       syncPolicy:
+        managedNamespaceMetadata:
+          annotations: # The labels to set on the application namespace
+            openshift.io/sa.scc.uid-range: 1001/1001
         automated:
           prune: false
           selfHeal: true

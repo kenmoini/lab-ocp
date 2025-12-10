@@ -1,0 +1,68 @@
+apiVersion: sonatype.com/v1alpha1
+kind: NexusRepo
+metadata:
+  name: hub
+  namespace: nexus
+spec:
+  ingress:
+    enabled: true
+    dockerSubdomain: false
+    annotations:
+      kubernetes.io/ingress.class: openshift-default
+      route.openshift.io/termination: edge
+    host: nexus.apps.tri-force.lab.kemo.network
+    name: nxrm
+    additionalRules: null
+    dockerIngress:
+      annotations:
+        kubernetes.io/ingress.class: openshift-default
+        route.openshift.io/termination: edge
+      enabled: true
+      host: nexus-docker.apps.tri-force.lab.kemo.network
+      name: nxrm-docker
+    tls:
+      enabled: false
+      secretName: tlsSecretName
+    defaultRule: true
+  license:
+    fileContentsBase64: your_license_file_contents_in_base_64
+    secretName: nexus-repo-license
+  nexusData:
+    pvc:
+      accessMode: ReadWriteOnce
+      size: 60Gi
+    storageClass:
+      enabled: false
+      name: ocs-storagecluster-cephfs
+      parameters: {}
+      provisioner: provisioner
+      reclaimPolicy: Retain
+      volumeBindingMode: WaitForFirstConsumer
+    volumeClaimTemplate:
+      enabled: true
+  secret:
+    nexusSecret:
+      enabled: false
+      mountPath: /var/nexus-repo-secrets
+      name: nexus-secret.json
+      nexusSecretsKeyId: super_secret_key_id
+      secretKeyfileContentsBase64: secretKeyfileContentsBase64
+  service:
+    docker:
+      enabled: true
+      name: nexus-repo-docker-service
+      port: 9090
+      protocol: TCP
+      targetPort: 9090
+      type: ClusterIP
+    nexus:
+      enabled: true
+      name: nexus-repo-service
+      port: 80
+      protocol: TCP
+      targetPort: 8081
+      type: ClusterIP
+  statefulset:
+    container:
+      env:
+        clustered: false
