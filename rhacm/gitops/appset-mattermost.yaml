@@ -1,0 +1,64 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: mattermost
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: appset.kemo.dev/helm-mattermost
+                    operator: In
+                    values:
+                      - "true"
+                      - "enabled"
+          - list:
+              elements:
+              - appName: mattermost
+                namespace: mattermost
+                helmRepoURL: https://helm.mattermost.com
+                helmChartName: mattermost
+                helmRevision: 1.0.4
+  template:
+    metadata:
+      name: "{{name}}-{{appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+    spec:
+      ignoreDifferences:
+        - group: apiextensions.k8s.io
+          jsonPointers:
+            - /status
+          kind: CustomResourceDefinition
+      project: default
+      sources:
+    
+        - chart: '{{helmChartName}}'
+          helm:
+            valueFiles:
+              - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
+          repoURL: '{{helmRepoURL}}'
+          targetRevision: '{{helmRevision}}'
+        - ref: values
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
+      destination:
+        name: "{{name}}"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+        retry:
+          limit: 5
