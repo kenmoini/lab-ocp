@@ -224,7 +224,7 @@ jobs:
           roxctl image scan --output=sarif --image="${{ env.REGISTRY_IMAGE }}:latest" > results.sarif
           
       - name: Upload roxctl scan results to GitHub code scanning
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           category: stackrox-io/kl-golden-ubi
           sarif_file: results.sarif
