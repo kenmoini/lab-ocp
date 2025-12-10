@@ -1,0 +1,47 @@
+persistence:
+  ## This volume persists generated data from users, like images, attachments...
+  ##
+  data:
+    enabled: true
+    size: 10Gi
+    ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+    ## Default: volume.alpha.kubernetes.io/storage-class: default
+    ##
+    # storageClass:
+    accessMode: ReadWriteOnce
+  # existingClaim: ""
+  plugins:
+    enabled: true
+    size: 1Gi
+    ## If defined, volume.beta.kubernetes.io/storage-class: <storageClass>
+    ## Default: volume.alpha.kubernetes.io/storage-class: default
+    ##
+    # storageClass:
+    accessMode: ReadWriteOnce
+  # existingClaim: ""
+
+route:
+  enabled: true
+
+mysql:
+  enabled: true
+
+config:
+  MM_PLUGINSETTINGS_CLIENTDIRECTORY: "./client/plugins"
+  MM_PLUGINSETTINGS_ENABLE: "True"
+  MM_PLUGINSETTINGS_ENABLEUPLOADS: "True"
+
+extraInitContainers:
+  - command:
+      - sh
+      - '-c'
+      - chown -R 2000:2000 /client/plugins
+    image: busybox
+    name: changeowner
+    volumeMounts:
+      - mountPath: /client/plugins
+        name: mattermost-plugins
+
+securityContext:
+  fsGroup: 2000
+  fsGroupChangePolicy: "OnRootMismatch"
