@@ -226,7 +226,7 @@ jobs:
       - name: Upload roxctl scan results to GitHub code scanning
         uses: github/codeql-action/upload-sarif@v3
         with:
-          category: stackrox-io/main
+          category: stackrox-io/kl-golden-ubi
           sarif_file: results.sarif
 
       - name: Check image with roxctl
