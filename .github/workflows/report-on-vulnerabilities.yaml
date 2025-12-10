@@ -22,18 +22,93 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       results: ${{ steps.parse-results.outputs.results }}
-    steps:    
-    - name: Get Branches Name
-      id: get-branches
-      run: |
-        curl -s 'https://api.github.com/repos/${{ env.REPO_NAME }}/commits?per_page=3' | jq -r '.[].sha'
-  #       all_branches=$(curl -s 'https://api.github.com/repos/${{ env.REPO_NAME }}/commits/master?per_page=10' | jq -r '.[].name | select(startswith("release-"))' | sort -rV | head -n 2)
-  #       releasebranch1=$(echo "$all_branches" | sed -n 1p)
-  #       releasebranch2=$(echo "$all_branches" | sed -n 2p)
+    steps:
 
-  #       echo "releasebranch1=$releasebranch1" >> $GITHUB_OUTPUT
-  #       echo "releasebranch2=$releasebranch2" >> $GITHUB_OUTPUT
-    
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Prepare
+        run: |
+          sudo apt-get install -y skopeo && \
+          sudo mkdir -p /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }} && \
+          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt && \
+          sudo cp containers/kl-golden-ubi/root-ca/kemo-labs.pem /usr/local/share/ca-certificates/kemo-labs.crt && \
+          sudo update-ca-certificates && \
+          sudo systemctl restart docker
+
+      - name: Get Last 3 Tags
+        id: get-tags
+        run: |
+          tags=$(skopeo list-tags docker://${{ env.REGISTRY }}/${{ env.REPO_NAME }} | jq -r '.Tags[] | select(. | length > 10)' | head -n 3)
+          tag1=$(echo "$tags" | sed -n 1p)
+          tag2=$(echo "$tags" | sed -n 2p)
+          tag3=$(echo "$tags" | sed -n 3p)
+
+          echo "tag1=$tag1" >> $GITHUB_OUTPUT
+          echo "tag2=$tag2" >> $GITHUB_OUTPUT
+          echo "tag3=$tag3" >> $GITHUB_OUTPUT
+
+      - name: Install roxctl
+        uses: stackrox/roxctl-installer-action@v1
+        # with:
+        #   central-endpoint: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
+        #   central-token: ${{ secrets.ROX_API_TOKEN }}
+        #   skip-tls-verify: true
+
+      - name: Scan images with roxctl
+        shell: bash
+        env:
+          ROX_ENDPOINT: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
+          ROX_API_TOKEN: ${{ secrets.ROX_API_TOKEN }}
+          ROX_INSECURE_CLIENT_SKIP_TLS_VERIFY: true
+        run: |
+          echo "Scanning image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag1 }}"
+          roxctl image scan --output=table --image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag1 }}"
+          echo "Scanning image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag2 }}"
+          roxctl image scan --output=table --image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag2 }}"
+          echo "Scanning image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag3 }}"
+          roxctl image scan --output=table --image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag3 }}"
+
+      - name: Scan image with roxctl and save to GitHub Artifact
+        shell: bash
+        env:
+          ROX_ENDPOINT: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
+          ROX_API_TOKEN: ${{ secrets.ROX_API_TOKEN }}
+          ROX_INSECURE_CLIENT_SKIP_TLS_VERIFY: true
+        run: |
+          roxctl image scan --output=sarif --image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag1 }}" > results1.sarif
+          roxctl image scan --output=sarif --image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag2 }}" > results2.sarif
+          roxctl image scan --output=sarif --image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag3 }}" > results3.sarif
+          
+      - name: First Tag - Upload roxctl scan results to GitHub code scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          category: stackrox-io/kl-golden-ubi:sha256@${{ steps.get-tags.outputs.tag1 }}
+          sarif_file: results1.sarif
+          
+      - name: Second Tag - Upload roxctl scan results to GitHub code scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          category: stackrox-io/kl-golden-ubi:sha256@${{ steps.get-tags.outputs.tag2 }}
+          sarif_file: results2.sarif
+          
+      - name: Third Tag - Upload roxctl scan results to GitHub code scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          category: stackrox-io/kl-golden-ubi:sha256@${{ steps.get-tags.outputs.tag3 }}
+          sarif_file: results3.sarif
+    # - name: Get Last 3 Commits
+    #   id: get-branches
+    #   run: |
+    #     commits=$(curl -s 'https://api.github.com/repos/${{ env.REPO_NAME }}/commits?per_page=3' | jq -r '.[].sha')
+    #     commit1=$(echo "$commits" | sed -n 1p)
+    #     commit2=$(echo "$commits" | sed -n 2p)
+    #     commit3=$(echo "$commits" | sed -n 3p)
+
+    #     echo "commit1=$commit1" >> $GITHUB_OUTPUT
+    #     echo "commit2=$commit2" >> $GITHUB_OUTPUT
+    #     echo "commit3=$commit3" >> $GITHUB_OUTPUT 
+
   #   - name: Scan for vulnerabilities in latest image
   #     uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
   #     with: 

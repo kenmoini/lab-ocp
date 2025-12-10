@@ -229,7 +229,7 @@ jobs:
           category: stackrox-io/kl-golden-ubi
           sarif_file: results.sarif
 
-      - name: Check image with roxctl
+      - name: Check image with roxctl for Policy Violations
         shell: bash
         env:
           ROX_ENDPOINT: ${{ secrets.ACS_CENTRAL_ENDPOINT }}
