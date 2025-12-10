@@ -63,7 +63,7 @@ jobs:
         with:
           buildkitd-config-inline: |
             [registry."${{ env.REGISTRY_HOSTNAME }}"]
-              ca = "/etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt"
+              ca = ["/etc/docker/certs.d/${{ env.REGISTRY_HOSTNAME }}/ca.crt"]
 
       - name: Docker meta
         id: meta
