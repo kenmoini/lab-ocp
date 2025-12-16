@@ -12,3 +12,7 @@ subjects:
   - name: operators-aap-2.6
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+
+  - name: operators-rhbk-26.4
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

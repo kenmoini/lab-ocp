@@ -1,0 +1,91 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-dev-hub
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Red Hat Developer Hub (Backstage) instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: backstage-instance-init
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: rhdh
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: backstage-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rhdh.redhat.com/v1alpha3
+                kind: Backstage
+                metadata:
+                  name: developer-hub
+                  namespace: rhdh
+                  labels:
+                    app.kubernetes.io/name: backstage
+                    config.openshift.io/component: developer-hub
+                    config.openshift.io/managed-by: gitops
+                spec:
+                  # Database configuration - using embedded PostgreSQL for simplicity
+                  database:
+                    enableLocalDb: true
+                  deployment:
+                    patch:
+                      spec:
+                        template:
+                          spec:
+                            volumes:
+                              - $patch: replace
+                                name: dynamic-plugins-root
+                                persistentVolumeClaim:
+                                  claimName: dynamic-plugins-root
+                  # Application configuration
+                  application:
+                    # Use external ConfigMap for app configuration
+                    appConfig:
+                      configMaps:
+                      - name: app-config-rhdh
+                      mountPath: /opt/app-root/src
+
+                    # Environment variables from Secret
+                    extraEnvs:
+                      secrets:
+                      - name: my-rhdh-secrets
+                      - name: keycloak-secrets
+                      # Inject the ARGOCD_URL, ARGOCD_USERNAME,
+                      # and ARGOCD_PASSWORD into the pod as environment variables
+                      - name: argocd-secrets
+
+                    # Mount RBAC policies file
+                    extraFiles:
+                      mountPath: /opt/app-root/src
+                      configMaps:
+                        - name: rbac-policies
+
+                    # Single replica for development
+                    replicas: 1
+
+                    # Route configuration
+                    route:
+                      enabled: true

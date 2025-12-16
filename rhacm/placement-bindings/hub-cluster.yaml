@@ -26,6 +26,9 @@ subjects:
   - name: operators-aap-base
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: operators-rhbk-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: operators-talm
     apiGroup: policy.open-cluster-management.io
     kind: Policy
