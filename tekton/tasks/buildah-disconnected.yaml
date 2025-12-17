@@ -15,7 +15,7 @@ metadata:
       - name: Ken Moini?
         email: ken@kenmoini.com
   name: buildah-disconnected
-  namespace: tekton-pipelines
+  namespace: openshift-pipelines
   labels:
     app.kubernetes.io/version: 0.0.1
     operator.tekton.dev/provider-type: community
