@@ -24,6 +24,7 @@ resources:
   - openshift-logging.yaml
   #- odf.yaml
   - power-monitoring.yaml
+  - rhbk.yaml
   - virtualization.yaml
 
 commonAnnotations:

@@ -2,9 +2,9 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: instance-aap-2.6
+  name: instance-rhbk-26.4
   annotations:
-    policy.open-cluster-management.io/description: Deploys the Ansible Automation Platform 2.6 instance
+    policy.open-cluster-management.io/description: Deploys the Red Hat Build of Keycloak v26.4 instance
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
     policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
@@ -73,16 +73,49 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
-                # Placeholder
+                kind: Cluster
+                apiVersion: postgresql.cnpg.io/v1
+                metadata:
+                  name: keycloak-db
+                  namespace: rhbk
+                spec:
+                  instances: 1
+                  enableSuperuserAccess: true
+                  logLevel: info
+                  primaryUpdateStrategy: unsupervised
+                  storage:
+                    size: 1Gi
+                  walStorage:
+                    size: 1Gi
+
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
-          name: eso-keycloak-admin
+          name: keycloak-pgsql-instance
           namespace: ""
           compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: keycloak-db-secret-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: keycloak-db-app
+                  namespace: rhbk
+                type: kubernetes.io/basic-auth
+
+    - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
-          name: keycloak-pgsql-instance
+          name: keycloak-db-secret-check
           namespace: ""
           compliance: Compliant
       objectDefinition:
@@ -104,6 +137,17 @@ spec:
                   name: sso
                   namespace: rhbk
                 spec:
+                  db:
+                    vendor: postgres
+                    database: app
+                    port: 5432
+                    host: keycloak-db-rw.rhbk.svc.cluster.local
+                    usernameSecret:
+                      name: keycloak-db-app
+                      key: username
+                    passwordSecret:
+                      name: keycloak-db-app
+                      key: password
                   bootstrapAdmin:
                     user:
                       secret: keycloak-admin
@@ -112,5 +156,8 @@ spec:
                   instances: 1
                   serviceMonitor:
                     enabled: true
+                  ingress:
+                    enabled: true
+                    className: openshift-default
                   # tracing:
                   #   enabled: true
