@@ -1,0 +1,30 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: developer-services
+  namespace: rhbk
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: policy.kemo.dev/developer-services
+              operator: In
+              values:
+                - "true"
+                - "enabled"
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: developer-services
+  namespace: rhbk
+placementRef:
+  name: developer-services
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: secrets-rhdh-kc
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

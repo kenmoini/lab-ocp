@@ -12,6 +12,7 @@ resources:
   - community-eso.yaml
   - cost-management-metrics.yaml
   - descheduler.yaml
+  - developer-hub.yaml
   - far.yaml
   - gatekeeper.yaml
   #- lso.yaml

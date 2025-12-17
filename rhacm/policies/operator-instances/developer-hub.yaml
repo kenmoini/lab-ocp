@@ -11,7 +11,13 @@ metadata:
 spec:
   disabled: false
   policy-templates:
-    - objectDefinition:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: keycloak-instance
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
@@ -26,66 +32,152 @@ spec:
                 kind: Namespace
                 metadata:
                   name: rhdh
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: backstage-instance
-        spec:
-          remediationAction: enforce
-          severity: critical
-          object-templates:
             - complianceType: musthave
               objectDefinition:
-                apiVersion: rhdh.redhat.com/v1alpha3
-                kind: Backstage
+                apiVersion: v1
+                kind: ConfigMap
                 metadata:
-                  name: developer-hub
+                  name: rbac-policies
                   namespace: rhdh
-                  labels:
-                    app.kubernetes.io/name: backstage
-                    config.openshift.io/component: developer-hub
-                    config.openshift.io/managed-by: gitops
+                data:
+                  rbac-policies.csv: |
+                    p, role:default/location_read, catalog.entity.read, read, allow
+                    p, role:default/location_read, catalog.location.read, read, allow
+                    p, role:default/platformengineer, catalog.entity.create, create, allow
+                    p, role:default/platformengineer, catalog.entity.refresh, update, allow
+                    p, role:default/platformengineer, catalog.entity.delete, delete, allow
+                    p, role:default/platformengineer, catalog.location.create, create, allow
+                    p, role:default/platformengineer, catalog.location.delete, delete, allow
+                    p, role:default/scaffolder_execute, scaffolder.action.execute, use, allow
+                    p, role:default/scaffolder_execute, scaffolder.template.parameter.read, read, allow
+                    p, role:default/scaffolder_execute, scaffolder.template.step.read, read, allow
+                    p, role:default/scaffolder_execute, scaffolder.task.create, create, allow
+                    p, role:default/scaffolder_execute, scaffolder.task.cancel, use, allow
+                    p, role:default/scaffolder_execute, scaffolder.task.read, read, allow
+                    p, role:default/scaffolder_execute, catalog.location.create, create, allow
+                    p, role:default/plugins, topology.view.read, read, allow
+                    p, role:default/plugins, tekton.view.read, read, allow
+                    p, role:default/plugins, argocd.view.read, read, allow
+                    p, role:default/plugins, kubernetes.proxy, use, allow
+                    g, group:default/rhdh-admins, role:default/location_read
+                    g, group:default/rhdh-admins, role:default/platformengineer
+                    g, group:default/rhdh-admins, role:default/scaffolder_execute
+                    g, group:default/rhdh-admins, role:default/plugins
+                    g, group:default/rhdh-users, role:default/location_read
+                    g, group:default/rhdh-users, role:default/scaffolder_execute
+                    g, group:default/rhdh-users, role:default/plugins
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: PersistentVolumeClaim
+                metadata:
+                  name: dynamic-plugins-root
+                  namespace: rhdh
                 spec:
-                  # Database configuration - using embedded PostgreSQL for simplicity
-                  database:
-                    enableLocalDb: true
-                  deployment:
-                    patch:
-                      spec:
-                        template:
-                          spec:
-                            volumes:
-                              - $patch: replace
-                                name: dynamic-plugins-root
-                                persistentVolumeClaim:
-                                  claimName: dynamic-plugins-root
-                  # Application configuration
-                  application:
-                    # Use external ConfigMap for app configuration
-                    appConfig:
-                      configMaps:
-                      - name: app-config-rhdh
-                      mountPath: /opt/app-root/src
+                  accessModes:
+                    - ReadWriteOnce
+                  volumeMode: Filesystem
+                  resources:
+                    requests:
+                      storage: 5Gi
+            - complianceType: musthave
+              objectDefinition:
+                kind: ConfigMap
+                apiVersion: v1
+                metadata:
+                  name: rhdh-dynamic-plugins
+                  namespace: rhdh
+                data:
+                  dynamic-plugins.yaml: |
+                    includes:
+                    - dynamic-plugins.default.yaml
+                    plugins:
+                      - package: ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-keycloak-dynamic
+                        disabled: false
+                      - package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic
+                        disabled: false
+                      - package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-org-dynamic
+                        disabled: false
+                      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
+                        disabled: false
+                      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
+                        disabled: false
+                      - package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic
+                        disabled: false
+                      - package: ./dynamic-plugins/dist/backstage-community-plugin-redhat-argocd
+                        disabled: false
+                      - package: ./dynamic-plugins/dist/backstage-community-plugin-rbac
+                        disabled: false
+    # - extraDependencies:
+    #     - apiVersion: policy.open-cluster-management.io/v1
+    #       kind: ConfigurationPolicy
+    #       name: backstage-instance-init
+    #       namespace: ""
+    #       compliance: Compliant
+    #     - apiVersion: policy.open-cluster-management.io/v1
+    #       kind: ConfigurationPolicy
+    #       name: rhdh-rhbk-realm
+    #       namespace: ""
+    #       compliance: Compliant
+    #   objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: backstage-instance
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: critical
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: rhdh.redhat.com/v1alpha3
+    #             kind: Backstage
+    #             metadata:
+    #               name: dev-hub
+    #               namespace: rhdh
+    #               labels:
+    #                 app.kubernetes.io/name: dev-hub
+    #                 config.openshift.io/component: dev-hub
+    #             spec:
+    #               # Database configuration - using embedded PostgreSQL for simplicity
+    #               database:
+    #                 enableLocalDb: true
+    #               deployment:
+    #                 patch:
+    #                   spec:
+    #                     template:
+    #                       spec:
+    #                         volumes:
+    #                           - $patch: replace
+    #                             name: dynamic-plugins-root
+    #                             persistentVolumeClaim:
+    #                               claimName: dynamic-plugins-root
+    #               # Application configuration
+    #               application:
+    #                 # Use external ConfigMap for app configuration
+    #                 appConfig:
+    #                   configMaps:
+    #                   - name: app-config-rhdh
+    #                   mountPath: /opt/app-root/src
 
-                    # Environment variables from Secret
-                    extraEnvs:
-                      secrets:
-                      - name: my-rhdh-secrets
-                      - name: keycloak-secrets
-                      # Inject the ARGOCD_URL, ARGOCD_USERNAME,
-                      # and ARGOCD_PASSWORD into the pod as environment variables
-                      - name: argocd-secrets
+    #                 # Environment variables from Secret
+    #                 extraEnvs:
+    #                   secrets:
+    #                   - name: my-rhdh-secrets
+    #                   - name: keycloak-secrets
+    #                   # Inject the ARGOCD_URL, ARGOCD_USERNAME,
+    #                   # and ARGOCD_PASSWORD into the pod as environment variables
+    #                   - name: argocd-secrets
 
-                    # Mount RBAC policies file
-                    extraFiles:
-                      mountPath: /opt/app-root/src
-                      configMaps:
-                        - name: rbac-policies
+    #                 # Mount RBAC policies file
+    #                 extraFiles:
+    #                   mountPath: /opt/app-root/src
+    #                   configMaps:
+    #                     - name: rbac-policies
 
-                    # Single replica for development
-                    replicas: 1
+    #                 # Single replica for development
+    #                 replicas: 1
 
-                    # Route configuration
-                    route:
-                      enabled: true
+    #                 # Route configuration
+    #                 route:
+    #                   enabled: true

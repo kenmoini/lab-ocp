@@ -17,3 +17,5 @@ spec:
     - operators-dev-hub
     - operators-servicemesh-2
 
+    - instance-dev-hub
+
