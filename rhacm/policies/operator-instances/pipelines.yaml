@@ -84,7 +84,7 @@ spec:
                       scc:
                         default: pipelines-scc
                   tektonpruner:
-                    disabled: false
+                    disabled: true
                     global-config:
                       enforcedConfigLevel: global
                       failedHistoryLimit: null
