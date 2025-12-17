@@ -37,8 +37,21 @@ spec:
                   #   openshift-pipelines.tekton.dev/sa-created: 'true'
                   name: config
                 spec:
+                  params:
+                    - name: createRbacResource
+                      value: "true"
+                    - name: communityResolverTasks
+                      value: 'true'
+                    - name: pipelineTemplates
+                      value: 'true'
+                    - name: resolverTasks
+                      value: 'true'
+                    - name: resolverStepActions
+                      value: 'true'
                   addon:
                     params:
+                      - name: createRbacResource
+                        value: "true"
                       - name: communityResolverTasks
                         value: 'true'
                       - name: pipelineTemplates
