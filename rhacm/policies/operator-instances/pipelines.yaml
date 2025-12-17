@@ -28,7 +28,7 @@ spec:
           severity: high
           object-templates:
             - complianceType: musthave
-              recreateOption: IfRequired
+              recreateOption: Always #IfRequired
               objectDefinition:
                 apiVersion: operator.tekton.dev/v1alpha1
                 kind: TektonConfig
