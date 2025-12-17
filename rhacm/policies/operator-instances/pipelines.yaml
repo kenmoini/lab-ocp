@@ -50,8 +50,6 @@ spec:
                       value: 'true'
                   addon:
                     params:
-                      - name: createRbacResource
-                        value: "true"
                       - name: communityResolverTasks
                         value: 'true'
                       - name: pipelineTemplates
