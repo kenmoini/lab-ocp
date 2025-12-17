@@ -1,0 +1,116 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-aap-2.6
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Ansible Automation Platform 2.6 instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: eso-vault-clustersecretstore
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: eso-keycloak-admin
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: external-secrets.io/v1beta1
+                kind: ExternalSecret
+                metadata:
+                  name: vault-keycloak-admin
+                  namespace: rhbk
+                spec:
+                  refreshInterval: "3600s"
+                  secretStoreRef:
+                    name: kemo-labs-vault
+                    kind: ClusterSecretStore
+                  target:
+                    name: keycloak-admin # name of the k8s Secret to make in this namespace
+                    creationPolicy: Owner
+                    deletionPolicy: Retain
+                    template:
+                      engineVersion: v2
+                      type: Opaque # type of k8s Secret to make
+                  data:
+                    - secretKey: username
+                      remoteRef:
+                        key: kemo.labs/openshift/hub-services/keycloak # name of the secret under the target Vault path
+                        property: adminUsername # # name of the key in that named Vault secret
+                    - secretKey: password
+                      remoteRef:
+                        key: kemo.labs/openshift/hub-services/keycloak # name of the secret under the target Vault path
+                        property: adminPassword # # name of the key in that named Vault secret
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: eso-keycloak-admin
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: keycloak-pgsql-instance
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                # Placeholder
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: eso-keycloak-admin
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: keycloak-pgsql-instance
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: keycloak-instance
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: k8s.keycloak.org/v2alpha1
+                kind: Keycloak
+                metadata:
+                  labels:
+                    app: sso
+                  name: sso
+                  namespace: rhbk
+                spec:
+                  bootstrapAdmin:
+                    user:
+                      secret: keycloak-admin
+                  hostname:
+                    hostname: keycloak.apps.tri-force.lab.kemo.network
+                  instances: 1
+                  serviceMonitor:
+                    enabled: true
+                  # tracing:
+                  #   enabled: true

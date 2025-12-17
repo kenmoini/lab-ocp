@@ -7,12 +7,13 @@ metadata:
 spec:
   description: "OpenShift developer services"
   policies:
+    - operators-cnpgsql
     - operators-openshift-builds
     - operators-pipelines
     - operators-devspaces
     - operators-serverless
     - operators-authorino
     - operators-rhoai
-    - operators-dev-hub/
+    - operators-dev-hub
     - operators-servicemesh-2
 

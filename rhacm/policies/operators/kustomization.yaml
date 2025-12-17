@@ -9,6 +9,7 @@ resources:
   - authorino.yaml
   - cco.yaml
   - cert-manager.yaml
+  - cnpgsql.yaml
   - compliance.yaml
   - cost-management-metrics.yaml
   - descheduler.yaml
