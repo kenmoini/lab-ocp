@@ -158,7 +158,7 @@ spec:
                     resources:
                       - pipelinerun
                   profile: lite
-                  targetNamespace: openshift-pipelines
+                  targetNamespace: tekton-pipelines
                   dashboard:
                     options: {}
                     readonly: false
