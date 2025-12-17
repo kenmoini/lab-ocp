@@ -160,8 +160,21 @@ spec:
                   instances: 1
                   serviceMonitor:
                     enabled: true
+                  additionalOptions:
+                    - name: metrics-enabled
+                      value: 'true'
                   ingress:
                     enabled: true
                     className: openshift-default
+                  networkPolicy:
+                    enabled: true
+                    https:
+                      - namespaceSelector:
+                          matchLabels:
+                            kubernetes.io/metadata.name: openshift-ingress
+                    management:
+                      - namespaceSelector:
+                          matchLabels:
+                            kubernetes.io/metadata.name: openshift-user-workload-monitoring
                   # tracing:
                   #   enabled: true
