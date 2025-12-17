@@ -137,6 +137,8 @@ spec:
                   name: sso
                   namespace: rhbk
                 spec:
+                  http:
+                    httpEnabled: true
                   db:
                     vendor: postgres
                     database: app
