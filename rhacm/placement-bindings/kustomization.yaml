@@ -15,6 +15,7 @@ resources:
   - hcp-kubevirt.yaml
   - hcp-services.yaml
   - hub-cluster.yaml
+  - hub-developer-services.yaml
   - hub-4.19-clusters.yaml
 
   - community-eso.yaml

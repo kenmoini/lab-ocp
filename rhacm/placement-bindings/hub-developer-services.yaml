@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: hub-developer-services
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: hub-developer-services
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: mcsb-global-rhbk
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

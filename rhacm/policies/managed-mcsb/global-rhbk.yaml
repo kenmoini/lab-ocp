@@ -1,0 +1,32 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: mcsb-global-rhbk
+  annotations:
+    policy.open-cluster-management.io/description: Creates a ManagedClusterSetBinding to the 'global' ManagedClusterSet in the 'rhbk' namespace.
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: ACM-CFG - Advanced Cluster Management Configuration
+spec:
+  disabled: false
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: mcsb-global-rhbk
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1beta2
+                kind: ManagedClusterSetBinding
+                metadata:
+                  name: global
+                  namespace: rhbk
+                spec:
+                  clusterSet: global

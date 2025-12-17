@@ -9,6 +9,9 @@ resources:
   - global-base-namespaces.yaml
   - root-ca.yaml
 
+  # Hub things
+  - managed-mcsb/
+
   # Health Signals
   - health-checks/
 
