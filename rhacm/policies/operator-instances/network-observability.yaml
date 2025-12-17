@@ -283,19 +283,19 @@ spec:
                       args: []
                       port: 9001
                       register: true
-                      scheduling:
-                        affinity:
-                          nodeAffinity:
-                            preferredDuringSchedulingIgnoredDuringExecution: []
-                            requiredDuringSchedulingIgnoredDuringExecution:
-                              nodeSelectorTerms: []
-                          podAffinity:
-                            preferredDuringSchedulingIgnoredDuringExecution: []
-                            requiredDuringSchedulingIgnoredDuringExecution: []
-                          podAntiAffinity:
-                            preferredDuringSchedulingIgnoredDuringExecution: []
-                            requiredDuringSchedulingIgnoredDuringExecution: []
-                        tolerations: []
+                      # scheduling:
+                      #   affinity:
+                      #     nodeAffinity:
+                      #       preferredDuringSchedulingIgnoredDuringExecution: []
+                      #       requiredDuringSchedulingIgnoredDuringExecution:
+                      #         nodeSelectorTerms: []
+                      #     podAffinity:
+                      #       preferredDuringSchedulingIgnoredDuringExecution: []
+                      #       requiredDuringSchedulingIgnoredDuringExecution: []
+                      #     podAntiAffinity:
+                      #       preferredDuringSchedulingIgnoredDuringExecution: []
+                      #       requiredDuringSchedulingIgnoredDuringExecution: []
+                      #   tolerations: []
                     enable: true
                     resources:
                       claims: []
@@ -326,32 +326,7 @@ spec:
                         name: Services network
                     imagePullPolicy: IfNotPresent
                     autoscaler:
-                      maxReplicas: 3
-                      metrics:
-                        - containerResource:
-                            target: {}
-                          external:
-                            metric:
-                              selector:
-                                matchExpressions: []
-                            target: {}
-                          object:
-                            describedObject: {}
-                            metric:
-                              selector:
-                                matchExpressions: []
-                            target: {}
-                          pods:
-                            metric:
-                              selector:
-                                matchExpressions: []
-                            target: {}
-                          resource:
-                            name: cpu
-                            target:
-                              averageUtilization: 50
-                              type: Utilization
-                          type: Resource
+                      maxReplicas: 2
                       minReplicas: 1
                       status: Disabled
                     replicas: 1
@@ -362,20 +337,20 @@ spec:
                       conversationTerminatingTimeout: 5s
                       conversationEndTimeout: 10s
                       enableKubeProbes: true
-                      scheduling:
-                        affinity:
-                          nodeAffinity:
-                            preferredDuringSchedulingIgnoredDuringExecution: []
-                            requiredDuringSchedulingIgnoredDuringExecution:
-                              nodeSelectorTerms: []
-                          podAffinity:
-                            preferredDuringSchedulingIgnoredDuringExecution: []
-                            requiredDuringSchedulingIgnoredDuringExecution: []
-                          podAntiAffinity:
-                            preferredDuringSchedulingIgnoredDuringExecution: []
-                            requiredDuringSchedulingIgnoredDuringExecution: []
-                        tolerations: []
-                      secondaryNetworks: []
+                      # scheduling:
+                      #   affinity:
+                      #     nodeAffinity:
+                      #       preferredDuringSchedulingIgnoredDuringExecution: []
+                      #       requiredDuringSchedulingIgnoredDuringExecution:
+                      #         nodeSelectorTerms: []
+                      #     podAffinity:
+                      #       preferredDuringSchedulingIgnoredDuringExecution: []
+                      #       requiredDuringSchedulingIgnoredDuringExecution: []
+                      #     podAntiAffinity:
+                      #       preferredDuringSchedulingIgnoredDuringExecution: []
+                      #       requiredDuringSchedulingIgnoredDuringExecution: []
+                      #   tolerations: []
+                      # secondaryNetworks: []
                       healthPort: 8080
                       dropUnusedFields: true
                       conversationHeartbeatInterval: 30s
@@ -393,7 +368,7 @@ spec:
                             namespace: ''
                           type: Disabled
                     resources:
-                      claims: []
+                      # claims: []
                       limits:
                         memory: 800Mi
                       requests:
