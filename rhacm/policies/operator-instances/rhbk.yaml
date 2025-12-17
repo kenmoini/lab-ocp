@@ -154,7 +154,7 @@ spec:
                     user:
                       secret: keycloak-admin
                   hostname:
-                    hostname: keycloak.apps.tri-force.lab.kemo.network
+                    hostname: https://keycloak.apps.tri-force.lab.kemo.network
                   instances: 1
                   serviceMonitor:
                     enabled: true
