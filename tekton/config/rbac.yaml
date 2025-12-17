@@ -1,0 +1,41 @@
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: pipeline
+  annotations:
+    openshift.io/internal-registry-pull-secret-ref: pipeline-internal-reg
+secrets:
+  - name: pipeline-internal-reg
+imagePullSecrets:
+  - name: pipeline-internal-reg
+# =================================================================================
+# Internal Registry RBAC
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: allow-pipelines-pushing-imagestream
+  namespace: openshift
+subjects:
+  - kind: ServiceAccount
+    name: pipeline
+    namespace: hub-cicd
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: 'system:image-pusher'
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: allow-pipelines-pushing-imagestream
+  namespace: hub-cicd
+subjects:
+  - kind: ServiceAccount
+    name: pipeline
+    namespace: hub-cicd
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: 'system:image-pusher'

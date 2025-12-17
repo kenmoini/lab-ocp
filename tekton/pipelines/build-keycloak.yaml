@@ -1,0 +1,185 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: build-keycloak
+spec:
+  params:
+    # shared params
+    - default: 'true'
+      description: |
+        Sets the TLS verification flag, `true` is recommended.
+      name: TLS_VERIFY
+      type: string
+    - default: 'false'
+      description: |
+        Turns on verbose logging, all commands executed will be printed out.
+      name: VERBOSE
+      type: string
+    - default: ''
+      description: HTTP proxy server (non-TLS requests).
+      name: HTTP_PROXY
+      type: string
+    - default: ''
+      description: HTTPS proxy server (TLS requests).
+      name: HTTPS_PROXY
+      type: string
+    - default: ''
+      description: Opt out of proxying HTTP/HTTPS requests.
+      name: NO_PROXY
+      type: string
+
+    # git-clone params
+    - description: |
+        Git repository URL.
+      name: URL
+      type: string
+    - default: main
+      description: |
+        Revision to checkout, an branch, tag, sha, ref, etc...
+      name: REVISION
+      type: string
+
+    # buildah params
+    - description: |
+        Fully qualified container image name to be built by buildah.
+      name: IMAGE
+      type: string
+    - default: containers/keycloak/Containerfile
+      description: |
+        Path to the `Dockerfile` (or `Containerfile`) relative to the `source` workspace.
+      name: DOCKERFILE
+      type: string
+    # - default:
+    #     - ''
+    #   description: |
+    #     Dockerfile build arguments, array of key=value
+    #   name: BUILD_ARGS
+    #   type: array
+    - default: containers/keycloak/
+      description: |
+        Path to the directory to use as context.
+      name: CONTEXT
+      type: string
+    - default: ''
+      description: |
+        Extra parameters passed for the build command when building images.
+      name: BUILD_EXTRA_ARGS
+      type: string
+    - default: ''
+      description: |
+        Extra parameters passed for the push command when pushing images.
+      name: PUSH_EXTRA_ARGS
+      type: string
+    - default: 'false'
+      description: |
+        Skip pushing the image to the container registry.
+      name: SKIP_PUSH
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: URL
+          value: "$(params.URL)"
+        - name: REVISION
+          value: "$(params.REVISION)"
+        - name: SSL_VERIFY
+          value: "$(params.TLS_VERIFY)"
+        - name: VERBOSE
+          value: "$(params.VERBOSE)"
+        - name: CRT_FILENAME
+          value: ca-bundle.crt
+        - name: SUBDIRECTORY
+          value: ''
+        - name: USER_HOME
+          value: /home/git
+        - name: DELETE_EXISTING
+          value: 'true'
+        - name: REFSPEC
+          value: ''
+        - name: SUBMODULES
+          value: 'true'
+        - name: DEPTH
+          value: '1'
+        - name: SPARSE_CHECKOUT_DIRECTORIES
+          value: ''
+        # Optional Proxy Configuration
+        - name: HTTP_PROXY
+          value: "$(params.HTTP_PROXY)"
+        - name: HTTPS_PROXY
+          value: "$(params.HTTPS_PROXY)"
+        - name: NO_PROXY
+          value: "$(params.NO_PROXY)"
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: output
+          workspace: build
+    - name: buildah-disconnected
+      params:
+        - name: IMAGE
+          value: "$(params.IMAGE)"
+          #value: 'image-registry.openshift-image-registry.svc:5000/openshift/ocp-binary-tools:latest'
+        - name: DOCKERFILE
+          value: "$(params.DOCKERFILE)"
+          #value: binaries/Containerfile
+        # - name: BUILD_ARGS
+        #   value: []
+        - name: CONTEXT
+          value: "$(params.CONTEXT)"
+        - name: STORAGE_DRIVER
+          value: vfs
+        - name: FORMAT
+          value: oci
+        - name: BUILD_EXTRA_ARGS
+          value: "$(params.BUILD_EXTRA_ARGS)"
+        - name: PUSH_EXTRA_ARGS
+          value: "$(params.PUSH_EXTRA_ARGS)"
+        - name: SKIP_PUSH
+          value: "$(params.SKIP_PUSH)"
+        - name: TLS_VERIFY
+          value: "$(params.TLS_VERIFY)"
+        - name: VERBOSE
+          value: "$(params.VERBOSE)"
+        # Optional Proxy Configuration
+        - name: HTTP_PROXY
+          value: "$(params.HTTP_PROXY)"
+        - name: HTTPS_PROXY
+          value: "$(params.HTTPS_PROXY)"
+        - name: NO_PROXY
+          value: "$(params.NO_PROXY)"
+      runAfter:
+        - git-clone
+      taskRef:
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: buildah-disconnected
+          - name: namespace
+            value: openshift-pipelines
+        resolver: cluster
+      workspaces:
+        - name: source
+          workspace: build
+        - name: authsecret
+          workspace: authsecret
+        - name: containerconfig
+          workspace: containerconfig
+        - name: root-ca-certs
+          workspace: root-ca-certs
+  workspaces:
+    - name: build
+      optional: false
+    - name: authsecret
+      optional: true
+    - name: containerconfig
+      optional: true
+    - name: root-ca-certs
+      optional: true

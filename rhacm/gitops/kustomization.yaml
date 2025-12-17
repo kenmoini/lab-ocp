@@ -9,6 +9,7 @@ resources:
   - appset-democratic-csi-nfs.yaml
   - appset-egress-ips.yaml
   - appset-hashicorp-vault.yaml
+  - appset-hub-dev-services.yaml
   - appset-install-kyverno.yaml
   - appset-kagent-crds.yaml
   - appset-kagent-kmcp.yaml
