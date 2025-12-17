@@ -61,7 +61,7 @@ spec:
                 metadata:
                   namespace: rhbk
                 spec:
-                  displayName: Red Hat Build of Keycloak
+                  displayName: Red Hat build of Keycloak Operator
                 status:
                   phase: Succeeded
                   reason: InstallSucceeded
