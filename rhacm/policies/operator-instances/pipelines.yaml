@@ -1,0 +1,166 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-pipelines
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Red Hat OpenShift Pipelines Operator
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: pipelines-operator-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: tekton-config
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              recreateOption: IfRequired
+              objectDefinition:
+                apiVersion: operator.tekton.dev/v1alpha1
+                kind: TektonConfig
+                metadata:
+                  # labels:
+                  #   openshift-pipelines.tekton.dev/sa-created: 'true'
+                  name: config
+                spec:
+                  addon:
+                    params:
+                      - name: communityResolverTasks
+                        value: 'true'
+                      - name: pipelineTemplates
+                        value: 'true'
+                      - name: resolverTasks
+                        value: 'true'
+                      - name: resolverStepActions
+                        value: 'true'
+                  platforms:
+                    openshift:
+                      pipelinesAsCode:
+                        enable: true
+                        options: {}
+                        settings:
+                          bitbucket-cloud-additional-source-ip: ''
+                          auto-configure-repo-namespace-template: ''
+                          tekton-dashboard-url: ''
+                          custom-console-url-pr-tasklog: ''
+                          bitbucket-cloud-check-source-ip: 'true'
+                          hub-catalog-type: artifacthub
+                          enable-cancel-in-progress-on-push: 'false'
+                          custom-console-url-pr-details: ''
+                          auto-configure-repo-repository-template: ''
+                          remote-tasks: 'true'
+                          application-name: Pipelines as Code CI
+                          auto-configure-new-github-repo: 'false'
+                          custom-console-url-namespace: ''
+                          skip-push-event-for-pr-commits: 'true'
+                          max-keep-run-upper-limit: '0'
+                          error-log-snippet: 'true'
+                          error-detection-from-container-logs: 'true'
+                          secret-github-app-scope-extra-repos: ''
+                          remember-ok-to-test: 'false'
+                          hub-url: 'https://artifacthub.io'
+                          error-detection-max-number-of-lines: '50'
+                          error-detection-simple-regexp: '^(?P<filename>[^:]*):(?P<line>[0-9]+):(?P<column>[0-9]+)?([ ]*)?(?P<error>.*)'
+                          default-max-keep-runs: '0'
+                          custom-console-name: ''
+                          secret-auto-create: 'true'
+                          custom-console-url: ''
+                          secret-github-app-token-scoped: 'true'
+                          enable-cancel-in-progress-on-pull-requests: 'false'
+                      scc:
+                        default: pipelines-scc
+                  tektonpruner:
+                    disabled: false
+                    global-config:
+                      enforcedConfigLevel: global
+                      failedHistoryLimit: null
+                      historyLimit: 100
+                      namespaces: null
+                      successfulHistoryLimit: null
+                      ttlSecondsAfterFinished: null
+                    options: {}
+                  chain:
+                    disabled: true
+                    # artifacts.taskrun.storage: oci
+                    # artifacts.pipelinerun.storage: oci
+                    # artifacts.pipelinerun.format: in-toto
+                    # artifacts.taskrun.format: in-toto
+                    # performance:
+                    #   disable-ha: false
+                    # artifacts.oci.storage: oci
+                    # artifacts.oci.format: simplesigning
+                    # options: {}
+                  pipeline:
+                    running-in-environment-with-injected-sidecars: true
+                    metrics.taskrun.duration-type: histogram
+                    results-from: termination-message
+                    enforce-nonfalsifiability: none
+                    enable-cluster-resolver: true
+                    metrics.pipelinerun.duration-type: histogram
+                    await-sidecar-readiness: true
+                    coschedule: workspaces
+                    metrics.count.enable-reason: false
+                    params:
+                      - name: enableMetrics
+                        value: 'true'
+                    enable-step-actions: true
+                    max-result-size: 4096
+                    enable-hub-resolver: true
+                    default-service-account: pipeline
+                    enable-param-enum: false
+                    enable-git-resolver: true
+                    enable-bundles-resolver: true
+                    require-git-ssh-secret-known-hosts: false
+                    set-security-context: false
+                    enable-cel-in-whenexpression: false
+                    performance:
+                      disable-ha: false
+                    send-cloudevents-for-runs: false
+                    metrics.taskrun.level: task
+                    trusted-resources-verification-no-match-policy: ignore
+                    metrics.pipelinerun.level: pipeline
+                    enable-api-fields: beta
+                    keep-pod-on-cancel: false
+                    enable-provenance-in-status: true
+                    enable-custom-tasks: true
+                    disable-creds-init: false
+                    options: {}
+                    disable-affinity-assistant: true
+                  config: {}
+                  pruner:
+                    disabled: false
+                    keep: 10
+                    resources:
+                      - pipelinerun
+                  profile: lite
+                  targetNamespace: openshift-pipelines
+                  dashboard:
+                    options: {}
+                    readonly: false
+                  hub:
+                    options: {}
+                  trigger:
+                    default-service-account: pipeline
+                    disabled: false
+                    enable-api-fields: stable
+                    options: {}
+                  result:
+                    disabled: false
+                    is_external_db: false
+                    options: {}
+                    performance:
+                      disable-ha: false

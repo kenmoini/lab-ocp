@@ -51,3 +51,30 @@ spec:
                 spec:
                   plugins:
                     - pipelines-console-plugin
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: pipelines-operator-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: ClusterServiceVersion
+                metadata:
+                  namespace: openshift-operators
+                spec:
+                  displayName: Red Hat OpenShift Pipelines
+                status:
+                  phase: Succeeded
+                  reason: InstallSucceeded
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rh-pipelines-subscription
+          namespace: ""
+          compliance: Compliant
