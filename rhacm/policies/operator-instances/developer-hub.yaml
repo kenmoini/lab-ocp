@@ -108,7 +108,101 @@ spec:
                         disabled: false
                       - package: ./dynamic-plugins/dist/backstage-community-plugin-rbac
                         disabled: false
-
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  annotations:
+                    rhdh.redhat.com/backstage-name: dev-hub
+                  labels:
+                    rhdh.redhat.com/ext-config-sync: "true"
+                  name: app-config-rhdh
+                  namespace: rhdh
+                data:
+                  app-config-rhdh.yaml: |
+                    app:
+                      title: Red Hat Developer Hub
+                      baseUrl: ${BACKEND_URL}
+                    argocd:
+                      appLocatorMethods:
+                        - type: config
+                          instances:
+                            - name: argocd
+                              url: ${ARGOCD_URL}
+                              username: ${ARGOCD_USERNAME}
+                              password: ${ARGOCD_PASSWORD}
+                    signInPage: oidc
+                    auth:
+                      # Need this for OIDC Keycloak login
+                      session:
+                        secret: ${BACKEND_SECRET}
+                      environment: production
+                      providers:
+                        oidc:
+                          production:
+                            metadataUrl: ${KEYCLOAK_BASE_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration
+                            clientId: ${KEYCLOAK_CLIENT_ID}
+                            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+                            prompt: auto
+                      externalAccess:
+                      - options:
+                          subject: orchestrator
+                          token: ${BACKEND_SECRET}
+                        type: static
+                    backend:
+                      auth:
+                        externalAccess:
+                          - type: static
+                            options:
+                              token: ${BACKEND_SECRET}
+                              subject: external-access
+                      cors:
+                        origin: ${BACKEND_URL}
+                      baseUrl: ${BACKEND_URL}
+                      reading:
+                        allow:
+                          - host: raw.githubusercontent.com
+                    catalog:
+                      locations:
+                        - type: url
+                          target: https://raw.githubusercontent.com/redhat-appstudio/tssc-sample-templates/release-v1.8.x/all.yaml
+                      providers:
+                        keycloakOrg:
+                          default:
+                            baseUrl: ${KEYCLOAK_BASE_URL}
+                            loginRealm: ${KEYCLOAK_REALM}
+                            realm: ${KEYCLOAK_REALM}
+                            clientId: ${KEYCLOAK_CLIENT_ID}
+                            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+                            schedule:
+                              frequency:
+                                minutes: 5
+                              timeout:
+                                minutes: 3
+                              initialDelay:
+                                seconds: 15
+                    kubernetes:
+                      serviceLocatorMethod:
+                        type: multiTenant
+                      clusterLocatorMethods:
+                        - type: config
+                          clusters:
+                            - name: local
+                              url: https://kubernetes.default.svc
+                              authProvider: serviceAccount
+                              skipTLSVerify: true
+                              skipMetricsLookup: true
+                    extensions:
+                      installation:
+                        enabled: true
+                    permission:
+                      enabled: true
+                      rbac:
+                        policies-csv-file: /opt/app-root/src/rbac-policies.csv
+                        admin:
+                          users:
+                            - name: user:default/admin
 
     # - extraDependencies:
     #     - apiVersion: policy.open-cluster-management.io/v1
