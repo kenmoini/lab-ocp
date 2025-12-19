@@ -139,7 +139,7 @@ spec:
                         secret: ${BACKEND_SECRET}
                       environment: production
                       providers:
-                        oidc:
+                        keycloak:
                           production:
                             metadataUrl: ${KEYCLOAK_BASE_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration
                             clientId: ${KEYCLOAK_CLIENT_ID}
