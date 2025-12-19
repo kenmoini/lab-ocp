@@ -9,6 +9,7 @@ resources:
   - acs-secured-cluster.yaml
   - netobserv-loki-format-secret.yaml
   - rhbk-rhdh-secrets.yaml
+  - argocd-rhdh-secrets.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

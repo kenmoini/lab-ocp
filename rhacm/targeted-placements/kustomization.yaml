@@ -6,6 +6,7 @@ resources:
   - acs-secured-cluster.yaml
   - acs-secured-cluster-binding.yaml
   - developer-services-rhbk.yaml
+  - developer-services-openshift-gitops.yaml
   - loki-format-secret.yaml
   - loki-format-secret-binding.yaml
   - kube-system_community-eso.yaml
