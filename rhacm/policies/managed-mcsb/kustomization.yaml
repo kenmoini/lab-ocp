@@ -6,6 +6,7 @@ namespace: open-cluster-management-policies
 
 resources:
   - global-rhbk.yaml
+  - global-rhdh.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

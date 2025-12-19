@@ -2,9 +2,9 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: mcsb-global-rhbk
+  name: mcsb-global-rhdh
   annotations:
-    policy.open-cluster-management.io/description: Creates a ManagedClusterSetBinding to the 'global' ManagedClusterSet in the 'rhbk' namespace.
+    policy.open-cluster-management.io/description: Creates a ManagedClusterSetBinding to the 'global' ManagedClusterSet in the 'rhdh' namespace.
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
     policy.open-cluster-management.io/controls: ACM-CFG - Advanced Cluster Management Configuration
@@ -16,7 +16,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: mcsb-global-rhbk-check
+          name: mcsb-global-rhdh-check
         spec:
           remediationAction: inform
           severity: low
@@ -26,12 +26,12 @@ spec:
                 apiVersion: v1
                 kind: Namespace
                 metadata:
-                  name: rhbk
+                  name: rhdh
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
-          name: mcsb-global-rhbk-check
+          name: mcsb-global-rhdh-check
           namespace: ""
           compliance: Compliant
       ignorePending: true
@@ -39,7 +39,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: mcsb-global-rhbk
+          name: mcsb-global-rhdh
         spec:
           remediationAction: enforce
           severity: low
@@ -50,6 +50,6 @@ spec:
                 kind: ManagedClusterSetBinding
                 metadata:
                   name: global
-                  namespace: rhbk
+                  namespace: rhdh
                 spec:
                   clusterSet: global

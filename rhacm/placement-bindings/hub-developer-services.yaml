@@ -12,3 +12,8 @@ subjects:
   - name: mcsb-global-rhbk
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+    
+  - name: mcsb-global-rhdh
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+    
