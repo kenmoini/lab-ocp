@@ -204,76 +204,74 @@ spec:
                           users:
                             - name: user:default/admin
 
-    # - extraDependencies:
-    #     - apiVersion: policy.open-cluster-management.io/v1
-    #       kind: ConfigurationPolicy
-    #       name: backstage-instance-init
-    #       namespace: ""
-    #       compliance: Compliant
-    #     - apiVersion: policy.open-cluster-management.io/v1
-    #       kind: ConfigurationPolicy
-    #       name: rhdh-rhbk-realm
-    #       namespace: ""
-    #       compliance: Compliant
-    #   objectDefinition:
-    #     apiVersion: policy.open-cluster-management.io/v1
-    #     kind: ConfigurationPolicy
-    #     metadata:
-    #       name: backstage-instance
-    #     spec:
-    #       remediationAction: enforce
-    #       severity: critical
-    #       object-templates:
-    #         - complianceType: musthave
-    #           objectDefinition:
-    #             apiVersion: rhdh.redhat.com/v1alpha3
-    #             kind: Backstage
-    #             metadata:
-    #               name: dev-hub
-    #               namespace: rhdh
-    #               labels:
-    #                 app.kubernetes.io/name: dev-hub
-    #                 config.openshift.io/component: dev-hub
-    #             spec:
-    #               # Database configuration - using embedded PostgreSQL for simplicity
-    #               database:
-    #                 enableLocalDb: true
-    #               deployment:
-    #                 patch:
-    #                   spec:
-    #                     template:
-    #                       spec:
-    #                         volumes:
-    #                           - $patch: replace
-    #                             name: dynamic-plugins-root
-    #                             persistentVolumeClaim:
-    #                               claimName: dynamic-plugins-root
-    #               # Application configuration
-    #               application:
-    #                 # Use external ConfigMap for app configuration
-    #                 appConfig:
-    #                   configMaps:
-    #                   - name: app-config-rhdh
-    #                   mountPath: /opt/app-root/src
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: backstage-instance-init
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhdh-rhbk-realm
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: backstage-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rhdh.redhat.com/v1alpha3
+                kind: Backstage
+                metadata:
+                  name: dev-hub
+                  namespace: rhdh
+                  labels:
+                    app.kubernetes.io/name: dev-hub
+                    config.openshift.io/component: dev-hub
+                spec:
+                  # Database configuration - using embedded PostgreSQL for simplicity
+                  database:
+                    enableLocalDb: true
+                  deployment:
+                    patch:
+                      spec:
+                        template:
+                          spec:
+                            volumes:
+                              - $patch: replace
+                                name: dynamic-plugins-root
+                                persistentVolumeClaim:
+                                  claimName: dynamic-plugins-root
+                  # Application configuration
+                  application:
+                    # Use external ConfigMap for app configuration
+                    appConfig:
+                      configMaps:
+                      - name: app-config-rhdh
+                      mountPath: /opt/app-root/src
 
-    #                 # Environment variables from Secret
-    #                 extraEnvs:
-    #                   secrets:
-    #                   - name: my-rhdh-secrets
-    #                   - name: keycloak-secrets
-    #                   # Inject the ARGOCD_URL, ARGOCD_USERNAME,
-    #                   # and ARGOCD_PASSWORD into the pod as environment variables
-    #                   - name: argocd-secrets
+                    # Environment variables from Secret
+                    extraEnvs:
+                      secrets:
+                      - name: my-rhdh-secrets
+                      - name: keycloak-secrets
+                      - name: argocd-secrets
 
-    #                 # Mount RBAC policies file
-    #                 extraFiles:
-    #                   mountPath: /opt/app-root/src
-    #                   configMaps:
-    #                     - name: rbac-policies
+                    # Mount RBAC policies file
+                    extraFiles:
+                      mountPath: /opt/app-root/src
+                      configMaps:
+                        - name: rbac-policies
 
-    #                 # Single replica for development
-    #                 replicas: 1
+                    # Single replica for development
+                    replicas: 1
 
-    #                 # Route configuration
-    #                 route:
-    #                   enabled: true
+                    # Route configuration
+                    route:
+                      enabled: true
