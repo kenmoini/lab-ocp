@@ -135,6 +135,7 @@ spec:
                               username: ${ARGOCD_USERNAME}
                               password: ${ARGOCD_PASSWORD}
                     signInPage: oidc
+                    dangerouslyAllowSignInWithoutUserInCatalog: true
                     auth:
                       # Need this for OIDC Keycloak login
                       session:
