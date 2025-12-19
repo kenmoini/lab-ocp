@@ -9,6 +9,7 @@ resources:
   - acs-secured-cluster.yaml
   - netobserv-loki-format-secret.yaml
   - rhbk-rhdh-secrets.yaml
+  - rhdh-rhdh-secrets.yaml
   - argocd-rhdh-secrets.yaml
 
 commonAnnotations:

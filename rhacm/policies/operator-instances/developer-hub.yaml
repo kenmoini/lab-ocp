@@ -108,6 +108,8 @@ spec:
                         disabled: false
                       - package: ./dynamic-plugins/dist/backstage-community-plugin-rbac
                         disabled: false
+
+
     # - extraDependencies:
     #     - apiVersion: policy.open-cluster-management.io/v1
     #       kind: ConfigurationPolicy
