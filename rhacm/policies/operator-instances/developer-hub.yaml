@@ -108,7 +108,7 @@ spec:
                         disabled: false
                       - package: ./dynamic-plugins/dist/backstage-community-plugin-rbac
                         disabled: false
-                      - package: ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-keycloak
+                      - package: @redhat/backstage-plugin-keycloak-backend 
                         disabled: false
             - complianceType: musthave
               objectDefinition:
