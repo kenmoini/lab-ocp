@@ -178,3 +178,25 @@ spec:
                             kubernetes.io/metadata.name: openshift-user-workload-monitoring
                   # tracing:
                   #   enabled: true
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhbk-consolelink
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: console.openshift.io/v1
+                kind: ConsoleLink
+                metadata:
+                  name: rhbk-console-link
+                spec:
+                  applicationMenu:
+                    imageURL: 'https://dt-cdn.net/hub/Keycloak_Logo.png'
+                    section: Red Hat Applications
+                  href: 'https://{{ (lookup "networking.k8s.io/v1" "Ingress" "rhbk" "sso-ingress").spec.rules[0].host }}'
+                  location: ApplicationMenu
+                  text: Red Hat Build of Keycloak
