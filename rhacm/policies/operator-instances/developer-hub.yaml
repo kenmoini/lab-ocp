@@ -260,7 +260,7 @@ spec:
                     extraEnvs:
                       secrets:
                       - name: my-rhdh-secrets
-                      - name: keycloak-secrets
+                      - name: keycloak-client
                       - name: argocd-secrets
 
                     # Mount RBAC policies file
