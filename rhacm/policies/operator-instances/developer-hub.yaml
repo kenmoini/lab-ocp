@@ -108,8 +108,6 @@ spec:
                         disabled: false
                       - package: ./dynamic-plugins/dist/backstage-community-plugin-rbac
                         disabled: false
-                      - package: @redhat/backstage-plugin-keycloak-backend 
-                        disabled: false
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
@@ -141,7 +139,7 @@ spec:
                         secret: ${BACKEND_SECRET}
                       environment: production
                       providers:
-                        keycloak:
+                        oidc:
                           production:
                             metadataUrl: ${KEYCLOAK_BASE_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration
                             clientId: ${KEYCLOAK_CLIENT_ID}
