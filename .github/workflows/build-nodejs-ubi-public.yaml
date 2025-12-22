@@ -1,4 +1,4 @@
-name: Build Container - Public Kemo Labs Golden UBI
+name: Build Container - Public Kemo Labs NodeJS UBI
 
 env:
   REGISTRY_HOSTNAME: quay.io
