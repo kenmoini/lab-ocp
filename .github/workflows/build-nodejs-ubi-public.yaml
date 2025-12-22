@@ -2,9 +2,9 @@ name: Build Container - Public Kemo Labs Golden UBI
 
 env:
   REGISTRY_HOSTNAME: quay.io
-  REGISTRY_IMAGE: quay.io/kenmoini/kl-golden-ubi
-  BUILD_CONTEXT_PATH: containers/kl-golden-ubi
-  CONTAINERFILE_PATH: containers/kl-golden-ubi/Containerfile
+  REGISTRY_IMAGE: quay.io/kenmoini/kl-nodejs-ubi
+  BUILD_CONTEXT_PATH: containers/kl-nodejs
+  CONTAINERFILE_PATH: containers/kl-nodejs/Containerfile
   WORKFLOW_TRIGGER: 1
 
 on:
@@ -12,8 +12,8 @@ on:
     branches:
       - main
     paths:
-      - containers/kl-golden-ubi/**
-      - .github/workflows/build-golden-ubi-public.yaml
+      - containers/kl-nodejs/**
+      - .github/workflows/build-nodejs-ubi-public.yaml
 
   # Schedule workflow run at 00:00 on Sunday
   schedule:

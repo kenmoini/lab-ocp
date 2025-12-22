@@ -5,6 +5,8 @@ env:
   REGISTRY_IMAGE: nexus-docker.apps.tri-force.lab.kemo.network/docker/kl-golden-ubi
   BUILD_CONTEXT_PATH: containers/kl-golden-ubi
   CONTAINERFILE_PATH: containers/kl-golden-ubi/Containerfile
+  # WORKFLOW_TRIGGER is used to force workflow re-runs via changing its value
+  WORKFLOW_TRIGGER: 1
 
 on:
   push:

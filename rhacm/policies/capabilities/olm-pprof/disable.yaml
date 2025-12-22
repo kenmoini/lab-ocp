@@ -1,0 +1,31 @@
+# https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/edge_computing/sno-configure-for-vdu#ztp-sno-du-reducing-resource-usage-with-olm-pprof_sno-configure-for-vdu
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: disable-olm-pprof
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CC - Capability Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: disable-olm-pprof
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: collect-profiles-config
+                  namespace: openshift-operator-lifecycle-manager
+                data:
+                  pprof-config.yaml: |
+                    disabled: True

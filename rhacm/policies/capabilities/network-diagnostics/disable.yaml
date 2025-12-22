@@ -1,0 +1,29 @@
+# https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html/edge_computing/sno-configure-for-vdu#ztp-sno-du-disabling-network-diagnostics_sno-configure-for-vdu
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: disable-network-diagnostics
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CC - Capability Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: disable-network-diagnostics
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1
+                kind: Network
+                metadata:
+                  name: cluster
+                spec:
+                  disableNetworkDiagnostics: true
