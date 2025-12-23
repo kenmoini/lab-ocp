@@ -106,6 +106,11 @@ if command -v roxctl &>/dev/null; then
   append_ver "roxctl    |${ROXCTL_VER}     |Red Hat OpenShift Advanced Cluster Security CLI (roxctl)"
 fi
 
+if command -v k9s &>/dev/null; then
+  K9S_VER=$(k9s version --short | grep Version | grep -Eo '?[0-9]+\.[0-9]+\.[0-9]+')
+  append_ver "k9s    |${K9S_VER}     |K9s CLI"
+fi
+
 JQ_VER=$(jq --version)
 JQ_VER=${JQ_VER#jq-}
 append_ver "jq       |${JQ_VER#v}        |jq"

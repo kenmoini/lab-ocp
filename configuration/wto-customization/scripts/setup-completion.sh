@@ -60,3 +60,7 @@ fi
 if command -v roxctl &>/dev/null; then
   roxctl completion bash > $COMPDIR/roxctl
 fi
+
+if command -v k9s &>/dev/null; then
+  k9s completion bash > $COMPDIR/k9s
+fi

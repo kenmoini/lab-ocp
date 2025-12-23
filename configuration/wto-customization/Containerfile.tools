@@ -1,6 +1,7 @@
 # https://github.com/redhat-developer/web-terminal-tooling/tree/main
 ARG FILE_ARCH
 ARG PATH_ARCH
+##############################################################################
 FROM registry.access.redhat.com/ubi9/go-toolset:9.7 AS gobuilder
 
 WORKDIR /tmp/go
@@ -8,6 +9,7 @@ WORKDIR /tmp/go
 RUN git clone https://github.com/derailed/k9s.git && \
     cd k9s && \
     make build && chmod a+x /tmp/go/k9s/execs/k9s
+
 ##############################################################################
 #FROM quay.io/devfile/base-developer-image:ubi9-latest
 FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6-1760515502
