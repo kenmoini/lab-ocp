@@ -14,6 +14,8 @@ A base script installs GitOps, configures it with an AppOfApps pattern, includin
 
 ## Architecture and Pattern
 
+> Loosely based on this Validated Pattern but with things that make more sense https://validatedpatterns.io/patterns/multicloud-gitops/
+
 ### Bootstrap Initialization
 
 The goal for bootstrapping is it should be as simple as possible, a 1-2-3 sort of thing.
