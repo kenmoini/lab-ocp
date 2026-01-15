@@ -12,6 +12,40 @@ A base script installs GitOps, configures it with an AppOfApps pattern, includin
 - An OpenShift cluster or few.
 - ODF on the clusters - if not, you just need to change some `storageClassName` definitions and do something different for MCO and Loki object storage.
 
+## Architecture and Pattern
+
+### Bootstrap Initialization
+
+The goal for bootstrapping is it should be as simple as possible, a 1-2-3 sort of thing.
+
+![Cluster Bootstrapping](static/hub-cluster-bootstrap.png)
+
+This is done via the `./bootstrap/hub/deploy.sh` script against the OpenShift cluster that will become the Hub cluster.  It simply does:
+
+- Creation of prerequisite secrets (Vault, Git, etc)
+- Installation of ArgoCD
+- Configuration of root ArgoCD App-of-Apps
+
+### Bootstrap Process
+
+Once that bootstrap script is started, the [root App-of-Apps](bootstrap/hub/bootstrap-application.yaml) will sync an [Application that reconfigures ArgoCD](bootstrap/hub/argo/hub-acm-instance.yaml) with best practices, and [another set of Applications](https://github.com/kenmoini/lab-ocp/blob/main/bootstrap/hub/argo/kustomization.yaml) that install ACM and configure it, syncing down all the assets like Policies, Placements, etc.
+
+![ArgoCD Root App of Apps](static/argocd-root-app.png)
+
+### Bootstrap Results
+
+After ArgoCD syncs down everything, ACM is configured with everything it needs to manage OpenShift clusters at scale.  Some things are automatically configured to all OpenShift clusters, some to specific version, specific environments, with many additional labels available for capability enhancements - eg label a cluster to enable virtualization, developer services, enhanced observability, and more.
+
+Some may leverage ArgoCD to sync everything down everywhere, but this does not scale well - we use ArgoCD for it's CD syncing capabilities, limit it's logic and sprawl, and use ACM for its strenghts.
+
+![Bootstrap Results](static/bootstrap-result.png)
+
+### Multi-Cluster Management
+
+With everything in place, you can then leverage the Hub for control your fleet no matter where they run or what they're running.
+
+![MCM Architecture](static/mcm-arch.png)
+
 ## Hub Cluster
 
 I have a Hub cluster, 3 bare metal nodes that are pretty beefy.  I have it always deployed and use it as a Hub cluster for ACM and ACS.
