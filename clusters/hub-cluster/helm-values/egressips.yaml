@@ -4,6 +4,14 @@ createEgressIPs: true
 targetCURLTestEndpoint: "http://disconn-harbor.d70.kemo.labs:8080"
 
 egressIPList:
+- name: oobm-set1
+  egressIPs:
+    - 192.168.46.60
+    - 192.168.46.61
+  selector:
+    matchLabels:
+      kubernetes.io/metadata.name: openshift-workload-availability
+      
 - name: dbnet-set1
   egressIPs:
     - 192.168.66.60
