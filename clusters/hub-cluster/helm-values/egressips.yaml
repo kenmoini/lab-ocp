@@ -11,6 +11,13 @@ egressIPList:
   selector:
     matchLabels:
       kubernetes.io/metadata.name: openshift-workload-availability
+  podSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - fence-agents-remediation-operator
+          - node-healthcheck-operator
       
 - name: dbnet-set1
   egressIPs:
