@@ -30,7 +30,7 @@ This is done via the `./bootstrap/hub/deploy.sh` script against the OpenShift cl
 
 ### Bootstrap Process
 
-Once that bootstrap script is started, the [root App-of-Apps](bootstrap/hub/bootstrap-application.yaml) will sync an [Application that reconfigures ArgoCD](bootstrap/hub/argo/hub-acm-instance.yaml) with best practices, and [another set of Applications](https://github.com/kenmoini/lab-ocp/blob/main/bootstrap/hub/argo/kustomization.yaml) that install ACM and configure it, syncing down all the assets like Policies, Placements, etc.
+Once that bootstrap script is started, the [root App-of-Apps](bootstrap/hub/bootstrap-application.yaml) will sync an [Application that reconfigures ArgoCD](bootstrap/hub/argo/hub-argocd.yaml) with best practices, and [another set of Applications](https://github.com/kenmoini/lab-ocp/blob/main/bootstrap/hub/argo/kustomization.yaml) that install ACM and configure it, syncing down all the assets like Policies, Placements, etc.
 
 ![ArgoCD Root App of Apps](static/argocd-root-app.png)
 
