@@ -76,7 +76,7 @@ spec:
                         tlsConfig:
                           ca:
                             key: service-ca.crt
-                            name: hub-alertmanager-router-ca
+                            name: hub-alertmanager-router-ca-{{ $n := split "." (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.apiServerURL }}{{ $n._1 }}
                           insecureSkipVerify: false
                       externalLabels:
                         managed_cluster: {{hub index .ManagedClusterLabels "clusterID" hub}}
