@@ -5,5 +5,5 @@ metadata:
   namespace: openshift-storage
   annotations:
     argocd.argoproj.io/sync-wave: "-2"
-spec:
-  enableCephTools: true
+spec: {}
+  # enableCephTools: true
