@@ -1,0 +1,18 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: openshift-4.20-clusters
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: openshift-4.20-clusters
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: operators-4.20-gitops-1.18
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+  - name: operators-logging-6.4
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

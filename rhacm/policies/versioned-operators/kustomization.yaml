@@ -12,9 +12,11 @@ resources:
 
   - logging-base.yaml
   - logging-6.3.yaml
+  - logging-6.4.yaml
 
   - rh-loki-base.yaml
   - rh-loki-6.3.yaml
+  - rh-loki-6.4.yaml
 
   - mtc-base.yaml
   - mtc-1.8.yaml

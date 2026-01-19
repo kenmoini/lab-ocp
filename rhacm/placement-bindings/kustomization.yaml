@@ -7,6 +7,7 @@ resources:
   - all-openshift-clusters.yaml
   - all-hcp-virt-clusters.yaml
   - openshift-4.19-clusters.yaml
+  - openshift-4.20-clusters.yaml
   - acs.yaml
   - enhanced-metrics.yaml
   - global.yaml
@@ -17,6 +18,7 @@ resources:
   - hub-cluster.yaml
   - hub-developer-services.yaml
   - hub-4.19-clusters.yaml
+  - hub-4.20-clusters.yaml
 
   - community-eso.yaml
   - bmh-lso-odf.yaml

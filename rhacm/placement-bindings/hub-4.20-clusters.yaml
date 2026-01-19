@@ -1,0 +1,18 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: hub-4.20-clusters
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: hub-4.20-clusters
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: operators-aap-2.6
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+  - name: operators-rhbk-26.4
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
