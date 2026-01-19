@@ -12,7 +12,7 @@ spec:
   sources:
     - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
       targetRevision: main
-      path: openshift/advanced-cluster-management/operator/overlays/release-2.14/
+      path: openshift/advanced-cluster-management/operator/overlays/release-2.15/
       kustomize: {}
 
   project: default

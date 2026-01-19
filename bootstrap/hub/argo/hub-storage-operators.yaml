@@ -18,9 +18,9 @@ spec:
       targetRevision: main
       path: openshift/local-storage/operator/overlays/stable/
       kustomize: {}
-    - repoURL: 'https://github.com/redhat-cop/gitops-catalog'
+    - repoURL: 'https://github.com/kenmoini/gitops-catalog'
       targetRevision: main
-      path: openshift-data-foundation-operator/operator/overlays/stable-4.19/
+      path: openshift-data-foundation-operator/operator/overlays/stable-4.20/
       kustomize: {}
     - repoURL: 'https://github.com/redhat-cop/gitops-catalog'
       targetRevision: main
