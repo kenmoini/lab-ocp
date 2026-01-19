@@ -69,7 +69,7 @@ spec:
                       - apiVersion: v2
                         bearerToken:
                           key: token
-                          name: observability-alertmanager-accessor
+                          name: observability-alertmanager-accessor-{{ $n := split "." (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.apiServerURL }}{{ $n._1 }}
                         scheme: https
                         staticConfigs:
                         - {{hub (lookup "route.openshift.io/v1" "Route" "open-cluster-management-observability" "alertmanager").spec.host hub}}
