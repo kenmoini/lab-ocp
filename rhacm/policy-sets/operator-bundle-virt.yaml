@@ -9,7 +9,7 @@ spec:
   policies:
     - operators-descheduler
     - operators-far
-    - operators-mtv
+    - operators-mtv-base
     - operators-nfd
     - operators-nmo
     - operators-nmstate

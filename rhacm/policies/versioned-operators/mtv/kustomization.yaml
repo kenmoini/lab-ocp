@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: open-cluster-management-policies
+
+resources:
+
+  - mtv-base.yaml
+  - mtv-2.9.yaml
+  - mtv-2.10.yaml

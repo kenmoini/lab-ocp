@@ -20,7 +20,7 @@ resources:
   - gatekeeper.yaml
   - lso.yaml
   - metallb.yaml
-  - mtv.yaml
+  # - mtv.yaml
   - network-observability.yaml
   - nfd.yaml
   - nmstate.yaml
