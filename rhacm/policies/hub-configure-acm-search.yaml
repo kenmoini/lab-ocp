@@ -1,0 +1,63 @@
+
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: hub-configure-acm-search
+  annotations:
+    policy.open-cluster-management.io/description: Reconfigures ACM Search for persistent storage with the default storageclass.
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: check-acm-search-exists
+        spec:
+          remediationAction: inform
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: search.open-cluster-management.io/v1alpha1
+                kind: Search
+                metadata:
+                  name: search-v2-operator
+                  namespace: open-cluster-management
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: check-acm-search-exists
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: hub-acm-search-pvc
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates-raw: |
+            {{- range $sc := (lookup "storage.k8s.io/v1" "StorageClass" "" "").items }}
+            {{- range $key, $value := $sc.metadata.annotations }}
+            {{- if and (eq $key "storageclass.kubernetes.io/is-default-class") (eq $value "true") }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: search.open-cluster-management.io/v1alpha1
+                kind: Search
+                metadata:
+                  name: search-v2-operator
+                  namespace: open-cluster-management
+                spec:
+                  dbStorage:
+                    size: 20Gi
+                    storageClassName: {{ $sc.metadata.name }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
