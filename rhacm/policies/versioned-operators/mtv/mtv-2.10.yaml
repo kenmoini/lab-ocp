@@ -14,7 +14,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: mtv-subscription
+          name: mtv-subscription-2.10
         spec:
           remediationAction: enforce
           severity: high
