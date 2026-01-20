@@ -67,16 +67,16 @@ spec:
       destination:
         name: "{{name}}"
         namespace: "{{namespace}}"
-      # syncPolicy:
-      #   automated:
-      #     prune: false
-      #     selfHeal: true
-      #   syncOptions:
-      #     - CreateNamespace=true
-      #     - SkipDryRunOnMissingResource=true
-      #     - ServerSideApply=true
-      #     - RespectIgnoreDifferences=true
-      #     - ApplyOutOfSyncOnly=true
-      #     - Validate=false
-      #   retry:
-      #     limit: 5
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+          - ApplyOutOfSyncOnly=true
+          - Validate=false
+        retry:
+          limit: 5
