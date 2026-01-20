@@ -68,7 +68,9 @@ spec:
                   name: gpu-cluster-policy
                 spec:
                   vgpuDeviceManager:
-                    enabled: true
+                    enabled: false
+                  gdrcopy:
+                    enabled: false
                   migManager:
                     enabled: true
                   operator:
@@ -117,16 +119,21 @@ spec:
                     config:
                       default: ''
                       name: ''
+                    mps:
+                      root: /run/nvidia/mps
                     enabled: true
                   mig:
                     strategy: single
                   sandboxDevicePlugin:
                     enabled: true
+                  kataManager:
+                    config:
+                      artifactsDir: /opt/nvidia-gpu-operator/artifacts/runtimeclasses
                   validator:
                     plugin:
-                      env:
-                        - name: WITH_WORKLOAD
-                          value: 'true'
+                      env: []
+                        # - name: WITH_WORKLOAD
+                        #   value: 'true'
                   nodeStatusExporter:
                     enabled: true
                   daemonsets:
