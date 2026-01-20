@@ -1,0 +1,27 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: conruntime-configuration
+  #annotations:
+  #  argocd.argoproj.io/compare-options: IgnoreExtraneous
+#placementBindingDefaults:
+#  name: machineconfiguration
+policySetDefaults:
+  generatePolicySetPlacement: false
+policyDefaults:
+  generatePolicyPlacement: false
+  namespace: open-cluster-management-policies
+  categories:
+  - NIST SP 800-53
+  controls:
+  - CM Configuration Management
+  standards:
+  - CM-2 Baseline Configuration
+  remediationAction: enforce
+  severity: high
+  pruneObjectBehavior: None
+  consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
+policies:
+  - name: conruntime-configuration
+    manifests:
+      - path: manifests

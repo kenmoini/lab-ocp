@@ -6,6 +6,13 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
+  capabilities:
+    platform:
+      analytics:
+        namespaceRightSizingRecommendation:
+          enabled: true
+        virtualizationRightSizingRecommendation:
+          enabled: true
   enableDownsampling: true
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
