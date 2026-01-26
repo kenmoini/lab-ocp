@@ -18,6 +18,10 @@ spec:
       targetRevision: main
       path: rhacm/policy-generators/kubeletconfig/
       kustomize: {}
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: rhacm/policy-generators/containerruntimeconfig/
+      kustomize: {}
 
   project: default
   syncPolicy:

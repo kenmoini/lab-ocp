@@ -13,6 +13,12 @@ set -e
 oc label node raza cluster.ocs.openshift.io/openshift-storage='' --overwrite
 oc label node suki cluster.ocs.openshift.io/openshift-storage='' --overwrite
 oc label node endurance cluster.ocs.openshift.io/openshift-storage='' --overwrite
+oc label node raza cpumanager="true" --overwrite
+oc label node suki cpumanager="true" --overwrite
+oc label node endurance cpumanager="true" --overwrite
+oc label node raza k8s.ovn.org/egress-assignable='' --overwrite
+oc label node suki k8s.ovn.org/egress-assignable='' --overwrite
+oc label node endurance k8s.ovn.org/egress-assignable='' --overwrite
 
 oc create secret generic bootstrap-vault-userpass -n kube-system --from-literal=password=$(cat $HOME/.hub-vault_pass.txt | tr -d '\n') --dry-run=client -o yaml | oc apply -f -
 
@@ -32,6 +38,7 @@ until $(oc get managedclusters.cluster.open-cluster-management.io/hub-cluster &>
 
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster community-eso=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/democratic-csi=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/kyverno=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/vlan-stacks=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/egress-ips=enabled

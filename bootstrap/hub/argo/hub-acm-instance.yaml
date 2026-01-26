@@ -7,6 +7,11 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-5"
 spec:
+  ignoreDifferences:
+    - group: operator.open-cluster-management.io
+      kind: MultiClusterHub
+      jsonPointers:
+        - /spec/overrides/components
   destination:
     server: 'https://kubernetes.default.svc'
   sources:
