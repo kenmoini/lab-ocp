@@ -70,7 +70,7 @@ spec:
                         bearerToken:
                           key: token
                           #name: observability-alertmanager-accessor-{{ $n := split "." (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.apiServerURL }}{{ $n._1 }}
-                          name: observability-alertmanager-accessor-{{ fromClusterClaim "id.openshift.io" | trunc 19 }}
+                          name: observability-alertmanager-accessor-{{ fromClusterClaim "id.openshift.io" | replace "-" "" | trunc 19 }}
                         scheme: https
                         staticConfigs:
                         - {{hub (lookup "route.openshift.io/v1" "Route" "open-cluster-management-observability" "alertmanager").spec.host hub}}
@@ -82,7 +82,7 @@ spec:
                             # ACM 2.15.0...
                             #name: hub-alertmanager-router-ca-{{ $n := split "." (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.apiServerURL }}{{ $n._1 }}
                             # ACM 2.15.1+...I hate these idiots
-                            name: hub-alertmanager-router-ca-{{ fromClusterClaim "id.openshift.io" | trunc 19 }}
+                            name: hub-alertmanager-router-ca-{{ fromClusterClaim "id.openshift.io" | replace "-" "" | trunc 19 }}
                           insecureSkipVerify: false
                       externalLabels:
                         managed_cluster: {{hub index .ManagedClusterLabels "clusterID" hub}}
