@@ -1,0 +1,31 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub-simple-chat
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+  sources:
+    - repoURL: 'https://github.com/kenmoini/smart-drone-patterns/'
+      targetRevision: main
+      path: apps/simple-chat/deployment/overlays/persistent/
+      kustomize: {}
+
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - SkipDryRunOnMissingResource=true
+      - ServerSideApply=true
+      - RespectIgnoreDifferences=true
+      - ApplyOutOfSyncOnly=true
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true # overrides changes made on the cluster that drift from git state
+    retry:
+      limit: 5

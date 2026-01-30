@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: debug-receiver
+  labels:
+    app: debug-receiver
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: debug-receiver
+  template:
+    metadata:
+      labels:
+        app: debug-receiver
+    spec:
+      containers:
+        - image: registry.access.redhat.com/ubi8/python-39:latest
+          name: python
+          ports:
+            - containerPort: 9393
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          command:
+            - /bin/sh
+            - -c
+            - |
+              pip install pyserv
+              serv 9393
