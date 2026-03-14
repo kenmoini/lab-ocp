@@ -67,7 +67,7 @@ spec:
                   deschedulingIntervalSeconds: 30
                   profiles:
                     - KubeVirtRelieveAndMigrate
-                    - LongLifecycle
+                    - TopologyAndDuplicates
                   profileCustomizations:
                     devEnableSoftTainter: true
                     devDeviationThresholds: AsymmetricLow
