@@ -21,3 +21,5 @@ spec:
               operator: NotIn
               values:
                 - "KubeVirt"
+                - "Azure"
+                - "Amazon"
