@@ -28,6 +28,7 @@ spec:
           values:
           - OpenShift
           - Google
+          - AKS
 ---
 apiVersion: apps.open-cluster-management.io/v1beta1
 kind: GitOpsCluster
