@@ -16,6 +16,10 @@ spec:
       kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
+      path: rhacm/managedclustersets/
+      kustomize: {}
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
       path: rhacm/gitops/
       kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'

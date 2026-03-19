@@ -1,0 +1,10 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta2
+kind: ManagedClusterSet
+metadata:
+  annotations:
+    cluster.open-cluster-management.io/submariner-broker-ns: external-managed-ocp-broker
+  name: external-managed-ocp
+spec:
+  clusterSelector:
+    selectorType: ExclusiveClusterSetLabel

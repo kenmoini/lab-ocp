@@ -39,9 +39,9 @@ until $(oc get managedclusters.cluster.open-cluster-management.io/hub-cluster &>
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster community-eso=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/democratic-csi=enabled
-oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/kyverno=enabled
+# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/kyverno=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/vlan-stacks=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/egress-ips=enabled
-oc label managedclusters.cluster.open-cluster-management.io/hub-cluster rhLoki=enabled
-oc label managedclusters.cluster.open-cluster-management.io/hub-cluster nvidia-gpu=enabled
+# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster rhLoki=enabled
+# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster nvidia-gpu=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster virtualization=enabled
