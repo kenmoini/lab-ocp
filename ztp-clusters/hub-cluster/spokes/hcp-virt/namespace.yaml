@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hcp-virt
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hcp-virt-infra

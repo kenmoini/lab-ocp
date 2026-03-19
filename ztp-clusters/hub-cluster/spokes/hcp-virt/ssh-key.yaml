@@ -1,0 +1,31 @@
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: sshkey-hcp-virt
+#   namespace: hcp-virt-infra
+# stringData:
+#   'id_rsa.pub': #injected on create
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sshkey-hcp-virt
+  namespace: hcp-virt-infra
+spec:
+  refreshInterval: "3600s"
+  secretStoreRef:
+    name: kemo-labs-vault
+    kind: ClusterSecretStore
+  target:
+    name: sshkey-hcp-virt
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    template:
+      engineVersion: v2
+      type: Opaque
+  data:
+    - secretKey: 'id_rsa.pub'
+      remoteRef:
+        key: kemo.labs/openshift/shared/ztp
+        property: ssh-public-key

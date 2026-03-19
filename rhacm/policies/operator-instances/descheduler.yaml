@@ -66,8 +66,8 @@ spec:
                   managementState: Managed
                   deschedulingIntervalSeconds: 30
                   profiles:
-                    - DevKubeVirtRelieveAndMigrate
-                    - LongLifecycle
+                    - KubeVirtRelieveAndMigrate
+                    - TopologyAndDuplicates
                   profileCustomizations:
                     devEnableSoftTainter: true
                     devDeviationThresholds: AsymmetricLow

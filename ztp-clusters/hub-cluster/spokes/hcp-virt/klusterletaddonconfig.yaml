@@ -1,0 +1,20 @@
+---
+apiVersion: agent.open-cluster-management.io/v1
+kind: KlusterletAddonConfig
+metadata:
+  name: hcp-virt
+  namespace: hcp-virt
+spec:
+  clusterName: hcp-virt
+  clusterNamespace: hcp-virt
+  clusterLabels:
+    cloud: KubeVirt
+    vendor: OpenShift
+  applicationManager:
+    enabled: true
+  policyController:
+    enabled: true
+  searchCollector:
+    enabled: true
+  certPolicyController:
+    enabled: true
