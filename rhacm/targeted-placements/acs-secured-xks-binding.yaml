@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: acs-secured-xks
+  namespace: stackrox
+placementRef:
+  name: acs-secured-xks
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: instance-acs-secured-xks
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

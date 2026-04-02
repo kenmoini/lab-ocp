@@ -12,6 +12,8 @@ stringData:
   alertmanager.yaml: |
     global:
       resolve_timeout: "5m"
+      http_config:
+        proxy_from_environment: true
     receivers:
     - name: "null"
     - name: debug-receiver

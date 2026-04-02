@@ -12,6 +12,8 @@ resources:
   - global-hcp-virt-openshift-operators.yaml
   - hub-health-checks.yaml
   - developer-services.yaml
+  - onprem-openshift-config.yaml
+  - onprem-openshift-operators.yaml
   - operator-bundle-nvidia.yaml
   - operator-bundle-odf.yaml
   - operator-bundle-virt.yaml

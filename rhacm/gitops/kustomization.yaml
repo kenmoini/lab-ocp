@@ -19,6 +19,7 @@ resources:
   - appset-rocketchat.yaml
   - appset-vlan-stacks.yaml
   - appset-ztp-sync.yaml
+  - appset-ext-xks-rhacs.yaml
   - rhacm-integration.yaml
 
 commonAnnotations:

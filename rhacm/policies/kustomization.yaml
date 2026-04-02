@@ -16,6 +16,7 @@ resources:
   - health-checks/
 
   # Global/Common Policies
+  - maintenance/
   - console-info-header.yaml
   - label-nodes-egressip.yaml
   - audit-logging-config.yaml

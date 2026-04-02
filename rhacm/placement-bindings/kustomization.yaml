@@ -6,6 +6,7 @@ namespace: open-cluster-management-policies
 resources:
   - all-openshift-clusters.yaml
   - all-hcp-virt-clusters.yaml
+  - onprem-openshift-clusters.yaml
   - openshift-4.19-clusters.yaml
   - openshift-4.20-clusters.yaml
   - acs.yaml

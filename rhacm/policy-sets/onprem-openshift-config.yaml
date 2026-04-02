@@ -1,0 +1,19 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: onprem-openshift-config
+  #namespace: open-cluster-management-policies
+spec:
+  description: "On-Premises OpenShift configuration policies"
+  policies:
+    # Policy Generators
+    - machine-configuration
+    - kubelet-configuration
+    - label-nodes
+
+    # Policies
+    - configure-idp
+    - configure-ingress-certs
+    - remove-kubeadmin
+    - openshift-samples-config

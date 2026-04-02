@@ -1,0 +1,103 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: marketplace-job-cleanup
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: marketplace-job-cleanup-rbac
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ServiceAccount
+                metadata:
+                  name: marketplace-job-cleanup
+                  namespace: openshift-marketplace
+                  annotations:
+                    argocd.argoproj.io/sync-wave: "0"
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: Role
+                metadata:
+                  name: marketplace-job-cleanup
+                  namespace: openshift-marketplace
+                  annotations:
+                    argocd.argoproj.io/sync-wave: "1"
+                rules:
+                  - apiGroups:
+                      - ""
+                    resources:
+                      - jobs
+                    verbs:
+                      - get
+                      - list
+                      - delete
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: RoleBinding
+                metadata:
+                  name: marketplace-job-cleanup
+                  namespace: openshift-marketplace
+                  annotations:
+                    argocd.argoproj.io/sync-wave: "2"
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: Role
+                  name: marketplace-job-cleanup
+                subjects:
+                  - kind: ServiceAccount
+                    name: marketplace-job-cleanup
+                    namespace: openshift-marketplace
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: marketplace-cleanup-job
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: batch/v1
+                kind: CronJob
+                metadata:
+                  name: marketplace-job-cleanup
+                  namespace: openshift-marketplace
+                  annotations:
+                    argocd.argoproj.io/sync-wave: "5"
+                spec:
+                  schedule: "*/5 * * * *"
+                  concurrencyPolicy: Forbid
+                  jobTemplate:
+                    spec:
+                      template:
+                        spec:
+                          containers:
+                          - name: marketplace-job-cleanup
+                            image: registry.redhat.io/openshift4/ose-cli:latest
+                            imagePullPolicy: IfNotPresent
+                            command:
+                              - /bin/bash
+                              - -c
+                              - |
+                                #!/usr/bin/env bash
+
+                                oc delete jobs --field-selector status.successful=1 -n openshift-marketplace
+                                oc delete jobs --field-selector status.successful=0 -n openshift-marketplace
+                          serviceAccountName: marketplace-job-cleanup
+                          restartPolicy: OnFailure

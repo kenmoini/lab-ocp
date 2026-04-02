@@ -7,19 +7,14 @@ metadata:
 spec:
   description: "Global OpenShift Operator Deployments"
   policies:
-  - operators-gitops-base
-  - operators-logging-base
-  - operators-rh-cert-manager
-  - operators-rhacs
-  - operators-metallb
-  - operators-web-terminal
-  - operators-compliance
-  - operators-nmo
-  - operators-nmstate
-  - operators-oadp
-  - operators-coo
-  - operators-sscsi
-  - operators-gatekeeper
-
-  - instance-metallb
-  - instance-nmstate
+    - operators-gitops-base
+    - operators-logging-base
+    - operators-rh-cert-manager
+    - operators-rhacs
+    - operators-web-terminal
+    - operators-compliance
+    - operators-nmo
+    - operators-coo
+    - operators-oadp
+    - operators-gatekeeper
+    - operators-sscsi

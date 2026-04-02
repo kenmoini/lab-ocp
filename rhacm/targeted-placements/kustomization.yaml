@@ -5,6 +5,8 @@ kind: Kustomization
 resources:
   - acs-secured-cluster.yaml
   - acs-secured-cluster-binding.yaml
+  - acs-secured-xks.yaml
+  - acs-secured-xks-binding.yaml
   - developer-services-rhbk.yaml
   - developer-services-rhdh.yaml
   - developer-services-openshift-gitops.yaml

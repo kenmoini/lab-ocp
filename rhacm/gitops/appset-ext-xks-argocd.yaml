@@ -1,0 +1,56 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ext-xks-argocd
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  appset/ext-xks-argocd: enabled
+          - list:
+              elements:
+              - appName: argocd
+                namespace: argocd
+                helmRepoURL: 'https://argoproj.github.io/argo-helm'
+                helmChartName: argo-cd
+                helmRevision: 9.4.15
+  template:
+    metadata:
+      name: "{{name}}-{{appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+    spec:
+      project: default
+      sources:
+        - chart: '{{helmChartName}}'
+          helm:
+            valuesObject:
+              redis-ha:
+                enabled: true
+              controller:
+                replicas: 1
+              server:
+                replicas: 1
+              repoServer:
+                replicas: 1
+              applicationSet:
+                replicas: 1
+          repoURL: '{{helmRepoURL}}'
+          targetRevision: '{{helmRevision}}'
+      destination:
+        name: "{{name}}"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        retry:
+          limit: 5

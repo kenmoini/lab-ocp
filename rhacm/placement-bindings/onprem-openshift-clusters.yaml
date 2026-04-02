@@ -1,0 +1,20 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: onprem-openshift-clusters
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: onprem-openshift-clusters
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  # On-Premises OpenShift Configuration
+  - name: onprem-openshift-config
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+
+  # On-Premises OpenShift Operator Installation
+  - name: onprem-openshift-operators
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet

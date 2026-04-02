@@ -11,6 +11,45 @@ metadata:
 spec:
   disabled: false
   policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: eso-vault-clustersecretstore
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: stackrox-pull-ext-secret
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: external-secrets.io/v1beta1
+                kind: ExternalSecret
+                metadata:
+                  name: stackrox-pull-ext-secret
+                  namespace: stackrox
+                spec:
+                  refreshInterval: "3600s"
+                  secretStoreRef:
+                    name: kemo-labs-vault
+                    kind: ClusterSecretStore
+                  target:
+                    name: public-pull-secret # name of the k8s Secret to make in this namespace
+                    creationPolicy: Owner
+                    deletionPolicy: Retain
+                    template:
+                      engineVersion: v2
+                      type: kubernetes.io/dockerconfigjson # type of k8s Secret to make
+                  data:
+                    - secretKey: '.dockerconfigjson' # name of the key in the k8s Secret to create
+                      remoteRef:
+                        key: external/redhat/public-pull-secret # name of the secret under the target Vault path
+                        property: pull-secret # name of the key in that named Vault secret
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy

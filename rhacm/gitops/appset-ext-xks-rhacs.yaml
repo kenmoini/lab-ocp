@@ -1,0 +1,51 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ext-xks-rhacs
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchLabels:
+                  ensemble/ext-xks-rhacs: enabled
+          - list:
+              elements:
+              - appName: rhacs
+                namespace: stackrox
+                helmRepoURL: 'https://mirror.openshift.com/pub/rhacs/charts/'
+                helmChartName: stackrox-secured-cluster-services
+                helmRevision: 4.9.4
+  template:
+    metadata:
+      name: "{{name}}-{{appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+    spec:
+      project: default
+      sources:
+        - chart: '{{helmChartName}}'
+          helm:
+            valuesObject:
+              clusterName: '{{name}}'
+              # TODO: Figure out a way to dynamically pull the central endpoint URL instead of hardcoding it here
+              centralEndpoint: central-stackrox.apps.tri-force.lab.kemo.network:443
+              scanner:
+                disable: false
+          repoURL: '{{helmRepoURL}}'
+          targetRevision: '{{helmRevision}}'
+      destination:
+        name: "{{name}}"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        retry:
+          limit: 5

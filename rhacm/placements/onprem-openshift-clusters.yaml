@@ -2,7 +2,7 @@
 apiVersion: cluster.open-cluster-management.io/v1beta1
 kind: Placement
 metadata:
-  name: all-openshift-clusters
+  name: onprem-openshift-clusters
 spec:
   tolerations:
     - key: cluster.open-cluster-management.io/unreachable
@@ -17,6 +17,10 @@ spec:
               operator: In
               values:
                 - "OpenShift"
+            - key: location
+              operator: In
+              values:
+                - "kemo-labs-rdu"
             - key: cloud
               operator: NotIn
               values:

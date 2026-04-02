@@ -1,0 +1,13 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: onprem-openshift-operators
+  #namespace: open-cluster-management-policies
+spec:
+  description: "On-Premises OpenShift Operator Deployments"
+  policies:
+    - operators-metallb
+    - operators-nmstate
+    - instance-metallb
+    - instance-nmstate

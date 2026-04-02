@@ -7,6 +7,7 @@ resources:
   - loki-format-secret.yaml
   - configure-monitoring.yaml
   - acs-secured-cluster.yaml
+  - acs-secured-xks.yaml
   - netobserv-loki-format-secret.yaml
   - rhbk-rhdh-secrets.yaml
   - rhdh-rhdh-secrets.yaml

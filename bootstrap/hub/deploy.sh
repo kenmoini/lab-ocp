@@ -20,6 +20,18 @@ oc label node raza k8s.ovn.org/egress-assignable='' --overwrite
 oc label node suki k8s.ovn.org/egress-assignable='' --overwrite
 oc label node endurance k8s.ovn.org/egress-assignable='' --overwrite
 
+oc label node raza topology.kubernetes.io/region=rdu-1 --overwrite
+oc label node suki topology.kubernetes.io/region=rdu-1 --overwrite
+oc label node endurance topology.kubernetes.io/region=rdu-1 --overwrite
+
+oc label node raza topology.kubernetes.io/zone=rdu-1a --overwrite
+oc label node suki topology.kubernetes.io/zone=rdu-1b --overwrite
+oc label node endurance topology.kubernetes.io/zone=rdu-1c --overwrite
+
+oc label node raza topology.kubernetes.io/rack=rdu-1a-tower1 --overwrite
+oc label node suki topology.kubernetes.io/rack=rdu-1b-tower2 --overwrite
+oc label node endurance topology.kubernetes.io/rack=rdu-1c-tower3 --overwrite
+
 oc create secret generic bootstrap-vault-userpass -n kube-system --from-literal=password=$(cat $HOME/.hub-vault_pass.txt | tr -d '\n') --dry-run=client -o yaml | oc apply -f -
 
 oc apply -k https://github.com/kenmoini/ocp4-gitops-config/openshift/openshift-gitops/operator/overlays/latest/
@@ -36,6 +48,7 @@ oc apply -f bootstrap-application.yaml
 
 until $(oc get managedclusters.cluster.open-cluster-management.io/hub-cluster &>/dev/null); do echo "Waiting for ACM and Hub Cluster init..." && sleep 5; done
 
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster location=kemo-labs-rdu
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster community-eso=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/democratic-csi=enabled
