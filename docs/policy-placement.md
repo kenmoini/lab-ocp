@@ -80,6 +80,7 @@ Defined in `rhacm/placements/`.
 | openshift-4.19-clusters | openshift-4.19-clusters.yaml | `openshiftVersion-major-minor=4.19` + `cloud!=KubeVirt` |
 | openshift-4.20-clusters | openshift-4.20-clusters.yaml | `openshiftVersion-major-minor=4.20` + `cloud!=KubeVirt` |
 | developer-services-4.19 | developer-services.yaml | `policy.kemo.dev/developer-services=true\|enabled` + `openshiftVersion-major-minor=4.19` |
+| developer-services-4.20 | developer-services.yaml | `policy.kemo.dev/developer-services=true\|enabled` + `openshiftVersion-major-minor=4.20` |
 | virtualization-4.19 | virtualization.yaml | `virtualization=true\|enabled` + `openshiftVersion-major-minor=4.19` |
 | virtualization-4.20 | virtualization.yaml | `virtualization=true\|enabled` + `openshiftVersion-major-minor=4.20` |
 | rh-loki-4.19 | rh-loki.yaml | `rhLoki=true\|enabled` + `openshiftVersion-major-minor=4.19` |
@@ -224,6 +225,7 @@ All core bindings live in `rhacm/placement-bindings/`.
 | Name | File | Placement | Bound Subjects |
 |------|------|-----------|---------------|
 | developer-services-4.19 | developer-services.yaml | developer-services-4.19 | operators-4.19-mtc-1.8 (Policy) |
+| developer-services-4.20 | developer-services.yaml | developer-services-4.20 | operators-4.19-mtc-1.8 (Policy) |
 | virtualization-4.19 | virtualization.yaml | virtualization-4.19 | operators-4.19-mtv-2.9 (Policy) |
 | virtualization-4.20 | virtualization.yaml | virtualization-4.20 | operators-4.20-mtv-2.10 (Policy), gitops-1.18 (Policy) |
 | rh-loki-4.19 | rh-loki.yaml | rh-loki-4.19 | operators-4.19-logging-6.3 (Policy), instance-logging-6.3 (Policy) |
