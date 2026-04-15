@@ -1,0 +1,11 @@
+- op: add
+  path: /spec/controller/env/-
+  value:
+    name: ARGOCD_APPLICATION_CONTROLLER_REPO_SERVER_TIMEOUT_SECONDS
+    value: 180
+
+- op: add
+  path: /spec/controller/env/-
+  value:
+    name: ARGOCD_APPLICATION_CONTROLLER_KUBECTL_PARALLELISM_LIMIT
+    value: 30

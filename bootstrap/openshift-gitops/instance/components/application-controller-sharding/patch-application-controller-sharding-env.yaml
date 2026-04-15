@@ -1,0 +1,5 @@
+- op: add
+  path: /spec/controller/env/-
+  value:
+    name: ARGOCD_CONTROLLER_SHARDING_ALGORITHM
+    value: round-robin

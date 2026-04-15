@@ -1,0 +1,5 @@
+- op: add
+  path: /spec/repo/env/-
+  value:
+    name: ARGOCD_REVISION_CACHE_LOCK_TIMEOUT
+    value: 30s

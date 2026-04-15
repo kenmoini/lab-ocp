@@ -1,0 +1,38 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: openshift-gitops
+
+resources:
+  - ../../base
+
+components:
+  - ../../components/annotation-resource-tracking
+  - ../../components/application-controller-cluster-admin
+  - ../../components/cluster-ca-certs
+  - ../../components/edge-termination
+  - ../../components/enable-badges
+  - ../../components/enable-notifications
+  - ../../components/enable-plugins
+  - ../../components/gitops-admins
+  - ../../components/health-check-acs-central
+  - ../../components/health-check-argocd
+  - ../../components/health-check-acm-policy
+  - ../../components/health-check-egressips
+  - ../../components/health-check-externalsecret
+  - ../../components/health-check-nmstate
+  - ../../components/health-check-odf
+  - ../../components/health-check-olm
+  - ../../components/health-check-openshift-builds
+  - ../../components/local-users
+  - ../../components/sync-wave-wait
+
+  # The following shamelessly stolen from https://blog.stderr.at/gitopscollection/2026-03-27-openshift-gitops-performance-tuning/#_introduction
+  - ../../components/application-controller-limits-timeouts
+  - ../../components/application-controller-processors
+  - ../../components/application-controller-sharding
+  - ../../components/repo-exec-timeout
+  - ../../components/repo-git-attempts
+  - ../../components/repo-remote-parallelism
+  - ../../components/repo-revision-cache-lock-timeout
+  - ../../components/timeout-reconciliation
