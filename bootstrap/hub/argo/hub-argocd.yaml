@@ -10,9 +10,10 @@ spec:
   destination:
     server: 'https://kubernetes.default.svc'
   sources:
-    - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
+    # - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: openshift/openshift-gitops/instance/overlays/default/
+      path: bootstrap/openshift-gitops/instance/overlays/default/
       kustomize: {}
 
   project: default
