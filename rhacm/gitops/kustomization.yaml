@@ -20,6 +20,7 @@ resources:
   - appset-vlan-stacks.yaml
   - appset-ztp-sync.yaml
   - appset-ext-xks-rhacs.yaml
+  - appset-ext-xks-argocd.yaml
   - rhacm-integration.yaml
 
 commonAnnotations:
