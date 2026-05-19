@@ -21,6 +21,6 @@ subjects:
     apiGroup: policy.open-cluster-management.io
     kind: Policy
     
-  - name: operators-quay-316
+  - name: operators-quay-317
     apiGroup: policy.open-cluster-management.io
     kind: Policy
