@@ -26,6 +26,7 @@ resources:
   #- odf.yaml
   - pipelines.yaml
   - power-monitoring.yaml
+  - quay.yaml
   - rhbk.yaml
   - virtualization.yaml
 
