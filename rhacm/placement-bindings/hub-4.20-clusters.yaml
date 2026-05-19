@@ -20,3 +20,7 @@ subjects:
   - name: hub-configure-acm-search
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+    
+  - name: operators-quay-316
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
