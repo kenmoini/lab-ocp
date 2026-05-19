@@ -1,0 +1,216 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-quay
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Quay Operator Instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: quay-instance-ns
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: quay
+
+    # DO NOT STORE LIKE THIS IF YOU CAN HELP IT
+    # PULL THE SECRET FROM ESO LIKE COMMENTED OUT BELOWWWWW
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: quay-instance-config-secret
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: quay-config
+                  namespace: quay
+                stringData:
+                  config.yaml: |
+                    AUTHENTICATION_TYPE: Database
+                    ALLOW_PULLS_WITHOUT_STRICT_LOGGING: true
+                    ENTERPRISE_LOGO_URL: /static/img/RH_Logo_Quay_Black_UX-horizontal.svg
+                    FEATURE_BUILD_SUPPORT: false
+                    FEATURE_DIRECT_LOGIN: true
+                    FEATURE_MAILING: false
+                    FEATURE_UI_V2: true
+                    FEATURE_UI_V2_REPO_SETTINGS: true
+                    FEATURE_AUTO_PRUNE: true
+                    FEATURE_PROXY_CACHE: true
+                    FEATURE_QUOTA_MANAGEMENT: true
+                    BROWSER_API_CALLS_XHR_ONLY: false
+                    REGISTRY_TITLE: Red Hat Quay
+                    REGISTRY_TITLE_SHORT: Red Hat Quay
+                    DATABASE_SECRET_KEY: 0ce4f796-c295-415b-bf9d-b315114704b8
+                    SECRET_KEY: e8f9fe68-1f84-48a8-a05f-02d72e6eccba
+                    SUPER_USERS:
+                      - quayadmin
+                      - admin
+                      - kemo
+                    DISTRIBUTED_STORAGE_CONFIG:
+                        default:
+                            - LocalStorage
+                            - storage_path: /datastorage/registry
+                    DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
+                    DISTRIBUTED_STORAGE_PREFERENCE:
+                        - default
+                    PREFERRED_URL_SCHEME: http
+                    DEFAULT_TAG_EXPIRATION: 2w
+                    TAG_EXPIRATION_OPTIONS:
+                        - 0s
+                        - 1d
+                        - 1w
+                        - 2w
+                        - 4w
+                        - 3y
+
+                  
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: quay-instance-config-secret
+          # name: ext-secret-quay-check # TODO: Swap out when ESO is online
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: quayregistry-instance
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: QuayRegistry
+                apiVersion: quay.redhat.com/v1
+                metadata:
+                  name: quay
+                  namespace: quay
+                spec:
+                  configBundleSecret: quay-config
+                  components:
+                    - kind: clair
+                      managed: true
+                    - kind: postgres
+                      managed: true
+                    - kind: objectstorage
+                      managed: false
+                    - kind: redis
+                      managed: true
+                    - kind: horizontalpodautoscaler
+                      managed: false
+                    - kind: route
+                      managed: true
+                    - kind: mirror
+                      managed: true
+                      #overrides:
+                      #  env:
+                      #    - name: HTTP_PROXY
+                      #      value: http://proxy.kemo.labs:3129
+                      #    - name: HTTPS_PROXY
+                      #      value: http://proxy.kemo.labs:3129
+                      #    - name: NO_PROXY
+                      #      value: '.local,.svc,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/23,192.168.0.0/16,.kemo.network,.kemo.labs'
+                    - kind: monitoring
+                      managed: true
+                    - kind: tls
+                      managed: true
+                    - kind: quay
+                      managed: true
+                      #overrides:
+                      #  env:
+                      #    - name: HTTP_PROXY
+                      #      value: http://proxy.kemo.labs:3129
+                      #    - name: HTTPS_PROXY
+                      #      value: http://proxy.kemo.labs:3129
+                      #    - name: NO_PROXY
+                      #      value: '.local,.svc,localhost,127.0.0.1,10.0.0.0/8,172.16.0.0/23,192.168.0.0/16,.kemo.network,.kemo.labs'
+                    - kind: clairpostgres
+                      managed: true
+                  
+    # - extraDependencies:
+    #     - apiVersion: policy.open-cluster-management.io/v1
+    #       kind: ConfigurationPolicy
+    #       name: eso-vault-clustersecretstore
+    #       namespace: ""
+    #       compliance: Compliant
+    #   objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: ext-secret-quay
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: high
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: external-secrets.io/v1beta1
+    #             kind: ExternalSecret
+    #             metadata:
+    #               name: quay-config-secret
+    #               namespace: quay
+    #             spec:
+    #               refreshInterval: "3600s"
+    #               secretStoreRef:
+    #                 name: kemo-labs-vault
+    #                 kind: ClusterSecretStore
+    #               target:
+    #                 name: quay-config # name of the k8s Secret to make in this namespace
+    #                 creationPolicy: Owner
+    #                 deletionPolicy: Retain
+    #                 template:
+    #                   engineVersion: v2
+    #                   type: Opaque # type of k8s Secret to make
+    #               data:
+    #                 - secretKey: 'config.yaml' # name of the key in the k8s Secret to create
+    #                   remoteRef:
+    #                     key: kemo.labs/openshift/services/quay # name of the secret under the target Vault path
+    #                     property: config # name of the key in that named Vault secret
+
+    # - extraDependencies:
+    #     - apiVersion: policy.open-cluster-management.io/v1
+    #       kind: ConfigurationPolicy
+    #       name: ext-secret-quay
+    #       namespace: ""
+    #       compliance: Compliant
+    #   objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: ext-secret-quay-check
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: critical
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: v1
+    #             kind: Secret
+    #             metadata:
+    #               name: quay-config
+    #               namespace: quay
+    #             type: Opaque
