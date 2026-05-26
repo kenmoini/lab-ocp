@@ -208,6 +208,6 @@ spec:
                         #  name: eso-vault-token
                         #  namespace: external-secrets
                       path: kv
-                      server: 'https://vault.apps.kemo.labs'
+                      server: 'https://vault.apps.lab.kemo.dev'
                       version: v2
                       caBundle: '{{hub fromConfigMap "open-cluster-management-policies" "root-ca-bundle" "ca-bundle.crt" | base64enc hub}}'
