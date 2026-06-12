@@ -360,26 +360,26 @@ spec:
                     login:
                         name: matrix-red-login-template
                   identityProviders:
-                    - ldap:
-                        attributes:
-                          email:
-                            - mail
-                          id:
-                            - dn
-                          name:
-                            - cn
-                          preferredUsername:
-                            - uid
-                        bindDN: 'uid=admin,cn=users,cn=accounts,dc=kemo,dc=labs'
-                        bindPassword:
-                          name: ldap-bind-pass
-                        ca:
-                          name: ldap-ca-cert
-                        insecure: false
-                        url: 'ldaps://idm.kemo.labs:636'
-                      mappingMethod: add
-                      name: LabDAP
-                      type: LDAP
+                    # - ldap:
+                    #     attributes:
+                    #       email:
+                    #         - mail
+                    #       id:
+                    #         - dn
+                    #       name:
+                    #         - cn
+                    #       preferredUsername:
+                    #         - uid
+                    #     bindDN: 'uid=admin,cn=users,cn=accounts,dc=kemo,dc=labs'
+                    #     bindPassword:
+                    #       name: ldap-bind-pass
+                    #     ca:
+                    #       name: ldap-ca-cert
+                    #     insecure: false
+                    #     url: 'ldaps://idm.kemo.labs:636'
+                    #   mappingMethod: add
+                    #   name: LabDAP
+                    #   type: LDAP
                     - google:
                         clientID: 1005185173510-l99vvs6cdfhfbu84s4tck5tj6kalt8p5.apps.googleusercontent.com
                         clientSecret:
@@ -388,24 +388,24 @@ spec:
                       mappingMethod: add
                       name: RedHatSSO
                       type: Google
-                    - mappingMethod: add
-                      name: KemoLabsSSO
-                      openID:
-                        ca:
-                          name: kemo-labs-sso-oidc
-                        claims:
-                          email:
-                            - email
-                          name:
-                            - name
-                          preferredUsername:
-                            - preferred_username
-                        clientID: tri-force-ocp
-                        clientSecret:
-                          name: sso-kemo-labs
-                        extraScopes: []
-                        issuer: 'https://sso.kemo.labs/realms/KemoLabs'
-                      type: OpenID
+                    # - mappingMethod: add
+                    #   name: KemoLabsSSO
+                    #   openID:
+                    #     ca:
+                    #       name: kemo-labs-sso-oidc
+                    #     claims:
+                    #       email:
+                    #         - email
+                    #       name:
+                    #         - name
+                    #       preferredUsername:
+                    #         - preferred_username
+                    #     clientID: tri-force-ocp
+                    #     clientSecret:
+                    #       name: sso-kemo-labs
+                    #     extraScopes: []
+                    #     issuer: 'https://sso.kemo.labs/realms/KemoLabs'
+                    #   type: OpenID
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
