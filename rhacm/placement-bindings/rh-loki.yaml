@@ -18,3 +18,23 @@ subjects:
   - name: operators-coo
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: rh-loki-4.20
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: rh-loki-4.20
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: operators-rh-loki-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-rh-loki-6.5
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-coo
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
