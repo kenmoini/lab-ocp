@@ -76,6 +76,7 @@ spec:
       g, cluster-admins, role:admin
     scopes: '[groups]'
   repo:
+    volumeMounts: []
     resources:
       limits:
         cpu: '1'
