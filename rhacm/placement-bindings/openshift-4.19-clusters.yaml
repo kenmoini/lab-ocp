@@ -16,3 +16,6 @@ subjects:
   - name: operators-logging-6.3
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: ocp-logging-6.3
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

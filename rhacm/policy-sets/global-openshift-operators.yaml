@@ -9,6 +9,7 @@ spec:
   policies:
     - operators-gitops-base
     - operators-logging-base
+    - instance-ocp-logging
     - operators-rh-cert-manager
     - operators-rhacs
     - operators-web-terminal

@@ -42,6 +42,7 @@ resources:
 
   # Operator instances
   - operator-instances/
+  - versioned-operator-instances/
 
   # RHACM Hub Policies
   #- hub-ocp-update-svc.yaml
