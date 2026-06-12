@@ -77,6 +77,7 @@ spec:
     scopes: '[groups]'
   repo:
     volumeMounts: []
+    volumes: []
     resources:
       limits:
         cpu: '1'
