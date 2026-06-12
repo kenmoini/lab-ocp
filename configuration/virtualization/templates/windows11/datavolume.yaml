@@ -13,7 +13,7 @@ spec:
   source:
     http:
       certConfigMap: vm-src-certs
-      url: 'https://dropbox.kemo.labs/Windows11_x64_en-us.iso'
+      url: 'https://dropbox.apps.lab.kemo.dev/isos/Windows11_x64_en-us.iso'
   storage:
     resources:
       requests:
