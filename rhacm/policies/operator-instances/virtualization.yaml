@@ -302,7 +302,7 @@ spec:
                           cdi.kubevirt.io/storage.bind.immediate.requested: 'true'
                         labels:
                           kubevirt.io/dynamic-credentials-support: 'true'
-                        name: fedora40-image-cron
+                        name: fedora44-image-cron
                       spec:
                         garbageCollect: Outdated
                         managedDataSource: fedora
@@ -313,7 +313,7 @@ spec:
                             source:
                               registry:
                                 pullMethod: node
-                                url: 'docker://disconn-harbor.d70.kemo.labs/quay-ptc/containerdisks/fedora:40'
+                                url: 'docker://disconn-harbor.d70.kemo.labs/quay-ptc/containerdisks/fedora@sha256:1217dcc8c58dbc3ca08e0323929b86f609506121adb01d0fd892232f2c0544f6'
                                 #secretRef: private-ps
                                 certConfigMap: private-registry-ca
                             storage:
