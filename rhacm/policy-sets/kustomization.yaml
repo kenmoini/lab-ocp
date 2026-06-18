@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: open-cluster-management-policies
 
 resources:
+  - best-practices.yaml
   - health-checks.yaml
   - enhanced-metrics.yaml
   - global-openshift-config.yaml

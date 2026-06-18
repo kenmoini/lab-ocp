@@ -1,0 +1,101 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: detect-latest-tag
+  annotations:
+    policy.open-cluster-management.io/description: Detects containers running with the :latest tag
+spec:
+  disabled: false
+  remediationAction: inform
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: latest-pod
+        spec:
+          remediationAction: inform
+          severity: low
+          namespaceSelector:
+            exclude:
+              - kube-*
+              - openshift-
+              - open-cluster-management*
+              - multicluster-engine
+            include:
+              - default
+          object-templates-raw: |
+            {{/* ##  Loop through all the Pods ## */}}
+            {{- $podList := (lookup "v1" "Pod" "" "").items }}
+            {{- range $pod := $podList }}
+              {{- $latestDetected := false }}
+              {{- range $container := $pod.spec.containers }}
+                {{- if (contains ":latest" $container.image) }}
+                  {{- $latestDetected = true }}
+                {{- end -}}
+              {{- end }}
+              {{- if $latestDetected }}
+
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                  name: {{ $pod.metadata.name }}
+                  namespace: {{ $pod.metadata.namespace }}
+                spec:
+                  containers:
+                  {{- range $container := $pod.spec.containers }}
+                  {{- if (contains ":latest" $container.image) }}
+                  - name: {{ $container.name }}
+                    image: {{ $container.image }}
+                  {{- end -}}
+                  {{- end -}}
+              {{- end }}
+            {{- end }}
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: latest-init-pod
+        spec:
+          remediationAction: inform
+          severity: low
+          namespaceSelector:
+            exclude:
+              - kube-*
+              - openshift-
+              - open-cluster-management*
+              - multicluster-engine
+            include:
+              - default
+          object-templates-raw: |
+            {{/* ##  Loop through all the Pods ## */}}
+            {{- $podList := (lookup "v1" "Pod" "" "").items }}
+            {{- range $pod := $podList }}
+              {{- $latestDetected := false }}
+              {{- range $container := $pod.spec.initContainers }}
+                {{- if (contains ":latest" $container.image) }}
+                  {{- $latestDetected = true }}
+                {{- end -}}
+              {{- end }}
+              {{- if $latestDetected }}
+
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: v1
+                kind: Pod
+                metadata:
+                  name: {{ $pod.metadata.name }}
+                  namespace: {{ $pod.metadata.namespace }}
+                spec:
+                  initContainers:
+                  {{- range $container := $pod.spec.containers }}
+                  {{- if (contains ":latest" $container.image) }}
+                  - name: {{ $container.name }}
+                    image: {{ $container.image }}
+                  {{- end -}}
+                  {{- end -}}
+              {{- end }}
+            {{- end }}

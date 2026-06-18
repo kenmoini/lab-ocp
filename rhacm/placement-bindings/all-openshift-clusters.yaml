@@ -23,3 +23,8 @@ subjects:
   - name: global-openshift-operators
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+
+  # Best Practices, eg Detect Latest Tag
+  - name: best-practices
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
