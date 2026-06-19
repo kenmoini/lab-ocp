@@ -6,6 +6,6 @@ metadata:
     argocd.argoproj.io/secret-type: cluster
 stringData:
   config: '{"tlsClientConfig":{"insecure":false}}'
-  name: hub-cluster
+  name: in-cluster
   server: https://kubernetes.default.svc
 type: Opaque
