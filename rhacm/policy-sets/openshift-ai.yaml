@@ -19,5 +19,6 @@ spec:
     - operators-rhcl
     - operators-rh-otel
     - operators-rh-tempo
+    - operators-rh-keda
     - operators-coo
     - operators-rhoai

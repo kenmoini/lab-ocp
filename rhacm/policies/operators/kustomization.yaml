@@ -18,6 +18,7 @@ resources:
   - community-eso.yaml
   - far.yaml
   - gatekeeper.yaml
+  - keda.yaml
   - lso.yaml
   - metallb.yaml
   # - mtv.yaml
