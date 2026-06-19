@@ -118,7 +118,7 @@
             noncompliants[i] = entry.clustername
           end
         end
-        if table.getn(noncompliants) == 0 then
+        if #noncompliants == 0 then
           hs.message = "All clusters are compliant"
         else
           hs.message = "NonCompliant clusters: " .. table.concat(noncompliants, ", ")
@@ -130,7 +130,7 @@
             noncompliants[i] = entry.templateMeta.name
           end
         end
-        if table.getn(noncompliants) == 0 then
+        if #noncompliants == 0 then
           hs.message = "All templates are compliant"
         else
           hs.message = "NonCompliant templates: " .. table.concat(noncompliants, ", ")
