@@ -1,0 +1,31 @@
+apiVersion: policies.kyverno.io/v1alpha1
+kind: MutatingPolicy
+metadata:
+  name: add-default-cronjob
+  annotations:
+    policies.kyverno.io/title: Add Default CronJob spec
+    policies.kyverno.io/subject: CronJob
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: A Kyverno policy to add a default spec to CronJob resources that do not have one defined.
+spec:
+  matchConstraints:
+    resourceRules:
+      - apiGroups:
+          - batch
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - cronjobs
+  mutations:
+    - patchType: ApplyConfiguration
+      applyConfiguration:
+        expression: |-
+          Object{
+            spec: Object.spec{
+              successfulJobsHistoryLimit: has(object.spec.successfulJobsHistoryLimit) ? object.spec.successfulJobsHistoryLimit : 3,
+              failedJobsHistoryLimit: has(object.spec.failedJobsHistoryLimit) ? object.spec.failedJobsHistoryLimit : 3
+            }
+          }
