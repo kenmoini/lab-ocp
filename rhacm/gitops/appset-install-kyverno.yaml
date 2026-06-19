@@ -28,13 +28,13 @@ spec:
         argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
     spec:
       ignoreDifferences:
-        - group: apiextensions.k8s.io
-          # jsonPointers:
-          #   - /status
+        - group: "*"
+          kind: "*"
+          jsonPointers:
+            - /status
           #   - /status/storedVersions
           #   - /status/storedVersions/0
           #   - /status/storedVersions/1
-          kind: CustomResourceDefinition
       project: default
       sources:
         - kustomize: {}
