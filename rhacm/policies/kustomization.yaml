@@ -17,6 +17,7 @@ resources:
 
   # Global/Common Policies
   - maintenance/
+  - capabilities/
   - console-info-header.yaml
   - label-nodes-egressip.yaml
   - audit-logging-config.yaml
