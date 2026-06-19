@@ -33,3 +33,6 @@ spec:
           spec:
             +(successfulJobsHistoryLimit): 3
             +(failedJobsHistoryLimit): 3
+            jobTemplate:
+              spec:
+                +(ttlSecondsAfterFinished): 3600
