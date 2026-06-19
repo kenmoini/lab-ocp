@@ -13,7 +13,7 @@ spec:
     # - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: bootstrap/openshift-gitops/instance/overlays/default/
+      path: bootstrap/openshift-gitops/instance/overlays/hub-cluster/
       kustomize: {}
 
   project: default
