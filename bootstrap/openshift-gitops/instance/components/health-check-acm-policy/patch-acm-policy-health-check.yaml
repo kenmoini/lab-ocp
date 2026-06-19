@@ -101,8 +101,8 @@
     check: |
       hs = {}
       if obj.status == nil or obj.status.compliant == nil then
-        hs.status = "Progressing"
-        hs.message = "Waiting for the status to be reported"
+        hs.status = "Healthy"
+        hs.message = "Policy " .. obj.metadata.name .. " is not evaluated yet by matching clusters and placements, treating as Healthy"
         return hs
       end
       if obj.status.compliant == "Compliant" then
