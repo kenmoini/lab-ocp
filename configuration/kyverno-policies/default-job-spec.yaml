@@ -1,0 +1,34 @@
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-default-job
+  annotations:
+    policies.kyverno.io/title: Add Default Job spec
+    policies.kyverno.io/subject: Job
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: A Kyverno policy to add a default spec to Job resources that do not have one defined.
+    policies.kyverno.io/category: Other
+    policies.kyverno.io/severity: medium
+    kyverno.io/kyverno-version: 1.10.0-alpha.2
+    kyverno.io/kubernetes-version: "1.26"
+spec:
+  background: false
+  rules:
+    - name: add-default-ttl
+      match:
+        any:
+          - resources:
+              kinds:
+                - Job
+      preconditions:
+        any:
+          - key: "{{request.operation || 'BACKGROUND'}}"
+            operator: AnyIn
+            value:
+              - CREATE
+              - UPDATE
+      mutate:
+        patchStrategicMerge:
+          spec:
+            +(ttlSecondsAfterFinished): 3600
