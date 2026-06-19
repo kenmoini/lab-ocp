@@ -49,3 +49,5 @@ spec:
                   namespace: openshift-lws-operator
                 spec:
                   upgradeStrategy: Default
+                  targetNamespaces:
+                    - openshift-lws-operator

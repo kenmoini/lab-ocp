@@ -49,3 +49,5 @@ spec:
                   namespace: openshift-jobset-operator
                 spec:
                   upgradeStrategy: Default
+                  targetNamespaces:
+                    - openshift-jobset-operator
