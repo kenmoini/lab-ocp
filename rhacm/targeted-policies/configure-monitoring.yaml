@@ -54,6 +54,8 @@ spec:
                             requests:
                               storage: 10Gi
                     prometheusK8s:
+                      retention: 7d
+                      retentionSize: 70GB
                       nodeSelector:
                         node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
                       tolerations:
