@@ -33,5 +33,14 @@ spec:
                   name: gatekeeper-operator-product
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
+                  config:
+                    resources:
+                      requests:
+                        memory: "128Mi"
+                        cpu: "500m"
+                      limits:
+                        memory: "256Mi"
+                        cpu: "1000m"
+
 
 
