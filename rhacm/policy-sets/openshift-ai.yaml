@@ -1,0 +1,23 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: openshift-ai
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Red Hat OpenShift AI operators and deployments"
+  policies:
+    - operators-authorino
+    - operators-rh-cert-manager
+    - operators-servicemesh-3
+    - operators-rh-kueue-base
+    - operators-rh-kueue-1.3
+    - operators-lwso-base
+    - operators-lwso-1.0
+    - operators-jobset-base
+    - operators-jobset-1.0
+    - operators-rhcl
+    - operators-rh-otel
+    - operators-rh-tempo
+    - operators-coo
+    - operators-rhoai

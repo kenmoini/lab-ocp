@@ -33,6 +33,9 @@ resources:
   - pipelines.yaml
   - power-monitoring.yaml
   - rhacs.yaml
+  - rhcl.yaml
+  - rh-otel.yaml
+  - rh-tempo.yaml
   - rhoai.yaml
   - sscsi.yaml
   - snr.yaml

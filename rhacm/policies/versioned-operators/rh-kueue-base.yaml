@@ -1,0 +1,51 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: operators-rh-kueue-base
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Installs the Red Hat Build of Kueue Operator base components
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rh-kueue-ns
+        spec:
+          remediationAction: enforce
+          severity: critical
+          pruneObjectBehavior: None
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: openshift-kueue-operator
+                  labels:
+                    openshift.io/cluster-monitoring: 'true'
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rh-kueue-og
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: None
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1
+                kind: OperatorGroup
+                metadata:
+                  name: rh-kueue-operator-group
+                  namespace: openshift-kueue-operator
+                spec:
+                  upgradeStrategy: Default

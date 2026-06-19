@@ -29,6 +29,15 @@ resources:
   - rhbk-base.yaml
   - rhbk-26.4.yaml
 
+  - rh-kueue-base.yaml
+  - rh-kueue-v1.3.yaml
+
+  - leader-workset-base.yaml
+  - leader-workset-v1.0.yaml
+
+  - jobset-base.yaml
+  - jobset-v1.0.yaml
+
   - quay-3.16.yaml
   - quay-3.17.yaml
 
