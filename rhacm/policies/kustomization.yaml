@@ -22,6 +22,7 @@ resources:
   - label-nodes-egressip.yaml
   - audit-logging-config.yaml
   - encrypt-etcd.yaml
+  - default-gatewayclass.yaml
   - disable-self-provisioner.yaml
   - root-ca-distribution.yaml
   - remove-kubeadmin.yaml
