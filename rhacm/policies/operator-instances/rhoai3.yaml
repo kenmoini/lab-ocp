@@ -48,7 +48,7 @@ spec:
                     llamastackoperator:
                       managementState: Managed
                     kueue:
-                      managementState: Managed
+                      managementState: Unmanaged
                       defaultClusterQueueName: default
                       defaultLocalQueueName: default
                     mlflowoperator:
