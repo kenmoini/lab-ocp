@@ -48,7 +48,7 @@ spec:
                   namespace: openshift-operators
                 spec:
                   channel: stable
-                  installPlanApproval: Automatic
+                  # installPlanApproval: Automatic
                   name: servicemeshoperator3
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
