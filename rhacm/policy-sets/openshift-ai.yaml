@@ -24,5 +24,6 @@ spec:
     - operators-coo
     # - operators-rhoai
     - default-gatewayclass
+    - instance-serverless
     - instance-jobset
     # - instance-rhoai3
