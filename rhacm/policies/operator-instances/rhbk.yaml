@@ -62,6 +62,11 @@ spec:
           name: eso-keycloak-admin
           namespace: ""
           compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-cnpgsql
+          namespace: ""
+          compliance: Compliant
       objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy

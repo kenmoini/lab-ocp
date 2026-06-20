@@ -121,6 +121,38 @@ spec:
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: Policy
+          name: operators-cnpgsql
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: maas-pgsql-instance
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: Cluster
+                apiVersion: postgresql.cnpg.io/v1
+                metadata:
+                  name: maas-db
+                  namespace: redhat-ods-applications
+                spec:
+                  instances: 1
+                  enableSuperuserAccess: true
+                  logLevel: info
+                  primaryUpdateStrategy: unsupervised
+                  storage:
+                    size: 1Gi
+                  walStorage:
+                    size: 1Gi
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
           name: operators-rhoai
           namespace: ""
           compliance: Compliant
