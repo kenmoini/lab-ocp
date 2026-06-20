@@ -26,5 +26,6 @@ spec:
     - operators-cnpgsql
     - default-gatewayclass
     - instance-serverless
+    - instance-leaderworkerset
     - instance-jobset
     - instance-rhoai3
