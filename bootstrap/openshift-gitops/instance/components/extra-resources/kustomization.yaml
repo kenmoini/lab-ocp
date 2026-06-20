@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+
+patches:
+  - path: patch-app-resources.yaml
+    target:
+      kind: ArgoCD
+  - path: patch-appset-resources.yaml
+    target:
+      kind: ArgoCD
+  - path: patch-repo-resources.yaml
+    target:
+      kind: ArgoCD
+  - path: patch-server-resources.yaml
+    target:
+      kind: ArgoCD

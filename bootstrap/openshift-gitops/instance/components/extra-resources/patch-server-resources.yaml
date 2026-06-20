@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1beta1
+kind: ArgoCD
+metadata:
+  name: openshift-gitops
+spec:
+  server:
+    resources:
+      limits:
+        cpu: 100m
+        memory: 512Mi
+      requests:
+        cpu: 125m
+        memory: 128Mi
