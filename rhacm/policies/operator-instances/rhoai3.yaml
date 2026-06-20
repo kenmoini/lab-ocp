@@ -51,7 +51,6 @@ spec:
           name: default-gatewayclass
           namespace: ""
           compliance: Compliant
-          
       objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -80,7 +79,7 @@ spec:
                   name: maas-default-gateway
                   namespace: openshift-ingress
                 spec:
-                  host: {{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console" "maas" }}
+                  host: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console" "maas" }}'
                   port:
                     targetPort: 80
                   tls:
@@ -114,11 +113,11 @@ spec:
                     - name: http
                       port: 80
                       protocol: HTTP
-                      hostname: {{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console" "maas" }}
+                      hostname: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console" "maas" }}'
                       allowedRoutes:
                         namespaces:
                           from: All
-  
+
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: Policy
