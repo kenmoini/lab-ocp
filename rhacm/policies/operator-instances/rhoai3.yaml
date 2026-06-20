@@ -21,6 +21,35 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: rhoai-kuadrant
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: kuadrant-system
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: kuadrant.io/v1beta1
+                kind: Kuadrant
+                metadata:
+                  name: kuadrant
+                  namespace: kuadrant-system
+  
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-rhoai
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: rhoai-instance
         spec:
           remediationAction: enforce
@@ -44,7 +73,7 @@ spec:
                       managementState: Managed
                     kserve:
                       managementState: Managed
-                      # rawDeploymentServiceConfig: Headless
+                      rawDeploymentServiceConfig: Headed
                       modelsAsService:
                         managementState: Managed
                     llamastackoperator:
@@ -125,3 +154,4 @@ spec:
                 spec:
                   dashboardConfig:
                     genAiStudio: true
+                    vLLMDeploymentOnMaaS: true
