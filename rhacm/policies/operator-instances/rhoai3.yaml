@@ -69,6 +69,94 @@ spec:
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-kuadrant
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-auth-svc-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Service
+                metadata:
+                  name: authorino-authorino-authorization
+                  namespace: kuadrant-system
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-auth-svc-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-auth-svc-meta
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Service
+                metadata:
+                  name: authorino-authorino-authorization
+                  namespace: kuadrant-system
+                  metadata:
+                    annotations:
+                      service.beta.openshift.io/serving-cert-secret-name: authorino-server-cert
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-auth-svc-meta
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-authorino
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-authorino
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.authorino.kuadrant.io/v1beta1
+                kind: Authorino
+                metadata:
+                  name: authorino
+                  namespace: kuadrant-system
+                spec:
+                  replicas: 1
+                  clusterWide: true
+                  listener:
+                    tls:
+                      enabled: true
+                      certSecretRef:
+                        name: authorino-server-cert
+                  oidcServer:
+                    tls:
+                      enabled: false
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
           kind: Policy
           name: operators-rhoai
           namespace: ""
