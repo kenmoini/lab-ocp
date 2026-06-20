@@ -51,3 +51,24 @@ spec:
                   upgradeStrategy: Default
                   targetNamespaces:
                     - openshift-jobset-operator
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: jobset-operator-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: jobset-operator
+                  namespace: openshift-jobset-operator
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available

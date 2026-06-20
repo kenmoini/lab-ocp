@@ -72,7 +72,7 @@ spec:
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
-          kind: Policy
+          kind: ConfigurationPolicy
           name: rhoai-operator-subscription
           namespace: ""
           compliance: Compliant
@@ -92,28 +92,7 @@ spec:
                 metadata:
                   name: rhods-operator
                   namespace: redhat-ods-operator
-
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: Policy
-          name: rhoai-operator-status
-          namespace: ""
-          compliance: Compliant
-      objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: rhoai-operator-replica
-        spec:
-          remediationAction: enforce
-          severity: high
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: apps/v1
-                kind: Deployment
-                metadata:
-                  name: rhods-operator
-                  namespace: redhat-ods-operator
-                spec:
-                  replicas: 1
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available

@@ -22,3 +22,4 @@ spec:
     - operators-rh-keda
     - operators-coo
     # - operators-rhoai
+    - instance-jobset

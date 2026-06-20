@@ -1,0 +1,67 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-rhoai3
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Red Hat OpenShift AI Operator Instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-rhoai
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-instance
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: DataScienceCluster
+                apiVersion: datasciencecluster.opendatahub.io/v2
+                metadata:
+                  name: default-dsc
+                  labels:
+                    app.kubernetes.io/name: datasciencecluster
+                spec:
+                  components:
+                    dashboard:
+                      managementState: Managed
+                    aipipelines:
+                      managementState: Managed
+                    feastoperator:
+                      managementState: Managed
+                    kserve:
+                      managementState: Managed
+                    llamastackoperator:
+                      managementState: Managed
+                    kueue:
+                      managementState: Managed
+                    mlflowoperator:
+                      managementState: Managed
+                    sparkoperator:
+                      managementState: Managed
+                    modelregistry:
+                      managementState: Managed
+                      registriesNamespace: rhoai-model-registries
+                    ray:
+                      managementState: Managed
+                    workbenches:
+                      managementState: Managed
+                    trainer:
+                      managementState: Managed
+                    trainingoperator:
+                      managementState: Managed
+                    trustyai:
+                      managementState: Managed
