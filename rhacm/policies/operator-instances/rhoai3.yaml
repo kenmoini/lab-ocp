@@ -44,7 +44,9 @@ spec:
                       managementState: Managed
                     kserve:
                       managementState: Managed
-                      rawDeploymentServiceConfig: Headless
+                      # rawDeploymentServiceConfig: Headless
+                      modelsAsService:
+                        managementState: Managed
                     llamastackoperator:
                       managementState: Managed
                     kueue:
