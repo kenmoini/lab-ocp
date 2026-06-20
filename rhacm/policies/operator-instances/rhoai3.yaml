@@ -46,6 +46,12 @@ spec:
           name: operators-rhoai
           namespace: ""
           compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: default-gatewayclass
+          namespace: ""
+          compliance: Compliant
+          
       objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
