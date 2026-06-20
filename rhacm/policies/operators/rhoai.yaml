@@ -28,6 +28,14 @@ spec:
                 kind: Namespace
                 metadata:
                   name: redhat-ods-operator
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: redhat-ods-applications
+                  labels:
+                    openshift.io/cluster-monitoring: 'true'
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
