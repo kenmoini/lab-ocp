@@ -21,5 +21,6 @@ spec:
     - operators-rh-tempo
     - operators-rh-keda
     - operators-coo
-    # - operators-rhoai
+    - operators-rhoai
     - instance-jobset
+    - instance-rhoai3

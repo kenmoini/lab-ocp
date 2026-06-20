@@ -44,10 +44,13 @@ spec:
                       managementState: Managed
                     kserve:
                       managementState: Managed
+                      rawDeploymentServiceConfig: Headless
                     llamastackoperator:
                       managementState: Managed
                     kueue:
                       managementState: Managed
+                      defaultClusterQueueName: default
+                      defaultLocalQueueName: default
                     mlflowoperator:
                       managementState: Managed
                     sparkoperator:
@@ -59,6 +62,7 @@ spec:
                       managementState: Managed
                     workbenches:
                       managementState: Managed
+                      workbenchNamespace: rhods-notebooks
                     trainer:
                       managementState: Managed
                     trainingoperator:

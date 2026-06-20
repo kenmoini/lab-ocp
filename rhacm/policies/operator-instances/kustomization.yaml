@@ -29,6 +29,7 @@ resources:
   - power-monitoring.yaml
   - quay.yaml
   - rhbk.yaml
+  - rhoai3.yaml
   - virtualization.yaml
 
 commonAnnotations:
