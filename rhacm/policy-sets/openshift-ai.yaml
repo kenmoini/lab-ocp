@@ -21,7 +21,7 @@ spec:
     - operators-rh-tempo
     - operators-rh-keda
     - operators-coo
-    - operators-rhoai
+    # - operators-rhoai
     - default-gatewayclass
     - instance-jobset
-    - instance-rhoai3
+    # - instance-rhoai3
