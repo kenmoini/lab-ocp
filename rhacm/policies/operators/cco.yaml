@@ -19,9 +19,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-cluster-observability-operator
+          pruneObjectBehavior: None
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -39,6 +37,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -63,6 +62,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -73,7 +73,6 @@ spec:
                   namespace: openshift-cluster-observability-operator
                 spec:
                   upgradeStrategy: Default
-          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -82,6 +81,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:

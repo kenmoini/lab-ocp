@@ -20,6 +20,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: None
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -27,7 +28,6 @@ spec:
                 kind: Namespace
                 metadata:
                   name: redhat-ods-operator
-          pruneObjectBehavior: DeleteIfCreated
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -36,6 +36,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -45,7 +46,6 @@ spec:
                   name: rhoai-operatorgroup
                   namespace: redhat-ods-operator
                 spec: {}
-          pruneObjectBehavior: DeleteIfCreated
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -54,6 +54,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -68,7 +69,6 @@ spec:
                   installPlanApproval: Automatic
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
-          pruneObjectBehavior: DeleteIfCreated
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
