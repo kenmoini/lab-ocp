@@ -26,4 +26,4 @@ spec:
     - default-gatewayclass
     - instance-serverless
     - instance-jobset
-    # - instance-rhoai3
+    - instance-rhoai3
