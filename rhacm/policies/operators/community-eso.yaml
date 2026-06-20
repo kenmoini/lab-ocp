@@ -18,9 +18,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - external-secrets
           object-templates:
             - complianceType: musthave
               objectDefinition:

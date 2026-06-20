@@ -19,9 +19,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-nfd
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -29,6 +26,7 @@ spec:
                 apiVersion: nfd.openshift.io/v1
                 metadata:
                   name: nfd-instance
+                  namespace: openshift-nfd
                 spec:
                   workerConfig:
                     configData: |

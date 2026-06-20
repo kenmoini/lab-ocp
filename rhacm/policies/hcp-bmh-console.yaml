@@ -19,9 +19,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - metallb
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -100,9 +97,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
-          namespaceSelector:
-            include:
-              - metallb
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -122,9 +116,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
-          namespaceSelector:
-            include:
-              - metallb
           object-templates:
             - complianceType: musthave
               objectDefinition:

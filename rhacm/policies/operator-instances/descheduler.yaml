@@ -48,9 +48,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-kube-descheduler-operator
           object-templates:
             - complianceType: musthave
               objectDefinition:

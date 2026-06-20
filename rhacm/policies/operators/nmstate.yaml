@@ -18,9 +18,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-nmstate
           object-templates:
             - complianceType: musthave
               objectDefinition:

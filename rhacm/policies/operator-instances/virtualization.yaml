@@ -19,9 +19,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-virtualization-os-images
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -38,10 +35,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-cnv
-              - openshift-virtualization-os-images
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -159,9 +152,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-cnv
           object-templates:
             - complianceType: musthave
               objectDefinition:

@@ -20,10 +20,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -54,10 +50,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -95,10 +87,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -136,10 +124,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -177,10 +161,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -218,10 +198,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -259,10 +235,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -300,10 +272,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -341,10 +309,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:
@@ -382,10 +346,6 @@ spec:
         spec:
           remediationAction: inform
           severity: high
-          namespaceSelector:
-            exclude:
-              - kube-*
-              - openshift-*
           object-templates:
             - complianceType: mustnothave
               objectDefinition:

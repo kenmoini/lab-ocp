@@ -19,9 +19,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-storage
           object-templates:
             - complianceType: musthave
               objectDefinition:

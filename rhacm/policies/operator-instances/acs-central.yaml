@@ -80,9 +80,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - stackrox
           object-templates:
             - complianceType: musthave
               objectDefinition:

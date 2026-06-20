@@ -20,9 +20,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - kube-system
           object-templates:
             - complianceType: musthave
               objectDefinition:

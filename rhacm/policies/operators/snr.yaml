@@ -19,9 +19,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-workload-availability
           object-templates:
             - complianceType: musthave
               objectDefinition:

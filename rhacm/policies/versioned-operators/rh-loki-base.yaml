@@ -20,9 +20,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-operators-redhat
           object-templates:
             - complianceType: musthave
               objectDefinition:

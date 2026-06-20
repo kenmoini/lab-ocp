@@ -30,9 +30,6 @@ spec:
           remediationAction: enforce
           severity: critical
           pruneObjectBehavior: DeleteIfCreated
-          namespaceSelector:
-            include:
-              - cluster-info-header
           object-templates:
             - complianceType: musthave
               objectDefinition:

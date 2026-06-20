@@ -18,9 +18,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - nvidia-gpu-operator
           object-templates:
             - complianceType: musthave
               objectDefinition:

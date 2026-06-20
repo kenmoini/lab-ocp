@@ -18,9 +18,6 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
-          namespaceSelector:
-            include:
-              - openshift-mtv
           object-templates:
             - complianceType: musthave
               objectDefinition:
