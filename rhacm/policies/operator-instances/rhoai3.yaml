@@ -71,3 +71,57 @@ spec:
                       managementState: Managed
                     trustyai:
                       managementState: Managed
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-operator-status
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-instance
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-odhdash-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: opendatahub.io/v1alpha
+                kind: OdhDashboardConfig
+                metadata:
+                  name: odh-dashboard-config
+                  namespace: redhat-ods-applications
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-odhdash-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-odhdash-maas
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: opendatahub.io/v1alpha
+                kind: OdhDashboardConfig
+                metadata:
+                  name: odh-dashboard-config
+                  namespace: redhat-ods-applications
+                spec:
+                  dashboardConfig:
+                    genAiStudio: true
