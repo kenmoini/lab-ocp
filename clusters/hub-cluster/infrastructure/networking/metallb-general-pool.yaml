@@ -13,6 +13,7 @@ apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
   name: v60-auto-pool
+  namespace: metallb-system
   annotations:
     argocd.argoproj.io/sync-wave: "15"
 spec:
@@ -24,6 +25,7 @@ apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
   name: v60-high-pool
+  namespace: metallb-system
   annotations:
     argocd.argoproj.io/sync-wave: "15"
 spec:
