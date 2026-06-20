@@ -23,6 +23,7 @@ spec:
     - operators-rh-keda
     - operators-coo
     - operators-rhoai
+    - operators-cnpgsql
     - default-gatewayclass
     - instance-serverless
     - instance-jobset

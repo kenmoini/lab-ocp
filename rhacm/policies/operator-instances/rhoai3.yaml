@@ -233,3 +233,4 @@ spec:
                   dashboardConfig:
                     genAiStudio: true
                     vLLMDeploymentOnMaaS: true
+                    maasAuthPolicies: true
