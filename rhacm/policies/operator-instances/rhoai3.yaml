@@ -129,9 +129,8 @@ spec:
                 metadata:
                   name: authorino-authorino-authorization
                   namespace: kuadrant-system
-                  metadata:
-                    annotations:
-                      service.beta.openshift.io/serving-cert-secret-name: authorino-server-cert
+                  annotations:
+                    service.beta.openshift.io/serving-cert-secret-name: authorino-server-cert
 
     # Create the Authorino instance
     - extraDependencies:
