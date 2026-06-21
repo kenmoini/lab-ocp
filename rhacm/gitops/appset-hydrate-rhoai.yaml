@@ -42,7 +42,7 @@ spec:
           kind: 'ApplicationSet'
           jsonPointers:
             - '/metadata/generation'
-      project: spoke-cluster-config
+      project: rhoai
       sources:
         - kustomize: {}
           repoURL: 'https://github.com/kenmoini/lab-ocp'

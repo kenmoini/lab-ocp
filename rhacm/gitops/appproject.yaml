@@ -66,3 +66,19 @@ spec:
     - name: '*'
       namespace: '*'
       server: '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: rhoai
+  namespace: openshift-gitops
+spec:
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  sourceRepos:
+    - '*'
+  destinations:
+    - name: '*'
+      namespace: '*'
+      server: '*'
