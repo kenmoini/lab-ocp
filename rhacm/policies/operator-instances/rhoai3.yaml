@@ -403,7 +403,7 @@ spec:
           namespace: ""
           compliance: Compliant
         - apiVersion: policy.open-cluster-management.io/v1
-          kind: Policy
+          kind: ConfigurationPolicy
           name: maas-pgsql-instance
           namespace: ""
           compliance: Compliant
