@@ -456,6 +456,24 @@ spec:
                       mappingMethod: add
                       name: RedHatSSO
                       type: Google
+                    - mappingMethod: add
+                      name: AuthentikSSO
+                      openID:
+                        ca:
+                          name: kemo-labs-sso-oidc
+                        claims:
+                          email:
+                            - email
+                          name:
+                            - name
+                          preferredUsername:
+                            - preferred_username
+                        clientID: IFyG6vxFSe4pnauX2YQDuK8K9nd3qT33NYGCYARy
+                        clientSecret:
+                          name: sso-authentik
+                        extraScopes: []
+                        issuer: 'https://auth.apps.lab.kemo.dev/application/o/openshift'
+                      type: OpenID
                     # - mappingMethod: add
                     #   name: KemoLabsSSO
                     #   openID:
