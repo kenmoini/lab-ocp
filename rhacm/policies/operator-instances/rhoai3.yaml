@@ -262,7 +262,7 @@ spec:
                 kind: Tenant
                 metadata:
                   name: default-tenant
-                  namespace: model-as-a-service
+                  namespace: models-as-a-service
 
     # Configure the Tenant instance for Telemetry
     - extraDependencies:
@@ -286,7 +286,7 @@ spec:
                 kind: Tenant
                 metadata:
                   name: default-tenant
-                  namespace: model-as-a-service
+                  namespace: models-as-a-service
                 spec:
                   telemetry:
                     enabled: true
