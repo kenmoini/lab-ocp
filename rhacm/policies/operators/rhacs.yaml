@@ -75,21 +75,22 @@ spec:
                   installPlanApproval: Automatic
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: rhacs-plugin
-        spec:
-          remediationAction: enforce
-          severity: high
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: operator.openshift.io/v1
-                kind: Console
-                metadata:
-                  name: cluster
-                spec:
-                  plugins:
-                    - advanced-cluster-security
+    # - objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: rhacs-plugin
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: high
+    #       pruneObjectBehavior: DeleteIfCreated
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: operator.openshift.io/v1
+    #             kind: Console
+    #             metadata:
+    #               name: cluster
+    #             spec:
+    #               plugins:
+    #                 - advanced-cluster-security

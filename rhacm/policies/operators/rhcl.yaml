@@ -34,21 +34,22 @@ spec:
                   name: rhcl-operator
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: rhcl-plugin
-        spec:
-          remediationAction: enforce
-          severity: high
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: operator.openshift.io/v1
-                kind: Console
-                metadata:
-                  name: cluster
-                spec:
-                  plugins:
-                    - kuadrant-console-plugin
+    # - objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: rhcl-plugin
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: high
+    #       pruneObjectBehavior: DeleteIfCreated
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: operator.openshift.io/v1
+    #             kind: Console
+    #             metadata:
+    #               name: cluster
+    #             spec:
+    #               plugins:
+    #                 - kuadrant-console-plugin
