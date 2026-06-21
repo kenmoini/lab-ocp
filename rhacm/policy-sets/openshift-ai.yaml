@@ -21,11 +21,11 @@ spec:
     - operators-rh-otel
     - operators-rh-tempo
     - operators-rh-keda
-    # - operators-coo
-    # - operators-rhoai
+    - operators-coo
+    - operators-rhoai
     - operators-cnpgsql
     - default-gatewayclass
     - instance-serverless
     - instance-leaderworkerset
     - instance-jobset
-    # - instance-rhoai3
+    - instance-rhoai3
