@@ -34,4 +34,4 @@ spec:
                   name: limitador-operator
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
-                  startingCSV: limitador-operator.v1.3.4
+                  startingCSV: limitador-operator.v1.3.1
