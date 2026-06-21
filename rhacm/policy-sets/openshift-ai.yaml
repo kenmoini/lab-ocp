@@ -17,7 +17,7 @@ spec:
     - operators-lwso-1.0
     - operators-jobset-base
     - operators-jobset-1.0
-    - operators-rhcl
+    # - operators-rhcl
     - operators-rh-otel
     - operators-rh-tempo
     - operators-rh-keda
