@@ -370,7 +370,7 @@ spec:
                     managementState: Managed                 # Required: Enables and manages the observability stack
                     namespace: redhat-ods-monitoring    # Required: Namespace where monitoring components are deployed
                     collectorReplicas: 1                        # Optional: Number of collector instances for high availability
-                    # alerting: {}                              # Alertmanager configuration, uses default settings if empty
+                    alerting: {}                              # Alertmanager configuration, uses default settings if empty
                     metrics:                                  # Prometheus configuration for metrics collection
                       replicas: 1                             # Optional: Number of Prometheus instances
                       # resources:                              # CPU and memory requests and limits for Prometheus pods
@@ -387,9 +387,9 @@ spec:
                       storage:                                # Storage configuration for trace data
                         backend: pv                           # Required: Storage backend for Tempo traces (pv, s3, or gcs)
                         retention: 2160h                      # Optional: Retention period for trace data in hours
-                      exporters: {}                           # External traces exporters
-                      tls:
-                        enabled: false
+                      # exporters: {}                           # External traces exporters
+                      # tls:
+                      #   enabled: false
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
