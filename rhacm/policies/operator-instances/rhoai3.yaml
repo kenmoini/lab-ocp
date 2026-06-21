@@ -388,8 +388,8 @@ spec:
                         backend: pv                           # Required: Storage backend for Tempo traces (pv, s3, or gcs)
                         retention: 2160h                      # Optional: Retention period for trace data in hours
                       # exporters: {}                           # External traces exporters
-                      # tls:
-                      #   enabled: false
+                      tls:
+                        enabled: true
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
