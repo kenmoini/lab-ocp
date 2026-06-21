@@ -37,6 +37,15 @@ spec:
                   namespace: redhat-ods-applications
                 spec:
                   clusterSet: global
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v1beta2
+                kind: ManagedClusterSetBinding
+                metadata:
+                  name: global
+                  namespace: redhat-ods-monitoring
+                spec:
+                  clusterSet: global
 
     # Create the Kuadrant namespace and operator instance
     - extraDependencies:
