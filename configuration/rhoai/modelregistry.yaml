@@ -1,0 +1,23 @@
+apiVersion: modelregistry.opendatahub.io/v1beta1
+kind: ModelRegistry
+metadata:
+  annotations:
+    openshift.io/description: ''
+    openshift.io/display-name: test-model-reg
+  name: test-model-reg
+  namespace: rhoai-model-registries
+spec:
+  grpc:
+    port: 9090
+  kubeRBACProxy:
+    port: 8443
+    routePort: 443
+    serviceRoute: enabled
+  postgres:
+    generateDeployment: true
+    port: 5432
+    skipDBCreation: false
+    sslMode: disable
+  rest:
+    port: 8080
+    serviceRoute: disabled

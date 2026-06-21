@@ -1,0 +1,44 @@
+apiVersion: serving.kserve.io/v1alpha2
+kind: LLMInferenceService
+metadata:
+  annotations:
+    opendatahub.io/genai-use-case: test
+    opendatahub.io/hardware-profile-name: nvidia-a4000
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
+    opendatahub.io/model-type: generative
+    openshift.io/display-name: RedHatAI/Phi-4-mini-instruct-FP8-dynamic
+  name: redhataiphi-4-mini-instruct-fp
+  namespace: test-maas
+  labels:
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/genai-asset: 'true'
+spec:
+  baseRefs:
+    - name: redhataiphi-4-mini-instruct-fp
+  model:
+    name: redhataiphi-4-mini-instruct-fp
+    uri: 'oci://registry.redhat.io/rhai/modelcar-phi-4-mini-instruct-fp8-dynamic:3.0'
+  replicas: 1
+  router:
+    gateway:
+      refs:
+        - name: maas-default-gateway
+          namespace: openshift-ingress
+  template:
+    containers:
+      - name: main
+        resources:
+          limits:
+            cpu: '4'
+            memory: 32Gi
+            nvidia.com/gpu: '1'
+          requests:
+            cpu: '4'
+            memory: 16Gi
+            nvidia.com/gpu: '1'
+    nodeSelector:
+      nvidia.com/gpu.product: NVIDIA-RTX-A4000
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Exists

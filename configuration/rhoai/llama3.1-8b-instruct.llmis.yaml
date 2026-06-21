@@ -1,0 +1,42 @@
+apiVersion: serving.kserve.io/v1alpha2
+kind: LLMInferenceService
+metadata:
+  annotations:
+    # opendatahub.io/connections: secret-p14fog
+    opendatahub.io/genai-use-case: test,chat
+    opendatahub.io/hardware-profile-name: nvidia-a4000
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
+    opendatahub.io/model-type: generative
+    openshift.io/display-name: RedHatAI/Llama-3.1-8B-Instruct
+    serving.kserve.io/stop: 'true'
+  name: redhataillama-31-8b-instruct
+  namespace: test-maas
+  labels:
+    opendatahub.io/dashboard: 'true'
+    opendatahub.io/genai-asset: 'true'
+spec:
+  baseRefs:
+    - name: redhataillama-31-8b-instruct
+  model:
+    uri: 'oci://registry.redhat.io/rhelai1/modelcar-llama-3-1-8b-instruct:1.5'
+  replicas: 1
+  router:
+    gateway:
+      refs:
+        - name: maas-default-gateway
+          namespace: openshift-ingress
+    route: {}
+  template:
+    containers:
+      - name: main
+        resources:
+          limits:
+            cpu: '4'
+            memory: 16Gi
+            nvidia.com/gpu: '1'
+          requests:
+            cpu: '4'
+            memory: 16Gi
+            nvidia.com/gpu: '1'
+    nodeSelector:
+      nvidia.com/gpu.product: NVIDIA-RTX-A4000

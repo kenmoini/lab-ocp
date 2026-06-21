@@ -1,0 +1,38 @@
+apiVersion: infrastructure.opendatahub.io/v1
+kind: HardwareProfile
+metadata:
+  annotations:
+    opendatahub.io/dashboard-feature-visibility: '[]'
+    opendatahub.io/disabled: 'false'
+    opendatahub.io/display-name: nvidia-a4000
+  name: nvidia-a4000
+  namespace: redhat-ods-applications
+spec:
+  identifiers:
+    - defaultCount: '4'
+      displayName: CPU
+      identifier: cpu
+      maxCount: '64'
+      minCount: 1
+      resourceType: CPU
+    - defaultCount: 16Gi
+      displayName: Memory
+      identifier: memory
+      maxCount: 256Gi
+      minCount: 2Gi
+      resourceType: Memory
+    - defaultCount: 1
+      displayName: GPU
+      identifier: nvidia.com/gpu
+      maxCount: 1 # This is set to 1 because each node only has 1 GPU, so for multi-gpu it uses 1 GPU per-node
+      minCount: 1
+      resourceType: Accelerator
+  scheduling:
+    node:
+      nodeSelector:
+        nvidia.com/gpu.product: NVIDIA-RTX-A4000
+      tolerations:
+        - key: nvidia.com/gpu
+          effect: NoSchedule
+          operator: Exists
+    type: Node

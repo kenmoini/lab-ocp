@@ -1,0 +1,19 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSSubscription
+metadata:
+  annotations:
+    openshift.io/display-name: admin-models
+  name: admin-models
+  namespace: models-as-a-service
+spec:
+  modelRefs:
+    - name: redhataiphi-4-mini-instruct-fp
+      namespace: test-maas
+      tokenRateLimits:
+        - limit: 99999
+          window: 1m
+  owner:
+    groups:
+      - name: cluster-admins
+      - name: rhods-admins
+  priority: 10

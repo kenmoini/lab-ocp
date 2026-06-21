@@ -1,0 +1,7 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: test-maas
+  labels:
+    kubernetes.io/metadata.name: test-maas
+    opendatahub.io/dashboard: 'true'
