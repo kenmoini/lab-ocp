@@ -92,7 +92,8 @@ spec:
                   namespace: openshift-cluster-observability-operator
                 spec:
                   channel: stable
-                  installPlanApproval: Automatic
+                  installPlanApproval: Manual
                   name: cluster-observability-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
+                  startingCSV: cluster-observability-operator.v1.4.0

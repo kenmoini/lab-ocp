@@ -7,7 +7,7 @@ namespace: kyverno
 resources:
 - default-cronjob-spec.yaml
 - default-job-spec.yaml
-- mutate-persesdatasource.yaml
+# - mutate-persesdatasource.yaml
 - outbound-proxy.yaml
 - root-certs.yaml
 - configmap-secret-reloader.yaml
