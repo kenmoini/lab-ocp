@@ -7,7 +7,9 @@ metadata:
 spec:
   description: "Red Hat OpenShift AI operators and deployments"
   policies:
-    - operators-authorino
+    # - operators-authorino
+    # - operators-limitador
+    # - operators-rhcl
     - operators-rh-cert-manager
     - operators-servicemesh-3
     - operators-serverless
@@ -17,7 +19,6 @@ spec:
     - operators-lwso-1.0
     - operators-jobset-base
     - operators-jobset-1.0
-    - operators-rhcl
     - operators-rh-otel
     - operators-rh-tempo
     - operators-rh-keda

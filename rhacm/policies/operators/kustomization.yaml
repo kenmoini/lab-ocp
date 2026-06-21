@@ -19,6 +19,7 @@ resources:
   - far.yaml
   - gatekeeper.yaml
   - keda.yaml
+  - limitador.yaml
   - lso.yaml
   - metallb.yaml
   # - mtv.yaml
