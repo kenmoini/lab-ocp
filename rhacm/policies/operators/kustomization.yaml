@@ -36,6 +36,7 @@ resources:
   - power-monitoring.yaml
   - rhacs.yaml
   - rhcl.yaml
+  - rh-dns.yaml
   - rh-otel.yaml
   - rh-tempo.yaml
   - rhoai.yaml
