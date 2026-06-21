@@ -322,7 +322,7 @@ spec:
     # Configure the DSCI instance for observability
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
-          kind: Policy
+          kind: ConfigurationPolicy
           name: rhoai-dsci-check
           namespace: ""
           compliance: Compliant
