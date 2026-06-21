@@ -11,7 +11,7 @@ metadata:
 spec:
   disabled: false
   policy-templates:
-
+    # Create a MCSB to allow for the targeted placement that copies the DB secret
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: Policy
@@ -38,6 +38,7 @@ spec:
                 spec:
                   clusterSet: global
 
+    # Create the Kuadrant namespace and operator instance
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: Policy
@@ -70,6 +71,7 @@ spec:
                   observability:
                     enable: true
 
+    # Check for the Authorino service so we can annotate it
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
@@ -93,6 +95,7 @@ spec:
                   name: authorino-authorino-authorization
                   namespace: kuadrant-system
 
+    # Enforce the Authorino service annotations for TLS cert generation
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
@@ -119,6 +122,7 @@ spec:
                     annotations:
                       service.beta.openshift.io/serving-cert-secret-name: authorino-server-cert
 
+    # Create the Authorino instance
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
@@ -235,6 +239,130 @@ spec:
                       allowedRoutes:
                         namespaces:
                           from: All
+
+    # Check for the Tenant instance so we can configure it
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-gateway
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-tenant-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: maas.opendatahub.io/v1alpha1
+                kind: Tenant
+                metadata:
+                  name: default-tenant
+                  namespace: model-as-a-service
+
+    # Configure the Tenant instance for Telemetry
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-tenant-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-tenant-telemetry
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: maas.opendatahub.io/v1alpha1
+                kind: Tenant
+                metadata:
+                  name: default-tenant
+                  namespace: model-as-a-service
+                spec:
+                  telemetry:
+                    enabled: true
+                    metrics:
+                      captureModelUsage: true
+                      captureOrganization: true
+                      captureUser: false
+                      captureGroup: false
+
+    # Check for the DSCI instance so we can configure it
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-rhoai
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-dsci-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: dscinitialization.opendatahub.io/v2
+                kind: DSCInitialization
+                metadata:
+                  name: default-dsci
+
+    # Configure the DSCI instance for observability
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: rhoai-dsci-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-dsci-o11y
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: dscinitialization.opendatahub.io/v2
+                kind: DSCInitialization
+                metadata:
+                  name: default-dsci
+                spec:
+                  monitoring:
+                    managementState: Managed                 # Required: Enables and manages the observability stack
+                    namespace: redhat-ods-monitoring    # Required: Namespace where monitoring components are deployed
+                    alerting: {}                              # Alertmanager configuration, uses default settings if empty
+                    metrics:                                  # Prometheus configuration for metrics collection
+                      replicas: 1                             # Optional: Number of Prometheus instances
+                      resources:                              # CPU and memory requests and limits for Prometheus pods
+                        cpulimit: 500m                        # Optional: Maximum CPU allocation in millicores
+                        cpurequest: 100m                      # Optional: Minimum CPU allocation in millicores
+                        memorylimit: 512Mi                    # Optional: Maximum memory allocation in mebibytes
+                        memoryrequest: 256Mi                  # Optional: Minimum memory allocation in mebibytes
+                      storage:                                # Storage configuration for metrics data
+                        size: 5Gi                             # Required: Storage size for Prometheus data
+                        retention: 10d                        # Required: Retention period for metrics data in days
+                      exporters: {}                           # External metrics exporters
+                    traces:                                   # Tempo backend for distributed tracing
+                      sampleRatio: '0.1'                      # Optional: Portion of traces to sample, expressed as a decimal
+                      storage:                                # Storage configuration for trace data
+                        backend: pv                           # Required: Storage backend for Tempo traces (pv, s3, or gcs)
+                        retention: 2160h                      # Optional: Retention period for trace data in hours
+                      exporters: {}                           # External traces exporters
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
