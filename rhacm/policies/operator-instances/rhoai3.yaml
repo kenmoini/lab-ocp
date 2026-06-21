@@ -66,6 +66,9 @@ spec:
                 metadata:
                   name: kuadrant
                   namespace: kuadrant-system
+                spec:
+                  observability:
+                    enable: true
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
@@ -269,6 +272,11 @@ spec:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: Policy
           name: operators-rhoai
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: maas-pgsql-instance
           namespace: ""
           compliance: Compliant
       objectDefinition:
