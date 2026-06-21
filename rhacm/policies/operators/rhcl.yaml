@@ -35,6 +35,33 @@ spec:
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
                   startingCSV: rhcl-operator.v1.3.4
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhcl-subscription
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhcl-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: kuadrant-operator-controller-manager
+                  namespace: openshift-operators
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
     # - objectDefinition:
     #     apiVersion: policy.open-cluster-management.io/v1
     #     kind: ConfigurationPolicy

@@ -36,3 +36,30 @@ spec:
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
                   startingCSV: authorino-operator.v1.3.1
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: authorino-subscription
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: authorino-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: authorino-operator
+                  namespace: openshift-operators
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available

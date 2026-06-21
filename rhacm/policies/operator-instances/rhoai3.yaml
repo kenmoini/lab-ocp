@@ -55,6 +55,11 @@ spec:
           name: operators-rhoai
           namespace: ""
           compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-rhcl
+          namespace: ""
+          compliance: Compliant
       objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -87,6 +92,11 @@ spec:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
           name: rhoai-kuadrant
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-authorino
           namespace: ""
           compliance: Compliant
       objectDefinition:
@@ -423,6 +433,26 @@ spec:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
           name: maas-pgsql-instance
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-authorino
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-limitador
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-rhcl
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-rh-dns
           namespace: ""
           compliance: Compliant
       objectDefinition:
