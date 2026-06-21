@@ -24,10 +24,10 @@ spec:
     - operators-rh-tempo
     - operators-rh-keda
     - operators-coo
-    # - operators-rhoai
+    - operators-rhoai
     - operators-cnpgsql
     - default-gatewayclass
     - instance-serverless
     - instance-leaderworkerset
     - instance-jobset
-    # - instance-rhoai3
+    - instance-rhoai3
