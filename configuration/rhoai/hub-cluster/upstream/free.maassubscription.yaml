@@ -18,5 +18,5 @@ spec:
     - name: "simulated-free"
       namespace: "ai-models"
       tokenRateLimits:
-        - limit: 1000
-          window: "5m"
+        - limit: 100000
+          window: 1m
