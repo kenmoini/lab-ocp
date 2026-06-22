@@ -209,8 +209,7 @@ spec:
                           affinity:
                             nodeAffinity:
                               preferredDuringSchedulingIgnoredDuringExecution: []
-                              requiredDuringSchedulingIgnoredDuringExecution:
-                                nodeSelectorTerms: []
+                              requiredDuringSchedulingIgnoredDuringExecution: []
                             podAffinity:
                               preferredDuringSchedulingIgnoredDuringExecution: []
                               requiredDuringSchedulingIgnoredDuringExecution: []
