@@ -486,6 +486,82 @@ spec:
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-dsci-check
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-dsci-o11y
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-o11y-rbac
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: ClusterRole
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: rhods-otel-metrics-reader
+                rules:
+                  - verbs:
+                      - get
+                    nonResourceURLs:
+                      - /metrics
+                      - /api
+                      - /api/*
+                      - /apis
+                      - /apis/*
+                  - verbs:
+                      - get
+                      - list
+                      - watch
+                    apiGroups:
+                      - ''
+                    resources:
+                      - nodes/metrics
+                      - nodes
+                      - configmaps
+                  - verbs:
+                      - get
+                    apiGroups:
+                      - monitoring.coreos.com
+                    resources:
+                      - servicemonitors
+                      - podmonitors
+                  - verbs:
+                      - get
+                      - list
+                      - watch
+                    apiGroups:
+                      - "networking.k8s.io"
+                    resources:
+                      - ingresses
+            - complianceType: musthave
+              objectDefinition:
+                kind: ClusterRoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: rhods-otel-metrics-reader
+                subjects:
+                  - kind: ServiceAccount
+                    name: data-science-collector-collector
+                    namespace: redhat-ods-monitoring
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: rhods-otel-metrics-reader
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
           kind: Policy
           name: operators-cnpgsql
           namespace: ""
