@@ -355,7 +355,7 @@ spec:
                       dropUnusedFields: true
                       conversationHeartbeatInterval: 30s
                     metrics:
-                      alerts: []
+                      # alerts: []
                       disableAlerts: []
                       includeList: []
                       server:
