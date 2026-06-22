@@ -370,7 +370,17 @@ spec:
                     metrics:
                       # alerts: []
                       disableAlerts: []
-                      includeList: []
+                      includeList:
+                      - namespace_network_policy_events_total
+                      - workload_network_policy_events_total
+                      - namespace_flows_total
+                      - workload_flows_total
+                      - node_egress_bytes_total
+                      - namespace_egress_bytes_total
+                      - workload_egress_bytes_total
+                      - node_ingress_bytes_total
+                      - namespace_ingress_bytes_total
+                      - workload_ingress_bytes_total
                       server:
                         port: 9401
                         tls:
