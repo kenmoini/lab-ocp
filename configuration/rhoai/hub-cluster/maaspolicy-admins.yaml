@@ -9,6 +9,10 @@ spec:
   modelRefs:
     - name: redhataiphi-4-mini-instruct-fp
       namespace: test-maas
+    - name: "simulated-free"
+      namespace: "ai-models"
+    - name: "simulated-premium"
+      namespace: "ai-models"
       # tokenRateLimits:
       #   redhataiphi-4-mini-instruct-fp:
       #     - limit: 100000
@@ -17,3 +21,5 @@ spec:
     groups:
       - name: cluster-admins
       - name: rhods-admins
+    users:
+      - kemo
