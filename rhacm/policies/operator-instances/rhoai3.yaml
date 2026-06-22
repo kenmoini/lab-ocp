@@ -261,6 +261,19 @@ spec:
                       allowedRoutes:
                         namespaces:
                           from: All
+                    - name: https
+                      hostname: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console" "maas" }}'
+                      port: 443
+                      protocol: HTTPS
+                      allowedRoutes:
+                        namespaces:
+                          from: All
+                      tls:
+                        certificateRefs:
+                        - group: ""
+                          kind: Secret
+                          name: ingress-lb-tls
+                        mode: Terminate
 
     # Check for the Tenant instance so we can configure it
     - extraDependencies:
