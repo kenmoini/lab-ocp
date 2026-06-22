@@ -7,9 +7,9 @@ metadata:
 spec:
   description: "Additional monitoring and metrics services for OpenShift clusters"
   policies:
-    - operators-power-monitoring
+    # - operators-power-monitoring
     - operators-cost-mgmt
-    - instance-power-monitoring
+    # - instance-power-monitoring
     - instance-cost-mgmt
     - operators-net-obsv
     - instance-netobserv
