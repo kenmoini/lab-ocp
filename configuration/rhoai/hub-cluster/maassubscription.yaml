@@ -12,8 +12,20 @@ spec:
       tokenRateLimits:
         - limit: 99999
           window: 1m
+    - name: "simulated-free"
+      namespace: "ai-models"
+      tokenRateLimits:
+        - limit: 100000
+          window: 1m
+    - name: "simulated-premium"
+      namespace: "ai-models"
+      tokenRateLimits:
+        - limit: 100000
+          window: 1m
   owner:
     groups:
       - name: cluster-admins
       - name: rhods-admins
+    users:
+      - kemo
   priority: 10
