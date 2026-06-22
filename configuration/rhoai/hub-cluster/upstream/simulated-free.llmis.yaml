@@ -3,6 +3,9 @@ kind: LLMInferenceService
 metadata:
   name: simulated-free
   namespace: ai-models
+  annotations:
+    opendatahub.io/hardware-profile-name: default-profile
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
 spec:
   model:
     uri: hf://sshleifer/tiny-gpt2 # ~2MB test model, simulator ignores it anyway

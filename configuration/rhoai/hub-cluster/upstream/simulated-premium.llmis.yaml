@@ -3,6 +3,9 @@ kind: LLMInferenceService
 metadata:
   name: simulated-premium
   namespace: ai-models
+  annotations:
+    opendatahub.io/hardware-profile-name: default-profile
+    opendatahub.io/hardware-profile-namespace: redhat-ods-applications
 spec:
   model:
     uri: hf://facebook/opt-125m
