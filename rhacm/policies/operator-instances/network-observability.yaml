@@ -212,9 +212,9 @@ spec:
                       logLevel: info
                       advanced:
                         capOverride: []
-                        scheduling:
-                          affinity: {}
-                          tolerations: []
+                        # scheduling:
+                        #   affinity: {}
+                        #   tolerations: []
                       metrics:
                         disableAlerts: []
                         server:
