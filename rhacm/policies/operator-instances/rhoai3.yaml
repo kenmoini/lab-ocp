@@ -391,7 +391,7 @@ spec:
                   namespace: models-as-a-service
                 spec:
                   telemetry:
-                    enabled: true
+                    enabled: false
                     metrics:
                       captureModelUsage: true
                       captureOrganization: false
