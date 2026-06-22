@@ -15,6 +15,12 @@ metadata:
   name: redhataiphi-4-mini-instruct-fp
   namespace: test-maas
 spec:
+  router:
+    gateway:
+      refs:
+        - name: maas-default-gateway
+          namespace: openshift-ingress
+    route: {}
   model:
     uri: ''
   template:
