@@ -82,6 +82,13 @@ spec:
                   storageClassName: ocs-storagecluster-cephfs
                   tenants:
                     mode: openshift-network
+                    openshift:
+                      adminGroups:
+                        - cluster-admin
+                        - cluster-admins
+                        - system:cluster-admins
+                        - lab-admins
+                        - rhods-admins
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
