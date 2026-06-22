@@ -206,16 +206,7 @@ spec:
                       advanced:
                         capOverride: []
                         scheduling:
-                          affinity:
-                            nodeAffinity:
-                              preferredDuringSchedulingIgnoredDuringExecution: []
-                              requiredDuringSchedulingIgnoredDuringExecution: []
-                            podAffinity:
-                              preferredDuringSchedulingIgnoredDuringExecution: []
-                              requiredDuringSchedulingIgnoredDuringExecution: []
-                            podAntiAffinity:
-                              preferredDuringSchedulingIgnoredDuringExecution: []
-                              requiredDuringSchedulingIgnoredDuringExecution: []
+                          affinity: {}
                           tolerations: []
                       metrics:
                         disableAlerts: []
