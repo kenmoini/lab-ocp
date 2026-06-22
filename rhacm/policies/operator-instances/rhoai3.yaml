@@ -304,7 +304,7 @@ spec:
                 spec:
                   host: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console" "maas" }}'
                   port:
-                    targetPort: 80
+                    targetPort: https
                   tls:
                     insecureEdgeTerminationPolicy: Allow
                     termination: edge
