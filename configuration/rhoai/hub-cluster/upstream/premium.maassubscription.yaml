@@ -17,6 +17,6 @@ spec:
   modelRefs:
     - name: "simulated-premium"
       namespace: "ai-models"
-      # tokenRateLimits:
-      #   - limit: 100000
-      #     window: 1m
+      tokenRateLimits:
+        - limit: 100000
+          window: 1m
