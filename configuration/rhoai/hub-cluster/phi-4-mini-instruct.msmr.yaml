@@ -1,0 +1,11 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSModelRef
+metadata:
+  annotations:
+    openshift.io/display-name: RedHatAI/Qwen2.5-7B-Instruct
+  name: redhataiphi-4-mini-instruct-fp
+  namespace: test-maas
+spec:
+  modelRef:
+    kind: LLMInferenceService
+    name: redhataiphi-4-mini-instruct-fp

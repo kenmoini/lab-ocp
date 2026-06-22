@@ -6,6 +6,7 @@ resources:
   - namespace.yaml
   - nvidia-gpu-hardwareprofile.yaml
   - phi-4-mini-instruct.llmis.yaml
+  - phi-4-mini-instruct.msmr.yaml
   - rhoai-monitoring-netpol.yaml
 
 # namespace: test-maas
