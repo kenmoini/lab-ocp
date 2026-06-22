@@ -13,10 +13,10 @@ spec:
   modelRefs:
     - name: "simulated-free"
       namespace: "ai-models"
-      tokenRateLimits:
-        simulated-free:
-          - limit: 100000
-            window: 1m
+      # tokenRateLimits:
+      #   simulated-free:
+      #     - limit: 100000
+      #       window: 1m
   subjects:
     groups:
       - name: "system:authenticated"

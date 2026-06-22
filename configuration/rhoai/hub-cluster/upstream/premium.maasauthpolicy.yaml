@@ -12,10 +12,10 @@ spec:
   modelRefs:
     - name: "simulated-premium"
       namespace: "ai-models"
-      tokenRateLimits:
-        simulated-premium:
-          - limit: 100000
-            window: 1m
+      # tokenRateLimits:
+      #   simulated-premium:
+      #     - limit: 100000
+      #       window: 1m
   subjects:
     groups:
       - name: "system:authenticated"
