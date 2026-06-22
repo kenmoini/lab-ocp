@@ -144,7 +144,23 @@ spec:
                     flows.netobserv.io/flpparent-namespace: netobserv
                 spec:
                   networkPolicy:
-                    additionalNamespaces: []
+                    additionalNamespaces:
+                      - netobserv
+                      - openshift-logging
+                      - openshift-monitoring
+                      - openshift-gitops
+                      - openshift-ingress
+                      - openshift-cluster-observability-operator
+                      - openshift-network-operator
+                      - ovn-kubernetes
+                      - openshift-operators
+                      - models-as-a-service
+                      - redhat-ods-applications
+                      - redhat-ods-monitoring
+                      - redhat-ods-operator
+                      - rhoai-model-registries
+                      - test-maas
+                      - ai-models
                     enable: true
                   loki:
                     advanced:
