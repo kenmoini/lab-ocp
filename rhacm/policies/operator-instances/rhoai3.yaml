@@ -320,13 +320,13 @@ spec:
                       kind: ConfigMap
                       name: maas-default-gateway-config
                   listeners:
-                    # - name: http
-                    #   port: 80
-                    #   protocol: HTTP
-                    #   hostname: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console" "maas" }}'
-                    #   allowedRoutes:
-                    #     namespaces:
-                    #       from: All
+                    - name: http
+                      port: 80
+                      protocol: HTTP
+                      hostname: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console" "maas" }}'
+                      allowedRoutes:
+                        namespaces:
+                          from: All
                     - name: https
                       hostname: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console" "maas" }}'
                       port: 443
