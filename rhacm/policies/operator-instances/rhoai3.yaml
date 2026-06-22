@@ -278,6 +278,19 @@ spec:
                   name: maas-default-gateway-config
                   namespace: openshift-ingress
                 data:
+                  deployment: |
+                    spec:
+                      template:
+                        spec:
+                          containers:
+                          - name: istio-proxy
+                            resources:
+                              requests:
+                                cpu: 100m
+                                memory: 256Mi
+                              limits:
+                                cpu: "2"
+                                memory: 2Gi
                   service: |
                     spec:
                       type: ClusterIP
@@ -308,6 +321,7 @@ spec:
                   name: maas-default-gateway
                   namespace: openshift-ingress
                   labels:
+                    istio.io/rev: openshift-gateway
                     opendatahub.io/managed: "false"
                   annotations:
                     opendatahub.io/managed: "false"

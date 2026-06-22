@@ -145,6 +145,8 @@ spec:
                 spec:
                   networkPolicy:
                     additionalNamespaces:
+                      - default
+                      - kube-system
                       - netobserv
                       - openshift-logging
                       - openshift-monitoring
