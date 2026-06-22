@@ -1,0 +1,13 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSModelRef
+metadata:
+  name: "simulated-premium"
+  namespace: "ai-models"
+  labels:
+    migration.maas.opendatahub.io/from-tier: "premium"
+  annotations:
+    migration.maas.opendatahub.io/original-tier: "preimium"
+spec:
+  modelRef:
+    kind: LLMInferenceService
+    name: "simulated-premium"

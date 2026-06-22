@@ -1,0 +1,22 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSSubscription
+metadata:
+  name: "free-models-subscription"
+  namespace: "models-as-a-service"
+  labels:
+    migration.maas.opendatahub.io/from-tier: "free"
+  annotations:
+    migration.maas.opendatahub.io/original-tier: "free"
+    description: "Subscription for free tier models with 100 tokens/1m (migrated from tier-based system)"
+spec:
+  priority: 0
+  owner:
+    groups:
+      - name: "system:authenticated"
+    users: []
+  modelRefs:
+    - name: "simulated-free"
+      namespace: "ai-models"
+      tokenRateLimits:
+        - limit: 1000
+          window: "5m"

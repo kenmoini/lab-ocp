@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-models
+  labels:
+    kubernetes.io/metadata.name: ai-models
+    opendatahub.io/dashboard: 'true'

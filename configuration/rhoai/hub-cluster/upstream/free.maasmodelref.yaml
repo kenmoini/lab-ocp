@@ -1,0 +1,13 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSModelRef
+metadata:
+  name: "simulated-free"
+  namespace: "ai-models"
+  labels:
+    migration.maas.opendatahub.io/from-tier: "free"
+  annotations:
+    migration.maas.opendatahub.io/original-tier: "free"
+spec:
+  modelRef:
+    kind: LLMInferenceService
+    name: "simulated-free"

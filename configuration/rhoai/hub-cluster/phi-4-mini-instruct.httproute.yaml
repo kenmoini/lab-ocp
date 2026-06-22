@@ -1,0 +1,92 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: redhataiphi-4-mini-instruct-fp-instruct-kserve-route
+  namespace: test-maas
+  labels:
+    app.kubernetes.io/component: llminferenceservice-router
+    app.kubernetes.io/name: redhataiphi-4-mini-instruct-fp
+    app.kubernetes.io/part-of: llminferenceservice
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: maas-default-gateway
+      namespace: openshift-ingress
+  rules:
+    - backendRefs:
+        - group: ''
+          kind: Service
+          name: redhataiphi-4-mini-instruct-fp-kserve-workload-svc
+          port: 8000
+          weight: 1
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              replacePrefixMatch: /v1/completions
+              type: ReplacePrefixMatch
+      matches:
+        - path:
+            type: PathPrefix
+            value: /test-maas/redhataiphi-4-mini-instruct-fp/v1/completions
+      timeouts:
+        backendRequest: 0s
+        request: 0s
+    - backendRefs:
+        - group: ''
+          kind: Service
+          name: redhataiphi-4-mini-instruct-fp-kserve-workload-svc
+          port: 8000
+          weight: 1
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              replacePrefixMatch: /v1/chat/completions
+              type: ReplacePrefixMatch
+      matches:
+        - path:
+            type: PathPrefix
+            value: /test-maas/redhataiphi-4-mini-instruct-fp/v1/chat/completions
+      timeouts:
+        backendRequest: 0s
+        request: 0s
+    - backendRefs:
+        - group: ''
+          kind: Service
+          name: redhataiphi-4-mini-instruct-fp-kserve-workload-svc
+          port: 8000
+          weight: 1
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              replacePrefixMatch: /v1/responses
+              type: ReplacePrefixMatch
+      matches:
+        - path:
+            type: PathPrefix
+            value: /test-maas/redhataiphi-4-mini-instruct-fp/v1/responses
+      timeouts:
+        backendRequest: 0s
+        request: 0s
+    - backendRefs:
+        - group: ''
+          kind: Service
+          name: redhataiphi-4-mini-instruct-fp-kserve-workload-svc
+          port: 8000
+          weight: 1
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              replacePrefixMatch: /
+              type: ReplacePrefixMatch
+      matches:
+        - path:
+            type: PathPrefix
+            value: /test-maas/redhataiphi-4-mini-instruct-fp
+      timeouts:
+        backendRequest: 0s
+        request: 0s

@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - simulated-free.llmis.yaml
+  - simulated-premium.llmis.yaml
+  - free.maasauthpolicy.yaml
+  - free.maasmodelref.yaml
+  - free.maassubscription.yaml
+  - premium.maasauthpolicy.yaml
+  - premium.maasmodelref.yaml
+  - premium.maassubscription.yaml

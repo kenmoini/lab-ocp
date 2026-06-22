@@ -1,0 +1,22 @@
+apiVersion: maas.opendatahub.io/v1alpha1
+kind: MaaSSubscription
+metadata:
+  name: "premium-models-subscription"
+  namespace: "models-as-a-service"
+  labels:
+    migration.maas.opendatahub.io/from-tier: "premium"
+  annotations:
+    migration.maas.opendatahub.io/original-tier: "premium"
+    description: "Subscription for premium tier models with 10000 tokens/2m"
+spec:
+  priority: 1
+  owner:
+    groups:
+      - name: "premium-users"
+    users: []
+  modelRefs:
+    - name: "simulated-premium"
+      namespace: "ai-models"
+      tokenRateLimits:
+        - limit: 10000
+          window: "2m"
