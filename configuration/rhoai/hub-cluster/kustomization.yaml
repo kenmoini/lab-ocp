@@ -8,7 +8,7 @@ resources:
   - maassubscription.yaml
   - nvidia-gpu-hardwareprofile.yaml
   - phi-4-mini-instruct.llmis.yaml
-  - phi-4-mini-instruct.llmisc.yaml
+  # - phi-4-mini-instruct.llmisc.yaml
   # - phi-4-mini-instruct.httproute.yaml
   - phi-4-mini-instruct.msmr.yaml
   - rhoai-monitoring-netpol.yaml
