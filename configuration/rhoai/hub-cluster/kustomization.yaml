@@ -13,7 +13,5 @@ resources:
   - phi-4-mini-instruct.msmr.yaml
   - rhoai-monitoring-netpol.yaml
   - upstream/
-  - maaspolicy-admins.yaml
-  - maassubscription.yaml
 
 # namespace: test-maas
