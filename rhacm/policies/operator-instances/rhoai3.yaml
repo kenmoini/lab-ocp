@@ -185,6 +185,72 @@ spec:
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-authorino
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: authorino-kuadrant-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: authorino
+                  namespace: kuadrant-system
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-authorino
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: authorino-kuadrant-status
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-authorino-envs
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: authorino
+                  namespace: kuadrant-system
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - name: authorino
+                          env:
+                            - name: SSL_CERT_FILE
+                              value: /etc/ssl/certs/openshift-service-ca/service-ca-bundle.crt
+                            - name: REQUESTS_CA_BUNDLE
+                              value: /etc/ssl/certs/openshift-service-ca/service-ca-bundle.crt
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
           kind: Policy
           name: operators-rhoai
           namespace: ""
