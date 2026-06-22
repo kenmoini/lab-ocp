@@ -13,7 +13,8 @@ spec:
   owner:
     groups:
       - name: "system:authenticated"
-    users: []
+    users:
+      - kemo
   modelRefs:
     - name: "simulated-free"
       namespace: "ai-models"

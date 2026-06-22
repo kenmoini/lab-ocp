@@ -13,7 +13,8 @@ spec:
   owner:
     groups:
       - name: "premium-users"
-    users: []
+    users:
+      - kemo
   modelRefs:
     - name: "simulated-premium"
       namespace: "ai-models"
