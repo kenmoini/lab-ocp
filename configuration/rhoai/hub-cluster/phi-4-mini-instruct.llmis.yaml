@@ -20,6 +20,7 @@ spec:
     uri: 'oci://registry.redhat.io/rhai/modelcar-phi-4-mini-instruct-fp8-dynamic:3.0'
   replicas: 1
   router:
+    route: {}
     gateway:
       refs:
         - name: maas-default-gateway
