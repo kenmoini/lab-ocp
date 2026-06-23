@@ -747,3 +747,40 @@ spec:
                     enabled: true
                     notebookNamespace: rhods-notebooks
                     pvcSize: 30Gi
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-odhdash-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-mlflow
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: mlflow.opendatahub.io/v1
+                kind: MLflow
+                metadata:
+                  name: mlflow
+                  #namespace: redhat-ods-applications
+                spec:
+                  artifactsDestination: 'file:///mlflow/artifacts'
+                  backendStoreUri: 'sqlite:////mlflow/mlflow.db'
+                  replicas: 1
+                  serveArtifacts: true
+                  serviceAccountName: mlflow-sa
+                  storage:
+                    accessModes:
+                      - ReadWriteOnce
+                    resources:
+                      requests:
+                        storage: 10Gi
+                  workers: 1
