@@ -85,6 +85,7 @@ spec:
                   namespace: rhbk
                 spec:
                   instances: 1
+                  enablePDB: false
                   enableSuperuserAccess: true
                   logLevel: info
                   primaryUpdateStrategy: unsupervised

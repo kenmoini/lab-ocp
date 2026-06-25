@@ -585,6 +585,7 @@ spec:
                   namespace: redhat-ods-applications
                 spec:
                   instances: 1
+                  enablePDB: false
                   enableSuperuserAccess: true
                   logLevel: info
                   primaryUpdateStrategy: unsupervised
