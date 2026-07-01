@@ -206,3 +206,28 @@ spec:
                   href: 'https://{{ (index (lookup "networking.k8s.io/v1" "Ingress" "rhbk" "sso-ingress").spec.rules 0).host }}'
                   location: ApplicationMenu
                   text: Red Hat Build of Keycloak
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhbk-metric-netpol
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: NetworkPolicy
+                apiVersion: networking.k8s.io/v1
+                metadata:
+                  name: allow-from-openshift-monitoring
+                  namespace: rhbk
+                spec:
+                  podSelector: {}
+                  ingress:
+                    - from:
+                        - namespaceSelector:
+                            matchLabels:
+                              network.openshift.io/policy-group: monitoring
+                  policyTypes:
+                    - Ingress

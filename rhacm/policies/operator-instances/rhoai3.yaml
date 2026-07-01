@@ -785,3 +785,28 @@ spec:
                       requests:
                         storage: 10Gi
                   workers: 1
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-metric-netpol
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: NetworkPolicy
+                apiVersion: networking.k8s.io/v1
+                metadata:
+                  name: allow-from-openshift-monitoring
+                  namespace: redhat-ods-monitoring
+                spec:
+                  podSelector: {}
+                  ingress:
+                    - from:
+                        - namespaceSelector:
+                            matchLabels:
+                              network.openshift.io/policy-group: monitoring
+                  policyTypes:
+                    - Ingress
