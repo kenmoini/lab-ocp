@@ -75,7 +75,7 @@ spec:
                           name: observability-alertmanager-accessor-{{ fromClusterClaim "id.openshift.io" | replace "-" "" | trunc 19 }}
                         scheme: https
                         staticConfigs:
-                        - {{hub (lookup "route.openshift.io/v1" "Route" "open-cluster-management-observability" "alertmanager").spec.host hub}}
+                        - {{hub (lookup "route.openshift.io/v1" "Route" "open-cluster-management-observability" "alertmanager").spec.host hub}}{{hub (lookup "route.openshift.io/v1" "Route" "open-cluster-management-observability" "alertmanager").spec.path hub}}
                         tlsConfig:
                           ca:
                             key: service-ca.crt
