@@ -14,7 +14,7 @@ resources:
   - appset-kagent-crds.yaml
   - appset-kagent-kmcp.yaml
   - appset-kagent.yaml
-  - appset-kubevirt-redfish.yaml
+  # - appset-kubevirt-redfish.yaml
   - appset-mattermost.yaml
   - appset-rocketchat.yaml
   - appset-vlan-stacks.yaml
