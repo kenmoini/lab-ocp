@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
 
-components:
-  - ../../components/enable-console-plugin
+# components:
+#   - ../../components/enable-console-plugin
 
 patches:
   - target:
