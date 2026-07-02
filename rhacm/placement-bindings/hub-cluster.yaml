@@ -13,6 +13,9 @@ subjects:
   - name: hub-health-checks
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+  - name: health-check-odf
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
 
   # HCP Integration
   - name: hcp-bmh-acm-infra-creds

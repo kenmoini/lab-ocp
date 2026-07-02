@@ -16,3 +16,6 @@ subjects:
   - name: instance-bundle-odf
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+  - name: health-check-odf
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
