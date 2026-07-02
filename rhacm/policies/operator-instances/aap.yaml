@@ -77,6 +77,11 @@ spec:
           name: aap-ca-bundle-secret
           namespace: ""
           compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: health-check-odf
+          namespace: ""
+          compliance: Compliant
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1

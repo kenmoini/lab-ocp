@@ -72,7 +72,14 @@ spec:
                   href: 'https://{{ (lookup "route.openshift.io/v1" "Route" "stackrox" "central-reencrypt").spec.host }}'
                   location: ApplicationMenu
                   text: Advanced Cluster Security
-    - objectDefinition:
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: health-check-odf
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:

@@ -10,6 +10,12 @@ metadata:
     policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
 spec:
   disabled: false
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: health-check-odf
+      namespace: ""
+      compliance: Compliant
   policy-templates:
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1

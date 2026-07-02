@@ -9,6 +9,12 @@ metadata:
     policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
 spec:
   disabled: false
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: health-check-odf
+      namespace: ""
+      compliance: Compliant
   policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1

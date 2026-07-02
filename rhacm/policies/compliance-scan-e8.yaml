@@ -21,6 +21,11 @@ spec:
       name: operators-compliance
       namespace: open-cluster-management-policies
       compliance: Compliant
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: health-check-odf
+      namespace: ""
+      compliance: Compliant
   remediationAction: enforce
   disabled: false
   policy-templates:
