@@ -43,6 +43,28 @@ spec:
                 kind: Namespace
                 metadata:
                   name: rhdh
+    
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gbns-rhoai
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: redhat-ods-applications
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: redhat-ods-monitoring
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
