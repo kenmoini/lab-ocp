@@ -4,8 +4,8 @@ kind: Kustomization
 
 namespace: open-cluster-management-policies
 
-resources:
-  - detect-latest-tag.yaml
+# resources:
+  # - detect-latest-tag.yaml # This is pretty heavy, ACS's detection or even Kyverno is better
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
