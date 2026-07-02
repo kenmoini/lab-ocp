@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1beta1
+kind: ArgoCD
+metadata:
+  name: openshift-gitops
+spec:
+  controller:
+    env:
+      - name: ARGOCD_CONTROLLER_SHARDING_ALGORITHM
+        value: round-robin
+    sharding:
+      enabled: true
+      replicas: 3
+      minShards: 2
+      maxShards: 5
