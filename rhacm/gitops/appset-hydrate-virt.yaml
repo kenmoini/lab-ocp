@@ -1,0 +1,55 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: hydrate-virt
+  namespace: openshift-gitops
+spec:
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                - key: virtualization
+                  operator: In
+                  values:
+                  - enabled
+                  - "true"
+          - list:
+              elements:
+              - appName: hydrate-virt
+                namespace: openshift-gitops
+  template:
+    metadata:
+      name: "{{name}}-{{appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+    spec:
+      project: default
+      sources:
+        - repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
+          path: configuration/virtualization/templates/
+          kustomize: {}
+        - repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
+          path: configuration/virtualization/migration/
+          kustomize: {}
+      destination:
+        name: "{{name}}"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: false
+        syncOptions:
+          - CreateNamespace=true
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+          - ApplyOutOfSyncOnly=true
+        retry:
+          limit: 10

@@ -22,6 +22,7 @@ resources:
   - appset-ext-xks-rhacs.yaml
   - appset-ext-xks-argocd.yaml
   - appset-hydrate-rhoai.yaml
+  - appset-hydrate-virt.yaml
   - rhacm-integration.yaml
 
 commonAnnotations:
