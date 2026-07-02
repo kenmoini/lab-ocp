@@ -15,9 +15,9 @@ spec:
   destination:
     server: 'https://kubernetes.default.svc'
   sources:
-    - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: openshift/advanced-cluster-management/instance/base/
+      path: argocd/openshift/advanced-cluster-management/instance/base/
       kustomize: {}
 
   project: default

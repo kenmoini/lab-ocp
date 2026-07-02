@@ -10,9 +10,9 @@ spec:
   destination:
     server: 'https://kubernetes.default.svc'
   sources:
-    - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: openshift/advanced-cluster-management/operator/overlays/release-2.15/
+      path: argocd/openshift/advanced-cluster-management/operator/overlays/release-2.17/
       kustomize: {}
 
   project: default

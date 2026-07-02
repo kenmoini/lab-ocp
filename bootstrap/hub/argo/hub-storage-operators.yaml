@@ -10,21 +10,21 @@ spec:
   destination:
     server: 'https://kubernetes.default.svc'
   sources:
-    - repoURL: 'https://github.com/redhat-cop/gitops-catalog'
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: nmstate/operator/overlays/stable/
+      path: argocd/openshift/nmstate/operator/overlays/stable/
       kustomize: {}
-    - repoURL: 'https://github.com/kenmoini/ocp4-gitops-config'
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: openshift/local-storage/operator/overlays/stable/
+      path: argocd/openshift/local-storage/operator/overlays/stable/
       kustomize: {}
-    - repoURL: 'https://github.com/kenmoini/gitops-catalog'
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: openshift-data-foundation-operator/operator/overlays/stable-4.20/
+      path: argocd/openshift/openshift-data-foundation-operator/operator/overlays/stable-4.21/
       kustomize: {}
-    - repoURL: 'https://github.com/redhat-cop/gitops-catalog'
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
-      path: nmstate/instance/overlays/default/
+      path: argocd/openshift/nmstate/instance/overlays/default/
       kustomize: {}
   project: default
   syncPolicy:
