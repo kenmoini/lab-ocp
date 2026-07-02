@@ -9,6 +9,7 @@ resources:
   - onprem-openshift-clusters.yaml
   - openshift-4.19-clusters.yaml
   - openshift-4.20-clusters.yaml
+  - openshift-4.21-clusters.yaml
   - acs.yaml
   - enhanced-metrics.yaml
   - global.yaml
@@ -20,6 +21,7 @@ resources:
   - hub-developer-services.yaml
   - hub-4.19-clusters.yaml
   - hub-4.20-clusters.yaml
+  - hub-4.21-clusters.yaml
 
   - community-eso.yaml
   - bmh-lso-odf.yaml

@@ -1,0 +1,26 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: hub-4.21-clusters
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: hub-4.21-clusters
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: operators-aap-2.7
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+  - name: operators-rhbk-26.6
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+  - name: hub-configure-acm-search
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+    
+  - name: operators-quay-317
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

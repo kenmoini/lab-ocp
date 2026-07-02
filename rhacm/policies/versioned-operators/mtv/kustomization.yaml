@@ -9,3 +9,5 @@ resources:
   - mtv-base.yaml
   - mtv-2.9.yaml
   - mtv-2.10.yaml
+  - mtv-2.11.yaml
+  - mtv-2.12.yaml

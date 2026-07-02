@@ -14,6 +14,7 @@ resources:
   - logging-base.yaml
   - logging-6.3.yaml
   - logging-6.4.yaml
+  - logging-6.5.yaml
 
   - rh-loki-base.yaml
   - rh-loki-6.3.yaml
@@ -25,9 +26,11 @@ resources:
 
   - aap-base.yaml
   - aap-2.6.yaml
+  - aap-2.7.yaml
 
   - rhbk-base.yaml
   - rhbk-26.4.yaml
+  - rhbk-26.6.yaml
 
   - rh-kueue-base.yaml
   - rh-kueue-v1.3.yaml

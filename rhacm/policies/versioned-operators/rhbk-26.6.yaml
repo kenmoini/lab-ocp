@@ -2,9 +2,9 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: operators-rhbk-26.4
+  name: operators-rhbk-26.6
   annotations:
-    policy.open-cluster-management.io/description: Installs the Red Hat build of Keycloak 26.4 Operator in cluster-scoped mode
+    policy.open-cluster-management.io/description: Installs the Red Hat build of Keycloak 26.6 Operator in cluster-scoped mode
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2025
     policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
@@ -15,7 +15,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: rhbk-26.4-subscription
+          name: rhbk-26.6-subscription
         spec:
           remediationAction: enforce
           severity: high
@@ -28,7 +28,7 @@ spec:
                   name: rhbk-operator
                   namespace: rhbk
                 spec:
-                  channel: stable-v26.4
+                  channel: stable-v26.6
                   installPlanApproval: Automatic
                   name: rhbk-operator
                   source: redhat-operators 
@@ -68,6 +68,6 @@ spec:
       extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
-          name: rhbk-26.4-subscription
+          name: rhbk-26.6-subscription
           namespace: ""
           compliance: Compliant

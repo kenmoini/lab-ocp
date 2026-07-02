@@ -8,6 +8,7 @@ resources:
   # OpenShift Logging Operator with Loki Stack
   - openshift-logging.6.3.yaml
   - openshift-logging.6.4.yaml
+  - openshift-logging.6.5.yaml
   - leaderworkerset.yaml
 
 commonAnnotations:
