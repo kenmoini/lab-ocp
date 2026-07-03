@@ -185,6 +185,9 @@ spec:
                       renewBefore: 12h0m0s
                   enableCommonBootImageImport: true
                   enableApplicationAwareQuota: true
+                  applicationAwareConfig:
+                    allowApplicationAwareClusterResourceQuota: true
+                    vmiCalcConfigName: DedicatedVirtualResources
                   featureGates:
                     deployKubeSecondaryDNS: false
                     disableMDevConfiguration: false
