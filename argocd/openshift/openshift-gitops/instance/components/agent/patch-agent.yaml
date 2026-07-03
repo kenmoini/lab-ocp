@@ -5,6 +5,6 @@ metadata:
 spec:
   argoCDAgent:
     agent:
-      enabled: true
+      enabled: false
       allowedNamespaces:
         - '*'
