@@ -1,0 +1,10 @@
+apiVersion: argoproj.io/v1beta1
+kind: ArgoCD
+metadata:
+  name: openshift-gitops
+spec:
+  argoCDAgent:
+    agent:
+      enabled: true
+    allowedNamespaces:
+      - '*'

@@ -7,6 +7,7 @@ resources:
   - ../../base
 
 components:
+  - ../../components/agent
   - ../../components/annotation-resource-tracking
   - ../../components/application-controller-cluster-admin
   - ../../components/cluster-ca-certs
