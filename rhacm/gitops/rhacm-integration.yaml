@@ -46,6 +46,6 @@ spec:
     namespace: openshift-gitops
   # idk yet
   gitopsAddon:
-    enabled: true
+    enabled: false
     argoCDAgent:
-      enabled: true
+      enabled: false
