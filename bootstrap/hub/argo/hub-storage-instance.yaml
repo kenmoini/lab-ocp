@@ -23,10 +23,10 @@ spec:
       targetRevision: main
       path: clusters/hub-cluster/infrastructure/storage/lso/
       kustomize: {}
-    - repoURL: 'https://github.com/kenmoini/lab-ocp'
-      targetRevision: main
-      path: clusters/hub-cluster/infrastructure/storage/odf/
-      kustomize: {}
+    # - repoURL: 'https://github.com/kenmoini/lab-ocp'
+    #   targetRevision: main
+    #   path: clusters/hub-cluster/infrastructure/storage/odf/
+    #   kustomize: {}
   project: default
   syncPolicy:
     syncOptions:
