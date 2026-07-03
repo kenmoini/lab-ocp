@@ -45,6 +45,7 @@ spec:
     name: gitops-clusters
     namespace: openshift-gitops
   # idk yet
-  # gitopsAddon:
-  #   argoCDAgent:
-  #     enabled: true
+  gitopsAddon:
+    enabled: true
+    argoCDAgent:
+      enabled: true
