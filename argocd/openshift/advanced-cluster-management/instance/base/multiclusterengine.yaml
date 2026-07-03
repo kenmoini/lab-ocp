@@ -36,28 +36,31 @@ spec:
         name: cluster-proxy-addon
       - configOverrides: {}
         enabled: true
+        name: managedserviceaccount
+
+      - configOverrides: {}
+        enabled: true
         name: hypershift-local-hosting
       - configOverrides: {}
         enabled: true
         name: hypershift
+      # Hypershift and CAPI are mutually exclusive
       - configOverrides: {}
-        enabled: true
-        name: managedserviceaccount
-      - configOverrides: {}
-        enabled: true
+        enabled: false
         name: cluster-api
       - configOverrides: {}
-        enabled: true
+        enabled: false
         name: cluster-api-provider-aws
       - configOverrides: {}
         enabled: false
         name: cluster-api-provider-azure-preview
       - configOverrides: {}
-        enabled: true
+        enabled: false
         name: cluster-api-provider-metal3
       - configOverrides: {}
-        enabled: true
+        enabled: false
         name: cluster-api-provider-openshift-assisted
+
       - configOverrides: {}
         enabled: true
         name: image-based-install-operator
