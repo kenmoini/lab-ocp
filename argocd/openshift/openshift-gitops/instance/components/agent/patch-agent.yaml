@@ -6,5 +6,5 @@ spec:
   argoCDAgent:
     agent:
       enabled: true
-    allowedNamespaces:
-      - '*'
+      allowedNamespaces:
+        - '*'
