@@ -8,7 +8,7 @@ resources:
   - enable-console-plugin-job.yaml
   - enable-console-plugin-rbac.yaml
   - enable-console-plugin-sa.yaml
-  - openshift-data-foundation-console-plugin.yaml
+  # - openshift-data-foundation-console-plugin.yaml
   - namespace.yaml
   - operator-group.yaml
   - subscription.yaml
