@@ -1,0 +1,74 @@
+apiVersion: multicluster.openshift.io/v1
+kind: MultiClusterEngine
+metadata:
+  name: multiclusterengine
+spec:
+  availabilityConfig: Basic
+  localClusterName: hub-cluster
+  overrides:
+    components:
+      - configOverrides: {}
+        enabled: true
+        name: local-cluster
+      - configOverrides: {}
+        enabled: true
+        name: assisted-service
+      - configOverrides: {}
+        enabled: true
+        name: cluster-lifecycle
+      - configOverrides: {}
+        enabled: true
+        name: cluster-manager
+      - configOverrides: {}
+        enabled: true
+        name: cluster-permission
+      - configOverrides: {}
+        enabled: true
+        name: discovery
+      - configOverrides: {}
+        enabled: true
+        name: hive
+      - configOverrides: {}
+        enabled: true
+        name: server-foundation
+      - configOverrides: {}
+        enabled: true
+        name: cluster-proxy-addon
+      - configOverrides: {}
+        enabled: true
+        name: hypershift-local-hosting
+      - configOverrides: {}
+        enabled: true
+        name: hypershift
+      - configOverrides: {}
+        enabled: true
+        name: managedserviceaccount
+      - configOverrides: {}
+        enabled: true
+        name: cluster-api
+      - configOverrides: {}
+        enabled: true
+        name: cluster-api-provider-aws
+      - configOverrides: {}
+        enabled: false
+        name: cluster-api-provider-azure-preview
+      - configOverrides: {}
+        enabled: true
+        name: cluster-api-provider-metal3
+      - configOverrides: {}
+        enabled: true
+        name: cluster-api-provider-openshift-assisted
+      - configOverrides: {}
+        enabled: true
+        name: image-based-install-operator
+      - configOverrides: {}
+        enabled: false
+        name: maestro-preview
+      - configOverrides: {}
+        enabled: true
+        name: console-mce
+  targetNamespace: multicluster-engine
+  tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/infra
+      operator: Exists
