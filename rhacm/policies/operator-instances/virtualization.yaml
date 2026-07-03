@@ -188,6 +188,7 @@ spec:
                   featureGates:
                     deployKubeSecondaryDNS: false
                     disableMDevConfiguration: false
+                    objectGraph: true
                     #deployTektonTaskResources: true
                     #nonRoot: true
                     #withHostPassthroughCPU: true
