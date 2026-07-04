@@ -7,7 +7,9 @@ metadata:
   namespace: openshift-storage
 spec:
   storageDeviceSets:
-    - count: 15
+    - deviceClass: ssd
+      count: 5
+      replica: 3
       dataPVCTemplate:
         spec:
           accessModes:
@@ -20,7 +22,6 @@ spec:
       name: ocs-deviceset-lso-odf
       placement: {}
       portable: false
-      replica: 1
       resources: {}
   encryption:
     clusterWide: false
@@ -33,18 +34,17 @@ spec:
     cephBlockPools:
       defaultStorageClass: true
       defaultVirtualizationStorageClass: true
-  arbiter:
-    enable: false
+  arbiter: {}
   # manageNodes: false
   network:
     connections:
-      encryption:
-        enabled: false
+      encryption: {}
     provider: multus
+    multiClusterService: {}
     selectors:
       cluster: openshift-storage/cluster-net
       public: openshift-storage/public-net
-  nodeTopologies:
-    arbiterLocation: ''
-  resourceProfile: balanced
-  flexibleScaling: true
+  nodeTopologies: {}
+  externalStorage: {}
+  resourceProfile: lean
+  # flexibleScaling: true

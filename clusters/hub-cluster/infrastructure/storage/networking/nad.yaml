@@ -13,6 +13,7 @@ spec:
       "type": "macvlan",
       "master": "bond0.500",
       "mode": "bridge",
+      "mtu": 9100,
       "ipam": {
         "type": "whereabouts",
         "range": "192.168.240.0/21",
@@ -36,6 +37,7 @@ spec:
       "type": "macvlan",
       "master": "bond0.510",
       "mode": "bridge",
+      "mtu": 9100,
       "ipam": {
         "type": "whereabouts",
         "range": "192.168.248.0/22"

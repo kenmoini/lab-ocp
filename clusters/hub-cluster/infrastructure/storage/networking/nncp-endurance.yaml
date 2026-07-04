@@ -14,6 +14,7 @@ spec:
         description: VLAN 500 using bond0
         type: vlan
         state: up
+        mtu: 9100
         vlan:
           base-iface: bond0
           id: 500
@@ -21,6 +22,7 @@ spec:
         description: VLAN 510 using bond0
         type: vlan
         state: up
+        mtu: 9100
         vlan:
           base-iface: bond0
           id: 510
@@ -28,6 +30,7 @@ spec:
         description: Shim interface to connect to ODF public network
         type: mac-vlan
         state: up
+        mtu: 9100
         mac-vlan:
           base-iface: bond0.500 # host public network interface
           mode: bridge
