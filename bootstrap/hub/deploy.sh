@@ -34,7 +34,7 @@ oc label node endurance topology.kubernetes.io/rack=rdu-1c-tower3 --overwrite
 
 oc create secret generic bootstrap-vault-userpass -n kube-system --from-literal=password=$(cat $HOME/.hub-vault_pass.txt | tr -d '\n') --dry-run=client -o yaml | oc apply -f -
 
-oc apply -k https://github.com/kenmoini/lab-ocp/argocd/openshift/openshift-gitops/operator/overlays/latest/
+oc apply -k ../../argocd/openshift/openshift-gitops/operator/overlays/latest/
 
 # Wait for ArgoCD to be ready
 echo "Waiting for ArgoCD to be ready..."
@@ -48,15 +48,16 @@ oc apply -f bootstrap-application.yaml
 
 until $(oc get managedclusters.cluster.open-cluster-management.io/hub-cluster &>/dev/null); do echo "Waiting for ACM and Hub Cluster init..." && sleep 5; done
 
-# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster location=kemo-labs-rdu
-# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster community-eso=enabled
-# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
-# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/vlan-stacks=enabled
-# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/egress-ips=enabled
-# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster nvidia-gpu=enabled
-# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster virtualization=enabled
-# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster hcpServices=enabled
-# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster rhLoki=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster location=kemo-labs-rdu
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster community-eso=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/vlan-stacks=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/egress-ips=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster nvidia-gpu=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster virtualization=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster hcpServices=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster rhLoki=enabled
+# oc label managedclusters.cluster.open-cluster-management.io/hub-cluster policy.kemo.dev/openshift-ai=enabled
 
 # oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/kyverno=enabled
 # oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/democratic-csi=enabled

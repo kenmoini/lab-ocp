@@ -4,8 +4,8 @@ kind: Kustomization
 
 resources:
   - hub-argocd.yaml
-  - hub-storage-operators.yaml
-  - hub-storage-instance.yaml
+  # - hub-storage-operators.yaml
+  # - hub-storage-instance.yaml
   - hub-acm-operator.yaml
   - hub-acm-instance.yaml
   - hub-acm-glue.yaml
