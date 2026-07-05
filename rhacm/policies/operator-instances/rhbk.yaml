@@ -84,6 +84,18 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-same-namespace
+                  namespace: rhbk
+                spec:
+                  podSelector: {}
+                  ingress:
+                  - from:
+                    - podSelector: {}
+            - complianceType: musthave
+              objectDefinition:
                 kind: Cluster
                 apiVersion: postgresql.cnpg.io/v1
                 metadata:
