@@ -36,12 +36,12 @@ spec:
                         # SSHD configuration
                         - contents:
                             source: 'data:,IgnoreUserKnownHosts%20yes'
-                          mode: 384
+                          mode: 420
                           overwrite: true
                           path: /etc/ssh/sshd_config.d/00-complianceascode-IgnoreUserKnownHosts.conf
                         - contents:
                             source: 'data:,GSSAPIAuthentication%20no'
-                          mode: 384
+                          mode: 420
                           overwrite: true
                           path: /etc/ssh/sshd_config.d/00-complianceascode-GSSAPIAuthentication.conf
             - complianceType: musthave
@@ -61,11 +61,11 @@ spec:
                         # SSHD configuration
                         - contents:
                             source: 'data:,IgnoreUserKnownHosts%20yes'
-                          mode: 384
+                          mode: 420
                           overwrite: true
                           path: /etc/ssh/sshd_config.d/00-complianceascode-IgnoreUserKnownHosts.conf
                         - contents:
                             source: 'data:,GSSAPIAuthentication%20no'
-                          mode: 384
+                          mode: 420
                           overwrite: true
                           path: /etc/ssh/sshd_config.d/00-complianceascode-GSSAPIAuthentication.conf
