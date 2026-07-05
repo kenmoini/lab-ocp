@@ -9,3 +9,4 @@ spec:
   policies:
     - configure-crypto-policy
     - no-empty-passwords
+    - allowed-registries # Needed for E8

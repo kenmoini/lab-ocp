@@ -1,0 +1,47 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: allowed-registries
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+    compliance.openshift.io/rule: allowed-registries
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: allowed-registries
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: config.openshift.io/v1
+                kind: Image
+                metadata:
+                  name: cluster
+                spec:
+                  allowedRegistriesForImport:
+                    - domainName: quay.io
+                    - domainName: registry.redhat.io
+                    - domainName: registry.access.redhat.com
+                    - domainName: registry.k8s.io
+                    - domainName: ghcr.io
+                    - domainName: gcr.io
+                    - domainName: nvcr.io
+                    - domainName: docker.io
+                  registrySources:
+                    allowedRegistries:
+                      - quay.io
+                      - registry.redhat.io
+                      - registry.access.redhat.com
+                      - registry.k8s.io
+                      - ghcr.io
+                      - gcr.io
+                      - nvcr.io
+                      - docker.io
