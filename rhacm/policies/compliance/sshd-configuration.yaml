@@ -27,7 +27,7 @@ spec:
                 metadata:
                   labels:
                     machineconfiguration.openshift.io/role: master
-                  name: 99-master-sshd-configuration
+                  name: 99-master-sshd-config
                 spec:
                   config:
                     ignition:
