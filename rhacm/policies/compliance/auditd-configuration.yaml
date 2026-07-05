@@ -93,17 +93,6 @@ spec:
                           mode: 420
                           overwrite: true
                           path: /etc/audit/rules.d/75-audit_rules_time_watch_localtime.rules
-                        # SSHD configuration
-                        - contents:
-                            source: 'data:,IgnoreUserKnownHosts%20yes'
-                          mode: 384
-                          overwrite: true
-                          path: /etc/ssh/sshd_config.d/00-complianceascode-IgnoreUserKnownHosts.conf
-                        - contents:
-                            source: 'data:,GSSAPIAuthentication%20no'
-                          mode: 384
-                          overwrite: true
-                          path: /etc/ssh/sshd_config.d/00-complianceascode-GSSAPIAuthentication.conf
             - complianceType: musthave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
@@ -178,14 +167,3 @@ spec:
                           mode: 420
                           overwrite: true
                           path: /etc/audit/rules.d/75-audit_rules_time_watch_localtime.rules
-                        # SSHD configuration
-                        - contents:
-                            source: 'data:,IgnoreUserKnownHosts%20yes'
-                          mode: 384
-                          overwrite: true
-                          path: /etc/ssh/sshd_config.d/00-complianceascode-IgnoreUserKnownHosts.conf
-                        - contents:
-                            source: 'data:,GSSAPIAuthentication%20no'
-                          mode: 384
-                          overwrite: true
-                          path: /etc/ssh/sshd_config.d/00-complianceascode-GSSAPIAuthentication.conf
