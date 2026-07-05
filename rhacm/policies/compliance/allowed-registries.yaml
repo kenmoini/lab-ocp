@@ -27,6 +27,7 @@ spec:
                   name: cluster
                 spec:
                   allowedRegistriesForImport:
+                    - domainName: disconn-harbor.d70.kemo.labs
                     - domainName: quay.io
                     - domainName: registry.redhat.io
                     - domainName: registry.access.redhat.com
@@ -37,6 +38,7 @@ spec:
                     - domainName: docker.io
                   registrySources:
                     allowedRegistries:
+                      - disconn-harbor.d70.kemo.labs
                       - quay.io
                       - registry.redhat.io
                       - registry.access.redhat.com
