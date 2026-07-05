@@ -28,6 +28,7 @@ spec:
                 spec:
                   allowedRegistriesForImport:
                     - domainName: disconn-harbor.d70.kemo.labs
+                    - domainName: disconn-harbor.d70.kemo.labs/registry-redhat-io-ptc
                     - domainName: quay.io
                     - domainName: registry.redhat.io
                     - domainName: registry.access.redhat.com
