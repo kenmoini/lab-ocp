@@ -7,20 +7,20 @@ metadata:
 spec:
   nodeDisruptionPolicy:
     files:
-      - path: /etc/audit/rules.d
-        actions:
-          - type: DaemonReload
-          - type: Restart
-            restart:
-              serviceName: auditd.service
-          - type: Drain
-          - type: Reload
-            reload:
-              serviceName: crio.service
-          - type: DaemonReload
-          - type: Restart
-            restart:
-              serviceName: crio.service
+      # - path: /etc/audit/rules.d
+      #   actions:
+      #     - type: DaemonReload
+      #     - type: Restart
+      #       restart:
+      #         serviceName: auditd.service
+      #     - type: Drain
+      #     - type: Reload
+      #       reload:
+      #         serviceName: crio.service
+      #     - type: DaemonReload
+      #     - type: Restart
+      #       restart:
+      #         serviceName: crio.service
       - path: /etc/chrony.conf
         actions:
           - restart:
