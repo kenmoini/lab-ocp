@@ -40,6 +40,7 @@ spec:
                   registrySources:
                     allowedRegistries:
                       - disconn-harbor.d70.kemo.labs
+                      - disconn-harbor.d70.kemo.labs/registry-redhat-io-ptc
                       - quay.io
                       - registry.redhat.io
                       - registry.access.redhat.com
