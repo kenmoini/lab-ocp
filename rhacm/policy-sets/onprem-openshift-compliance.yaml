@@ -13,3 +13,4 @@ spec:
     - auditd-configuration
     - rhcos4-sysctls
     - ingress-cipher
+    - sshd-configuration

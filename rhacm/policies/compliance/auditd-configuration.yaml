@@ -35,14 +35,75 @@ spec:
                       files:
                         - contents:
                             source: 'data:,%23%0A%23%20This%20file%20controls%20the%20configuration%20of%20the%20audit%20daemon%0A%23%0A%0Alocal_events%20=%20yes%0Awrite_logs%20=%20yes%0Alog_file%20=%20%2Fvar%2Flog%2Faudit%2Faudit.log%0Alog_group%20=%20root%0Alog_format%20=%20ENRICHED%0Aflush%20=%20incremental_async%0Afreq%20=%2050%0Amax_log_file%20=%206%0Anum_logs%20=%205%0Apriority_boost%20=%204%0Aname_format%20=%20hostname%0A%23%23name%20=%20mydomain%0Amax_log_file_action%20=%20rotate%0Aspace_left%20=%20100%0Aspace_left_action%20=%20email%0Averify_email%20=%20yes%0Aaction_mail_acct%20=%20root%0Aadmin_space_left%20=%2050%0Aadmin_space_left_action%20=%20syslog%0Adisk_full_action%20=%20single%0Adisk_error_action%20=%20single%0Ause_libwrap%20=%20yes%0A%23%23tcp_listen_port%20=%2060%0Atcp_listen_queue%20=%205%0Atcp_max_per_addr%20=%201%0A%23%23tcp_client_ports%20=%201024-65535%0Atcp_client_max_idle%20=%200%0Atransport%20=%20TCP%0Akrb5_principal%20=%20auditd%0A%23%23krb5_key_file%20=%20%2Fetc%2Faudit%2Faudit.key%0Adistribute_network%20=%20no%0Aq_depth%20=%20400%0Aoverflow_action%20=%20syslog%0Amax_restarts%20=%2010%0Aplugin_dir%20=%20%2Fetc%2Faudit%2Fplugins.d'
-                          mode: 416
+                          mode: 420
                           overwrite: true
                           path: /etc/audit/auditd.conf
                         - contents:
-                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fbin%2Fchcon%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fbin%2Fchcon%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20perm_mod%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Frestorecon%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Frestorecon%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-restorecon%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsemanage%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsemanage%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-unix-update%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetfiles%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetfiles%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-unix-update%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetsebool%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetsebool%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fseunshare%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A%0A-a%20always%2Cexit%20-F%20arch%3D%20ARCH%20-S%20delete_module%20-F%20key%3Dmodules'
-                          mode: 416
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20sethostname%2Csetdomainname%20-F%20key%3Daudit_rules_networkconfig_modification%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20sethostname%2Csetdomainname%20-F%20key%3Daudit_rules_networkconfig_modification%0A-w%20/etc/issue%20-p%20wa%20-k%20audit_rules_networkconfig_modification%0A-w%20/etc/issue.net%20-p%20wa%20-k%20audit_rules_networkconfig_modification%0A-w%20/etc/hosts%20-p%20wa%20-k%20audit_rules_networkconfig_modification%0A-w%20/etc/sysconfig/network%20-p%20wa%20-k%20audit_rules_networkconfig_modification%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-audit_rules_networkconfig_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fbin%2Fchcon%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fbin%2Fchcon%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20perm_mod%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Frestorecon%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Frestorecon%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-restorecon%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsemanage%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsemanage%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-unix-update%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetfiles%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetfiles%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-unix-update%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetsebool%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetsebool%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fseunshare%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20delete_module%20-F%20key%3Dmodules%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20delete_module%20-F%20key%3Dmodules'
+                          mode: 420
                           overwrite: true
                           path: /etc/audit/rules.d/suffix.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20delete_module%20-k%20modules%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20delete_module%20-k%20modules%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20init_module%20-k%20modules%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20init_module%20-k%20modules%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20finit_module%20-k%20modules%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20finit_module%20-k%20modules'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/kernel.rules
+                        - contents:
+                            source: 'data:,-w%20%2Fvar%2Flog%2Ftallylog%20-p%20wa%20-k%20logins%0A-w%20%2Fvar%2Flog%2Flastlog%20-p%20wa%20-k%20logins%0A-w%20%2Fvar%2Frun%2Ffaillock%20-p%20wa%20-k%20logins%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/login.rules
+                        - contents:
+                            source: 'data:,-w%20%2Fetc%2Fsudoers.d%2F%20-p%20wa%20-k%20actions%0A-w%20%2Fetc%2Fsudoers%20-p%20wa%20-k%20actions%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/sudoers.rules
+                        - contents:
+                            source: 'data:,-w%20/etc/group%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A-w%20/etc/passwd%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A-w%20/etc/gshadow%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A-w%20/etc/shadow%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A-w%20/etc/security/opasswd%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-audit_rules_usergroup_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch=b64%20-S%20adjtimex%20-k%20audit_time_rules%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20adjtimex%20-k%20audit_time_rules%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-syscall-adjtimex.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch=b64%20-S%20clock_settime%20-F%20a0=0x0%20-k%20time-change%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20clock_settime%20-F%20a0=0x0%20-k%20time-change%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-syscall-clock-settime.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch=b64%20-S%20settimeofday%20-k%20audit_time_rules%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20settimeofday%20-k%20audit_time_rules%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-syscall-settimeofday.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch=b64%20-S%20stime%20-k%20audit_time_rules%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20stime%20-k%20audit_time_rules%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-syscall-stime.rules
+                        - contents:
+                            source: 'data:,-w%20/etc/localtime%20-p%20wa%20-k%20audit_time_rules%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-audit_rules_time_watch_localtime.rules
+                        # SSHD configuration
+                        - contents:
+                            source: 'data:,IgnoreUserKnownHosts%20yes'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/ssh/sshd_config.d/00-complianceascode-IgnoreUserKnownHosts.conf
+                        - contents:
+                            source: 'data:,GSSAPIAuthentication%20no'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/ssh/sshd_config.d/00-complianceascode-GSSAPIAuthentication.conf
             - complianceType: musthave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
@@ -59,11 +120,72 @@ spec:
                       files:
                         - contents:
                             source: 'data:,%23%0A%23%20This%20file%20controls%20the%20configuration%20of%20the%20audit%20daemon%0A%23%0A%0Alocal_events%20=%20yes%0Awrite_logs%20=%20yes%0Alog_file%20=%20%2Fvar%2Flog%2Faudit%2Faudit.log%0Alog_group%20=%20root%0Alog_format%20=%20ENRICHED%0Aflush%20=%20incremental_async%0Afreq%20=%2050%0Amax_log_file%20=%206%0Anum_logs%20=%205%0Apriority_boost%20=%204%0Aname_format%20=%20hostname%0A%23%23name%20=%20mydomain%0Amax_log_file_action%20=%20rotate%0Aspace_left%20=%20100%0Aspace_left_action%20=%20email%0Averify_email%20=%20yes%0Aaction_mail_acct%20=%20root%0Aadmin_space_left%20=%2050%0Aadmin_space_left_action%20=%20syslog%0Adisk_full_action%20=%20single%0Adisk_error_action%20=%20single%0Ause_libwrap%20=%20yes%0A%23%23tcp_listen_port%20=%2060%0Atcp_listen_queue%20=%205%0Atcp_max_per_addr%20=%201%0A%23%23tcp_client_ports%20=%201024-65535%0Atcp_client_max_idle%20=%200%0Atransport%20=%20TCP%0Akrb5_principal%20=%20auditd%0A%23%23krb5_key_file%20=%20%2Fetc%2Faudit%2Faudit.key%0Adistribute_network%20=%20no%0Aq_depth%20=%20400%0Aoverflow_action%20=%20syslog%0Amax_restarts%20=%2010%0Aplugin_dir%20=%20%2Fetc%2Faudit%2Fplugins.d'
-                          mode: 416
+                          mode: 420
                           overwrite: true
                           path: /etc/audit/auditd.conf
                         - contents:
-                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fbin%2Fchcon%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fbin%2Fchcon%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20perm_mod%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Frestorecon%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Frestorecon%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-restorecon%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsemanage%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsemanage%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-unix-update%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetfiles%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetfiles%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-unix-update%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetsebool%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetsebool%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fseunshare%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A%0A-a%20always%2Cexit%20-F%20arch%3D%20ARCH%20-S%20delete_module%20-F%20key%3Dmodules'
-                          mode: 416
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20sethostname%2Csetdomainname%20-F%20key%3Daudit_rules_networkconfig_modification%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20sethostname%2Csetdomainname%20-F%20key%3Daudit_rules_networkconfig_modification%0A-w%20/etc/issue%20-p%20wa%20-k%20audit_rules_networkconfig_modification%0A-w%20/etc/issue.net%20-p%20wa%20-k%20audit_rules_networkconfig_modification%0A-w%20/etc/hosts%20-p%20wa%20-k%20audit_rules_networkconfig_modification%0A-w%20/etc/sysconfig/network%20-p%20wa%20-k%20audit_rules_networkconfig_modification%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-audit_rules_networkconfig_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dperm_mod%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fbin%2Fchcon%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fbin%2Fchcon%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20perm_mod%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Frestorecon%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Frestorecon%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-restorecon%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsemanage%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsemanage%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-unix-update%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetfiles%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetfiles%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged-unix-update%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetsebool%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fsetsebool%20-F%20perm%3Dx%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-k%20privileged%0A%0A-a%20always%2Cexit%20-F%20path%3D%2Fusr%2Fsbin%2Fseunshare%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Dprivileged%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20delete_module%20-F%20key%3Dmodules%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20delete_module%20-F%20key%3Dmodules'
+                          mode: 420
                           overwrite: true
                           path: /etc/audit/rules.d/suffix.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20delete_module%20-k%20modules%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20delete_module%20-k%20modules%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20init_module%20-k%20modules%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20init_module%20-k%20modules%0A%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20finit_module%20-k%20modules%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20finit_module%20-k%20modules'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/kernel.rules
+                        - contents:
+                            source: 'data:,-w%20%2Fvar%2Flog%2Ftallylog%20-p%20wa%20-k%20logins%0A-w%20%2Fvar%2Flog%2Flastlog%20-p%20wa%20-k%20logins%0A-w%20%2Fvar%2Frun%2Ffaillock%20-p%20wa%20-k%20logins%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/login.rules
+                        - contents:
+                            source: 'data:,-w%20%2Fetc%2Fsudoers.d%2F%20-p%20wa%20-k%20actions%0A-w%20%2Fetc%2Fsudoers%20-p%20wa%20-k%20actions%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/sudoers.rules
+                        - contents:
+                            source: 'data:,-w%20/etc/group%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A-w%20/etc/passwd%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A-w%20/etc/gshadow%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A-w%20/etc/shadow%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A-w%20/etc/security/opasswd%20-p%20wa%20-k%20audit_rules_usergroup_modification%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-audit_rules_usergroup_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch=b64%20-S%20adjtimex%20-k%20audit_time_rules%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20adjtimex%20-k%20audit_time_rules%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-syscall-adjtimex.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch=b64%20-S%20clock_settime%20-F%20a0=0x0%20-k%20time-change%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20clock_settime%20-F%20a0=0x0%20-k%20time-change%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-syscall-clock-settime.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch=b64%20-S%20settimeofday%20-k%20audit_time_rules%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20settimeofday%20-k%20audit_time_rules%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-syscall-settimeofday.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch=b64%20-S%20stime%20-k%20audit_time_rules%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20stime%20-k%20audit_time_rules%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-syscall-stime.rules
+                        - contents:
+                            source: 'data:,-w%20/etc/localtime%20-p%20wa%20-k%20audit_time_rules%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-audit_rules_time_watch_localtime.rules
+                        # SSHD configuration
+                        - contents:
+                            source: 'data:,IgnoreUserKnownHosts%20yes'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/ssh/sshd_config.d/00-complianceascode-IgnoreUserKnownHosts.conf
+                        - contents:
+                            source: 'data:,GSSAPIAuthentication%20no'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/ssh/sshd_config.d/00-complianceascode-GSSAPIAuthentication.conf

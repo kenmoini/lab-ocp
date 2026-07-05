@@ -1,0 +1,71 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: sshd-configuration
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+    compliance.openshift.io/rule: sshd-configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: sshd-configuration
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 99-master-sshd-configuration
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        # SSHD configuration
+                        - contents:
+                            source: 'data:,IgnoreUserKnownHosts%20yes'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/ssh/sshd_config.d/00-complianceascode-IgnoreUserKnownHosts.conf
+                        - contents:
+                            source: 'data:,GSSAPIAuthentication%20no'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/ssh/sshd_config.d/00-complianceascode-GSSAPIAuthentication.conf
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 99-worker-sshd-config
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        # SSHD configuration
+                        - contents:
+                            source: 'data:,IgnoreUserKnownHosts%20yes'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/ssh/sshd_config.d/00-complianceascode-IgnoreUserKnownHosts.conf
+                        - contents:
+                            source: 'data:,GSSAPIAuthentication%20no'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/ssh/sshd_config.d/00-complianceascode-GSSAPIAuthentication.conf

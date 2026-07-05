@@ -11,3 +11,4 @@ resources:
   - allowed-registries.yaml
   - ingresscontroller-cipher-suites.yaml
   - rhcos4-sysctls.yaml
+  - sshd-configuration.yaml
