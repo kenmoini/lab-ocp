@@ -94,7 +94,7 @@ spec:
                           mode: 420
                           overwrite: true
                           path: /etc/audit/rules.d/75-audit_rules_time_watch_localtime.rules
-            - complianceType: musthave
+            - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
                 kind: MachineConfig

@@ -45,7 +45,7 @@ spec:
                           mode: 420
                           overwrite: true
                           path: /etc/ssh/sshd_config.d/00-complianceascode-GSSAPIAuthentication.conf
-            - complianceType: musthave
+            - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
                 kind: MachineConfig

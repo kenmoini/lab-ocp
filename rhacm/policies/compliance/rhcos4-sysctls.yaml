@@ -65,7 +65,7 @@ spec:
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_net_core_bpf_jit_harden.conf
-            - complianceType: musthave
+            - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
                 kind: MachineConfig
