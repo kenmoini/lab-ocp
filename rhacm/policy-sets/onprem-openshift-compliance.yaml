@@ -10,3 +10,4 @@ spec:
     - configure-crypto-policy
     - no-empty-passwords
     - allowed-registries # Needed for E8
+    - auditd-configuration
