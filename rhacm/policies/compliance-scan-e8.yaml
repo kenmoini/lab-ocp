@@ -37,6 +37,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -64,6 +65,7 @@ spec:
         spec:
           remediationAction: inform
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
