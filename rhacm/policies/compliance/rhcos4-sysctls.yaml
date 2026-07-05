@@ -1,0 +1,105 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: rhcos4-sysctls
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+    compliance.openshift.io/rule: rhcos4-sysctls
+    control.compliance.openshift.io/NIST-800-53: IA-5(1)(a);IA-5(c);CM-6(a)
+    control.compliance.openshift.io/PCI-DSS: Req-8.2.3
+    control.compliance.openshift.io/PCI-DSS-4-0: 8.3.1;8.3
+    control.compliance.openshift.io/SRG: SRG-OS-000480-GPOS-00227
+    policies.open-cluster-management.io/controls: IA-5(1)(a),IA-5(c),CM-6(a),Req-8.2.3,SRG-OS-000480-GPOS-00227,8.3.1,8.3
+    policies.open-cluster-management.io/standards: NIST-800-53,PCI-DSS,SRG,PCI-DSS-4-0
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhcos4-sysctls
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 50-master-rhcos4-sysctls
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,kernel.yama.ptrace_scope%3D1%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_kernel_yama_ptrace_scope.conf
+                        - contents:
+                            source: 'data:,kernel.unprivileged_bpf_disabled%3D1%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_kernel_unprivileged_bpf_disabled.conf
+                        - contents:
+                            source: 'data:,kernel.randomize_va_space%3D2%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_kernel_randomize_va_space.conf
+                        - contents:
+                            source: 'data:,kernel.dmesg_restrict%3D1%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_kernel_dmesg_restrict.conf
+                        - contents:
+                            source: 'data:,net.core.bpf_jit_harden%3D2%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_net_core_bpf_jit_harden.conf
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 50-worker-rhcos4-sysctls
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,kernel.yama.ptrace_scope%3D1%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_kernel_yama_ptrace_scope.conf
+                        - contents:
+                            source: 'data:,kernel.unprivileged_bpf_disabled%3D1%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_kernel_unprivileged_bpf_disabled.conf
+                        - contents:
+                            source: 'data:,kernel.randomize_va_space%3D2%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_kernel_randomize_va_space.conf
+                        - contents:
+                            source: 'data:,kernel.dmesg_restrict%3D1%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_kernel_dmesg_restrict.conf
+                        - contents:
+                            source: 'data:,net.core.bpf_jit_harden%3D2%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/75-sysctl_net_core_bpf_jit_harden.conf
