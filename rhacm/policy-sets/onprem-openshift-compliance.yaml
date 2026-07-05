@@ -1,0 +1,11 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: onprem-openshift-compliance
+  #namespace: open-cluster-management-policies
+spec:
+  description: "On-Premises OpenShift compliance policies"
+  policies:
+    - configure-crypto-policy
+    - no-empty-passwords

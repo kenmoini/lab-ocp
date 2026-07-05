@@ -1,0 +1,79 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: configure-crypto-policy
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+    compliance.openshift.io/rule: configure-crypto-policy
+    control.compliance.openshift.io/NERC-CIP: CIP-003-8 R4.2;CIP-007-3 R5.1;CIP-007-3 R7.1
+    control.compliance.openshift.io/NIST-800-53: AC-17(a);AC-17(2);CM-6(a);MA-4(6);SC-13;SC-12(2);SC-12(3)
+    control.compliance.openshift.io/PCI-DSS-4-0: 2.2.7;2.2
+    control.compliance.openshift.io/SRG: SRG-OS-000396-GPOS-00176;SRG-OS-000393-GPOS-00173;SRG-OS-000394-GPOS-00174
+    policies.open-cluster-management.io/controls: >-
+      CIP-003-8 R4.2,CIP-007-3 R5.1,CIP-007-3
+      R7.1,AC-17(a),AC-17(2),CM-6(a),MA-4(6),SC-13,SC-12(2),SC-12(3),SRG-OS-000396-GPOS-00176,SRG-OS-000393-GPOS-00173,SRG-OS-000394-GPOS-00174,2.2.7,2.2
+    policies.open-cluster-management.io/standards: NERC-CIP,NIST-800-53,SRG,PCI-DSS-4-0
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: configure-crypto-policy
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 50-master-configure-crypto-policy
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    systemd:
+                      units:
+                        - name: configure-crypto-policy.service
+                          enabled: true
+                          contents: |
+                            [Unit]
+                            Before=kubelet.service
+                            [Service]
+                            Type=oneshot
+                            ExecStart=update-crypto-policies --set  DEFAULT:NO-SHA1 
+                            RemainAfterExit=yes
+                            [Install]
+                            WantedBy=multi-user.target
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 50-worker-configure-crypto-policy
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    systemd:
+                      units:
+                        - name: configure-crypto-policy.service
+                          enabled: true
+                          contents: |
+                            [Unit]
+                            Before=kubelet.service
+                            [Service]
+                            Type=oneshot
+                            ExecStart=update-crypto-policies --set  DEFAULT:NO-SHA1 
+                            RemainAfterExit=yes
+                            [Install]
+                            WantedBy=multi-user.target

@@ -15,6 +15,7 @@ resources:
   - developer-services.yaml
   - onprem-openshift-config.yaml
   - onprem-openshift-operators.yaml
+  - onprem-openshift-compliance.yaml
   - operator-bundle-nvidia.yaml
   - operator-bundle-odf.yaml
   - operator-bundle-virt.yaml

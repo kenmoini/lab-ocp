@@ -18,3 +18,9 @@ subjects:
   - name: onprem-openshift-operators
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+
+  # On-Premises OpenShift Compliance
+  - name: onprem-openshift-compliance
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+
