@@ -30,7 +30,7 @@ spec:
                 spec:
                   tags:
                   {{- range $tag := $imageStream.spec.tags }}
-                  - name: {{ $tag.name }}
+                  - name: '{{ $tag.name }}'
                     importPolicy:
                       scheduled: true
                   {{- end -}}
