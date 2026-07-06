@@ -1,0 +1,145 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: default-net-pols
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: CM-6 Configuration Settings
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: compliance-e8-scan
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          namespaceSelector:
+            exclude: ["kube-*", "openshift-*", "open-cluster-management*"]
+            include:
+              - aap
+              - cert-manager
+              - cert-manager-operator
+              - debug-receiver
+              - default-broker
+              - external-managed-ocp-broker
+              - external-secrets
+              - external-xks-broker
+              - hive
+              - hub-cluster
+              - hypershift
+              - medik8s-leases
+              - mtv-integrations
+              - multicluster-engine
+              - netobserv
+              - nvidia-gpu-operator
+              - open-cluster-management
+              - open-cluster-management-agent
+              - open-cluster-management-agent-addon
+              - open-cluster-management-global-set
+              - open-cluster-management-hub
+              - open-cluster-management-observability
+              - open-cluster-management-policies
+              - redhat-ods-applications
+              - redhat-ods-monitoring
+              - rhacs-operator
+              - rhdh
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-same-namespace
+                spec:
+                  podSelector: {}
+                  ingress:
+                  - from:
+                    - podSelector: {}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-openshift-ingress
+                spec:
+                  ingress:
+                  - from:
+                    - namespaceSelector:
+                        matchLabels:
+                          network.openshift.io/policy-group: ingress
+                  podSelector: {}
+                  policyTypes:
+                  - Ingress
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-kube-apiserver-operator
+                spec:
+                  ingress:
+                  - from:
+                    - namespaceSelector:
+                        matchLabels:
+                          kubernetes.io/metadata.name: openshift-kube-apiserver-operator
+                      podSelector:
+                        matchLabels:
+                          app: kube-apiserver-operator
+                  policyTypes:
+                  - Ingress
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-openshift-monitoring
+                spec:
+                  ingress:
+                  - from:
+                    - namespaceSelector:
+                        matchLabels:
+                          network.openshift.io/policy-group: monitoring
+                  podSelector: {}
+                  policyTypes:
+                  - Ingress
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-openshift-operators
+                spec:
+                  ingress:
+                  - from:
+                    - namespaceSelector:
+                        matchLabels:
+                          kubernetes.io/metadata.name: openshift-operators
+                  podSelector: {}
+                  policyTypes:
+                  - Ingress
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-from-openshift-cert-operators
+                spec:
+                  ingress:
+                  - from:
+                    - namespaceSelector:
+                        matchLabels:
+                          kubernetes.io/metadata.name: openshift-certified-operators
+                  podSelector: {}
+                  policyTypes:
+                  - Ingress
+            - complianceType: musthave
+              objectDefinition:
+            - complianceType: musthave
+              objectDefinition:

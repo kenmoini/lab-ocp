@@ -1,0 +1,37 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: imagestream-sets-schedule
+  annotations:
+    policy.open-cluster-management.io/description: Ensures ImageStream sets are scheduled correctly
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: imagestream-sets-schedule
+        spec:
+          remediationAction: inform
+          severity: low
+          object-templates-raw: |
+            {{/* ##  Loop through all the ImageStreams ## */}}
+            {{- $imageStreamList := (lookup "image.openshift.io/v1" "ImageStream" "" "").items }}
+            {{- range $imageStream := $imageStreamList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: image.openshift.io/v1
+                kind: ImageStream
+                metadata:
+                  name: {{ $imageStream.metadata.name }}
+                  namespace: {{ $imageStream.metadata.namespace }}
+                spec:
+                  tags:
+                  {{- range $tag := $imageStream.spec.tags }}
+                  - name: {{ $tag.name }}
+                    imagePolicy:
+                      scheduled: true
+                  {{- end -}}
+            {{- end }}

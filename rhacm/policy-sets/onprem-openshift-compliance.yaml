@@ -15,3 +15,4 @@ spec:
     - rhcos4-sysctls
     - ingress-cipher
     - sshd-configuration
+    - imagestream-sets-schedule
