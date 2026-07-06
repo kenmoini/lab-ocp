@@ -31,7 +31,7 @@ spec:
                   tags:
                   {{- range $tag := $imageStream.spec.tags }}
                   - name: {{ $tag.name }}
-                    imagePolicy:
+                    importPolicy:
                       scheduled: true
                   {{- end -}}
             {{- end }}
