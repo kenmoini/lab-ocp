@@ -39,6 +39,6 @@ spec:
                   setValues:
                     - name: ocp4-var-sccs-with-allowed-capabilities-regex
                       rationale: Allow our own custom SCC
-                      value: ^privileged$|^hostnetwork-v2$|^restricted-v2$|^nonroot-v2$|^application-aware-quota$|^ceph-csi-op-scc$|^forklift-controller-scc$|^kubevirt-controller$|^noobaa-endpoint$|^nvidia-.*$|^odf-blackbox-scc$|^rook-.*$
+                      value: ^privileged$|^hostnetwork-v2$|^restricted-v2$|^restricted-v3$|^nonroot-v2$|^insights-runtime-extractor-scc|^nested-container$|^application-aware-quota$|^ceph-csi-op-scc$|^forklift-controller-scc$|^kubevirt-controller$|^noobaa-endpoint$|^nvidia-.*$|^odf-blackbox-scc$|^rook-.*$
                   extends: ocp4-cis
                   title: Modified CIS allowing one more SCC
