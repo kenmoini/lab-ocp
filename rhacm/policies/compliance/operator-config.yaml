@@ -1,0 +1,43 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: compliance-operator-config
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: CM-6 Configuration Settings
+spec:
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: operators-compliance
+      namespace: open-cluster-management-policies
+      compliance: Compliant
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: compliance-operator-config
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: compliance.openshift.io/v1alpha1
+                kind: TailoredProfile
+                metadata:
+                  name: cis-additional-scc
+                spec:
+                  description: Allows an additional scc
+                  setValues:
+                    - name: ocp4-var-sccs-with-allowed-capabilities-regex
+                      rationale: Allow our own custom SCC
+                      value: ^privileged$|^hostnetwork-v2$|^restricted-v2$|^nonroot-v2$|^application-aware-quota$|^ceph-csi-op-scc$|^forklift-controller-scc$|^kubevirt-controller$|^noobaa-endpoint$|^nvidia-.*$|^odf-blackbox-scc$|^rook-.*$
+                  extends: ocp4-cis
+                  title: Modified CIS allowing one more SCC

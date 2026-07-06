@@ -12,3 +12,4 @@ resources:
   - ingresscontroller-cipher-suites.yaml
   - rhcos4-sysctls.yaml
   - sshd-configuration.yaml
+  - operator-config.yaml
