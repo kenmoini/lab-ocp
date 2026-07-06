@@ -108,7 +108,7 @@ spec:
                   collector:
                     resources:
                       limits:
-                        memory: 6Gi
+                        memory: 8Gi
                         cpu: 6
                       requests:
                         memory: 2Gi
@@ -134,5 +134,10 @@ spec:
                       inputRefs:
                       - application
                       - infrastructure
+                      outputRefs:
+                      - local-lokistack
+                    - name: audit-logs
+                      inputRefs:
+                      - audit
                       outputRefs:
                       - local-lokistack
