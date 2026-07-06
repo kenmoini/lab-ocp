@@ -33,6 +33,7 @@ spec:
                 kind: TailoredProfile
                 metadata:
                   name: cis-additional-scc
+                  namespace: openshift-compliance
                 spec:
                   description: Allows an additional scc
                   setValues:
