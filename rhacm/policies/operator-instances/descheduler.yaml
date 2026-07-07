@@ -64,7 +64,7 @@ spec:
                   deschedulingIntervalSeconds: 30
                   profiles:
                     - KubeVirtRelieveAndMigrate
-                    - TopologyAndDuplicates
+                    - SoftTopologyAndDuplicates
                   profileCustomizations:
                     devEnableSoftTainter: true
                     devDeviationThresholds: AsymmetricLow
@@ -80,9 +80,10 @@ spec:
                         - open-cluster-management-hub
                         - open-cluster-management-policies
                         - dedicated-admin
+                        - openshift-storage
+                        - openshift-local-storage
+                        - democratic-csi
                         - default
-                        - cert-manager
-                        - cert-manager-operator
                         - default-broker
                         - hive
                         - kube-node-lease
