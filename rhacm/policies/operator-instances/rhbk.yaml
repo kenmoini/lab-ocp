@@ -199,10 +199,45 @@ spec:
                     management:
                       - namespaceSelector:
                           matchLabels:
-                            kubernetes.io/metadata.name: openshift-user-workload-monitoring
+                            network.openshift.io/policy-group: monitoring
+                            # kubernetes.io/metadata.name: openshift-user-workload-monitoring
                   # tracing:
                   #   enabled: true
-    - objectDefinition:
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: keycloak-instance
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: keycloak-instance-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: StatefulSet
+                metadata:
+                  name: sso
+                  namespace: rhbk
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: keycloak-instance-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
@@ -224,28 +259,28 @@ spec:
                   href: 'https://{{ (index (lookup "networking.k8s.io/v1" "Ingress" "rhbk" "sso-ingress").spec.rules 0).host }}'
                   location: ApplicationMenu
                   text: Red Hat Build of Keycloak
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: rhbk-metric-netpol
-        spec:
-          remediationAction: enforce
-          severity: critical
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                kind: NetworkPolicy
-                apiVersion: networking.k8s.io/v1
-                metadata:
-                  name: allow-from-openshift-monitoring
-                  namespace: rhbk
-                spec:
-                  podSelector: {}
-                  ingress:
-                    - from:
-                        - namespaceSelector:
-                            matchLabels:
-                              network.openshift.io/policy-group: monitoring
-                  policyTypes:
-                    - Ingress
+    # - objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: rhbk-metric-netpol
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: critical
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             kind: NetworkPolicy
+    #             apiVersion: networking.k8s.io/v1
+    #             metadata:
+    #               name: allow-from-openshift-monitoring
+    #               namespace: rhbk
+    #             spec:
+    #               podSelector: {}
+    #               ingress:
+    #                 - from:
+    #                     - namespaceSelector:
+    #                         matchLabels:
+    #                           network.openshift.io/policy-group: monitoring
+    #               policyTypes:
+    #                 - Ingress
