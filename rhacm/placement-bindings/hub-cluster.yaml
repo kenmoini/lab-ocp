@@ -48,6 +48,10 @@ subjects:
     apiGroup: policy.open-cluster-management.io
     kind: Policy
 
+  # Needed by RHBK
+  - name: operators-cnpgsql
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: instance-rhbk-26.4
     apiGroup: policy.open-cluster-management.io
     kind: Policy
