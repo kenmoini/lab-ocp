@@ -40,62 +40,62 @@ spec:
                       files:
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_group_open_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_group_openat_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_group_open_by_handle_at_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_gshadow_open_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_gshadow_openat_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_gshadow_open_by_handle_at_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_passwd_open_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_passwd_openat_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_passwd_open_by_handle_at_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_shadow_open_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_shadow_openat_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_shadow_open_by_handle_at_path_syscall.rules
 
@@ -116,61 +116,61 @@ spec:
                       files:
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_group_open_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_group_openat_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/group%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_group_open_by_handle_at_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_gshadow_open_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_gshadow_openat_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/gshadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_gshadow_open_by_handle_at_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_passwd_open_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_passwd_openat_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_passwd_open_by_handle_at_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_shadow_open_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%20-F%20a2%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_shadow_openat_path_syscall.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open_by_handle_at%20-F%20a2%2603%20-F%20path%3D/etc/shadow%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dmodify%0A'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-etc_shadow_open_by_handle_at_path_syscall.rules

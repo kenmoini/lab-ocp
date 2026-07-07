@@ -41,17 +41,17 @@ spec:
                       files:
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Fkube-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-kube.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Fopenshift-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-ocp.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Foauth-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-oauth.rules
             - complianceType: mustonlyhave
@@ -70,16 +70,16 @@ spec:
                       files:
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Fkube-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-kube.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Fopenshift-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-ocp.rules
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Foauth-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
-                          mode: 420
+                          mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-oauth.rules
