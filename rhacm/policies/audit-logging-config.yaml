@@ -26,9 +26,9 @@ spec:
                   name: cluster
                 spec:
                   audit:
-                    customRules:
-                      - group: system:authenticated:oauth
-                        profile: WriteRequestBodies
-                      - group: system:authenticated
-                        profile: AllRequestBodies
-                    profile: Default
+                    profile: WriteRequestBodies
+                    # customRules:
+                    #   - group: system:authenticated:oauth
+                    #     profile: WriteRequestBodies
+                    #   - group: system:authenticated
+                    #     profile: AllRequestBodies
