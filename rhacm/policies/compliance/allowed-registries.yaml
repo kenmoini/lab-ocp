@@ -32,6 +32,7 @@ spec:
                     - domainName: quay.io
                     - domainName: registry.redhat.io
                     - domainName: registry.access.redhat.com
+                    - domainName: registry.connect.redhat.com
                     - domainName: registry.k8s.io
                     - domainName: ghcr.io
                     - domainName: gcr.io
@@ -44,6 +45,7 @@ spec:
                       - quay.io
                       - registry.redhat.io
                       - registry.access.redhat.com
+                      - registry.connect.redhat.com
                       - registry.k8s.io
                       - ghcr.io
                       - gcr.io
