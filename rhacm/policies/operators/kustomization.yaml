@@ -17,6 +17,7 @@ resources:
   - devspaces.yaml
   - community-eso.yaml
   - far.yaml
+  - file-integrity.yaml
   - gatekeeper.yaml
   - keda.yaml
   - limitador.yaml

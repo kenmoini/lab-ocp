@@ -7,6 +7,7 @@ metadata:
 spec:
   description: "On-Premises OpenShift compliance policies"
   policies:
+    - operators-file-integrity
     - compliance-operator-config
     - configure-crypto-policy
     - no-empty-passwords
