@@ -16,3 +16,4 @@ spec:
     - ingress-cipher
     - sshd-configuration
     - imagestream-sets-schedule
+    - auditd-dir-access
