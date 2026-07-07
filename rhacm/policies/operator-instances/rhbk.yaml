@@ -227,9 +227,7 @@ spec:
                   name: sso
                   namespace: rhbk
                 status:
-                  conditions:
-                    - status: 'True'
-                      type: Available
+                  readyReplicas: 1
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
