@@ -5,4 +5,9 @@ kind: Kustomization
 namespace: open-cluster-management-policies
 
 resources:
+  - auditd-dac-modification.yaml
+  - auditd-etc-rules.yaml
+  - auditd-failed-file-events.yaml
+  - auditd-file-deletion-events.yaml
   - auditd-log-directory-access.yaml
+  - auditd-priv-cmds.yaml

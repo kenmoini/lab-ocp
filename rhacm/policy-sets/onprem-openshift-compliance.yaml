@@ -16,4 +16,9 @@ spec:
     - ingress-cipher
     - sshd-configuration
     - imagestream-sets-schedule
-    - auditd-dir-access
+    - auditd-log-dir-access
+    - auditd-file-del-events
+    - auditd-etc-rules
+    - auditd-dac-mod
+    - auditd-priv-cmds
+    - auditd-failed-file-events

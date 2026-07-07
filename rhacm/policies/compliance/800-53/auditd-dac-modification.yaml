@@ -1,0 +1,172 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: auditd-dac-mod
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+    compliance.openshift.io/rule: audit-rules-dac-modification
+    control.compliance.openshift.io/BSI: SYS.1.1.A10
+    control.compliance.openshift.io/NIST-800-53: AU-2(d);AU-12(c);CM-6(a)
+    control.compliance.openshift.io/PCI-DSS: Req-10.5.5
+    control.compliance.openshift.io/PCI-DSS-4-0: 10.3.4;10.3
+    control.compliance.openshift.io/SRG: SRG-OS-000037-GPOS-00015;SRG-OS-000042-GPOS-00020;SRG-OS-000062-GPOS-00031;SRG-OS-000392-GPOS-00172;SRG-OS-000462-GPOS-00206;SRG-OS-000471-GPOS-00215;SRG-OS-000064-GPOS-00033;SRG-OS-000466-GPOS-00210;SRG-OS-000458-GPOS-00203;SRG-APP-000091-CTR-000160;SRG-APP-000492-CTR-001220;SRG-APP-000493-CTR-001225;SRG-APP-000494-CTR-001230;SRG-APP-000500-CTR-001260;SRG-APP-000507-CTR-001295;SRG-APP-000495-CTR-001235;SRG-APP-000499-CTR-001255
+    control.compliance.openshift.io/STIG: CNTR-OS-000160;CNTR-OS-000930;CNTR-OS-000950
+    control.compliance.openshift.io/STIG-RULE: SV-257518r1050653_rule;SV-257575r961800_rule;SV-257577r961812_rule
+    control.compliance.openshift.io/STIGID: CNTR-OS-000160;CNTR-OS-000930;CNTR-OS-000950
+    policies.open-cluster-management.io/controls: AU-2(d),AU-12(c),CM-6(a),Req-10.5.5,SRG-OS-000037-GPOS-00015,SRG-OS-000042-GPOS-00020,SRG-OS-000062-GPOS-00031,SRG-OS-000392-GPOS-00172,SRG-OS-000462-GPOS-00206,SRG-OS-000471-GPOS-00215,SRG-OS-000064-GPOS-00033,SRG-OS-000466-GPOS-00210,SRG-OS-000458-GPOS-00203,SRG-APP-000091-CTR-000160,SRG-APP-000492-CTR-001220,SRG-APP-000493-CTR-001225,SRG-APP-000494-CTR-001230,SRG-APP-000500-CTR-001260,SRG-APP-000507-CTR-001295,SRG-APP-000495-CTR-001235,SRG-APP-000499-CTR-001255,SYS.1.1.A10,10.3.4,10.3,CNTR-OS-000160,CNTR-OS-000930,CNTR-OS-000950,SV-257518r1050653_rule,SV-257575r961800_rule,SV-257577r961812_rule
+    policies.open-cluster-management.io/standards: NIST-800-53,PCI-DSS,SRG,BSI,PCI-DSS-4-0,STIG,STIGID,STIG-RULE
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auditd-dac-mod
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 75-master-auditd-dac-mod
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20setxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20setxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-setxattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20removexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20removexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-removexattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lsetxattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lremovexattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lchown_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fsetxattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fremovexattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchownat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchownat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchownat_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchown_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmodat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmodat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchmodat_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmod%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmod%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchmod_dac_modification.rules
+
+
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 75-worker-auditd-dac-mod
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20setxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20setxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-setxattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20removexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20removexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-removexattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lsetxattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lremovexattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lchown_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fsetxattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fremovexattr_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchownat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchownat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchownat_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchown_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmodat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmodat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchmodat_dac_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmod%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmod%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchmod_dac_modification.rules

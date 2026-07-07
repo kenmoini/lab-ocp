@@ -1,0 +1,276 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: auditd-priv-cmds
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+    compliance.openshift.io/rule: audit-rules-privileged-commands
+    control.compliance.openshift.io/BSI: SYS.1.1.A10
+    control.compliance.openshift.io/NIST-800-53: AU-2(d);AU-12(c);AC-6(9);CM-6(a)
+    policies.open-cluster-management.io/controls: AU-2(d),AU-12(c),AC-6(9),CM-6(a),SYS.1.1.A10
+    policies.open-cluster-management.io/standards: NIST-800-53,BSI
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auditd-priv-cmds
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 75-master-auditd-priv-cmds
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/at%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_at_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/chage%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_chage_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/chsh%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_chsh_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/crontab%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_crontab_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/gpasswd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_gpasswd_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/mount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_mount_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newgidmap%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_newgidmap_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newgrp%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_newgrp_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newuidmap%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_newuidmap_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/pam_timestamp_check%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_pam_timestamp_check_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_passwd_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/postdrop%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_postdrop_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/postqueue%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_postqueue_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/libexec/pt_chown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_libexec_pt_chown_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/libexec/openssh/ssh-keysign%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_libexec_openssh_ssh-keysign_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/su%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_su_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/sudo%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_sudo_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/sudoedit%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_sudoedit_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/umount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_umount_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/unix_chkpwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_unix_chkpwd_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/userhelper%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_userhelper_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/usernetctl%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_usernetctl_execution.rules
+
+
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 75-worker-auditd-priv-cmds
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/at%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_at_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/chage%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_chage_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/chsh%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_chsh_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/crontab%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_crontab_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/gpasswd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_gpasswd_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/mount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_mount_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newgidmap%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_newgidmap_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newgrp%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_newgrp_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newuidmap%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_newuidmap_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/pam_timestamp_check%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_pam_timestamp_check_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_passwd_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/postdrop%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_postdrop_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/postqueue%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_postqueue_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/libexec/pt_chown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_libexec_pt_chown_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/libexec/openssh/ssh-keysign%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_libexec_openssh_ssh-keysign_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/su%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_su_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/sudo%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_sudo_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/sudoedit%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_sudoedit_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/umount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_bin_umount_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/unix_chkpwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_unix_chkpwd_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/userhelper%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_userhelper_execution.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/usernetctl%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-usr_sbin_usernetctl_execution.rules

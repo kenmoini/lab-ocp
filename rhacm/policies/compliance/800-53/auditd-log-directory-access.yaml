@@ -1,12 +1,11 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: auditd-dir-access
+  name: auditd-log-dir-access
   annotations:
     policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
     policy.open-cluster-management.io/standards: Kemo Labs 2026
     policy.open-cluster-management.io/controls: CR - Compliance Remediation
-    compliance.openshift.io/last-scanned-timestamp: 2026-07-07T03:00:05Z
     compliance.openshift.io/rule: directory-access-var-log-oauth-audit,directory-access-var-log-ocp-audit,directory-access-var-log-kube-audit
     control.compliance.openshift.io/NIST-800-53: AU-2(d);AU-12(c);AC-6(9);CM-6(a)
     control.compliance.openshift.io/PCI-DSS-4-0: 10.3.2;10.3
@@ -20,7 +19,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: auditd-dir-access
+          name: auditd-log-dir-access
         spec:
           remediationAction: enforce
           severity: high
@@ -33,7 +32,7 @@ spec:
                 metadata:
                   labels:
                     machineconfiguration.openshift.io/role: master
-                  name: 75-master-auditd-dir-access
+                  name: 75-master-auditd-log-dir-access
                 spec:
                   config:
                     ignition:
@@ -62,7 +61,7 @@ spec:
                 metadata:
                   labels:
                     machineconfiguration.openshift.io/role: worker
-                  name: 75-worker-auditd-dir-access
+                  name: 75-worker-auditd-log-dir-access
                 spec:
                   config:
                     ignition:

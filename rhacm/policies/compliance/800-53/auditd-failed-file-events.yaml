@@ -1,0 +1,235 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: auditd-failed-file-events
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+    compliance.openshift.io/rule: audit-rules-unsuccessful-file
+    control.compliance.openshift.io/BSI: SYS.1.1.A10
+    control.compliance.openshift.io/NIST-800-53: AU-2(d);AU-12(c);AC-6(9);CM-6(a)
+    policies.open-cluster-management.io/controls: AU-2(d),AU-12(c),AC-6(9),CM-6(a),SYS.1.1.A10
+    policies.open-cluster-management.io/standards: NIST-800-53,BSI
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auditd-failed-file-events
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 75-master-auditd-failed-file-events
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-chmod_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-chown_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,%23%23%20This%20content%20is%20a%20section%20of%20an%20Audit%20config%20snapshot%20recommended%20for%20Red%2520Hat%2520Enterprise%2520Linux%2520CoreOS%25204%20systems%20that%20target%20OSPP%20compliance.%0A%23%23%20The%20following%20content%20has%20been%20retreived%20on%202019-03-11%20from:%20https:%2F%2Fgithub.com%2Flinux-audit%2Faudit-userspace%2Fblob%2Fmaster%2Frules%2F30-ospp-v42.rules%0A%0A%23%23%20The%20purpose%20of%20these%20rules%20is%20to%20meet%20the%20requirements%20for%20Operating%0A%23%23%20System%20Protection%20Profile%20%28OSPP%29v4.2.%20These%20rules%20depends%20on%20having%0A%23%23%2010-base-config.rules%2C%2011-loginuid.rules%2C%20and%2043-module-load.rules%20installed.%0A%0A%23%23%20Unsuccessful%20file%20creation%20%28open%20with%20O_CREAT%29%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20creat%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20creat%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20creat%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20creat%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A%0A%23%23%20Unsuccessful%20file%20modifications%20%28open%20for%20write%20or%20truncate%29%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&01003%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&01003%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&01003%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&01003%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&01003%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&01003%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&01003%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&01003%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20truncate%2Cftruncate%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20truncate%2Cftruncate%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20truncate%2Cftruncate%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20truncate%2Cftruncate%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A%0A%23%23%20Unsuccessful%20file%20access%20%28any%20other%20opens%29%20This%20has%20to%20go%20last.%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%2Ccreat%2Ctruncate%2Cftruncate%2Copenat%2Copen_by_handle_at%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-access%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%2Ccreat%2Ctruncate%2Cftruncate%2Copenat%2Copen_by_handle_at%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-access%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%2Ccreat%2Ctruncate%2Cftruncate%2Copenat%2Copen_by_handle_at%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-access%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%2Ccreat%2Ctruncate%2Cftruncate%2Copenat%2Copen_by_handle_at%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-access'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/audit/rules.d/30-ospp-v42-remediation.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmod%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmod%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmod%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmod%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchmod_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmodat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmodat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmodat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmodat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchmodat_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchown_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchownat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchownat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchownat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchownat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchownat_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fremovexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fremovexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fremovexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fremovexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fremovexattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fsetxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fsetxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fsetxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fsetxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fsetxattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lchown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lchown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lchown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lchown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lchown_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lremovexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lremovexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lremovexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lremovexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lremovexattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lsetxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lsetxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lsetxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lsetxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lsetxattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlinkat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlinkat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlinkat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlinkat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-unlinkat_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlink%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlink%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlink%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlink%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-unlink_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20setxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20setxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20setxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20setxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-setxattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20renameat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20renameat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20renameat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20renameat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-renameat_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20removexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20removexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20removexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20removexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-removexattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20rename%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20rename%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20rename%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20rename%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-rename_audit_rules_unsuccessful_file_modification.rules
+
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 75-worker-auditd-failed-file-events
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chmod%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chmod%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-chmod_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20chown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20chown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-chown_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,%23%23%20This%20content%20is%20a%20section%20of%20an%20Audit%20config%20snapshot%20recommended%20for%20Red%2520Hat%2520Enterprise%2520Linux%2520CoreOS%25204%20systems%20that%20target%20OSPP%20compliance.%0A%23%23%20The%20following%20content%20has%20been%20retreived%20on%202019-03-11%20from:%20https:%2F%2Fgithub.com%2Flinux-audit%2Faudit-userspace%2Fblob%2Fmaster%2Frules%2F30-ospp-v42.rules%0A%0A%23%23%20The%20purpose%20of%20these%20rules%20is%20to%20meet%20the%20requirements%20for%20Operating%0A%23%23%20System%20Protection%20Profile%20%28OSPP%29v4.2.%20These%20rules%20depends%20on%20having%0A%23%23%2010-base-config.rules%2C%2011-loginuid.rules%2C%20and%2043-module-load.rules%20installed.%0A%0A%23%23%20Unsuccessful%20file%20creation%20%28open%20with%20O_CREAT%29%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20creat%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20creat%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20creat%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20creat%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-create%0A%0A%23%23%20Unsuccessful%20file%20modifications%20%28open%20for%20write%20or%20truncate%29%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&01003%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&01003%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&01003%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&01003%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&01003%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&01003%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&01003%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&01003%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20truncate%2Cftruncate%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20truncate%2Cftruncate%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20truncate%2Cftruncate%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20truncate%2Cftruncate%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-modification%0A%0A%23%23%20Unsuccessful%20file%20access%20%28any%20other%20opens%29%20This%20has%20to%20go%20last.%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%2Ccreat%2Ctruncate%2Cftruncate%2Copenat%2Copen_by_handle_at%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-access%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%2Ccreat%2Ctruncate%2Cftruncate%2Copenat%2Copen_by_handle_at%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-access%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%2Ccreat%2Ctruncate%2Cftruncate%2Copenat%2Copen_by_handle_at%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-access%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%2Ccreat%2Ctruncate%2Cftruncate%2Copenat%2Copen_by_handle_at%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccesful-access'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/audit/rules.d/30-ospp-v42-remediation.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmod%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmod%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmod%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmod%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchmod_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmodat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmodat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmodat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmodat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchmodat_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchown_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchownat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchownat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchownat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchownat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fchownat_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fremovexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fremovexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fremovexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fremovexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fremovexattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fsetxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fsetxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fsetxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fsetxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-fsetxattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lchown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lchown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lchown%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lchown%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lchown_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lremovexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lremovexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lremovexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lremovexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lremovexattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lsetxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lsetxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lsetxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lsetxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-lsetxattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlinkat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlinkat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlinkat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlinkat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-unlinkat_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlink%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlink%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlink%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlink%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-unlink_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20setxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20setxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20setxattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20setxattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-setxattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20renameat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20renameat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20renameat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20renameat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-renameat_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20removexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20removexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20removexattr%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20removexattr%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-removexattr_audit_rules_unsuccessful_file_modification.rules
+                        - contents:
+                            source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20rename%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20rename%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20rename%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20rename%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Daccess%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/audit/rules.d/75-rename_audit_rules_unsuccessful_file_modification.rules
