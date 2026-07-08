@@ -40,26 +40,31 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # rhcos4-e8-master-sysctl-kernel-yama-ptrace-scope
                         - contents:
                             source: 'data:,kernel.yama.ptrace_scope%3D1%0A'
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_kernel_yama_ptrace_scope.conf
+                        # rhcos4-e8-master-sysctl-kernel-unprivileged-bpf-disabled
                         - contents:
                             source: 'data:,kernel.unprivileged_bpf_disabled%3D1%0A'
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_kernel_unprivileged_bpf_disabled.conf
+                        # rhcos4-e8-master-sysctl-kernel-randomize-va-space
                         - contents:
                             source: 'data:,kernel.randomize_va_space%3D2%0A'
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_kernel_randomize_va_space.conf
+                        # rhcos4-e8-master-sysctl-kernel-dmesg-restrict
                         - contents:
                             source: 'data:,kernel.dmesg_restrict%3D1%0A'
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_kernel_dmesg_restrict.conf
+                        # rhcos4-e8-master-sysctl-net-core-bpf-jit-harden
                         - contents:
                             source: 'data:,net.core.bpf_jit_harden%3D2%0A'
                           mode: 420
@@ -79,26 +84,31 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # rhcos4-e8-worker-sysctl-kernel-yama-ptrace-scope
                         - contents:
                             source: 'data:,kernel.yama.ptrace_scope%3D1%0A'
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_kernel_yama_ptrace_scope.conf
+                        # rhcos4-e8-worker-sysctl-kernel-unprivileged-bpf-disabled
                         - contents:
                             source: 'data:,kernel.unprivileged_bpf_disabled%3D1%0A'
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_kernel_unprivileged_bpf_disabled.conf
+                        # rhcos4-e8-worker-sysctl-kernel-randomize-va-space
                         - contents:
                             source: 'data:,kernel.randomize_va_space%3D2%0A'
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_kernel_randomize_va_space.conf
+                        # rhcos4-e8-worker-sysctl-kernel-dmesg-restrict
                         - contents:
                             source: 'data:,kernel.dmesg_restrict%3D1%0A'
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_kernel_dmesg_restrict.conf
+                        # rhcos4-e8-worker-sysctl-net-core-bpf-jit-harden
                         - contents:
                             source: 'data:,net.core.bpf_jit_harden%3D2%0A'
                           mode: 420

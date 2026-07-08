@@ -20,6 +20,8 @@ spec:
           severity: high
           pruneObjectBehavior: DeleteIfCreated
           object-templates:
+          # rhcos4-high-master-sysctl-kernel-perf-event-paranoid
+          # rhcos4-stig-master-sysctl-kernel-perf-event-paranoid
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
@@ -39,6 +41,8 @@ spec:
                           mode: 420
                           overwrite: true
                           path: /etc/sysctl.d/75-sysctl_kernel_perf_event_paranoid.conf
+          # rhcos4-high-worker-sysctl-kernel-perf-event-paranoid
+          # rhcos4-stig-worker-sysctl-kernel-perf-event-paranoid
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1

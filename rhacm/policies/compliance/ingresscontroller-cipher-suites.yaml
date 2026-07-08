@@ -19,6 +19,7 @@ spec:
           remediationAction: enforce
           severity: high
           object-templates:
+            # ocp4-cis-ingress-controller-tls-cipher-suites
             - complianceType: musthave
               objectDefinition:
                 apiVersion: operator.openshift.io/v1

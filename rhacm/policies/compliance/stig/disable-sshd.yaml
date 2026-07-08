@@ -19,6 +19,7 @@ spec:
           severity: high
           pruneObjectBehavior: DeleteIfCreated
           object-templates:
+          # rhcos4-stig-master-service-sshd-disabled
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
@@ -39,6 +40,7 @@ spec:
                         - enabled: false
                           mask: true
                           name: sshd.socket
+          # rhcos4-stig-worker-service-sshd-disabled
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1

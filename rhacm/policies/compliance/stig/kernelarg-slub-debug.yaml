@@ -20,6 +20,7 @@ spec:
           severity: high
           pruneObjectBehavior: DeleteIfCreated
           object-templates:
+          # rhcos4-stig-master-coreos-slub-debug-kernel-argument
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
@@ -34,6 +35,7 @@ spec:
                       version: 3.1.0
                   kernelArguments:
                     - slub_debug=P
+          # rhcos4-stig-worker-coreos-slub-debug-kernel-argument
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1

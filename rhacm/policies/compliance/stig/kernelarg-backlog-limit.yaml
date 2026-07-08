@@ -20,6 +20,8 @@ spec:
           severity: high
           pruneObjectBehavior: DeleteIfCreated
           object-templates:
+          # rhcos4-high-master-coreos-audit-backlog-limit-kernel-argument
+          # rhcos4-stig-master-coreos-audit-backlog-limit-kernel-argument
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
@@ -34,6 +36,8 @@ spec:
                       version: 3.1.0
                   kernelArguments:
                     - audit_backlog_limit=8192
+          # rhcos4-high-worker-coreos-audit-backlog-limit-kernel-argument
+          # rhcos4-stig-worker-coreos-audit-backlog-limit-kernel-argument
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1

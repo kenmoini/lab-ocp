@@ -20,6 +20,8 @@ spec:
           severity: high
           pruneObjectBehavior: DeleteIfCreated
           object-templates:
+          # rhcos4-high-master-coreos-vsyscall-kernel-argument
+          # rhcos4-stig-master-coreos-vsyscall-kernel-argument
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
@@ -35,6 +37,8 @@ spec:
                   kernelArguments:
                     - vsyscall=none
             - complianceType: mustonlyhave
+          # rhcos4-high-worker-coreos-vsyscall-kernel-argument
+          # rhcos4-stig-worker-coreos-vsyscall-kernel-argument
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
                 kind: MachineConfig

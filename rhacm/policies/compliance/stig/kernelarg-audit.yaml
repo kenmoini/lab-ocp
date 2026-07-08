@@ -20,6 +20,8 @@ spec:
           severity: high
           pruneObjectBehavior: DeleteIfCreated
           object-templates:
+          # rhcos4-high-master-coreos-audit-option
+          # rhcos4-stig-master-coreos-audit-option
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
@@ -34,6 +36,8 @@ spec:
                       version: 3.1.0
                   kernelArguments:
                     - audit=1
+          # rhcos4-high-worker-coreos-audit-option
+          # rhcos4-stig-worker-coreos-audit-option
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
