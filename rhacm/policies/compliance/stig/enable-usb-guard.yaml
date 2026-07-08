@@ -29,11 +29,11 @@ spec:
                     machineconfiguration.openshift.io/role: master
                   name: 75-master-enable-usb-guard
                 spec:
+                  extensions:
+                    - usbguard
                   config:
                     ignition:
                       version: 3.1.0
-                    extensions:
-                      - usbguard
                     systemd:
                       units:
                         - enabled: true
@@ -45,6 +45,11 @@ spec:
                           mode: 384
                           overwrite: true
                           path: /etc/usbguard/rules.d/75-hid-and-hub.conf
+                        - contents:
+                            source: 'data:,install%20usb-storage%20/bin/false%0Ablacklist%20usb-storage%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/modprobe.d/usb-storage.conf
             - complianceType: mustonlyhave
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
@@ -54,11 +59,11 @@ spec:
                     machineconfiguration.openshift.io/role: worker
                   name: 75-worker-enable-usb-guard
                 spec:
+                  extensions:
+                    - usbguard
                   config:
                     ignition:
                       version: 3.1.0
-                    extensions:
-                      - usbguard
                     systemd:
                       units:
                         - enabled: true
@@ -70,3 +75,8 @@ spec:
                           mode: 384
                           overwrite: true
                           path: /etc/usbguard/rules.d/75-hid-and-hub.conf
+                        - contents:
+                            source: 'data:,install%20usb-storage%20/bin/false%0Ablacklist%20usb-storage%0A'
+                          mode: 420
+                          overwrite: true
+                          path: /etc/modprobe.d/usb-storage.conf
