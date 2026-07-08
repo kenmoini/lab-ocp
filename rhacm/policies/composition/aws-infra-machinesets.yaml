@@ -97,8 +97,6 @@ spec:
                               value: owned
                           userDataSecret:
                             name: worker-user-data
-                      versions:
-                        kubelet: ""
             - complianceType: musthave
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
@@ -171,8 +169,6 @@ spec:
                               value: owned
                           userDataSecret:
                             name: worker-user-data
-                      versions:
-                        kubelet: ""
             - complianceType: musthave
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
@@ -245,5 +241,3 @@ spec:
                               value: owned
                           userDataSecret:
                             name: worker-user-data
-                      versions:
-                        kubelet: ""
