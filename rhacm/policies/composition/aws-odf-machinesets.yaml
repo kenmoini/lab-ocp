@@ -58,7 +58,11 @@ spec:
                       providerSpec:
                         value:
                           ami:
-                            id: '{{ (lookup "machine.openshift.io/v1beta1" "MachineSet" "openshift-machine-api" ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName "-worker-" (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region "a" | join "")).spec.template.spec.providerSpec.value.ami.id }}'
+                            id: '{{- $msName := "" -}}
+                                {{- $infraName := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName -}}
+                                {{- $region := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region -}}
+                                {{- $msName = $infraName "-worker-" $region "a" | join "" -}}
+                                {{- (lookup "machine.openshift.io/v1beta1" "MachineSet" "openshift-machine-api" $msName).spec.template.spec.providerSpec.value.ami.id -}}'
                           apiVersion: awsproviderconfig.openshift.io/v1beta1
                           blockDevices:
                             - ebs:
@@ -127,7 +131,12 @@ spec:
                       providerSpec:
                         value:
                           ami:
-                            id: '{{ (lookup "machine.openshift.io/v1beta1" "MachineSet" "openshift-machine-api" ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName "-worker-" (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region "b" | join "")).spec.template.spec.providerSpec.value.ami.id }}'
+                            #id: '{{ (lookup "machine.openshift.io/v1beta1" "MachineSet" "openshift-machine-api" ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName "-worker-" (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region "b" | join "")).spec.template.spec.providerSpec.value.ami.id }}'
+                            id: '{{- $msName := "" -}}
+                                {{- $infraName := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName -}}
+                                {{- $region := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region -}}
+                                {{- $msName = $infraName "-worker-" $region "b" | join "" -}}
+                                {{- (lookup "machine.openshift.io/v1beta1" "MachineSet" "openshift-machine-api" $msName).spec.template.spec.providerSpec.value.ami.id -}}'
                           apiVersion: awsproviderconfig.openshift.io/v1beta1
                           blockDevices:
                             - ebs:
@@ -196,7 +205,12 @@ spec:
                       providerSpec:
                         value:
                           ami:
-                            id: '{{ (lookup "machine.openshift.io/v1beta1" "MachineSet" "openshift-machine-api" ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName "-worker-" (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region "c" | join "")).spec.template.spec.providerSpec.value.ami.id }}'
+                            #id: '{{ (lookup "machine.openshift.io/v1beta1" "MachineSet" "openshift-machine-api" ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName "-worker-" (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region "c" | join "")).spec.template.spec.providerSpec.value.ami.id }}'
+                            id: '{{- $msName := "" -}}
+                                {{- $infraName := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName -}}
+                                {{- $region := (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region -}}
+                                {{- $msName = $infraName "-worker-" $region "c" | join "" -}}
+                                {{- (lookup "machine.openshift.io/v1beta1" "MachineSet" "openshift-machine-api" $msName).spec.template.spec.providerSpec.value.ami.id -}}'
                           apiVersion: awsproviderconfig.openshift.io/v1beta1
                           blockDevices:
                             - ebs:
