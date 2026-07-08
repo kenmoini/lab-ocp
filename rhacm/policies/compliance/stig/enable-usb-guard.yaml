@@ -37,6 +37,7 @@ spec:
                     systemd:
                       units:
                         - enabled: true
+                          mask: false
                           name: usbguard.service
                     storage:
                       files:
@@ -72,6 +73,7 @@ spec:
                     systemd:
                       units:
                         - enabled: true
+                          mask: false
                           name: usbguard.service
                     storage:
                       files:
