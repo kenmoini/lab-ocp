@@ -7,7 +7,7 @@ metadata:
 spec:
   description: "On-Premises OpenShift compliance policies"
   policies:
-    # - disable-sshd
+    - disable-sshd
     - operators-file-integrity
     - compliance-operator-config
     - configure-crypto-policy
