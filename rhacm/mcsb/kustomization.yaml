@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - aws-self-managed-o-c-m-p.yaml
   - default-o-c-m-p.yaml
   - global-o-c-m-p.yaml
   - global-kube-system.yaml
