@@ -44,56 +44,67 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # rhcos4-high-master-audit-rules-dac-modification-setxattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20setxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20setxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-setxattr_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-removexattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20removexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20removexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-removexattr_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-lsetxattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-lsetxattr_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-lremovexattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-lremovexattr_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-lchown
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-lchown_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-fsetxattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fsetxattr_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-fremovexattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fremovexattr_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-fchownat
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchownat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchownat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fchownat_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-fchown
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fchown_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-fchmodat
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmodat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmodat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fchmodat_dac_modification.rules
+                        # rhcos4-high-master-audit-rules-dac-modification-fchmod
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmod%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmod%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
@@ -115,56 +126,67 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # rhcos4-high-worker-audit-rules-dac-modification-setxattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20setxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20setxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-setxattr_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-removexattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20removexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20removexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-removexattr_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-lsetxattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-lsetxattr_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-lremovexattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-lremovexattr_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-lchown
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20lchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20lchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-lchown_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-fsetxattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fsetxattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fsetxattr_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-fremovexattr
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fremovexattr%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fremovexattr_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-fchownat
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchownat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchownat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fchownat_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-fchown
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fchown_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-fchmodat
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmodat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmodat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-fchmodat_dac_modification.rules
+                        # rhcos4-high-worker-audit-rules-dac-modification-fchmod
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20fchmod%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20fchmod%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384

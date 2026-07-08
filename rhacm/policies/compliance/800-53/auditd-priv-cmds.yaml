@@ -38,111 +38,133 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # rhcos4-high-master-audit-rules-privileged-commands-at
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/at%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_at_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-chage
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/chage%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_chage_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-chsh
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/chsh%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_chsh_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-crontab
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/crontab%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_crontab_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-gpasswd
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/gpasswd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_gpasswd_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-mount
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/mount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_mount_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-newgidmap
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newgidmap%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_newgidmap_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-newgrp
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newgrp%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_newgrp_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-newuidmap
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newuidmap%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_newuidmap_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-pam-timestamp-check
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/pam_timestamp_check%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_pam_timestamp_check_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-passwd
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_passwd_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-postdrop
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/postdrop%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_postdrop_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-postqueue
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/postqueue%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_postqueue_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-pt-chown
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/libexec/pt_chown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_libexec_pt_chown_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-ssh-keysign
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/libexec/openssh/ssh-keysign%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_libexec_openssh_ssh-keysign_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-su
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/su%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_su_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-sudo
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/sudo%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_sudo_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-sudoedit
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/sudoedit%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_sudoedit_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-umount
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/umount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_umount_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-unix-chkpwd
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/unix_chkpwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_unix_chkpwd_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-userhelper
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/userhelper%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_userhelper_execution.rules
+                        # rhcos4-high-master-audit-rules-privileged-commands-usernetctl
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/usernetctl%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
@@ -164,111 +186,133 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # rhcos4-high-worker-audit-rules-privileged-commands-at
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/at%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_at_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-chage
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/chage%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_chage_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-chsh
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/chsh%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_chsh_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-crontab
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/crontab%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_crontab_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-gpasswd
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/gpasswd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_gpasswd_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-mount
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/mount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_mount_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-newgidmap
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newgidmap%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_newgidmap_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-newgrp
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newgrp%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_newgrp_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-newuidmap
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/newuidmap%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_newuidmap_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-pam-timestamp-check
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/pam_timestamp_check%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_pam_timestamp_check_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-passwd
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/passwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_passwd_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-postdrop
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/postdrop%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_postdrop_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-postqueue
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/postqueue%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_postqueue_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-pt-chown
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/libexec/pt_chown%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_libexec_pt_chown_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-ssh-keysign
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/libexec/openssh/ssh-keysign%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_libexec_openssh_ssh-keysign_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-su
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/su%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_su_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-sudo
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/sudo%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_sudo_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-sudoedit
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/sudoedit%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_sudoedit_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-umount
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/umount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_umount_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-unix-chkpwd
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/unix_chkpwd%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_unix_chkpwd_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-userhelper
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/userhelper%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_sbin_userhelper_execution.rules
+                        # rhcos4-high-worker-audit-rules-privileged-commands-usernetctl
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/sbin/usernetctl%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384

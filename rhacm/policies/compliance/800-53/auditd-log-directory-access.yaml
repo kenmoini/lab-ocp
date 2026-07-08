@@ -39,16 +39,19 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # ocp4-high-node-master-directory-access-var-log-kube-audit
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Fkube-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-kube.rules
+                        # ocp4-high-node-master-directory-access-var-log-ocp-audit
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Fopenshift-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-ocp.rules
+                        # ocp4-high-node-master-directory-access-var-log-oauth-audit
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Foauth-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
                           mode: 384
@@ -68,16 +71,19 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # ocp4-high-node-worker-directory-access-var-log-kube-audit
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Fkube-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-kube.rules
+                        # ocp4-high-node-worker-directory-access-var-log-ocp-audit
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Fopenshift-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-var-log-ocp.rules
+                        # ocp4-high-node-worker-directory-access-var-log-oauth-audit
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20dir%3D%2Fvar%2Flog%2Foauth-apiserver%2F%20-F%20perm%3Dr%20-F%20auid%3E%3D1000%20-F%20auid!%3Dunset%20-F%20key%3Daccess-audit-trail'
                           mode: 384

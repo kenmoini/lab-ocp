@@ -43,26 +43,31 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # rhcos4-high-master-audit-rules-file-deletion-events-rename
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20rename%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20rename%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-rename-file-deletion-events.rules
+                        # rhcos4-high-master-audit-rules-file-deletion-events-renameat
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20renameat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20renameat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-renameat-file-deletion-events.rules
+                        # rhcos4-high-master-audit-rules-file-deletion-events-rmdir
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20rmdir%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20rmdir%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-rmdir-file-deletion-events.rules
+                        # rhcos4-high-master-audit-rules-file-deletion-events-unlink
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlink%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlink%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-unlink-file-deletion-events.rules
+                        # rhcos4-high-master-audit-rules-file-deletion-events-unlinkat
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlinkat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlinkat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
@@ -84,26 +89,31 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # rhcos4-high-worker-audit-rules-file-deletion-events-rename
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20rename%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20rename%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-rename-file-deletion-events.rules
+                        # rhcos4-high-worker-audit-rules-file-deletion-events-renameat
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20renameat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20renameat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-renameat-file-deletion-events.rules
+                        # rhcos4-high-worker-audit-rules-file-deletion-events-rmdir
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20rmdir%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20rmdir%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-rmdir-file-deletion-events.rules
+                        # rhcos4-high-worker-audit-rules-file-deletion-events-unlink
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlink%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlink%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-unlink-file-deletion-events.rules
+                        # rhcos4-high-worker-audit-rules-file-deletion-events-unlinkat
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlinkat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlinkat%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Ddelete%0A'
                           mode: 384
