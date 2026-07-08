@@ -1,0 +1,50 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: kernelarg-backlog-limit
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+    compliance.openshift.io/rule: kernelarg-backlog-limit
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: kernelarg-backlog-limit
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 75-master-kernelarg-backlog-limit
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                  kernelArguments:
+                    - audit_backlog_limit=8192
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 75-worker-kernelarg-backlog-limit
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                  kernelArguments:
+                    - audit_backlog_limit=8192

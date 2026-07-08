@@ -5,5 +5,14 @@ kind: Kustomization
 namespace: open-cluster-management-policies
 
 resources:
+  - auditd-rules.yaml
   - classification-banner.yaml
+  - disable-sshd.yaml
+  - enable-usb-guard.yaml
   - imagestream-sets-schedule.yaml
+  - kernelarg-audit.yaml
+  - kernelarg-backlog-limit.yaml
+  - kernelarg-page-poison.yaml
+  - kernelarg-slub-debug.yaml
+  - kernelarg-vsyscall.yaml
+  - sysctls.yaml

@@ -1,0 +1,61 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: disable-sshd
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: disable-sshd
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 75-master-disable-sshd
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    systemd:
+                      units:
+                        - enabled: false
+                          mask: true
+                          name: sshd.service
+                        - enabled: false
+                          mask: true
+                          name: sshd.socket
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 75-worker-disable-sshd
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    systemd:
+                      units:
+                        - enabled: false
+                          mask: true
+                          name: sshd.service
+                        - enabled: false
+                          mask: true
+                          name: sshd.socket

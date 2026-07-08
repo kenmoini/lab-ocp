@@ -1,0 +1,72 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: enable-usb-guard
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+    compliance.openshift.io/rule: enable-usb-guard
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: enable-usb-guard
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 75-master-enable-usb-guard
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    extensions:
+                      - usbguard
+                    systemd:
+                      units:
+                        - enabled: true
+                          name: usbguard.service
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,%0Aallow%20with-interface%20match-all%20%7B%2003:%2A:%2A%2009:00:%2A%20%7D'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/usbguard/rules.d/75-hid-and-hub.conf
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 75-worker-enable-usb-guard
+                spec:
+                  config:
+                    ignition:
+                      version: 3.1.0
+                    extensions:
+                      - usbguard
+                    systemd:
+                      units:
+                        - enabled: true
+                          name: usbguard.service
+                    storage:
+                      files:
+                        - contents:
+                            source: 'data:,%0Aallow%20with-interface%20match-all%20%7B%2003:%2A:%2A%2009:00:%2A%20%7D'
+                          mode: 384
+                          overwrite: true
+                          path: /etc/usbguard/rules.d/75-hid-and-hub.conf
