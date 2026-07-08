@@ -19,6 +19,7 @@ resources:
   - maintenance/
   - capabilities/
   - compliance/
+  - composition/
   # - best-practices/
   - console-info-header.yaml
   - label-nodes-egressip.yaml
