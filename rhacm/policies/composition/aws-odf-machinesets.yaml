@@ -90,7 +90,7 @@ spec:
                             - filters:
                                 - name: tag:Name
                                   values:
-                                    - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-sg'
+                                    - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-node'
                           subnet:
                             filters:
                               - name: tag:Name
@@ -166,7 +166,7 @@ spec:
                             - filters:
                                 - name: tag:Name
                                   values:
-                                    - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-sg'
+                                    - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-node'
                           subnet:
                             filters:
                               - name: tag:Name
@@ -242,7 +242,7 @@ spec:
                             - filters:
                                 - name: tag:Name
                                   values:
-                                    - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-sg'
+                                    - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-node'
                           subnet:
                             filters:
                               - name: tag:Name
