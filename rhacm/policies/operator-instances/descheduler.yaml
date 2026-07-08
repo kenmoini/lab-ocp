@@ -50,6 +50,7 @@ spec:
           severity: critical
           object-templates:
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: operator.openshift.io/v1
                 kind: KubeDescheduler
