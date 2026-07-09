@@ -7,7 +7,6 @@ metadata:
     policy.open-cluster-management.io/description: Moves subscriptions to infrastructure nodes
 spec:
   disabled: false
-  remediationAction: inform
   policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
@@ -15,7 +14,7 @@ spec:
         metadata:
           name: subs-on-infra
         spec:
-          remediationAction: inform
+          remediationAction: enforce
           severity: low
           object-templates-raw: |
             {{/* ##  Loop through all the Nodes ## */}}
