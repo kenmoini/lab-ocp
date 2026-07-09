@@ -57,9 +57,9 @@ spec:
                           cluster.ocs.openshift.io/openshift-storage: ""
                           node-role.kubernetes.io/worker: ""
                       taints:
-                        - key: node-role.kubernetes.io/infra
-                          effect: NoSchedule
-                          value: "true"
+                        # - key: node-role.kubernetes.io/infra
+                        #   effect: NoSchedule
+                        #   value: "true"
                         - key: node.ocs.openshift.io/storage
                           effect: NoSchedule
                           value: "true"
@@ -136,9 +136,9 @@ spec:
                           cluster.ocs.openshift.io/openshift-storage: ""
                           node-role.kubernetes.io/worker: ""
                       taints:
-                        - key: node-role.kubernetes.io/infra
-                          effect: NoSchedule
-                          value: "true"
+                        # - key: node-role.kubernetes.io/infra
+                        #   effect: NoSchedule
+                        #   value: "true"
                         - key: node.ocs.openshift.io/storage
                           effect: NoSchedule
                           value: "true"
@@ -216,9 +216,9 @@ spec:
                           cluster.ocs.openshift.io/openshift-storage: ""
                           node-role.kubernetes.io/worker: ""
                       taints:
-                        - key: node-role.kubernetes.io/infra
-                          effect: NoSchedule
-                          value: "true"
+                        # - key: node-role.kubernetes.io/infra
+                        #   effect: NoSchedule
+                        #   value: "true"
                         - key: node.ocs.openshift.io/storage
                           effect: NoSchedule
                           value: "true"

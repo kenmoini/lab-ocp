@@ -108,9 +108,9 @@ spec:
                           node-role.kubernetes.io/worker: ""
                           node-role.kemo.dev/nvidia-gpu: ""
                       taints:
-                        - key: node-role.kubernetes.io/infra
-                          effect: NoSchedule
-                          value: "true"
+                        # - key: node-role.kubernetes.io/infra
+                        #   effect: NoSchedule
+                        #   value: "true"
                         - key: node-role.kemo.dev/nvidia-gpu
                           effect: NoSchedule
                           value: "true"
@@ -187,9 +187,9 @@ spec:
                           node-role.kubernetes.io/worker: ""
                           node-role.kemo.dev/nvidia-gpu: ""
                       taints:
-                        - key: node-role.kubernetes.io/infra
-                          effect: NoSchedule
-                          value: "true"
+                        # - key: node-role.kubernetes.io/infra
+                        #   effect: NoSchedule
+                        #   value: "true"
                         - key: node-role.kemo.dev/nvidia-gpu
                           effect: NoSchedule
                           value: "true"
@@ -267,9 +267,9 @@ spec:
                           node-role.kubernetes.io/worker: ""
                           node-role.kemo.dev/nvidia-gpu: ""
                       taints:
-                        - key: node-role.kubernetes.io/infra
-                          effect: NoSchedule
-                          value: "true"
+                        # - key: node-role.kubernetes.io/infra
+                        #   effect: NoSchedule
+                        #   value: "true"
                         - key: node-role.kemo.dev/nvidia-gpu
                           effect: NoSchedule
                           value: "true"
