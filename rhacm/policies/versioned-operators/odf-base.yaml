@@ -72,3 +72,22 @@ spec:
                   conditions:
                     - status: 'True'
                       type: Available
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-console-plugin
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1
+                kind: Console
+                metadata:
+                  name: cluster
+                spec:
+                  plugins:
+                    - odf-console
