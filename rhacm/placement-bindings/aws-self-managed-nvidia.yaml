@@ -12,6 +12,9 @@ subjects:
   - name: aws-nvidia-machinesets
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  # - name: gpu-operator-nodes
+  #   apiGroup: policy.open-cluster-management.io
+  #   kind: Policy
   - name: operator-bundle-nvidia-gpu
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
