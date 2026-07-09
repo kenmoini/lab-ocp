@@ -23,7 +23,6 @@ resources:
   - nfd.yaml
   - nmstate.yaml
   - nvidia-gpu.yaml
-  - nvidia-gpu-nodes.yaml
   - openshift-logging.yaml
   #- odf.yaml
   - odf-aws.yaml
