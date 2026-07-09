@@ -105,8 +105,12 @@ spec:
                         key: node-role.kemo.dev/nvidia-gpu
                         operator: Exists
                     mds:
-                      nodeSelector:
-                        node.ocs.openshift.io/storage: ""
+                      nodeAffinity:
+                        requiredDuringSchedulingIgnoredDuringExecution:
+                          nodeSelectorTerms:
+                          - matchExpressions:
+                            - key: cluster.ocs.openshift.io/openshift-storage
+                              operator: Exists
                       tolerations:
                       - effect: NoSchedule
                         key: node-role.kubernetes.io/infra
@@ -115,8 +119,12 @@ spec:
                         key: node.ocs.openshift.io/storage
                         operator: Exists
                     metrics-exporter:
-                      nodeSelector:
-                        node.ocs.openshift.io/storage: ""
+                      nodeAffinity:
+                        requiredDuringSchedulingIgnoredDuringExecution:
+                          nodeSelectorTerms:
+                          - matchExpressions:
+                            - key: cluster.ocs.openshift.io/openshift-storage
+                              operator: Exists
                       tolerations:
                       - effect: NoSchedule
                         key: node-role.kubernetes.io/infra
@@ -125,8 +133,12 @@ spec:
                         key: node.ocs.openshift.io/storage
                         operator: Exists
                     noobaa-core:
-                      nodeSelector:
-                        node.ocs.openshift.io/storage: ""
+                      nodeAffinity:
+                        requiredDuringSchedulingIgnoredDuringExecution:
+                          nodeSelectorTerms:
+                          - matchExpressions:
+                            - key: cluster.ocs.openshift.io/openshift-storage
+                              operator: Exists
                       tolerations:
                       - effect: NoSchedule
                         key: node-role.kubernetes.io/infra
@@ -135,8 +147,12 @@ spec:
                         key: node.ocs.openshift.io/storage
                         operator: Exists
                     rgw:
-                      nodeSelector:
-                        node.ocs.openshift.io/storage: ""
+                      nodeAffinity:
+                        requiredDuringSchedulingIgnoredDuringExecution:
+                          nodeSelectorTerms:
+                          - matchExpressions:
+                            - key: cluster.ocs.openshift.io/openshift-storage
+                              operator: Exists
                       tolerations:
                       - effect: NoSchedule
                         key: node-role.kubernetes.io/infra
@@ -145,8 +161,12 @@ spec:
                         key: node.ocs.openshift.io/storage
                         operator: Exists
                     toolbox:
-                      nodeSelector:
-                        node.ocs.openshift.io/storage: ""
+                      nodeAffinity:
+                        requiredDuringSchedulingIgnoredDuringExecution:
+                          nodeSelectorTerms:
+                          - matchExpressions:
+                            - key: cluster.ocs.openshift.io/openshift-storage
+                              operator: Exists
                       tolerations:
                       - effect: NoSchedule
                         key: node-role.kubernetes.io/infra
