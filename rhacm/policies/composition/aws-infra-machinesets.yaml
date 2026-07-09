@@ -22,6 +22,30 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: machineset-infra-mcp
+        spec:
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              recreateOption: IfRequired
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfigPool
+                metadata:
+                  labels:
+                    pools.operator.machineconfiguration.openshift.io/infra: ''
+                  name: infra
+                spec:
+                  machineConfigSelector:
+                    matchLabels:
+                      machineconfiguration.openshift.io/role: infra
+                  nodeSelector:
+                    matchLabels:
+                      node-role.kubernetes.io/infra: ''
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: machineset-infra-worker1
         spec:
           severity: high
