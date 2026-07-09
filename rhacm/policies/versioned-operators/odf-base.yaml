@@ -1,0 +1,74 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: operators-odf-base
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Installs the Red Hat OpenShift Data Foundation (ODF) base components
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-ns
+        spec:
+          remediationAction: enforce
+          severity: critical
+          pruneObjectBehavior: None
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: openshift-storage
+                  labels:
+                    openshift.io/cluster-monitoring: 'true'
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-og
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1
+                kind: OperatorGroup
+                metadata:
+                  name: odf-operator-group
+                  namespace: openshift-storage
+                spec:
+                  upgradeStrategy: Default
+                  targetNamespaces:
+                    - openshift-storage
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-operator-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: ocs-operator
+                  namespace: openshift-storage
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available

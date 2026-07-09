@@ -8,4 +8,5 @@ spec:
   description: "Set of policies that will deploy basic OpenShift Data Foundation components"
   policies:
     - operators-lso
-    - operators-odf
+    - operators-odf-base
+    - operators-odf-variable

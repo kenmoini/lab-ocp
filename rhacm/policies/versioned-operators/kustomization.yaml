@@ -8,6 +8,11 @@ resources:
 
   # Operator Installation Policies
   - mtv/
+
+  - odf-base.yaml
+  - odf-variable.yaml
+  - odf-4.21.yaml
+
   - gitops-base.yaml
   - gitops-1.18.yaml
 

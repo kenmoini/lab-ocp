@@ -15,3 +15,6 @@ subjects:
   - name: aws-infra-machinesets
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: operator-bundle-odf
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
