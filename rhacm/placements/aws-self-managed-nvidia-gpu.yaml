@@ -1,0 +1,23 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: aws-self-managed-nvidia-gpu
+  #namespace: open-cluster-management-policies
+spec:
+  clusterSets:
+    - aws-self-managed
+  tolerations:
+    - key: cluster.open-cluster-management.io/unreachable
+      operator: Exists
+    - key: cluster.open-cluster-management.io/unavailable
+      operator: Exists
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: nvidia-gpu
+              operator: In
+              values:
+                - "true"
+                - "enabled"
