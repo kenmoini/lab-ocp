@@ -37,6 +37,9 @@ spec:
                   namespace: openshift-logging 
                 spec:
                   size: 1x.extra-small
+                  template:
+                    ingester:
+                      replicas: 3
                   limits:
                     global:
                       retention:
