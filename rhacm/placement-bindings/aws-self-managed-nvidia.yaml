@@ -18,3 +18,6 @@ subjects:
   - name: operator-bundle-nvidia-gpu
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+  - name: instance-bundle-nvidia-gpu-nodes
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet

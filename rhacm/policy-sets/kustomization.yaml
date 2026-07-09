@@ -21,6 +21,7 @@ resources:
   - operator-bundle-virt.yaml
   - instance-bundle-virt.yaml
   - instance-bundle-nvidia.yaml
+  - instance-bundle-nvidia-gpu-nodes.yaml
   - instance-bundle-odf-lso-bmh.yaml
   - openshift-ai.yaml
 
