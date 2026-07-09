@@ -144,6 +144,34 @@ spec:
                       - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
                         operator: Exists
+                    blackbox-exporter:
+                      nodeAffinity:
+                        requiredDuringSchedulingIgnoredDuringExecution:
+                          nodeSelectorTerms:
+                          - matchExpressions:
+                            - key: cluster.ocs.openshift.io/openshift-storage
+                              operator: Exists
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                    api-server:
+                      nodeAffinity:
+                        requiredDuringSchedulingIgnoredDuringExecution:
+                          nodeSelectorTerms:
+                          - matchExpressions:
+                            - key: cluster.ocs.openshift.io/openshift-storage
+                              operator: Exists
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
                     rgw:
                       nodeAffinity:
                         requiredDuringSchedulingIgnoredDuringExecution:
