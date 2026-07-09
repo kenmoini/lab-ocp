@@ -12,3 +12,6 @@ subjects:
   - name: aws-odf-machinesets
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: aws-infra-machinesets
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
