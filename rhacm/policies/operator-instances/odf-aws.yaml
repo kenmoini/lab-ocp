@@ -70,9 +70,7 @@ spec:
                   labelSelector:
                     matchExpressions:
                       - key: cluster.ocs.openshift.io/openshift-storage
-                        operator: In
-                        values:
-                          - ""
+                        operator: Exists
                   placement:
                     all:
                       tolerations:
