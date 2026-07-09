@@ -25,6 +25,8 @@ spec:
                 kind: Namespace
                 metadata:
                   name: openshift-nfd
+                  annotations:
+                    scheduler.alpha.kubernetes.io/defaultTolerations: '[{"Key": "node-role.kubernetes.io/infra", "Operator":"Exists", "effect": "NoSchedule"}, {"Key": "node-role.kemo.dev/nvidia-gpu", "Operator":"Exists", "effect": "NoSchedule"}, {"Key": "nvidia.com/gpu", "Operator":"Exists", "effect": "NoSchedule"}]'
                   labels:
                     openshift.io/cluster-monitoring: "true"
     - objectDefinition:
