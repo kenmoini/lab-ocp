@@ -94,7 +94,7 @@ spec:
                             filters:
                               - name: tag:Name
                                 values:
-                                  - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-private-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
+                                  - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-subnet-private-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
                           tags:
                             - name: 'kubernetes.io/cluster/{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
                               value: owned
@@ -169,7 +169,7 @@ spec:
                             filters:
                               - name: tag:Name
                                 values:
-                                  - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-private-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
+                                  - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-subnet-private-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
                           tags:
                             - name: 'kubernetes.io/cluster/{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
                               value: owned
@@ -244,7 +244,7 @@ spec:
                             filters:
                               - name: tag:Name
                                 values:
-                                  - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-private-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
+                                  - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-subnet-private-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
                           tags:
                             - name: 'kubernetes.io/cluster/{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
                               value: owned
