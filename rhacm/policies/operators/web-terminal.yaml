@@ -77,9 +77,6 @@ spec:
           name: wto-controller-status
         spec:
           remediationAction: inform
-          namespaceSelector:
-            include:
-              - openshift-operators
           severity: high
           object-templates:
             - complianceType: musthave
@@ -88,6 +85,7 @@ spec:
                 kind: Deployment
                 metadata:
                   name: web-terminal-controller
+                  namespace: openshift-operators
                 status:
                   conditions:
                     - status: 'True'
