@@ -87,6 +87,7 @@ spec:
                                 - name: tag:Name
                                   values:
                                     - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-node'
+                            - filters:
                                 - name: tag:Name
                                   values:
                                     - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-lb'
@@ -162,6 +163,7 @@ spec:
                                 - name: tag:Name
                                   values:
                                     - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-node'
+                            - filters:
                                 - name: tag:Name
                                   values:
                                     - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-lb'
@@ -237,6 +239,7 @@ spec:
                                 - name: tag:Name
                                   values:
                                     - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-node'
+                            - filters:
                                 - name: tag:Name
                                   values:
                                     - '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-lb'
