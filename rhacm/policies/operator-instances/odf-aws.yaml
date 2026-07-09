@@ -91,6 +91,9 @@ spec:
                       - effect: NoSchedule
                         key: node-role.kemo.dev/nvidia-gpu
                         operator: Exists
+                      - effect: NoSchedule
+                        key: nvidia.com/gpu
+                        operator: Exists
                     csi-provisioner:
                       tolerations:
                       - effect: NoSchedule
@@ -101,6 +104,9 @@ spec:
                         operator: Exists
                       - effect: NoSchedule
                         key: node-role.kemo.dev/nvidia-gpu
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: nvidia.com/gpu
                         operator: Exists
                     mds:
                       nodeAffinity:
@@ -199,4 +205,110 @@ spec:
                         operator: Exists
                       - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
+                        operator: Exists
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: odf-aws-config
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-aws-driver-check
+        spec:
+          remediationAction: inform
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: csi.ceph.io/v1
+                kind: Driver
+                metadata:
+                  name: openshift-storage.rbd.csi.ceph.com
+                  namespace: openshift-storage
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: csi.ceph.io/v1
+                kind: Driver
+                metadata:
+                  name: openshift-storage.cephfs.csi.ceph.com
+                  namespace: openshift-storage
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: odf-aws-driver-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-aws-driver-mod
+        spec:
+          remediationAction: inform
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: csi.ceph.io/v1
+                kind: Driver
+                metadata:
+                  name: openshift-storage.rbd.csi.ceph.com
+                  namespace: openshift-storage
+                spec:
+                  controllerPlugin:
+                    tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: nvidia.com/gpu
+                        operator: Exists
+                  nodePlugin:
+                    tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: nvidia.com/gpu
+                        operator: Exists
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: csi.ceph.io/v1
+                kind: Driver
+                metadata:
+                  name: openshift-storage.cephfs.csi.ceph.com
+                  namespace: openshift-storage
+                spec:
+                  controllerPlugin:
+                    tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: nvidia.com/gpu
+                        operator: Exists
+                  nodePlugin:
+                    tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: nvidia.com/gpu
                         operator: Exists
