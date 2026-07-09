@@ -25,6 +25,7 @@ resources:
   - nvidia-gpu.yaml
   - openshift-logging.yaml
   #- odf.yaml
+  - odf-aws.yaml
   - pipelines.yaml
   - power-monitoring.yaml
   - quay.yaml

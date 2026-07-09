@@ -18,3 +18,6 @@ subjects:
   - name: operator-bundle-odf
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+  - name: instance-odf-aws
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

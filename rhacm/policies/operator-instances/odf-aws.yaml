@@ -1,0 +1,151 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-odf-aws
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the OpenShift Data Foundation Operator for use on top of AWS
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-aws-config
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: ocs.openshift.io/v1
+                kind: StorageCluster
+                metadata:
+                  annotations:
+                    uninstall.ocs.openshift.io/cleanup-policy: delete
+                    uninstall.ocs.openshift.io/mode: graceful
+                  name: ocs-storagecluster
+                  namespace: openshift-storage
+                spec:
+                  arbiter: {}
+                  encryption:
+                    kms: {}
+                  externalStorage: {}
+                  flexibleScaling: true
+                  managedResources:
+                    cephBlockPools:
+                      defaultStorageClass: true
+                    cephConfig: {}
+                    cephDashboard: {}
+                    cephFilesystems: {}
+                    cephObjectStoreUsers: {}
+                    cephObjectStores: {}
+                  mirroring: {}
+                  nodeTopologies: {}
+                  storageDeviceSets:
+                    - config: {}
+                      count: 1
+                      dataPVCTemplate:
+                        metadata: {}
+                        spec:
+                          accessModes:
+                            - ReadWriteOnce
+                          resources:
+                            requests:
+                              storage: 2Ti
+                          storageClassName: gp3-csi
+                          volumeMode: Block
+                        status: {}
+                      name: ocs-deviceset-thin
+                      placement: {}
+                      portable: true
+                      preparePlacement: {}
+                      replica: 3
+                      resources: {}
+                  monDataDirHostPath: /var/lib/rook
+                  resourceProfile: lean
+                  placement:
+                    all:
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                    csi-plugin:
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node-role.kemo.dev/nvidia-gpu
+                        operator: Exists
+                    csi-provisioner:
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node-role.kemo.dev/nvidia-gpu
+                        operator: Exists
+                    mds:
+                      nodeSelector:
+                        node.ocs.openshift.io/storage: ""
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                    metrics-exporter:
+                      nodeSelector:
+                        node.ocs.openshift.io/storage: ""
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                    noobaa-core:
+                      nodeSelector:
+                        node.ocs.openshift.io/storage: ""
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                    rgw:
+                      nodeSelector:
+                        node.ocs.openshift.io/storage: ""
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
+                    toolbox:
+                      nodeSelector:
+                        node.ocs.openshift.io/storage: ""
+                      tolerations:
+                      - effect: NoSchedule
+                        key: node-role.kubernetes.io/infra
+                        operator: Exists
+                      - effect: NoSchedule
+                        key: node.ocs.openshift.io/storage
+                        operator: Exists
