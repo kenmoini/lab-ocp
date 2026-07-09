@@ -36,6 +36,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -48,7 +49,6 @@ spec:
                   upgradeStrategy: Default
                   targetNamespaces:
                     - openshift-local-storage
-          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -57,6 +57,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:

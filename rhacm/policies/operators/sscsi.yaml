@@ -36,6 +36,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -46,7 +47,6 @@ spec:
                   namespace: openshift-cluster-csi-drivers
                 spec:
                   upgradeStrategy: Default
-          pruneObjectBehavior: None
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -55,6 +55,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -103,6 +104,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -112,7 +114,6 @@ spec:
                     name: secrets-store.csi.k8s.io
                 spec:
                   managementState: Managed
-          pruneObjectBehavior: None
       extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
