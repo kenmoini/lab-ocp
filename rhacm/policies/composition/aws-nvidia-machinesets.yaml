@@ -22,6 +22,57 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: machineset-nvidia-autoscalers
+        spec:
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: autoscaling.openshift.io/v1beta1
+                kind: MachineAutoscaler
+                metadata:
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
+                  namespace: openshift-machine-api
+                spec:
+                  minReplicas: 1
+                  maxReplicas: 3
+                  scaleTargetRef:
+                    apiVersion: machine.openshift.io/v1beta1
+                    kind: MachineSet
+                    name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: autoscaling.openshift.io/v1beta1
+                kind: MachineAutoscaler
+                metadata:
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
+                  namespace: openshift-machine-api
+                spec:
+                  minReplicas: 1
+                  maxReplicas: 3
+                  scaleTargetRef:
+                    apiVersion: machine.openshift.io/v1beta1
+                    kind: MachineSet
+                    name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: autoscaling.openshift.io/v1beta1
+                kind: MachineAutoscaler
+                metadata:
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
+                  namespace: openshift-machine-api
+                spec:
+                  minReplicas: 1
+                  maxReplicas: 3
+                  scaleTargetRef:
+                    apiVersion: machine.openshift.io/v1beta1
+                    kind: MachineSet
+                    name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: machineset-nvidia-worker1
         spec:
           severity: high
