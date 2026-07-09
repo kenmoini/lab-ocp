@@ -23,6 +23,7 @@ resources:
   - instance-bundle-nvidia.yaml
   - instance-bundle-odf-lso-bmh.yaml
   - openshift-ai.yaml
+  - openshift-ai-aws.yaml
 
 
 commonAnnotations:

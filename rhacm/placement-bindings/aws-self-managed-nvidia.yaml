@@ -21,3 +21,6 @@ subjects:
   - name: instance-bundle-nvidia-gpu
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+  - name: openshift-ai-aws
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
