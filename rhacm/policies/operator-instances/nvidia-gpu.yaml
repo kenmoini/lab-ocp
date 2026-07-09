@@ -51,6 +51,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
