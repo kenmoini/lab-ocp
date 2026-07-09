@@ -36,7 +36,7 @@ spec:
                   name: logging-loki 
                   namespace: openshift-logging 
                 spec:
-                  size: 1x.pico
+                  size: 1x.extra-small
                   limits:
                     global:
                       retention:
@@ -136,8 +136,8 @@ spec:
                       - infrastructure
                       outputRefs:
                       - local-lokistack
-                    - name: audit-logs
-                      inputRefs:
-                      - audit
-                      outputRefs:
-                      - local-lokistack
+                    # - name: audit-logs
+                    #   inputRefs:
+                    #   - audit
+                    #   outputRefs:
+                    #   - local-lokistack
