@@ -15,10 +15,10 @@ subjects:
   - name: aws-infra-machinesets
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: operator-odf-base
+  - name: operators-odf-base
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: operator-odf-variable
+  - name: operators-odf-variable
     apiGroup: policy.open-cluster-management.io
     kind: Policy
   - name: instance-odf-aws
