@@ -24,6 +24,8 @@ spec:
                 apiVersion: v1
                 kind: Namespace
                 metadata:
+                  annotations:
+                    scheduler.alpha.kubernetes.io/defaultTolerations: '[{"Key": "nvidia.com/gpu", "Operator":"Exists", "effect": "NoSchedule"}]'
                   name: nvidia-gpu-operator
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
