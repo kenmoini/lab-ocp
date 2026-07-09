@@ -111,7 +111,7 @@ spec:
                         # - key: node-role.kubernetes.io/infra
                         #   effect: NoSchedule
                         #   value: "true"
-                        - key: node-role.kemo.dev/nvidia-gpu
+                        - key: nvidia.com/gpu
                           effect: NoSchedule
                           value: "true"
                       providerSpec:
@@ -190,7 +190,7 @@ spec:
                         # - key: node-role.kubernetes.io/infra
                         #   effect: NoSchedule
                         #   value: "true"
-                        - key: node-role.kemo.dev/nvidia-gpu
+                        - key: nvidia.com/gpu
                           effect: NoSchedule
                           value: "true"
                       providerSpec:
@@ -270,7 +270,7 @@ spec:
                         # - key: node-role.kubernetes.io/infra
                         #   effect: NoSchedule
                         #   value: "true"
-                        - key: node-role.kemo.dev/nvidia-gpu
+                        - key: nvidia.com/gpu
                           effect: NoSchedule
                           value: "true"
                       providerSpec:
