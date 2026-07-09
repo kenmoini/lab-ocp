@@ -16,7 +16,7 @@ spec:
     - requiredClusterSelector:
         labelSelector:
           matchExpressions:
-            - key: nvidia-gpu
+            - key: policy.kemo.dev/nvidia-gpu
               operator: In
               values:
                 - "true"
