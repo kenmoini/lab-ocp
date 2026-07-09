@@ -27,6 +27,7 @@ spec:
           severity: high
           object-templates:
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -66,9 +67,12 @@ spec:
                           apiVersion: awsproviderconfig.openshift.io/v1beta1
                           blockDevices:
                             - ebs:
-                                iops: 0
-                                volumeSize: 300
-                                volumeType: gp3
+                                encrypted: true
+                                iops: 2000
+                                kmsKey:
+                                  arn: ''
+                                volumeSize: 500
+                                volumeType: io1
                           credentialsSecret:
                             name: aws-cloud-credentials
                           deviceIndex: 0
@@ -102,6 +106,7 @@ spec:
                           userDataSecret:
                             name: worker-user-data
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -142,9 +147,12 @@ spec:
                           apiVersion: awsproviderconfig.openshift.io/v1beta1
                           blockDevices:
                             - ebs:
-                                iops: 0
-                                volumeSize: 300
-                                volumeType: gp3
+                                encrypted: true
+                                iops: 2000
+                                kmsKey:
+                                  arn: ''
+                                volumeSize: 500
+                                volumeType: io1
                           credentialsSecret:
                             name: aws-cloud-credentials
                           deviceIndex: 0
@@ -178,6 +186,7 @@ spec:
                           userDataSecret:
                             name: worker-user-data
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -218,9 +227,12 @@ spec:
                           apiVersion: awsproviderconfig.openshift.io/v1beta1
                           blockDevices:
                             - ebs:
-                                iops: 0
-                                volumeSize: 300
-                                volumeType: gp3
+                                encrypted: true
+                                iops: 2000
+                                kmsKey:
+                                  arn: ''
+                                volumeSize: 500
+                                volumeType: io1
                           credentialsSecret:
                             name: aws-cloud-credentials
                           deviceIndex: 0

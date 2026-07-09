@@ -27,6 +27,7 @@ spec:
           severity: high
           object-templates:
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -102,6 +103,7 @@ spec:
                           userDataSecret:
                             name: worker-user-data
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -178,6 +180,7 @@ spec:
                           userDataSecret:
                             name: worker-user-data
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
