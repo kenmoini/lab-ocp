@@ -249,7 +249,7 @@ spec:
         metadata:
           name: odf-aws-driver-mod
         spec:
-          remediationAction: inform
+          remediationAction: enforce
           severity: critical
           object-templates:
             - complianceType: musthave
