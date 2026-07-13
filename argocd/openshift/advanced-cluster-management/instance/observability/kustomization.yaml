@@ -6,4 +6,5 @@ resources:
   - 01-acm-observability-bucket.yaml
   - 02-install-observability.yaml
   - 03-multiclusterobservability.yaml
+  - 04-netpols.yaml
   - namespace.yaml

@@ -1,0 +1,42 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-from-openshift-ingress
+  namespace: open-cluster-management-observability
+spec:
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          network.openshift.io/policy-group: ingress
+  podSelector: {}
+  policyTypes:
+  - Ingress
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-from-openshift-monitoring
+  namespace: open-cluster-management-observability
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              network.openshift.io/policy-group: monitoring
+  policyTypes:
+    - Ingress
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-from-same-namespace
+  namespace: open-cluster-management-observability
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+        - podSelector: {}
+  policyTypes:
+    - Ingress
