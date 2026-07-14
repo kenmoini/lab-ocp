@@ -38,6 +38,8 @@ spec:
                     - domainName: gcr.io
                     - domainName: nvcr.io
                     - domainName: docker.io
+                    - domainName: image-registry.openshift-image-registry.svc
+                    - domainName: default-route-openshift-image-registry.apps.tri-force.lab.kemo.network
                   registrySources:
                     allowedRegistries:
                       - disconn-harbor.d70.kemo.labs
@@ -51,3 +53,5 @@ spec:
                       - gcr.io
                       - nvcr.io
                       - docker.io
+                      - image-registry.openshift-image-registry.svc
+                      - default-route-openshift-image-registry.apps.tri-force.lab.kemo.network
