@@ -30,4 +30,4 @@ spec:
     - instance-serverless
     - instance-leaderworkerset
     - instance-jobset
-    - instance-rhoai3
+    # - instance-rhoai3
