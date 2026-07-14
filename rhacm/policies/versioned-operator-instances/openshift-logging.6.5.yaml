@@ -44,6 +44,13 @@ spec:
                     global:
                       retention:
                         days: 1
+                      # Needed when doing audit/infra logging
+                      ingestion:
+                        ingestionBurstSize: 50
+                        ingestionRate: 32
+                        maxLineSize: 2560000
+                        perStreamRateLimit: 10
+                        perStreamRateLimitBurst: 30
                   storage:
                     schemas:
                     - version: v13
