@@ -54,7 +54,7 @@ RUN update-ca-trust && \
     microdnf update -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms && \
     microdnf install -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms \
     gettext make which python3-pip wget curl-minimal zip unzip \
-    bash-completion ncurses pkgconf-pkg-config findutils \
+    bash-completion ncurses pkgconf-pkg-config findutils bind-utils ping \
     # zsh
     zsh \
     # terminal-based editors
@@ -192,6 +192,6 @@ LABEL summary="$SUMMARY" \
       com.redhat.component="$PRODNAME-$COMPNAME-container" \
       name="$PRODNAME/$COMPNAME" \
       license="MIT" \
-      maintainer="Ken Moini <dakwon@redhat.com>" \
+      maintainer="Ken Moini <ken@kenmoini.com>" \
       io.openshift.expose-services="" \
       usage=""
