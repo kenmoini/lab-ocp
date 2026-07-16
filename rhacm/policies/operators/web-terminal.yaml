@@ -105,9 +105,6 @@ spec:
           name: wto-template-check
         spec:
           remediationAction: inform
-          namespaceSelector:
-            include:
-              - openshift-operators
           severity: high
           object-templates:
             - complianceType: musthave
@@ -116,6 +113,7 @@ spec:
                 kind: DevWorkspaceTemplate
                 metadata:
                   name: web-terminal-tooling
+                  namespace: openshift-terminal
 
     # Modify the template to override the tooling container
     - extraDependencies:
@@ -131,9 +129,6 @@ spec:
           name: wto-tools-overrides
         spec:
           remediationAction: enforce
-          namespaceSelector:
-            include:
-              - openshift-operators
           severity: high
           object-templates:
             - complianceType: musthave
@@ -142,6 +137,7 @@ spec:
                 kind: DevWorkspaceTemplate
                 metadata:
                   name: web-terminal-tooling
+                  namespace: openshift-terminal
                   annotations:
                     web-terminal.redhat.com/unmanaged-state: 'true'
                 spec:
@@ -150,3 +146,65 @@ spec:
                       container:
                         image: 'quay.io/kenmoini/wto-tools:latest'
                         memoryLimit: 1024Mi
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: wto-tools-overrides
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: wto-per-user
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates-raw: |
+            {{/* ##  Loop through all the Users ## */}}
+            {{- $userList := (lookup "user.openshift.io/v1" "User" "" "").items }}
+            {{- range $user := $userList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: workspace.devfile.io/v1alpha2
+                kind: DevWorkspace
+                metadata:
+                  annotations:
+                    controller.devfile.io/devworkspace-source: web-terminal
+                    controller.devfile.io/restricted-access: 'true'
+                  name: terminal-{{ $user.metadata.name }}
+                  namespace: openshift-terminal
+                  finalizers:
+                    - rbac.controller.devfile.io
+                  labels:
+                    console.openshift.io/terminal: 'true'
+                    controller.devfile.io/creator: {{ $user.metadata.uid }}
+                spec:
+                  routingClass: web-terminal
+                  started: true
+                  template:
+                    attributes:
+                      controller.devfile.io/storage-type: per-workspace
+                    components:
+                      - name: web-terminal-tooling
+                        plugin:
+                          components:
+                            - container:
+                                volumeMounts:
+                                  - name: web-terminal-storage
+                                    path: /home/user/storage
+                              name: web-terminal-tooling
+                          kubernetes:
+                            name: web-terminal-tooling
+                            namespace: openshift-operators
+                      - name: web-terminal-exec
+                        plugin:
+                          kubernetes:
+                            name: web-terminal-exec
+                            namespace: openshift-operators
+                      - name: web-terminal-storage
+                        volume:
+                          size: 1000Mi
+            {{- end }}
