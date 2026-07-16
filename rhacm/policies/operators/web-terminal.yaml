@@ -113,7 +113,7 @@ spec:
                 kind: DevWorkspaceTemplate
                 metadata:
                   name: web-terminal-tooling
-                  namespace: openshift-terminal
+                  namespace: openshift-operators
 
     # Modify the template to override the tooling container
     - extraDependencies:
@@ -137,7 +137,7 @@ spec:
                 kind: DevWorkspaceTemplate
                 metadata:
                   name: web-terminal-tooling
-                  namespace: openshift-terminal
+                  namespace: openshift-operators
                   annotations:
                     web-terminal.redhat.com/unmanaged-state: 'true'
                 spec:
