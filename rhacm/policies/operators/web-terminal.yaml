@@ -180,10 +180,10 @@ spec:
                     - rbac.controller.devfile.io
                   labels:
                     console.openshift.io/terminal: 'true'
-                    controller.devfile.io/creator: {{ $user.metadata.uid }}
+                    controller.devfile.io/creator: {{ $user.metadata.uid |  }}
+                    controller.devfile.io/user-name: {{ $user.metadata.name }}
                 spec:
                   routingClass: web-terminal
-                  started: true
                   template:
                     attributes:
                       controller.devfile.io/storage-type: per-workspace
