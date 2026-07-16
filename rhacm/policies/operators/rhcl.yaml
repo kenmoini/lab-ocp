@@ -35,6 +35,14 @@ spec:
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
                   startingCSV: rhcl-operator.v1.3.4
+                  config:
+                    resources:
+                      requests:
+                        memory: "512Mi"
+                        cpu: "500m"
+                      limits:
+                        memory: "600Mi"
+                        cpu: "800m"
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1

@@ -149,3 +149,4 @@ spec:
                     - name: web-terminal-tooling
                       container:
                         image: 'quay.io/kenmoini/wto-tools:latest'
+                        memoryLimit: 1024Mi

@@ -70,5 +70,14 @@ spec:
                   channel: stable-4.19
                   installPlanApproval: Automatic
                   name: odf-operator
-                  source: redhat-operators 
+                  source: redhat-operators
                   sourceNamespace: openshift-marketplace
+                  # Useful for clusters with a lot of operators - the controller enumerates all the Subscriptions and well...yeah...OOMKills
+                  config:
+                    resources:
+                      requests:
+                        memory: "512Mi"
+                        cpu: "500m"
+                      limits:
+                        memory: "800Mi"
+                        cpu: "800m"
