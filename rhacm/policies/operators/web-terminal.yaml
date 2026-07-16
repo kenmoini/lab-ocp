@@ -175,13 +175,13 @@ spec:
                     controller.devfile.io/devworkspace-source: web-terminal
                     controller.devfile.io/restricted-access: 'true'
                     controller.devfile.io/user-name: {{ $user.metadata.name }}
-                  name: terminal-{{ $user.metadata.name }}
+                  name: terminal-{{ regexReplaceAll "[^a-zA-Z0-9]" $user.metadata.name "" }}
                   namespace: openshift-terminal
                   finalizers:
                     - rbac.controller.devfile.io
                   labels:
                     console.openshift.io/terminal: 'true'
-                    controller.devfile.io/creator: {{ regexReplaceAll `[^a-zA-Z0-9]` $user.metadata.uid "" }}
+                    controller.devfile.io/creator: {{ $user.metadata.uid }}
                 spec:
                   routingClass: web-terminal
                   template:
