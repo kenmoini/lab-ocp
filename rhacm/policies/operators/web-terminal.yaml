@@ -181,7 +181,7 @@ spec:
                     - rbac.controller.devfile.io
                   labels:
                     console.openshift.io/terminal: 'true'
-                    controller.devfile.io/creator: {{ $usr.metadata.uid }}
+                    controller.devfile.io/creator: {{ $usr.metadata.uid | quote }}
                 spec:
                   routingClass: web-terminal
                   template:
