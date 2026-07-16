@@ -167,6 +167,7 @@ spec:
             {{- $usrList := (lookup "user.openshift.io/v1" "User" "" "").items }}
             {{- range $usr := $usrList }}
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: workspace.devfile.io/v1alpha2
                 kind: DevWorkspace
