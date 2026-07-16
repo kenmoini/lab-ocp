@@ -164,8 +164,8 @@ spec:
           pruneObjectBehavior: DeleteIfCreated
           object-templates-raw: |
             {{/* ##  Loop through all the Users ## */}}
-            {{- $userList := (lookup "user.openshift.io/v1" "User" "" "").items }}
-            {{- range $user := $userList }}
+            {{- $usrList := (lookup "user.openshift.io/v1" "User" "" "").items }}
+            {{- range $usr := $usrList }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: workspace.devfile.io/v1alpha2
@@ -174,14 +174,14 @@ spec:
                   annotations:
                     controller.devfile.io/devworkspace-source: web-terminal
                     controller.devfile.io/restricted-access: 'true'
-                    controller.devfile.io/user-name: {{ $user.metadata.name }}
-                  name: terminal-{{ regexReplaceAll "[^a-zA-Z0-9]" $user.metadata.name "" }}
+                    controller.devfile.io/user-name: {{ $usr.metadata.name }}
+                  name: terminal-{{ regexReplaceAll "[^a-zA-Z0-9]" $usr.metadata.name "" }}
                   namespace: openshift-terminal
                   finalizers:
                     - rbac.controller.devfile.io
                   labels:
                     console.openshift.io/terminal: 'true'
-                    controller.devfile.io/creator: {{ $user.metadata.uid }}
+                    controller.devfile.io/creator: {{ $usr.metadata.uid }}
                 spec:
                   routingClass: web-terminal
                   template:
