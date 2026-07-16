@@ -173,7 +173,7 @@ spec:
                 metadata:
                   annotations:
                     controller.devfile.io/devworkspace-source: web-terminal
-                    controller.devfile.io/restricted-access: 'true'
+                    controller.devfile.io/restricted-access: 'false'
                     controller.devfile.io/user-name: {{ $usr.metadata.name }}
                   name: terminal-{{ regexReplaceAll "[^a-zA-Z0-9]" $usr.metadata.name "" }}
                   namespace: openshift-terminal
