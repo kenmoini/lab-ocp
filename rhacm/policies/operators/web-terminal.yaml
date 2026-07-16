@@ -159,7 +159,7 @@ spec:
         metadata:
           name: wto-per-user
         spec:
-          remediationAction: enforce
+          remediationAction: inform
           severity: high
           pruneObjectBehavior: DeleteIfCreated
           object-templates-raw: |
