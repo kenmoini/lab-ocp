@@ -147,6 +147,7 @@ spec:
                         image: 'quay.io/kenmoini/wto-tools:latest'
                         memoryLimit: 1024Mi
 
+    # Doesn't work due to protection mechanism in the DevWorkspace webhook controller.
     # - extraDependencies:
     #     - apiVersion: policy.open-cluster-management.io/v1
     #       kind: ConfigurationPolicy
@@ -209,49 +210,3 @@ spec:
     #                     volume:
     #                       size: 1000Mi
     #         {{- end }}
-
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
-          name: wto-tools-overrides
-          namespace: ""
-          compliance: Compliant
-      objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: wto-overrides
-        spec:
-          remediationAction: enforce
-          severity: high
-          pruneObjectBehavior: DeleteIfCreated
-          object-templates-raw: |
-            {{/* ##  Loop through all the DevWorkspaces ## */}}
-            {{- $dwsList := (lookup "workspace.devfile.io/v1alpha2" "DevWorkspace" "" "").items }}
-            {{- range $dws := $dwsList }}
-            {{- if (hasKey $dws.metadata.labels "console.openshift.io/terminal") }}
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: workspace.devfile.io/v1alpha2
-                kind: DevWorkspace
-                metadata:
-                  name: {{ $dws.metadata.name }}
-                  namespace: {{ $dws.metadata.namespace }}
-                spec:
-                  template:
-                    attributes:
-                      controller.devfile.io/storage-type: per-workspace
-                    components:
-                      - name: web-terminal-tooling
-                        plugin:
-                          components:
-                            - container:
-                                volumeMounts:
-                                  - name: web-terminal-storage
-                                    path: /home/user/storage
-                              name: web-terminal-tooling
-                      - name: web-terminal-storage
-                        volume:
-                          size: 1000Mi
-            {{- end }}
-            {{- end }}
