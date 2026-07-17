@@ -124,4 +124,9 @@ if command -v aws &>/dev/null; then
   append_ver "aws      |${AWS_VER}     |AWS CLI"
 fi
 
+if command -v gcloud &>/dev/null; then
+  GCLOUD_VER=$(gcloud --version | head -n1 | awk '{print $4}')
+  append_ver "gcloud   |${GCLOUD_VER}     |Google Cloud CLI"
+fi
+
 echo -e "$INSTALLED_TOOLS" | column -t -s '|'
