@@ -51,11 +51,6 @@ if command -v subctl &>/dev/null; then
   append_ver "subctl   |${SUBMARINER_VER#v}|Submariner CLI"
 fi
 
-if command -v virtctl &>/dev/null; then
-  KUBEVIRT_VER=$(virtctl version --client | grep -Eo 'GitVersion:"[^"]+"' | grep -Eo 'v?[0-9]+\.[0-9]+\.[0-9]+')
-  append_ver "virtctl  |${KUBEVIRT_VER#v}  |KubeVirt CLI"
-fi
-
 if command -v rhoas &>/dev/null; then
   RHOAS_VER=$(rhoas version | grep -Eo 'v?[0-9]+\.[0-9]+\.[0-9]+')
   append_ver "rhoas    |${RHOAS_VER#v}     |Red Hat OpenShift Application Services CLI"
@@ -109,6 +104,16 @@ fi
 if command -v k9s &>/dev/null; then
   K9S_VER=$(k9s version --short | grep Version | grep -Eo '?[0-9]+\.[0-9]+\.[0-9]+')
   append_ver "k9s    |${K9S_VER}     |K9s CLI"
+fi
+
+if command -v az &>/dev/null; then
+  AZ_VER=$(az version | jq -r '.azure-cli')
+  append_ver "az      |${AZ_VER}     |Azure CLI"
+fi
+
+if command -v virtctl &>/dev/null; then
+  KUBEVIRT_VER=$(virtctl version --client | grep -Eo 'GitVersion:"[^"]+"' | grep -Eo 'v?[0-9]+\.[0-9]+\.[0-9]+')
+  append_ver "virtctl  |${KUBEVIRT_VER#v}  |KubeVirt CLI"
 fi
 
 JQ_VER=$(jq --version)

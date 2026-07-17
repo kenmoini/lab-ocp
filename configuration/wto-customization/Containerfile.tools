@@ -2,7 +2,7 @@
 ARG FILE_ARCH
 ARG PATH_ARCH
 ##############################################################################
-FROM registry.access.redhat.com/ubi9/go-toolset:9.7 AS gobuilder
+FROM registry.access.redhat.com/ubi10/go-toolset:10.2 AS gobuilder
 
 WORKDIR /tmp/go
 
@@ -12,12 +12,12 @@ RUN git clone https://github.com/derailed/k9s.git && \
 
 ##############################################################################
 #FROM quay.io/devfile/base-developer-image:ubi9-latest
-FROM registry.access.redhat.com/ubi9/ubi-minimal:9.6-1760515502
+FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2
 
 ENV FILE_ARCH=${FILE_ARCH:-amd64} \
     PATH_ARCH=${PATH_ARCH:-x86_64}
 
-ENV OC_VERSION=4.19 \
+ENV OC_VERSION=4.21 \
     NETOBSERV_VERSION=1.9.0 \
     OCM_VERSION=1.0.8 \
     ROSA_VERSION=1.2.57 \
@@ -51,11 +51,9 @@ COPY --from=gobuilder /tmp/go/k9s/execs/k9s /usr/local/bin/k9s
 # Setup environment and install base packages
 RUN update-ca-trust && \
     mkdir -p /home/user $INITIAL_CONFIG $WRAPPER_BINARIES $DOWNLOADED_BINARIES && \
-    rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
-    microdnf install -y https://packages.microsoft.com/config/rhel/9.0/packages-microsoft-prod.rpm && \
-    microdnf update -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms && \
-    microdnf install -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms \
-    gettext make which python3-pip wget curl-minimal zip unzip \
+    microdnf update -y --disablerepo=* --enablerepo=ubi-10-appstream-rpms --enablerepo=ubi-10-baseos-rpms --enablerepo=ubi-10-codeready-builder-rpms && \
+    microdnf install -y --disablerepo=* --enablerepo=ubi-10-appstream-rpms --enablerepo=ubi-10-baseos-rpms --enablerepo=ubi-10-codeready-builder-rpms \
+    gettext make which python3-pip wget curl-minimal zip unzip openssl \
     bash-completion ncurses pkgconf-pkg-config findutils bind-utils iputils \
     # zsh
     zsh \
@@ -64,9 +62,16 @@ RUN update-ca-trust && \
     # developer tools
     tar git procps jq && \
     microdnf -y clean all && \
-    pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests && \
-    # Install the Cloud CLIs
-    azure-cli
+    pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests
+
+# Install the Cloud CLIs
+RUN wget https://packages.microsoft.com/keys/microsoft-2025.asc && \
+    rpm --import microsoft-2025.asc && \
+    rm -f microsoft-2025.asc && \
+    wget https://packages.microsoft.com/config/rhel/10/packages-microsoft-prod.rpm && \
+    rpm -Uvh packages-microsoft-prod.rpm && \
+    rm -f packages-microsoft-prod.rpm && \
+    microdnf install -y azure-cli
 
 # Install OC and Kubectl binaries
 RUN curl -L https://mirror.openshift.com/pub/openshift-v4/${PATH_ARCH}/clients/ocp/stable-${OC_VERSION}/openshift-client-linux.tar.gz | \
@@ -138,7 +143,7 @@ RUN curl -o- https://raw.githubusercontent.com/redhat-developer/app-services-cli
     mv -v ~/.local/bin/rhoas /usr/local/bin/
 
 # Install roxctl
-RUN arch="$(uname -m | sed "s/x86_64//")"; arch="${arch:+-$arch}" && \
+RUN arch="$(uname -m | sed 's/x86_64//' | sed 's/aarch64/arm64/')"; arch="${arch:+-$arch}" && \
     curl -L -f -o roxctl "https://mirror.openshift.com/pub/rhacs/assets/${ROXCTL_VERSION}/bin/Linux/roxctl${arch}" && \
     chmod a+x roxctl && \
     mv -v roxctl /usr/local/bin/roxctl
@@ -172,7 +177,7 @@ RUN /tmp/setup-completion.sh && \
     done && \
     /tmp/get-tooling-versions.sh > /tmp/installed_tools.txt && \
     chmod g+rw /tmp/installed_tools.txt && \
-    echo "Installed tools:" && \
+    echo -e "==================================\nInstalled tools:\n==================================\n" && \
     cat /tmp/installed_tools.txt
 
 USER 1001
