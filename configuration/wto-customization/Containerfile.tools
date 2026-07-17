@@ -51,6 +51,8 @@ COPY --from=gobuilder /tmp/go/k9s/execs/k9s /usr/local/bin/k9s
 # Setup environment and install base packages
 RUN update-ca-trust && \
     mkdir -p /home/user $INITIAL_CONFIG $WRAPPER_BINARIES $DOWNLOADED_BINARIES && \
+    rpm --import https://packages.microsoft.com/keys/microsoft.asc && \
+    microdnf install -y https://packages.microsoft.com/config/rhel/9.0/packages-microsoft-prod.rpm && \
     microdnf update -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms && \
     microdnf install -y --disablerepo=* --enablerepo=ubi-9-appstream-rpms --enablerepo=ubi-9-baseos-rpms \
     gettext make which python3-pip wget curl-minimal zip unzip \
@@ -62,7 +64,9 @@ RUN update-ca-trust && \
     # developer tools
     tar git procps jq && \
     microdnf -y clean all && \
-    pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests
+    pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests && \
+    # Install the Cloud CLIs
+    azure-cli
 
 # Install OC and Kubectl binaries
 RUN curl -L https://mirror.openshift.com/pub/openshift-v4/${PATH_ARCH}/clients/ocp/stable-${OC_VERSION}/openshift-client-linux.tar.gz | \
