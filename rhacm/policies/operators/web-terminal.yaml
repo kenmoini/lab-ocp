@@ -147,6 +147,69 @@ spec:
                         image: 'quay.io/kenmoini/wto-tools:latest'
                         memoryLimit: 1024Mi
 
+    # - extraDependencies:
+    #     - apiVersion: policy.open-cluster-management.io/v1
+    #       kind: ConfigurationPolicy
+    #       name: wto-tools-overrides
+    #       namespace: ""
+    #       compliance: Compliant
+    #   objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: wto-per-user
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: high
+    #       pruneObjectBehavior: DeleteIfCreated
+    #       object-templates-raw: |
+    #         {{/* ##  Loop through all the Users ## */}}
+    #         {{- $usrList := (lookup "user.openshift.io/v1" "User" "" "").items }}
+    #         {{- range $usr := $usrList }}
+    #         - complianceType: musthave
+    #           recreateOption: IfRequired
+    #           objectDefinition:
+    #             apiVersion: workspace.devfile.io/v1alpha2
+    #             kind: DevWorkspace
+    #             metadata:
+    #               annotations:
+    #                 controller.devfile.io/devworkspace-source: web-terminal
+    #                 controller.devfile.io/restricted-access: 'false'
+    #                 controller.devfile.io/user-name: {{ $usr.metadata.name }}
+    #               name: terminal-{{ regexReplaceAll "[^a-zA-Z0-9]" $usr.metadata.name "" }}
+    #               namespace: openshift-terminal
+    #               finalizers:
+    #                 - rbac.controller.devfile.io
+    #               labels:
+    #                 console.openshift.io/terminal: 'true'
+    #                 controller.devfile.io/creator: {{ $usr.metadata.uid | quote }}
+    #             spec:
+    #               routingClass: web-terminal
+    #               template:
+    #                 attributes:
+    #                   controller.devfile.io/storage-type: per-workspace
+    #                 components:
+    #                   - name: web-terminal-tooling
+    #                     plugin:
+    #                       components:
+    #                         - container:
+    #                             volumeMounts:
+    #                               - name: web-terminal-storage
+    #                                 path: /home/user/storage
+    #                           name: web-terminal-tooling
+    #                       kubernetes:
+    #                         name: web-terminal-tooling
+    #                         namespace: openshift-operators
+    #                   - name: web-terminal-exec
+    #                     plugin:
+    #                       kubernetes:
+    #                         name: web-terminal-exec
+    #                         namespace: openshift-operators
+    #                   - name: web-terminal-storage
+    #                     volume:
+    #                       size: 1000Mi
+    #         {{- end }}
+
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
@@ -157,34 +220,24 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: wto-per-user
+          name: wto-overrides
         spec:
           remediationAction: enforce
           severity: high
           pruneObjectBehavior: DeleteIfCreated
           object-templates-raw: |
-            {{/* ##  Loop through all the Users ## */}}
-            {{- $usrList := (lookup "user.openshift.io/v1" "User" "" "").items }}
-            {{- range $usr := $usrList }}
+            {{/* ##  Loop through all the DevWorkspaces ## */}}
+            {{- $dwsList := (lookup "workspace.devfile.io/v1alpha2" "DevWorkspace" "" "").items }}
+            {{- range $dws := $dwsList }}
+            {{- if (hasKey $dws.metadata.labels "console.openshift.io/terminal") }}
             - complianceType: musthave
-              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: workspace.devfile.io/v1alpha2
                 kind: DevWorkspace
                 metadata:
-                  annotations:
-                    controller.devfile.io/devworkspace-source: web-terminal
-                    controller.devfile.io/restricted-access: 'false'
-                    controller.devfile.io/user-name: {{ $usr.metadata.name }}
-                  name: terminal-{{ regexReplaceAll "[^a-zA-Z0-9]" $usr.metadata.name "" }}
-                  namespace: openshift-terminal
-                  finalizers:
-                    - rbac.controller.devfile.io
-                  labels:
-                    console.openshift.io/terminal: 'true'
-                    controller.devfile.io/creator: {{ $usr.metadata.uid | quote }}
+                  name: {{ $dws.metadata.name }}
+                  namespace: {{ $dws.metadata.namespace }}
                 spec:
-                  routingClass: web-terminal
                   template:
                     attributes:
                       controller.devfile.io/storage-type: per-workspace
@@ -197,15 +250,8 @@ spec:
                                   - name: web-terminal-storage
                                     path: /home/user/storage
                               name: web-terminal-tooling
-                          kubernetes:
-                            name: web-terminal-tooling
-                            namespace: openshift-operators
-                      - name: web-terminal-exec
-                        plugin:
-                          kubernetes:
-                            name: web-terminal-exec
-                            namespace: openshift-operators
                       - name: web-terminal-storage
                         volume:
                           size: 1000Mi
+            {{- end }}
             {{- end }}
