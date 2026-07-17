@@ -54,7 +54,7 @@ RUN update-ca-trust && \
     microdnf update -y --disablerepo=* --enablerepo=ubi-10-appstream-rpms --enablerepo=ubi-10-baseos-rpms --enablerepo=ubi-10-codeready-builder-rpms && \
     microdnf install -y --disablerepo=* --enablerepo=ubi-10-appstream-rpms --enablerepo=ubi-10-baseos-rpms --enablerepo=ubi-10-codeready-builder-rpms \
     gettext make which python3-pip wget curl-minimal zip unzip openssl \
-    bash-completion ncurses pkgconf-pkg-config findutils bind-utils iputils \
+    bash-completion ncurses pkgconf-pkg-config findutils bind-utils iputils libxcrypt-compat \
     # zsh
     zsh \
     # terminal-based editors
@@ -72,6 +72,14 @@ RUN wget https://packages.microsoft.com/keys/microsoft-2025.asc && \
     rpm -Uvh packages-microsoft-prod.rpm && \
     rm -f packages-microsoft-prod.rpm && \
     microdnf install -y azure-cli
+
+RUN mkdir -p /tmp/awscli && \
+    cd /tmp/awscli && \
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-${PATH_ARCH}.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    cd /tmp && \
+    rm -rf awscli/
 
 # Install OC and Kubectl binaries
 RUN curl -L https://mirror.openshift.com/pub/openshift-v4/${PATH_ARCH}/clients/ocp/stable-${OC_VERSION}/openshift-client-linux.tar.gz | \
@@ -175,7 +183,7 @@ RUN /tmp/setup-completion.sh && \
     echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
     chmod -R g+rwX ${f}; \
     done && \
-    echo "Changing user permissions on ${HOME}" && chown -R user:0 ${HOME} && \
+    echo "Changing user permissions on ${HOME}" && chown -R 1001:0 ${HOME} && \
     /tmp/get-tooling-versions.sh > /tmp/installed_tools.txt && \
     chmod g+rw /tmp/installed_tools.txt && \
     echo -e "==================================\nInstalled tools:\n==================================\n" && \
