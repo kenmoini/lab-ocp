@@ -32,7 +32,7 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-          #- linux/arm64
+          - linux/arm64
     steps:
       - name: Prepare
         run: |
@@ -73,8 +73,8 @@ jobs:
           context: ${{ env.BUILD_CONTEXT_PATH }}
           file: ${{ env.CONTAINERFILE_PATH }}
           labels: ${{ steps.meta.outputs.labels }}
+          provenance: false
           #push: true
-          #provenance: false
           #platforms: linux/amd64, linux/arm64
           #provenance: mode=max
           #sbom: true
