@@ -102,13 +102,8 @@ if command -v roxctl &>/dev/null; then
 fi
 
 if command -v k9s &>/dev/null; then
-  K9S_VER=$(k9s version --short | grep Version | grep -Eo '?[0-9]+\.[0-9]+\.[0-9]+')
+  K9S_VER=$(k9s version --short | grep Version | awk '{print $2}')
   append_ver "k9s    |${K9S_VER}     |K9s CLI"
-fi
-
-if command -v az &>/dev/null; then
-  AZ_VER=$(az version | jq -r '.azure-cli')
-  append_ver "az      |${AZ_VER}     |Azure CLI"
 fi
 
 if command -v virtctl &>/dev/null; then
@@ -116,8 +111,17 @@ if command -v virtctl &>/dev/null; then
   append_ver "virtctl  |${KUBEVIRT_VER#v}  |KubeVirt CLI"
 fi
 
-JQ_VER=$(jq --version)
-JQ_VER=${JQ_VER#jq-}
+JQ_VER=$(rpm -q jq | grep -Eo 'jq-[0-9]+\.[0-9]+\.[0-9]+' | grep -Eo 'v?[0-9]+\.[0-9]+\.[0-9]+')
 append_ver "jq       |${JQ_VER#v}        |jq"
+
+if command -v az &>/dev/null; then
+  AZ_VER=$(az version | jq -r '."azure-cli"')
+  append_ver "az      |${AZ_VER}     |Azure CLI"
+fi
+
+if command -v aws &>/dev/null; then
+  AWS_VER=$(aws --version 2>&1 | awk '{print $1}' | cut -d/ -f2)
+  append_ver "aws      |${AWS_VER}     |AWS CLI"
+fi
 
 echo -e "$INSTALLED_TOOLS" | column -t -s '|'
