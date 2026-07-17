@@ -1,6 +1,6 @@
 # https://github.com/redhat-developer/web-terminal-tooling/tree/main
-ARG FILE_ARCH
-ARG PATH_ARCH
+ARG FILE_ARCH=amd64
+ARG PATH_ARCH=x86_64
 ##############################################################################
 FROM registry.access.redhat.com/ubi10/go-toolset:10.2 AS gobuilder
 
@@ -175,6 +175,7 @@ RUN /tmp/setup-completion.sh && \
     echo "Changing permissions on ${f}" && chgrp -R 0 ${f} && \
     chmod -R g+rwX ${f}; \
     done && \
+    echo "Changing user permissions on ${HOME}" && chown -R user:0 ${HOME} && \
     /tmp/get-tooling-versions.sh > /tmp/installed_tools.txt && \
     chmod g+rw /tmp/installed_tools.txt && \
     echo -e "==================================\nInstalled tools:\n==================================\n" && \
