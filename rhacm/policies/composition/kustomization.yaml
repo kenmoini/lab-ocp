@@ -8,4 +8,6 @@ resources:
   - aws-infra-machinesets.yaml
   - aws-odf-machinesets.yaml
   - aws-nvidia-machinesets.yaml
+  - azure-infra-machinesets.yaml
   - move-subscriptions-to-infra.yaml
+  - infra-machineconfigpool.yaml
