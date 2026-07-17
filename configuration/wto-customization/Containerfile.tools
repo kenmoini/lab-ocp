@@ -60,6 +60,9 @@ RUN update-ca-trust && \
     pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests boto3
 
 # Install the Cloud CLIs
+COPY google-cloud.repo /etc/yum.repos.d/google-cloud-sdk.repo
+RUN microdnf install -y google-cloud-cli
+
 RUN wget https://packages.microsoft.com/keys/microsoft-2025.asc && \
     rpm --import microsoft-2025.asc && \
     rm -f microsoft-2025.asc && \
