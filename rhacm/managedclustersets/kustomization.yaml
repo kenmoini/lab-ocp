@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - aws-self-managed.yaml
+  - azure-self-managed.yaml
   - external-xks.yaml
   - external-managed-ocp.yaml
 
