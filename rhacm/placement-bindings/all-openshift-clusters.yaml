@@ -18,6 +18,10 @@ subjects:
   - name: global-openshift-config
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+  # Automatic Placement of Cluster Workloads on Infrastructure Nodes
+  - name: infra-selectors
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
 
   # Global OpenShift Operator Installation
   - name: global-openshift-operators

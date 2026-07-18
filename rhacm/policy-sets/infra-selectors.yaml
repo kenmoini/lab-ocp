@@ -1,0 +1,11 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: infra-selectors
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Infrastructure selectors/tolerations for cluster workload placement if Infrastructure nodes are present"
+  policies:
+    - infra-selector-imgreg
+    - infra-selector-subs

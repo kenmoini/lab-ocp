@@ -17,6 +17,5 @@ spec:
     - encrypt-etcd
     - image-vuln-scanning
     - enable-multinetworkpolicy
-    - subs-on-infra
     # - compliance-cis-scan
     # - compliance-e8-scan
