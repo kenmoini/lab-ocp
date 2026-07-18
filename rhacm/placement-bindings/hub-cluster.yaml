@@ -38,6 +38,9 @@ subjects:
   - name: operators-talm
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: operators-truenas-csi
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
 
   # Hub Instances
   - name: instance-acs-central

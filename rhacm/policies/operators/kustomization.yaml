@@ -44,6 +44,7 @@ resources:
   - sscsi.yaml
   - snr.yaml
   - talm.yaml
+  - truenas-csi.yaml
   - virtualization.yaml
   - web-terminal.yaml
   - serverless.yaml

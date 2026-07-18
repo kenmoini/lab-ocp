@@ -810,3 +810,68 @@ spec:
                               network.openshift.io/policy-group: monitoring
                   policyTypes:
                     - Ingress
+
+    # =================================================================================
+    # MaaS Controller OOMKill Protection
+    # =================================================================================
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-mlflow
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-mass-ctrl-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: maas-controller
+                  namespace: redhat-ods-applications
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-mass-ctrl-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-mass-ctrl-limits
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: maas-controller
+                  namespace: redhat-ods-applications
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - resources:
+                            limits:
+                              cpu: 500m
+                              memory: 1Gi
+                            requests:
+                              cpu: 10m
+                              memory: 64Mi
+                          name: manager
