@@ -12,6 +12,14 @@ spec:
       kind: MultiClusterHub
       jsonPointers:
         - /spec/overrides/components
+        - /spec/nodeSelector
+        - /spec/tolerations
+    - group: multicluster.openshift.io/v1
+      kind: MultiClusterEngine
+      jsonPointers:
+        - /spec/overrides/components
+        - /spec/nodeSelector
+        - /spec/tolerations
   destination:
     server: 'https://kubernetes.default.svc'
   sources:
