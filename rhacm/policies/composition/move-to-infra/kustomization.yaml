@@ -8,3 +8,4 @@ resources:
   - imageregistry.yaml
   - subscriptions.yaml
   - acm-hub.yaml
+  - acm-klusterlet.yaml

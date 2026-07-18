@@ -1,0 +1,41 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: infra-selector-klusterlet
+  annotations:
+    policy.open-cluster-management.io/description: Moves the Advanced Cluster Management Klusterlet objects to infrastructure nodes
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: infra-selector-klusterlet
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{/* ## Loop through the MultiClusterHubs ## */}}
+            {{- $klList := (lookup "operator.open-cluster-management.io/v1" "Klusterlet" "" "").items }}
+            {{- range $kl := $klList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.open-cluster-management.io/v1
+                kind: Klusterlet
+                metadata:
+                  name: {{ $kl.metadata.name }}
+                  namespace: {{ $kl.metadata.namespace }}
+                spec:
+                  nodePlacement:
+                    nodeSelector:
+                      node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+                    tolerations:
+                      - key: node-role.kubernetes.io/infra
+                        operator: Exists
+                        effect: NoSchedule
+                      - key: node-role.kubernetes.io/infra
+                        operator: Exists
+                        effect: NoExecute
+              {{- end }}

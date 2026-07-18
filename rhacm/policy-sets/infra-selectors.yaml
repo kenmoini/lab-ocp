@@ -9,3 +9,4 @@ spec:
   policies:
     - infra-selector-imgreg
     - infra-selector-subs
+    - infra-selector-klusterlet
