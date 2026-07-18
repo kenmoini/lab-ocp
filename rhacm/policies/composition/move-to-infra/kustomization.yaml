@@ -7,3 +7,4 @@ namespace: open-cluster-management-policies
 resources:
   - imageregistry.yaml
   - subscriptions.yaml
+  - acm-hub.yaml

@@ -17,15 +17,6 @@ spec:
           remediationAction: enforce
           severity: low
           object-templates-raw: |
-            {{/* ##  Loop through all the Nodes ## */}}
-            {{- $nodeList := (lookup "v1" "Node" "" "").items }}
-            {{- $infraNodesDetected := false }}
-            {{- range $node := $nodeList }}
-              {{- if (hasKey $node.metadata.labels "node-role.kubernetes.io/infra") }}
-                {{- $infraNodesDetected = true }}
-              {{- end -}}
-            {{- end }}
-            {{- if $infraNodesDetected }}
             {{/* ## Patch the ImageRegistry Config ## */}}
             - complianceType: musthave
               objectDefinition:
@@ -35,7 +26,7 @@ spec:
                   name: cluster
                 spec:
                   nodeSelector:
-                    node-role.kubernetes.io/infra: ""
+                    node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
                   tolerations:
                     - key: node-role.kubernetes.io/infra
                       operator: Exists
@@ -43,4 +34,3 @@ spec:
                     - key: node-role.kubernetes.io/infra
                       operator: Exists
                       effect: NoExecute
-            {{- end }}

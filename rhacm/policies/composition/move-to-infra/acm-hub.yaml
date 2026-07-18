@@ -1,0 +1,101 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: infra-selector-acm-hub
+  annotations:
+    policy.open-cluster-management.io/description: Moves the Advanced Cluster Management Hub objects to infrastructure nodes
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: infra-selector-mch
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{/* ## Loop through the MultiClusterHubs ## */}}
+            {{- $mchList := (lookup "operator.open-cluster-management.io/v1" "MultiClusterHub" "" "").items }}
+            {{- range $mch := $mchList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.open-cluster-management.io/v1
+                kind: MultiClusterHub
+                metadata:
+                  name: {{ $mch.metadata.name }}
+                  namespace: {{ $mch.metadata.namespace }}
+                spec:
+                  nodeSelector:
+                    node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+                  tolerations:
+                    - key: node-role.kubernetes.io/infra
+                      operator: Exists
+                      effect: NoSchedule
+                    - key: node-role.kubernetes.io/infra
+                      operator: Exists
+                      effect: NoExecute
+              {{- end }}
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: infra-selector-mce
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{/* ## Loop through the MultiClusterEngines ## */}}
+            {{- $mceList := (lookup "multicluster.openshift.io/v1" "MultiClusterEngine" "" "").items }}
+            {{- range $mce := $mceList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: multicluster.openshift.io/v1
+                kind: MultiClusterEngine
+                metadata:
+                  name: {{ $mce.metadata.name }}
+                  namespace: {{ $mce.metadata.namespace }}
+                spec:
+                  nodeSelector:
+                    node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+                  tolerations:
+                    - key: node-role.kubernetes.io/infra
+                      operator: Exists
+                      effect: NoSchedule
+                    - key: node-role.kubernetes.io/infra
+                      operator: Exists
+                      effect: NoExecute
+              {{- end }}
+
+    # - objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: infra-selector-acm-aodc
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: low
+    #       object-templates-raw: |
+    #         {{/* ## Loop through the AddOnDeploymentConfigs ## */}}
+    #         {{- $aodcList := (lookup "addon.open-cluster-management.io/v1alpha1" "AddOnDeploymentConfig" "" "").items }}
+    #         {{- range $aodc := $aodcList }}
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: addon.open-cluster-management.io/v1alpha1
+    #             kind: AddOnDeploymentConfig
+    #             metadata:
+    #               name: {{ $aodc.metadata.name }}
+    #               namespace: {{ $aodc.metadata.namespace }}
+    #             spec:
+    #               nodeSelector:
+    #                 node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+    #               tolerations:
+    #                 - key: node-role.kubernetes.io/infra
+    #                   operator: Exists
+    #                   effect: NoSchedule
+    #                 - key: node-role.kubernetes.io/infra
+    #                   operator: Exists
+    #                   effect: NoExecute
+    #           {{- end }}

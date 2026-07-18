@@ -58,3 +58,8 @@ subjects:
   - name: instance-rhbk-26.4
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+
+  # Configuration
+  - name: infra-selector-acm-hub
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
