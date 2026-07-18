@@ -12,6 +12,12 @@ subjects:
   - name: infra-mcp
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: storage-mcp
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
   - name: azure-infra-machinesets
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: azure-storage-machinesets
     apiGroup: policy.open-cluster-management.io
     kind: Policy

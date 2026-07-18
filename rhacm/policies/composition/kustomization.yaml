@@ -11,4 +11,6 @@ resources:
   - aws-odf-machinesets.yaml
   - aws-nvidia-machinesets.yaml
   - azure-infra-machinesets.yaml
+  - azure-odf-machinesets.yaml
   - infra-machineconfigpool.yaml
+  - storage-machineconfigpool.yaml

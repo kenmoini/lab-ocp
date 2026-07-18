@@ -1,0 +1,35 @@
+---
+apiVersion: policy.networking.k8s.io/v1alpha1
+kind: AdminNetworkPolicy
+metadata:
+  name: "cluster-services"
+spec:
+  priority: 5
+  subject:
+    namespaces: {}
+  ingress:
+    - name: "allow-ingress-from-monitoring"
+      action: "Allow"
+      from:
+      - namespaces:
+          matchLabels:
+            network.openshift.io/policy-group: monitoring
+    - name: "allow-ingress-from-ingress"
+      action: "Allow"
+      from:
+      - namespaces:
+          matchLabels:
+            network.openshift.io/policy-group: ingress
+  egress:
+    - name: "allow-egress-to-dns"
+      action: "Allow"
+      to:
+      - namespaces:
+          matchLabels:
+            kubernetes.io/metadata.name: openshift-dns
+    - name: "allow-egress-to-api"
+      action: "Allow"
+      to:
+      - namespaces:
+          matchLabels:
+            kubernetes.io/metadata.name: openshift-kube-apiserver-operator
