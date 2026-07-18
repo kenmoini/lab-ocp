@@ -199,7 +199,7 @@ RUN curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 | b
     && /usr/local/bin/helm repo update
 
 # Add upstream config
-ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.bashrc", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.zshrc", "/tmp/initial_config"]
+ADD --chmod=755 ["https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.bashrc", "https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/initial_config/.zshrc", "/tmp/initial_config/"]
 # ADD --chmod=755 https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/get-tooling-versions.sh /tmp/get-tooling-versions.sh
 COPY --chmod=755 scripts/* /tmp/
 ADD --chmod=755 https://raw.githubusercontent.com/redhat-developer/web-terminal-tooling/refs/heads/main/etc/entrypoint.sh /entrypoint.sh
