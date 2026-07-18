@@ -20,6 +20,7 @@ spec:
             {{/* ##  Loop through all the Subscriptions ## */}}
             {{- $subscriptionList := (lookup "operators.coreos.com/v1alpha1" "Subscription" "" "").items }}
             {{- range $subscription := $subscriptionList }}
+            {{- if ne $subscription.metadata.name "servicemeshoperator3" }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: operators.coreos.com/v1alpha1
@@ -38,4 +39,5 @@ spec:
                       - key: node-role.kubernetes.io/infra
                         operator: Exists
                         effect: NoExecute
+            {{- end }}
             {{- end }}
