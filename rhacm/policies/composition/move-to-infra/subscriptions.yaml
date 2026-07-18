@@ -20,6 +20,7 @@ spec:
             {{/* ##  Loop through all the Subscriptions ## */}}
             {{- $subscriptionList := (lookup "operators.coreos.com/v1alpha1" "Subscription" "" "").items }}
             {{- range $subscription := $subscriptionList }}
+            {{/* ## Bug Workaround: The Cluster Ingress Operator currently manages the SMesh3 Sub ## */}}
             {{- if ne $subscription.metadata.name "servicemeshoperator3" }}
             - complianceType: musthave
               objectDefinition:
