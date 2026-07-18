@@ -5,23 +5,24 @@ namespace: open-cluster-management-policies
 
 resources:
   - best-practices.yaml
-  - health-checks.yaml
+  - developer-services.yaml
   - enhanced-metrics.yaml
   - global-openshift-config.yaml
   - global-hcp-virt-openshift-config.yaml
   - global-openshift-operators.yaml
   - global-hcp-virt-openshift-operators.yaml
+  - health-checks.yaml
   - hub-health-checks.yaml
-  - developer-services.yaml
+  - infra-selectors.yaml
+  - instance-bundle-virt.yaml
+  - instance-bundle-nvidia.yaml
+  - instance-bundle-odf-lso-bmh.yaml
   - onprem-openshift-config.yaml
   - onprem-openshift-operators.yaml
   - onprem-openshift-compliance.yaml
   - operator-bundle-nvidia.yaml
   - operator-bundle-odf.yaml
   - operator-bundle-virt.yaml
-  - instance-bundle-virt.yaml
-  - instance-bundle-nvidia.yaml
-  - instance-bundle-odf-lso-bmh.yaml
   - openshift-ai.yaml
   - openshift-ai-aws.yaml
 
