@@ -26,6 +26,10 @@ spec:
       targetRevision: main
       path: rhacm/policy-sets/
       kustomize: {}
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: rhacm/addondeploymentconfigs/
+      kustomize: {}
 
   project: default
   syncPolicy:
