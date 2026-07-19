@@ -85,7 +85,7 @@ spec:
                             settings:
                               securityType: ''
                           publicIP: false
-                          acceleratedNetworking: true
+                          acceleratedNetworking: false
                           image:
                             offer: aro4
                             publisher: azureopenshift
@@ -157,7 +157,7 @@ spec:
                             settings:
                               securityType: ''
                           publicIP: false
-                          acceleratedNetworking: true
+                          acceleratedNetworking: false
                           image:
                             offer: aro4
                             publisher: azureopenshift
@@ -229,7 +229,7 @@ spec:
                             settings:
                               securityType: ''
                           publicIP: false
-                          acceleratedNetworking: true
+                          acceleratedNetworking: false
                           image:
                             offer: aro4
                             publisher: azureopenshift
