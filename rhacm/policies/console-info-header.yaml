@@ -7,6 +7,14 @@ metadata:
 data:
   hub-cluster-bkg: '#4f002f'
   hub-cluster-text: '#FFF'
+  blue-bkg: '#06c'
+  blue-text: '#FFF'
+  red-bkg: '#c9190b'
+  red-text: '#FFF'
+  aws-ai-bkg: '#40199a'
+  aws-ai-text: '#FFF'
+  vocp-bkg: '#ec7a08'
+  vocp-text: '#FFF'
 
 ---
 apiVersion: policy.open-cluster-management.io/v1
