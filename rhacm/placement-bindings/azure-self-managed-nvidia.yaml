@@ -1,0 +1,27 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: azure-self-managed-nvidia
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: azure-self-managed-nvidia
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: gpu-mcp
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: azure-machineset-gpu-h100
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+  - name: operator-bundle-nvidia-gpu
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+  - name: instance-bundle-nvidia-gpu
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+  # - name: openshift-ai-aws
+  #   apiGroup: policy.open-cluster-management.io
+  #   kind: PolicySet

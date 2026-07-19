@@ -9,6 +9,7 @@ resources:
   - aws-self-managed.yaml
   - aws-self-managed-nvidia.yaml
   - azure-self-managed.yaml
+  - azure-self-managed-nvidia.yaml
   - onprem-openshift-clusters.yaml
   - openshift-4.19-clusters.yaml
   - openshift-4.20-clusters.yaml

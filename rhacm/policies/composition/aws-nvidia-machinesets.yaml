@@ -106,6 +106,7 @@ spec:
                       metadata:
                         labels:
                           node-role.kubernetes.io/worker: ""
+                          node-role.kubernetes.io/gpu: ""
                           node-role.kemo.dev/nvidia-gpu: ""
                       taints:
                         # - key: node-role.kubernetes.io/infra
@@ -185,6 +186,7 @@ spec:
                       metadata:
                         labels:
                           node-role.kubernetes.io/worker: ""
+                          node-role.kubernetes.io/gpu: ""
                           node-role.kemo.dev/nvidia-gpu: ""
                       taints:
                         # - key: node-role.kubernetes.io/infra
@@ -265,6 +267,7 @@ spec:
                       metadata:
                         labels:
                           node-role.kubernetes.io/worker: ""
+                          node-role.kubernetes.io/gpu: ""
                           node-role.kemo.dev/nvidia-gpu: ""
                       taints:
                         # - key: node-role.kubernetes.io/infra

@@ -1,0 +1,40 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: gpu-mcp
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gpu-mcp
+        spec:
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              recreateOption: IfRequired
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfigPool
+                metadata:
+                  labels:
+                    pools.operator.machineconfiguration.openshift.io/gpu: ''
+                  name: gpu
+                spec:
+                  machineConfigSelector:
+                    matchExpressions:
+                    - key: machineconfiguration.openshift.io/role
+                      operator: In
+                      values:
+                        - worker
+                        - gpu
+                  nodeSelector:
+                    matchLabels:
+                      node-role.kubernetes.io/gpu: ''
