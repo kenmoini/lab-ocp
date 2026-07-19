@@ -4,7 +4,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: azure-machineset-gpu-h100
+  name: azure-machineset-gpu-t4
   annotations:
     policy.open-cluster-management.io/standards: NIST SP 800-53
     policy.open-cluster-management.io/categories: CM Configuration Management
@@ -17,7 +17,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: azure-machineset-gpu-h100
+          name: azure-machineset-gpu-t4
         spec:
           severity: high
           pruneObjectBehavior: DeleteIfCreated
@@ -32,21 +32,21 @@ spec:
                     machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "openshift-machine-api" "cluster").status.infrastructureName }}'
                     machine.openshift.io/cluster-api-machine-role: gpu
                     machine.openshift.io/cluster-api-machine-type: gpu
-                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-h100-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}1'
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-t4-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}1'
                   namespace: openshift-machine-api
                 spec:
                   replicas: 1
                   selector:
                     matchLabels:
                       machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-h100-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}1'
+                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-t4-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}1'
                   template:
                     metadata:
                       labels:
                         machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
                         machine.openshift.io/cluster-api-machine-role: gpu
                         machine.openshift.io/cluster-api-machine-type: gpu
-                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-h100-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}1'
+                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-t4-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}1'
                     spec:
                       metadata:
                         labels:
@@ -61,7 +61,7 @@ spec:
                           kind: AzureMachineProviderSpec
                           location: '{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}'
                           zone: '1'
-                          vmSize: Standard_NCC40ads_H100_v5
+                          vmSize: Standard_NC8as_T4_v3
                           osDisk:
                             diskSettings: {}
                             diskSizeGB: 2048
@@ -104,21 +104,21 @@ spec:
                     machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "openshift-machine-api" "cluster").status.infrastructureName }}'
                     machine.openshift.io/cluster-api-machine-role: gpu
                     machine.openshift.io/cluster-api-machine-type: gpu
-                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-h100-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}2'
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-t4-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}2'
                   namespace: openshift-machine-api
                 spec:
                   replicas: 1
                   selector:
                     matchLabels:
                       machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-h100-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}2'
+                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-t4-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}2'
                   template:
                     metadata:
                       labels:
                         machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
                         machine.openshift.io/cluster-api-machine-role: gpu
                         machine.openshift.io/cluster-api-machine-type: gpu
-                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-h100-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}2'
+                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-t4-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}2'
                     spec:
                       metadata:
                         labels:
@@ -133,7 +133,7 @@ spec:
                           kind: AzureMachineProviderSpec
                           location: '{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}'
                           zone: '2'
-                          vmSize: Standard_NCC40ads_H100_v5
+                          vmSize: Standard_NC8as_T4_v3
                           osDisk:
                             diskSettings: {}
                             diskSizeGB: 2048
@@ -176,21 +176,21 @@ spec:
                     machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "openshift-machine-api" "cluster").status.infrastructureName }}'
                     machine.openshift.io/cluster-api-machine-role: gpu
                     machine.openshift.io/cluster-api-machine-type: gpu
-                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-h100-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}3'
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-t4-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}3'
                   namespace: openshift-machine-api
                 spec:
                   replicas: 1
                   selector:
                     matchLabels:
                       machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-h100-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}3'
+                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-t4-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}3'
                   template:
                     metadata:
                       labels:
                         machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
                         machine.openshift.io/cluster-api-machine-role: gpu
                         machine.openshift.io/cluster-api-machine-type: gpu
-                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-h100-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}3'
+                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-t4-{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}3'
                     spec:
                       metadata:
                         labels:
@@ -205,7 +205,7 @@ spec:
                           kind: AzureMachineProviderSpec
                           location: '{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}'
                           zone: '3'
-                          vmSize: Standard_NCC40ads_H100_v5
+                          vmSize: Standard_NC8as_T4_v3
                           osDisk:
                             diskSettings: {}
                             diskSizeGB: 2048

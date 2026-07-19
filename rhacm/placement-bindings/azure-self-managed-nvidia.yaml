@@ -12,7 +12,7 @@ subjects:
   - name: gpu-mcp
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: azure-machineset-gpu-h100
+  - name: azure-machineset-gpu-t4
     apiGroup: policy.open-cluster-management.io
     kind: Policy
 
