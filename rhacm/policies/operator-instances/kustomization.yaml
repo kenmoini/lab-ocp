@@ -26,6 +26,7 @@ resources:
   - openshift-logging.yaml
   #- odf.yaml
   - odf-aws.yaml
+  - odf-azure.yaml
   - pipelines.yaml
   - power-monitoring.yaml
   - quay.yaml

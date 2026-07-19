@@ -2,9 +2,9 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: instance-odf-aws
+  name: instance-odf-azure
   annotations:
-    policy.open-cluster-management.io/description: Deploys the OpenShift Data Foundation Operator for use on top of AWS
+    policy.open-cluster-management.io/description: Deploys the OpenShift Data Foundation Operator for use on top of Azure
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
     policy.open-cluster-management.io/standards: Kemo Labs 2026
     policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
@@ -26,7 +26,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: odf-aws-config
+          name: odf-azure-config
         spec:
           remediationAction: enforce
           severity: critical
@@ -67,7 +67,7 @@ spec:
                           resources:
                             requests:
                               storage: 3Ti
-                          storageClassName: gp3-csi
+                          storageClassName: managed-csi
                           volumeMode: Block
                         status: {}
                       name: ocs-deviceset-thin
@@ -86,9 +86,6 @@ spec:
                     all:
                       tolerations:
                       - effect: NoSchedule
-                        key: node-role.kubernetes.io/infra
-                        operator: Exists
-                      - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
                         operator: Exists
                     csi-plugin:
@@ -98,9 +95,6 @@ spec:
                         operator: Exists
                       - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
-                        operator: Exists
-                      - effect: NoSchedule
-                        key: node-role.kemo.dev/nvidia-gpu
                         operator: Exists
                       - effect: NoSchedule
                         key: nvidia.com/gpu
@@ -114,9 +108,6 @@ spec:
                         key: node.ocs.openshift.io/storage
                         operator: Exists
                       - effect: NoSchedule
-                        key: node-role.kemo.dev/nvidia-gpu
-                        operator: Exists
-                      - effect: NoSchedule
                         key: nvidia.com/gpu
                         operator: Exists
                     mds:
@@ -127,9 +118,6 @@ spec:
                             - key: cluster.ocs.openshift.io/openshift-storage
                               operator: Exists
                       tolerations:
-                      - effect: NoSchedule
-                        key: node-role.kubernetes.io/infra
-                        operator: Exists
                       - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
                         operator: Exists
@@ -142,9 +130,6 @@ spec:
                               operator: Exists
                       tolerations:
                       - effect: NoSchedule
-                        key: node-role.kubernetes.io/infra
-                        operator: Exists
-                      - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
                         operator: Exists
                     noobaa-core:
@@ -155,9 +140,6 @@ spec:
                             - key: cluster.ocs.openshift.io/openshift-storage
                               operator: Exists
                       tolerations:
-                      - effect: NoSchedule
-                        key: node-role.kubernetes.io/infra
-                        operator: Exists
                       - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
                         operator: Exists
@@ -170,9 +152,6 @@ spec:
                               operator: Exists
                       tolerations:
                       - effect: NoSchedule
-                        key: node-role.kubernetes.io/infra
-                        operator: Exists
-                      - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
                         operator: Exists
                     api-server:
@@ -183,9 +162,6 @@ spec:
                             - key: cluster.ocs.openshift.io/openshift-storage
                               operator: Exists
                       tolerations:
-                      - effect: NoSchedule
-                        key: node-role.kubernetes.io/infra
-                        operator: Exists
                       - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
                         operator: Exists
@@ -198,9 +174,6 @@ spec:
                               operator: Exists
                       tolerations:
                       - effect: NoSchedule
-                        key: node-role.kubernetes.io/infra
-                        operator: Exists
-                      - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
                         operator: Exists
                     toolbox:
@@ -211,9 +184,6 @@ spec:
                             - key: cluster.ocs.openshift.io/openshift-storage
                               operator: Exists
                       tolerations:
-                      - effect: NoSchedule
-                        key: node-role.kubernetes.io/infra
-                        operator: Exists
                       - effect: NoSchedule
                         key: node.ocs.openshift.io/storage
                         operator: Exists

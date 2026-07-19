@@ -21,3 +21,13 @@ subjects:
   - name: azure-storage-machinesets
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+
+  - name: operators-odf-base
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: operators-odf-variable
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: instance-odf-azure
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

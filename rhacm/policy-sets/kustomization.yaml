@@ -25,6 +25,7 @@ resources:
   - operator-bundle-virt.yaml
   - openshift-ai.yaml
   - openshift-ai-aws.yaml
+  - openshift-ai-azure.yaml
 
 
 commonAnnotations:
