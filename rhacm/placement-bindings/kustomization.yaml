@@ -6,10 +6,17 @@ namespace: open-cluster-management-policies
 resources:
   - all-openshift-clusters.yaml
   - all-hcp-virt-clusters.yaml
+  
   - aws-self-managed.yaml
+  - aws-self-managed-infra.yaml
   - aws-self-managed-nvidia.yaml
+  - aws-self-managed-odf.yaml
+
   - azure-self-managed.yaml
+  - azure-self-managed-infra.yaml
   - azure-self-managed-nvidia.yaml
+  - azure-self-managed-odf.yaml
+
   - onprem-openshift-clusters.yaml
   - openshift-4.19-clusters.yaml
   - openshift-4.20-clusters.yaml

@@ -2,22 +2,16 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: aws-self-managed
+  name: aws-self-managed-infra
   #namespace: open-cluster-management-policies
 placementRef:
-  name: aws-self-managed
+  name: enable-infra-nodes
   apiGroup: cluster.open-cluster-management.io
   kind: Placement
 subjects:
-  - name: aws-odf-machinesets
+  - name: infra-mcp
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: operators-odf-base
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: operators-odf-variable
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-  - name: instance-odf-aws
+  - name: aws-infra-machinesets
     apiGroup: policy.open-cluster-management.io
     kind: Policy

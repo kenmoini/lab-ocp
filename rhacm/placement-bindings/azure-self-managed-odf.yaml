@@ -2,10 +2,10 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: azure-self-managed
+  name: azure-self-managed-odf
   #namespace: open-cluster-management-policies
 placementRef:
-  name: azure-self-managed
+  name: enable-odf-nodes
   apiGroup: cluster.open-cluster-management.io
   kind: Placement
 subjects:

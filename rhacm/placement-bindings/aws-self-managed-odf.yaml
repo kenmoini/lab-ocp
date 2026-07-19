@@ -2,26 +2,22 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: azure-self-managed
+  name: aws-self-managed-odf
   #namespace: open-cluster-management-policies
 placementRef:
-  name: azure-self-managed
+  name: enable-odf-nodes
   apiGroup: cluster.open-cluster-management.io
   kind: Placement
 subjects:
-  - name: storage-mcp
+  - name: aws-odf-machinesets
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: azure-storage-machinesets
-    apiGroup: policy.open-cluster-management.io
-    kind: Policy
-
   - name: operators-odf-base
     apiGroup: policy.open-cluster-management.io
     kind: Policy
   - name: operators-odf-variable
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: instance-odf-azure
+  - name: instance-odf-aws
     apiGroup: policy.open-cluster-management.io
     kind: Policy
