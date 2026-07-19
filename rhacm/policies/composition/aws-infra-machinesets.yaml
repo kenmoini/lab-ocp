@@ -28,6 +28,7 @@ spec:
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
                 kind: MachineConfigPool
@@ -46,6 +47,7 @@ spec:
                   nodeSelector:
                     matchLabels:
                       node-role.kubernetes.io/infra: ''
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -56,6 +58,7 @@ spec:
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -133,8 +136,10 @@ spec:
                               value: owned
                           userDataSecret:
                             name: worker-user-data
+
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet

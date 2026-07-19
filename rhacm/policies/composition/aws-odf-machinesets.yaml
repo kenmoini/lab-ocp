@@ -28,6 +28,7 @@ spec:
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -107,6 +108,7 @@ spec:
                             name: worker-user-data
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -187,6 +189,7 @@ spec:
                             name: worker-user-data
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet

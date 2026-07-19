@@ -23,6 +23,7 @@ spec:
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -96,6 +97,7 @@ spec:
 
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -169,6 +171,7 @@ spec:
 
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet

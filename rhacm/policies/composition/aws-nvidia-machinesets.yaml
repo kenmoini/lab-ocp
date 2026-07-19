@@ -27,11 +27,13 @@ spec:
           severity: high
           object-templates:
             - complianceType: musthave
+              recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: autoscaling.openshift.io/v1beta1
                 kind: MachineAutoscaler
                 metadata:
-                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
                   namespace: openshift-machine-api
                 spec:
                   minReplicas: 1
@@ -39,13 +41,15 @@ spec:
                   scaleTargetRef:
                     apiVersion: machine.openshift.io/v1beta1
                     kind: MachineSet
-                    name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
+                    name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
             - complianceType: musthave
+              recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: autoscaling.openshift.io/v1beta1
                 kind: MachineAutoscaler
                 metadata:
-                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
                   namespace: openshift-machine-api
                 spec:
                   minReplicas: 1
@@ -53,13 +57,15 @@ spec:
                   scaleTargetRef:
                     apiVersion: machine.openshift.io/v1beta1
                     kind: MachineSet
-                    name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
+                    name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
             - complianceType: musthave
+              recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: autoscaling.openshift.io/v1beta1
                 kind: MachineAutoscaler
                 metadata:
-                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
                   namespace: openshift-machine-api
                 spec:
                   minReplicas: 1
@@ -67,7 +73,7 @@ spec:
                   scaleTargetRef:
                     apiVersion: machine.openshift.io/v1beta1
                     kind: MachineSet
-                    name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
+                    name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
@@ -79,35 +85,34 @@ spec:
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
                 metadata:
                   labels:
                     machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                    machine.openshift.io/cluster-api-machine-role: worker-nvidia
-                    machine.openshift.io/cluster-api-machine-type: worker-nvidia
-                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
+                    machine.openshift.io/cluster-api-machine-role: gpu
+                    machine.openshift.io/cluster-api-machine-type: gpu
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
                   namespace: openshift-machine-api
                 spec:
                   replicas: 1
                   selector:
                     matchLabels:
                       machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
+                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
                   template:
                     metadata:
                       labels:
                         machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                        machine.openshift.io/cluster-api-machine-role: worker-nvidia
-                        machine.openshift.io/cluster-api-machine-type: worker-nvidia
-                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
+                        machine.openshift.io/cluster-api-machine-role: gpu
+                        machine.openshift.io/cluster-api-machine-type: gpu
+                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
                     spec:
                       metadata:
                         labels:
-                          node-role.kubernetes.io/worker: ""
                           node-role.kubernetes.io/gpu: ""
-                          node-role.kemo.dev/nvidia-gpu: ""
                       taints:
                         # - key: node-role.kubernetes.io/infra
                         #   effect: NoSchedule
@@ -159,39 +164,35 @@ spec:
                             name: worker-user-data
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
                 metadata:
                   labels:
                     machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                    machine.openshift.io/cluster-api-machine-role: worker-nvidia
-                    machine.openshift.io/cluster-api-machine-type: worker-nvidia
-                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
+                    machine.openshift.io/cluster-api-machine-role: gpu
+                    machine.openshift.io/cluster-api-machine-type: gpu
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
                   namespace: openshift-machine-api
                 spec:
                   replicas: 1
                   selector:
                     matchLabels:
                       machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
+                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
                   template:
                     metadata:
                       labels:
                         machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                        machine.openshift.io/cluster-api-machine-role: worker-nvidia
-                        machine.openshift.io/cluster-api-machine-type: worker-nvidia
-                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
+                        machine.openshift.io/cluster-api-machine-role: gpu
+                        machine.openshift.io/cluster-api-machine-type: gpu
+                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
                     spec:
                       metadata:
                         labels:
-                          node-role.kubernetes.io/worker: ""
                           node-role.kubernetes.io/gpu: ""
-                          node-role.kemo.dev/nvidia-gpu: ""
                       taints:
-                        # - key: node-role.kubernetes.io/infra
-                        #   effect: NoSchedule
-                        #   value: "true"
                         - key: nvidia.com/gpu
                           effect: NoSchedule
                           value: "true"
@@ -238,41 +239,38 @@ spec:
                               value: owned
                           userDataSecret:
                             name: worker-user-data
+
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
                 metadata:
                   labels:
                     machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                    machine.openshift.io/cluster-api-machine-role: worker-nvidia
-                    machine.openshift.io/cluster-api-machine-type: worker-nvidia
-                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
+                    machine.openshift.io/cluster-api-machine-role: gpu
+                    machine.openshift.io/cluster-api-machine-type: gpu
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
                   namespace: openshift-machine-api
                 spec:
                   replicas: 1
                   selector:
                     matchLabels:
                       machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
+                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
                   template:
                     metadata:
                       labels:
                         machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                        machine.openshift.io/cluster-api-machine-role: worker-nvidia
-                        machine.openshift.io/cluster-api-machine-type: worker-nvidia
-                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-worker-nvidia-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
+                        machine.openshift.io/cluster-api-machine-role: gpu
+                        machine.openshift.io/cluster-api-machine-type: gpu
+                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}c'
                     spec:
                       metadata:
                         labels:
-                          node-role.kubernetes.io/worker: ""
                           node-role.kubernetes.io/gpu: ""
-                          node-role.kemo.dev/nvidia-gpu: ""
                       taints:
-                        # - key: node-role.kubernetes.io/infra
-                        #   effect: NoSchedule
-                        #   value: "true"
                         - key: nvidia.com/gpu
                           effect: NoSchedule
                           value: "true"

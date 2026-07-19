@@ -20,6 +20,7 @@ spec:
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
+              pruneBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
                 kind: MachineConfigPool
