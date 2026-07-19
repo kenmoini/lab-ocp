@@ -61,7 +61,7 @@ spec:
                           kind: AzureMachineProviderSpec
                           location: '{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}'
                           zone: '1'
-                          vmSize: Standard_D16s_v6
+                          vmSize: Standard_NCC40ads_H100_v5
                           osDisk:
                             diskSettings: {}
                             diskSizeGB: 2048
@@ -133,7 +133,7 @@ spec:
                           kind: AzureMachineProviderSpec
                           location: '{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}'
                           zone: '2'
-                          vmSize: Standard_D16s_v6
+                          vmSize: Standard_NCC40ads_H100_v5
                           osDisk:
                             diskSettings: {}
                             diskSizeGB: 2048
@@ -205,7 +205,7 @@ spec:
                           kind: AzureMachineProviderSpec
                           location: '{{ (lookup "machine.openshift.io/v1" "ControlPlaneMachineSet" "" "cluster").spec.template.machines_v1beta1_machine_openshift_io.spec.providerSpec.value.location }}'
                           zone: '3'
-                          vmSize: Standard_D16s_v6
+                          vmSize: Standard_NCC40ads_H100_v5
                           osDisk:
                             diskSettings: {}
                             diskSizeGB: 2048
