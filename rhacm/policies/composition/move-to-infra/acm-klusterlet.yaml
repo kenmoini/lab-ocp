@@ -17,7 +17,7 @@ spec:
           remediationAction: enforce
           severity: low
           object-templates-raw: |
-            {{/* ## Loop through the MultiClusterHubs ## */}}
+            {{/* ## Loop through the Klusterlets ## */}}
             {{- $klList := (lookup "operator.open-cluster-management.io/v1" "Klusterlet" "" "").items }}
             {{- range $kl := $klList }}
             - complianceType: musthave
