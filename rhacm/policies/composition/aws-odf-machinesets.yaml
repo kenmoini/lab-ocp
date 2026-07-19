@@ -25,10 +25,10 @@ spec:
           name: machineset-odf-worker1
         spec:
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -108,7 +108,6 @@ spec:
                             name: worker-user-data
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -189,7 +188,6 @@ spec:
                             name: worker-user-data
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet

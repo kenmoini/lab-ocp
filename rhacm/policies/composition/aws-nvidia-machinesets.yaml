@@ -25,10 +25,10 @@ spec:
           name: machineset-nvidia-autoscalers
         spec:
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: autoscaling.openshift.io/v1beta1
                 kind: MachineAutoscaler
@@ -44,7 +44,6 @@ spec:
                     name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}a'
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: autoscaling.openshift.io/v1beta1
                 kind: MachineAutoscaler
@@ -60,7 +59,6 @@ spec:
                     name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-gpu-{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.platformStatus.aws.region }}b'
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: autoscaling.openshift.io/v1beta1
                 kind: MachineAutoscaler
@@ -82,10 +80,10 @@ spec:
           name: machineset-nvidia-worker1
         spec:
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -164,7 +162,6 @@ spec:
                             name: worker-user-data
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -242,7 +239,6 @@ spec:
 
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet

@@ -20,10 +20,10 @@ spec:
           name: azure-machineset-infra
         spec:
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -97,7 +97,6 @@ spec:
 
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -171,7 +170,6 @@ spec:
 
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet

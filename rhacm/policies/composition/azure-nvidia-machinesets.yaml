@@ -20,10 +20,10 @@ spec:
           name: azure-machineset-gpu-h100
         spec:
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -96,7 +96,6 @@ spec:
 
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -169,7 +168,6 @@ spec:
 
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet

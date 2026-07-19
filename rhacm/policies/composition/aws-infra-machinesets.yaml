@@ -25,10 +25,10 @@ spec:
           name: machineset-infra-mcp
         spec:
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machineconfiguration.openshift.io/v1
                 kind: MachineConfigPool
@@ -55,10 +55,10 @@ spec:
           name: machineset-infra-worker1
         spec:
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -139,7 +139,6 @@ spec:
 
             - complianceType: musthave
               recreateOption: IfRequired
-              pruneObjectBehavior: DeleteIfCreated
               objectDefinition:
                 apiVersion: machine.openshift.io/v1beta1
                 kind: MachineSet
@@ -218,6 +217,7 @@ spec:
                               value: owned
                           userDataSecret:
                             name: worker-user-data
+
             - complianceType: musthave
               recreateOption: IfRequired
               objectDefinition:
