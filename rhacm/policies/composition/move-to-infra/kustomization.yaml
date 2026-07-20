@@ -9,3 +9,4 @@ resources:
   - subscriptions.yaml
   - acm-hub.yaml
   - acm-klusterlet.yaml
+  - hub-acm-mca.yaml
