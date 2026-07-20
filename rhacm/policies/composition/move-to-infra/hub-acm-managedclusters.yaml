@@ -1,0 +1,40 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: hub-infra-selector-mc
+  annotations:
+    policy.open-cluster-management.io/description: Moves the Advanced Cluster Management Klusterlets on ManagedClusters to infrastructure nodes
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: hub-infra-selector-mc
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{/* ## Loop through the ManagedClusters - check for the infra label, then apply the modification for infra nodes ## */}}
+            {{- $managedClusterList := (lookup "cluster.open-cluster-management.io/v1" "ManagedCluster" "" "").items }}
+            {{- range $managedCluster := $managedClusterList }}
+              {{- $infraEnabledCluster := "false" }}
+              {{- range $key, $value := $managedCluster.metadata.labels }}
+                {{- if and (eq $key "policy.kemo.dev/infra-nodes") (or (eq $value "true") (eq $value "enabled")) }}
+                  {{- $infraEnabledCluster = "true" }}
+                {{- end }}
+              {{- end }}
+              {{- if eq $infraEnabledCluster "true" }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cluster.open-cluster-management.io/v
+                kind: ManagedCluster
+                metadata:
+                  name: {{ $managedCluster.metadata.name }}
+                  annotations:
+                    open-cluster-management/nodeSelector: '{"node-role.kubernetes.io/infra":""}'
+                    open-cluster-management/tolerations: '[{"key":"node-role.kubernetes.io/infra","operator":"Exists","effect":"NoSchedule"},{"key":"node-role.kubernetes.io/infra","operator":"Exists","effect":"NoExecute"}]'
+              {{- end }}
+            {{- end }}

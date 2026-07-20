@@ -66,3 +66,6 @@ subjects:
   - name: hub-infra-selector-mca
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: hub-infra-selector-mc
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

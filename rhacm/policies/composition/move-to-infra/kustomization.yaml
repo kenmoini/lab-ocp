@@ -10,3 +10,4 @@ resources:
   - acm-hub.yaml
   - acm-klusterlet.yaml
   - hub-acm-mca.yaml
+  - hub-acm-managedclusters.yaml
