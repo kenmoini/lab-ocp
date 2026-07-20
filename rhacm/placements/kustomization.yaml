@@ -11,7 +11,11 @@ resources:
   - azure-self-managed.yaml
   - azure-self-managed-nvidia.yaml
   - enable-infra-nodes.yaml
+  - enable-infra-nodes-aws.yaml
+  - enable-infra-nodes-azure.yaml
   - enable-odf-nodes.yaml
+  - enable-odf-nodes-aws.yaml
+  - enable-odf-nodes-azure.yaml
   - onprem-openshift-clusters.yaml
   - openshift-4.19-clusters.yaml
   - openshift-4.20-clusters.yaml
