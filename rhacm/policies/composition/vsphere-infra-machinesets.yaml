@@ -72,7 +72,7 @@ spec:
                             folder: '/{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.datacenter }}/vm/{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
                             resourcePool: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.resourcePool }}'
                             server: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).server }}'
-                          template: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.template }}'
+                          template: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-rhcos-{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).name }}'
                           userDataSecret:
                             name: worker-user-data
                           credentialsSecret:
