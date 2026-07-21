@@ -1,0 +1,23 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: vsphere
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: vsphere
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  # - name: aws-odf-machinesets
+  #   apiGroup: policy.open-cluster-management.io
+  #   kind: Policy
+  # - name: operators-odf-base
+  #   apiGroup: policy.open-cluster-management.io
+  #   kind: Policy
+  # - name: operators-odf-variable
+  #   apiGroup: policy.open-cluster-management.io
+  #   kind: Policy
+  # - name: instance-odf-aws
+  #   apiGroup: policy.open-cluster-management.io
+  #   kind: Policy

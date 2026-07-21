@@ -18,3 +18,5 @@ resources:
   - machineconfigpool-infra.yaml
   - machineconfigpool-storage.yaml
   - machineconfigpool-gpu.yaml
+
+  - vsphere-infra-machinesets.yaml

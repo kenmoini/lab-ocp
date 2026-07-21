@@ -6,7 +6,7 @@ namespace: open-cluster-management-policies
 resources:
   - all-openshift-clusters.yaml
   - all-hcp-virt-clusters.yaml
-  
+
   - aws-self-managed.yaml
   - aws-self-managed-nvidia.yaml
 
@@ -16,6 +16,7 @@ resources:
   - enable-infra-nodes.yaml
   - enable-infra-nodes-aws.yaml
   - enable-infra-nodes-azure.yaml
+  - enable-infra-nodes-vsphere.yaml
 
   - enable-odf-nodes.yaml
   - enable-odf-nodes-aws.yaml

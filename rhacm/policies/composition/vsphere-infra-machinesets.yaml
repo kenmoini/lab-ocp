@@ -1,0 +1,79 @@
+# This policy creates an OpenShift MachineSet that is intended for Infrastructure Nodes on vSphere.
+#
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: vsphere-infra-machinesets
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: vsphere-machineset-infra
+        spec:
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              recreateOption: IfRequired
+              objectDefinition:
+                apiVersion: machine.openshift.io/v1beta1
+                kind: MachineSet
+                metadata:
+                  labels:
+                    machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "openshift-machine-api" "cluster").status.infrastructureName }}'
+                    machine.openshift.io/cluster-api-machine-role: infra
+                    machine.openshift.io/cluster-api-machine-type: infra
+                  name: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-infra'
+                  namespace: openshift-machine-api
+                spec:
+                  replicas: 3
+                  selector:
+                    matchLabels:
+                      machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
+                      machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-infra'
+                  template:
+                    metadata:
+                      labels:
+                        machine.openshift.io/cluster-api-cluster: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
+                        machine.openshift.io/cluster-api-machine-role: infra
+                        machine.openshift.io/cluster-api-machine-type: infra
+                        machine.openshift.io/cluster-api-machineset: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}-infra'
+                    spec:
+                      metadata:
+                        labels:
+                          node-role.kubernetes.io/infra: ""
+                      taints:
+                        - key: node-role.kubernetes.io/infra
+                          effect: NoSchedule
+                          value: "true"
+                      providerSpec:
+                        value:
+                          apiVersion: machine.openshift.io/v1beta1
+                          kind: VSphereMachineProviderSpec
+                          metadata: {}
+                          numCPUs: 4
+                          numCoresPerSocket: 2
+                          diskGiB: 120
+                          memoryMiB: 16384
+                          network:
+                            devices:
+                              - networkName: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.networks[0] }}'
+                          workspace:
+                            datacenter: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.datacenter }}'
+                            datastore: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.datastore }}'
+                            folder: '/{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.datacenter }}/vm/{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
+                            resourcePool: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.resourcePool }}'
+                            server: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].server }}'
+                          template: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.template }}'
+                          userDataSecret:
+                            name: worker-user-data
+                          credentialsSecret:
+                            name: vsphere-cloud-credentials
