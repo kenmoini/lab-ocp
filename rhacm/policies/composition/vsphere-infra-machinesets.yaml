@@ -65,14 +65,14 @@ spec:
                           memoryMiB: 16384
                           network:
                             devices:
-                              - networkName: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.networks[0] }}'
+                              - networkName: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.networks[0] }}'
                           workspace:
-                            datacenter: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.datacenter }}'
-                            datastore: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.datastore }}'
-                            folder: '/{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.datacenter }}/vm/{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
-                            resourcePool: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.resourcePool }}'
-                            server: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].server }}'
-                          template: '{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains[0].topology.template }}'
+                            datacenter: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.datacenter }}'
+                            datastore: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.datastore }}'
+                            folder: '/{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.datacenter }}/vm/{{ (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.infrastructureName }}'
+                            resourcePool: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.resourcePool }}'
+                            server: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).server }}'
+                          template: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.template }}'
                           userDataSecret:
                             name: worker-user-data
                           credentialsSecret:
