@@ -12,6 +12,8 @@ resources:
 
   - azure-self-managed.yaml
   - azure-self-managed-nvidia.yaml
+  
+  - vsphere.yaml
 
   - enable-infra-nodes.yaml
   - enable-infra-nodes-aws.yaml
