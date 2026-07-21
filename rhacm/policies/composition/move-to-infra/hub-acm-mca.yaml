@@ -26,9 +26,8 @@ spec:
                   {{- $infraEnabledCluster = "true" }}
                 {{- end }}
               {{- end }}
-              {{- if eq $infraEnabledCluster "true" }}
-                {{- $addonList := (lookup "addon.open-cluster-management.io/v1beta1" "ManagedClusterAddOn" $managedCluster.metadata.name "").items }}
-                {{- range $addon := $addonList }}
+              {{- $addonList := (lookup "addon.open-cluster-management.io/v1beta1" "ManagedClusterAddOn" $managedCluster.metadata.name "").items }}
+              {{- range $addon := $addonList }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: addon.open-cluster-management.io/v1beta1
@@ -39,9 +38,12 @@ spec:
                 spec:
                   configs:
                     - group: addon.open-cluster-management.io
+              {{- if eq $infraEnabledCluster "true" }}
                       name: infra-nodes
+              {{- else }}
+                      name: worker-nodes
+              {{- end }}
                       namespace: open-cluster-management
                       resource: addondeploymentconfigs
-                {{- end }}
               {{- end }}
             {{- end }}

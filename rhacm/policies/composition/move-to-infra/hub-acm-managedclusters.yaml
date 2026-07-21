@@ -26,7 +26,6 @@ spec:
                   {{- $infraEnabledCluster = "true" }}
                 {{- end }}
               {{- end }}
-              {{- if eq $infraEnabledCluster "true" }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: cluster.open-cluster-management.io/v1
@@ -34,7 +33,10 @@ spec:
                 metadata:
                   name: {{ $managedCluster.metadata.name }}
                   annotations:
+              {{- if eq $infraEnabledCluster "true" }}
                     open-cluster-management/nodeSelector: '{"node-role.kubernetes.io/infra":""}'
-                    open-cluster-management/tolerations: '[{"key":"node-role.kubernetes.io/infra","operator":"Exists","effect":"NoSchedule"},{"key":"node-role.kubernetes.io/infra","operator":"Exists","effect":"NoExecute"}]'
+              {{- else }}
+                    open-cluster-management/nodeSelector: '{"node-role.kubernetes.io/worker":""}'
               {{- end }}
+                    open-cluster-management/tolerations: '[{"key":"node-role.kubernetes.io/infra","operator":"Exists","effect":"NoSchedule"},{"key":"node-role.kubernetes.io/infra","operator":"Exists","effect":"NoExecute"}]'
             {{- end }}

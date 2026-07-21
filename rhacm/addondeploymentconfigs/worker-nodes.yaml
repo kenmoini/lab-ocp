@@ -1,0 +1,17 @@
+apiVersion: addon.open-cluster-management.io/v1alpha1
+kind: AddOnDeploymentConfig
+metadata:
+  name: worker-nodes
+  # namespace: open-cluster-management
+spec:
+  agentInstallNamespace: open-cluster-management-agent-addon
+  nodePlacement:
+    nodeSelector:
+      node-role.kubernetes.io/worker: ''
+    tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/infra
+        operator: Exists
+      - effect: NoExecute
+        key: node-role.kubernetes.io/infra
+        operator: Exists
