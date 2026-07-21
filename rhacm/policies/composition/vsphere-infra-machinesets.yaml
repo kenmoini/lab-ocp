@@ -65,7 +65,7 @@ spec:
                           memoryMiB: 16384
                           network:
                             devices:
-                              - networkName: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.networks[0] }}'
+                              - networkName: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.networks | first }}'
                           workspace:
                             datacenter: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.datacenter }}'
                             datastore: '{{ ((lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").spec.platformSpec.vsphere.failureDomains | first).topology.datastore }}'
