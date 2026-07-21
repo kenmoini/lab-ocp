@@ -12,6 +12,11 @@ resources:
   - azure-self-managed-openshift-monitoring.yaml
   - azure-self-managed-stackrox.yaml
   - azure-self-managed-open-cluster-management-observability.yaml
+
+  - vsphere-o-c-m-p.yaml
+  - vsphere-kube-system.yaml
+  - vsphere-openshift-monitoring.yaml
+  - vsphere-open-cluster-management-observability.yaml
   
   - default-o-c-m-p.yaml
   - global-o-c-m-p.yaml
