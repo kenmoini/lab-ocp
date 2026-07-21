@@ -32,7 +32,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: machineconfigpool-status
+          name: infra-nodes-status
         spec:
           remediationAction: inform
           severity: high
