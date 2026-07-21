@@ -11,7 +11,7 @@ placementRef:
 subjects:
   - name: instance-acs-central
     apiGroup: policy.open-cluster-management.io
-    kind: PolicySet
+    kind: Policy
   - name: instance-acs-secured-cluster
     apiGroup: policy.open-cluster-management.io
-    kind: PolicySet
+    kind: Policy
