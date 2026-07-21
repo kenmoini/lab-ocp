@@ -30,8 +30,10 @@ spec:
                 spec:
                   tags:
                   {{- range $tag := $imageStream.spec.tags }}
+                  {{- if eq $tag.from.kind "DockerImage" }}
                   - name: '{{ $tag.name }}'
                     importPolicy:
                       scheduled: true
+                  {{- end -}}
                   {{- end -}}
             {{- end }}
