@@ -1,0 +1,62 @@
+# Shamelessly stolen from https://github.com/bry-tam/acm-policy-samples/blob/main/policies/cluster-health/machineconfigpool.yml
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: check-infra-nodes
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Checks to see if the Infra Nodes are ready
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: check-infra-mcp
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfigPool
+                metadata:
+                  name: infra
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: machineconfigpool-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates-raw: |
+            {{/* ##  Check if we have infra nodes available.  If so then make sure they're ready - if not, raise an alert with a fake infra node ## */}}
+            {{- if hasNodesWithExactRoles "infra" }}
+            {{- $nodeList := (lookup "v1" "Node" "" "").items }}
+            {{- range $node := $nodeList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Node
+                metadata:
+                  name: {{ $node.metadata.name }}
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Ready
+            {{- end }}
+            {{- else }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Node
+                metadata:
+                  name: missing-infra-nodes
+            {{- end }}

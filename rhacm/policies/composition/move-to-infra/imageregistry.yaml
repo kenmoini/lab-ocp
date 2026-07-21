@@ -8,7 +8,13 @@ metadata:
 spec:
   disabled: false
   policy-templates:
-    - objectDefinition:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: check-infra-nodes
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
