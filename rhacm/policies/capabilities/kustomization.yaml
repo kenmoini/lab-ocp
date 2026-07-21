@@ -11,6 +11,7 @@ resources:
   - openshift-console/disable.yaml
   - olm-pprof/enable.yaml
   - olm-pprof/disable.yaml
+  - vsphere-storage/
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

@@ -1,0 +1,34 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: disable-vsphere-csi
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CC - Capability Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: disable-vsphere-csi
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1
+                kind: ClusterCSIDriver
+                metadata:
+                  name: csi.vsphere.vmware.com
+                spec:
+                  managementState: Removed
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: check-vsphere-csi
+          namespace: ""
+          compliance: Compliant
