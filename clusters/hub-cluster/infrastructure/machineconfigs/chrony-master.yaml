@@ -12,7 +12,7 @@ spec:
     storage:
       files:
       - contents:
-          source: data:text/plain;charset=utf-8;base64,cG9vbCBudHAua2Vtby5sYWJzIGlidXJzdApkcmlmdGZpbGUgL3Zhci9saWIvY2hyb255L2RyaWZ0CnBlZXIgMTkyLjE2OC42MC40MApwZWVyIDE5Mi4xNjguNjAuNDYKcGVlciAxOTIuMTY4LjYwLjQ5Cm1ha2VzdGVwIDEuMCAzCnJ0Y3N5bmMKbG9nZGlyIC92YXIvbG9nL2Nocm9ueQo=
+          source: data:text/plain;charset=utf-8;base64,c2VydmVyIG50cC5rZW1vLmxhYnMgaWJ1cnN0CmRyaWZ0ZmlsZSAvdmFyL2xpYi9jaHJvbnkvZHJpZnQKcGVlciAxOTIuMTY4LjYwLjQwCnBlZXIgMTkyLjE2OC42MC40NgpwZWVyIDE5Mi4xNjguNjAuNDkKbWFrZXN0ZXAgMS4wIC0xCnJ0Y3N5bmMKbG9nZGlyIC92YXIvbG9nL2Nocm9ueQo=
         mode: 420
         overwrite: true
         path: /etc/chrony.conf
