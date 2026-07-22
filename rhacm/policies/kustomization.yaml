@@ -21,25 +21,26 @@ resources:
   - compliance/
   - composition/
   # - best-practices/
-  - console-info-header.yaml
-  - label-nodes-egressip.yaml
   - audit-logging-config.yaml
-  - encrypt-etcd.yaml
-  - default-gatewayclass.yaml
-  - disable-self-provisioner.yaml
-  - root-ca-distribution.yaml
-  - remove-kubeadmin.yaml
-  - image-vuln-scanning.yaml
-  - openshift-samples-config.yaml
-  - enable-internal-registry.yaml
-  - hcp-bmh-infra-creds.yaml
+  - compliance-scan-cis.yaml
+  - compliance-scan-e8.yaml
   - configure-idp.yaml
   - configure-ingress-certs.yaml
   - configure-project-template.yaml
-  - enable-multinetworkpolicy.yaml
+  - console-info-header.yaml
+  - default-gatewayclass.yaml
+  - disable-self-provisioner.yaml
   - enable-hcp.yaml
-  - compliance-scan-cis.yaml
-  - compliance-scan-e8.yaml
+  - enable-internal-registry.yaml
+  - enable-multinetworkpolicy.yaml
+  - encrypt-etcd.yaml
+  - hcp-bmh-infra-creds.yaml
+  - image-vuln-scanning.yaml
+  - increase-fd-limits.yaml
+  - label-nodes-egressip.yaml
+  - openshift-samples-config.yaml
+  - remove-kubeadmin.yaml
+  - root-ca-distribution.yaml
 
   # Operator Installation Policies
   - versioned-operators/

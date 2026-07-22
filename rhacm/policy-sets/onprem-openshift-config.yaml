@@ -17,3 +17,4 @@ spec:
     - configure-ingress-certs
     - remove-kubeadmin
     - openshift-samples-config
+    - increase-fd-limits

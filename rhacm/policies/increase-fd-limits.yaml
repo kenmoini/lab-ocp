@@ -1,0 +1,109 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: increase-fd-limits
+  annotations:
+    policy.open-cluster-management.io/description: Increase the file descriptor limits for CRI-O and sysctl on worker nodes to avoid hitting the default limit of 1024, namely for Vector
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: increase-crio-fd-limits
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 96-master-crio-limit-files
+                spec:
+                  config:
+                    ignition:
+                      version: 3.2.0
+                    storage:
+                      files:
+                        - contents:
+                            source: data:text/plain;charset=utf-8;base64,W2NyaW8ucnVudGltZV0KCmRlZmF1bHRfdWxpbWl0cz1bCgkibm9maWxlPTEwNDg1Nzc6MTA0ODU3NyIsCl0K
+                          mode: 420
+                          overwrite: true
+                          path: /etc/crio/crio.conf.d/50-ulimits
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 96-worker-crio-limit-files
+                spec:
+                  config:
+                    ignition:
+                      version: 3.2.0
+                    storage:
+                      files:
+                        - contents:
+                            source: data:text/plain;charset=utf-8;base64,W2NyaW8ucnVudGltZV0KCmRlZmF1bHRfdWxpbWl0cz1bCgkibm9maWxlPTEwNDg1Nzc6MTA0ODU3NyIsCl0K
+                          mode: 420
+                          overwrite: true
+                          path: /etc/crio/crio.conf.d/50-ulimits
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: increase-sysctl-fd-limits
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 97-master-sysctl-limit-files
+                spec:
+                  config:
+                    ignition:
+                      version: 3.2.0
+                    storage:
+                      files:
+                        - contents:
+                            source: data:text/plain;charset=utf-8;base64,ZnMubnJfb3Blbj0xMDQ4NTc3Cg==
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/10-files.conf
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 97-worker-sysctl-limit-files
+                spec:
+                  config:
+                    ignition:
+                      version: 3.2.0
+                    storage:
+                      files:
+                        - contents:
+                            source: data:text/plain;charset=utf-8;base64,ZnMubnJfb3Blbj0xMDQ4NTc3Cg==
+                          mode: 420
+                          overwrite: true
+                          path: /etc/sysctl.d/10-files.conf
