@@ -19,6 +19,7 @@ resources:
   - azure-self-managed-nvidia.yaml
   - azure-self-managed-odf.yaml
 
+  - vsphere.yaml
   - vsphere-infra.yaml
 
   - onprem-openshift-clusters.yaml

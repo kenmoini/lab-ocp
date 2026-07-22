@@ -12,6 +12,7 @@ resources:
   - olm-pprof/enable.yaml
   - olm-pprof/disable.yaml
   - vsphere-storage/
+  - managed-boot-images/
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

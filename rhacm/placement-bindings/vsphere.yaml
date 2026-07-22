@@ -9,15 +9,6 @@ placementRef:
   apiGroup: cluster.open-cluster-management.io
   kind: Placement
 subjects:
-  # - name: aws-odf-machinesets
-  #   apiGroup: policy.open-cluster-management.io
-  #   kind: Policy
-  # - name: operators-odf-base
-  #   apiGroup: policy.open-cluster-management.io
-  #   kind: Policy
-  # - name: operators-odf-variable
-  #   apiGroup: policy.open-cluster-management.io
-  #   kind: Policy
-  # - name: instance-odf-aws
-  #   apiGroup: policy.open-cluster-management.io
-  #   kind: Policy
+  - name: enable-boot-img-mgmt
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

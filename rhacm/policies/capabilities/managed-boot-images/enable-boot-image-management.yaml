@@ -1,0 +1,33 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: enable-boot-img-mgmt
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CC - Capability Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: enable-boot-img-mgmt
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1
+                kind: MachineConfiguration
+                metadata:
+                  name: cluster
+                spec:
+                  managedBootImages:
+                    machineManagers:
+                      - apiGroup: machine.openshift.io
+                        resource: machinesets
+                        selection:
+                          mode: All
