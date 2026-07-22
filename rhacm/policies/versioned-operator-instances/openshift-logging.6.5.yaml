@@ -47,7 +47,7 @@ spec:
                       # Needed when doing audit/infra logging
                       ingestion:
                         ingestionBurstSize: 50
-                        ingestionRate: 32
+                        ingestionRate: 64
                         maxLineSize: 2560000
                         perStreamRateLimit: 10
                         perStreamRateLimitBurst: 30
@@ -125,6 +125,17 @@ spec:
                         cpu: 2
                   serviceAccount:
                     name: logging-collector
+                  filters:
+                    - name: only-important
+                      type: drop
+                      drop:
+                        - test:
+                            - field: .message
+                              notMatches: "(?i)critical|error"
+                            - field: .level
+                              matches: "debug|info|trace"
+                    - name: multiline-detect
+                      type: detectMultilineException
                   outputs:
                     - name: local-lokistack
                       type: lokiStack
@@ -142,10 +153,13 @@ spec:
                   pipelines:
                     - name: infra-app-logs
                       inputRefs:
-                      - application
-                      - infrastructure
+                        - application
+                        - infrastructure
                       outputRefs:
-                      - local-lokistack
+                        - local-lokistack
+                      filterRefs:
+                        - only-important
+                        - multiline-detect
                     # - name: audit-logs
                     #   inputRefs:
                     #   - audit
