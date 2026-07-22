@@ -12,3 +12,4 @@ resources:
 - root-certs.yaml
 - configmap-secret-reloader.yaml
 - rbac.yaml # needed for configmap-secret-reloader
+- fd-limit-vector-collector.yaml

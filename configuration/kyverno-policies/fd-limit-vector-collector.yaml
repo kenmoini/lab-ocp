@@ -1,0 +1,42 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: ol-fd-limit-raise
+  annotations:
+    policies.kyverno.io/title: Raise OpenShift Logging Vector Collector FD Limit
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/category: Sample
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      In OpenShift Logging, the Vector collector is configured to run with a file descriptor limit of 1024.
+      This is insufficient for high-volume logging environments and can result in dropped logs.
+      This policy raises the file descriptor limit to 65535 for the Vector collector Pod.
+spec:
+  rules:
+  - name: ol-fd-limit-raise
+    match:
+      any:
+        - resources:
+            kinds:
+              - Pod # Pod will apply to its owners as well
+            operations:
+              - CREATE
+              - UPDATE
+            namespaceSelector:
+              matchExpressions:
+                - key: kubernetes.io/metadata.name
+                  operator: In
+                  values:
+                  - openshift-logging
+            selector:
+              matchLabels:
+                app.kubernetes.io/component: collector
+                app.kubernetes.io/name: vector
+    mutate:
+      patchStrategicMerge:
+        spec:
+          containers:
+            - (name): "*"
+              env:
+              - name: VECTOR_RAISE_FD_LIMIT
+                value: "true"
