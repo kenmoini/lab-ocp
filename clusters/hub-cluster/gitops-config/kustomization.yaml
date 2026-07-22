@@ -5,4 +5,5 @@ kind: Kustomization
 resources:
   - networking.yaml
   # - hydrate-virt.yaml
+  - machineconfigs.yaml
   - rbac.yaml

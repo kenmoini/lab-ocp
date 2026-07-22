@@ -1,0 +1,34 @@
+---
+kind: L2Advertisement
+apiVersion: metallb.io/v1beta1
+metadata:
+  name: public-subnet
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - v420-public-subnet
+  interfaces:
+    - br420
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: v420-public-subnet
+  namespace: metallb-system
+spec:
+  addresses:
+    - 76.195.90.161/32
+    - 76.195.90.162/32
+    - 76.195.90.163/32
+    - 76.195.90.164/32
+    - 76.195.90.165/32
+    - 76.195.90.166/32
+    - 76.195.90.167/32
+    - 76.195.90.168/32
+    - 76.195.90.169/32
+    - 76.195.90.170/32
+    - 76.195.90.171/32
+    - 76.195.90.172/32
+    - 76.195.90.173/32
+    - 76.195.90.174/32
+  autoAssign: false

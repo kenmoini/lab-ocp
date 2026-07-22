@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - metallb-hcp-pool.yaml
   - metallb-general-pool.yaml
+  # - metallb-public-subnet.yaml
   # - nncp-vlan-br-62.yaml
   # - nncp-vlan-br-66.yaml
   # - nncp-vlan-br-70.yaml
