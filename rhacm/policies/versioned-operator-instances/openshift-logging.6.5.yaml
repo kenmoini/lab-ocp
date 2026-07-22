@@ -136,6 +136,8 @@ spec:
                               matches: "debug|info|trace"
                     - name: multiline-detect
                       type: detectMultilineException
+                    - name: parse-json
+                      type: parse
                   outputs:
                     - name: local-lokistack
                       type: lokiStack
