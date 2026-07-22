@@ -15,7 +15,7 @@ spec:
     - operators-authorino
     - operators-rhoai
     - operators-dev-hub
-    - operators-servicemesh-2
+    - operators-servicemesh-3
 
     - instance-pipelines
     - instance-dev-hub
