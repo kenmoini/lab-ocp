@@ -4,6 +4,8 @@ kind: Kustomization
 namespace: open-cluster-management-policies
 
 resources:
+  - compliance/
+
   - best-practices.yaml
   - developer-services.yaml
   - enhanced-metrics.yaml

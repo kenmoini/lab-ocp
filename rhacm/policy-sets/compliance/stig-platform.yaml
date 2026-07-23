@@ -1,0 +1,10 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: stig-platform
+  #namespace: open-cluster-management-policies
+spec:
+  description: "DISA STIG Platform Level Remediation"
+  policies:
+    - console-logout-redirect

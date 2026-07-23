@@ -5,6 +5,7 @@ namespace: open-cluster-management-policies
 
 resources:
   - capabilities/
+  - compliance/
 
   - all-openshift-clusters.yaml
   - all-hcp-virt-clusters.yaml
