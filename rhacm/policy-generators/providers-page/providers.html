@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!--
+
+This template can be modified and used to customize the provider selection page. To replace
+the provider selection page, set master configuration option oauthConfig.templates.providerSelection to
+the path of the template file. Don't remove parameters in curly braces below.
+
+oauthConfig:
+  templates:
+    providerSelection: templates/select-provider-template.html
+
+The Name is unique for each provider and can be used for provider specific customizations like
+the example below.  The Name matches the name of an identity provider in the master configuration.
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;900&family=Red+Hat+Mono:wght@400;500&family=Red+Hat+Text:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+    :root{
+      --ink:      #05090d;   /* base field            */
+      --deep:     #0b1620;   /* mid atmosphere        */
+      --petrol:   #12414f;   /* abstract glow, cool   */
+      --violet:   #241d40;   /* abstract glow, warm   */
+      --red:    #ef0000;   /* single accent         */
+      --brass:    #e0a458;   /* single accent         */
+      --text:     #e7edf2;
+      --muted:    #8496a3;
+      --line:     rgba(255,255,255,.09);
+
+      --card-w: 25.5rem;
+      --r: 12px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      display:grid;
+      place-items:center;
+      padding:1.5rem;
+      background:var(--ink);
+      color:var(--text);
+      font-family:"Red Hat Text",system-ui,-apple-system,Segoe UI,sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* ---------- abstract dark field ----------
+      Pure CSS so there's no asset dependency. To use a real image
+      instead, drop it on .field as a background-image and keep
+      .field::after (the grain) for the tooth.               */
+    .field{position:fixed;inset:0;overflow:hidden;background:var(--ink);z-index:0}
+    .field span{
+      position:absolute;
+      border-radius:50%;
+      filter:blur(80px);
+      will-change:transform;
+    }
+    .field .a{width:60vw;height:60vw;left:-14vw;top:-18vw;background:var(--petrol);opacity:.55;animation:drift-a 34s ease-in-out infinite}
+    .field .b{width:52vw;height:52vw;right:-12vw;bottom:-16vw;background:var(--violet);opacity:.7;animation:drift-b 42s ease-in-out infinite}
+    .field .c{width:34vw;height:34vw;left:46%;top:38%;background:var(--deep);opacity:.9;animation:drift-a 28s ease-in-out infinite reverse}
+
+    /* faint diagonal weave — reads as fabric, not circuitry */
+    .field::before{
+      content:"";position:absolute;inset:-20%;
+      background:repeating-linear-gradient(58deg,transparent 0 46px,rgba(255,255,255,.028) 46px 47px);
+      mask-image:radial-gradient(ellipse at 50% 45%,#000 20%,transparent 78%);
+    }
+    /* film grain */
+    .field::after{
+      content:"";position:absolute;inset:0;opacity:.16;mix-blend-mode:overlay;
+      background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    /* vignette so the card floats */
+    .field .veil{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,transparent 30%,rgba(2,5,8,.72) 100%)}
+
+    @keyframes drift-a{50%{transform:translate3d(7vw,5vh,0) scale(1.12)}}
+    @keyframes drift-b{50%{transform:translate3d(-6vw,-6vh,0) scale(1.08)}}
+
+    /* ---------- card ---------- */
+    .card{
+      position:relative;z-index:1;
+      width:100%;max-width:var(--card-w);
+      padding:2.25rem 2rem 1.5rem;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,rgba(20,29,38,.82),rgba(9,14,20,.86));
+      backdrop-filter:blur(22px) saturate(1.2);
+      -webkit-backdrop-filter:blur(22px) saturate(1.2);
+      box-shadow:0 1px 0 rgba(255,255,255,.07) inset, 0 30px 70px -20px rgba(0,0,0,.85);
+      animation:rise .5s cubic-bezier(.2,.7,.3,1) both;
+    }
+    @keyframes rise{from{opacity:0;transform:translateY(10px)}}
+
+    .brand{display:flex;align-items:center;gap:.55rem;margin-bottom:2rem}
+    .brand svg{display:block}
+    .brand b{
+      font-family:"Red Hat Mono",ui-monospace,monospace;
+      font-weight:500;font-size:.688rem;letter-spacing:.16em;
+      text-transform:uppercase;color:var(--muted);
+    }
+
+    h1{
+      font-family:"Red Hat Display",system-ui,sans-serif;
+      font-weight:900;font-size:1.875rem;line-height:1.1;
+      letter-spacing:-.02em;margin:0 0 .4rem;
+    }
+    .sub{margin:0 0 1.5rem;color:var(--muted);font-size:.875rem;line-height:1.45}
+
+    /* ---------- provider list ---------- */
+    .providers{display:flex;flex-direction:column;gap:.5rem}
+
+    .provider{
+      position:relative;
+      display:flex;align-items:center;gap:.75rem;
+      width:100%;padding:.75rem .875rem;
+      border:1px solid var(--line);border-radius:var(--r);
+      background:rgba(255,255,255,.035);
+      color:var(--text);text-decoration:none;
+      font:500 .9375rem/1 "Red Hat Text",sans-serif;
+      cursor:pointer;overflow:hidden;
+      transition:background .18s ease,border-color .18s ease,transform .18s ease;
+    }
+    /* the routing lane: a lit edge on the side you're being sent through */
+    .provider::before{
+      content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+      background:var(--red);transform:scaleY(0);transform-origin:50% 50%;
+      transition:transform .22s cubic-bezier(.2,.7,.3,1);
+    }
+    .provider:hover,.provider:focus-visible{
+      background:rgba(255,255,255,.07);
+      border-color:rgba(224,164,88,.34);
+      transform:translateY(-1px);
+    }
+    .provider:hover::before,.provider:focus-visible::before{transform:scaleY(1)}
+    .provider:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+    .provider:active{transform:translateY(0)}
+
+    .mark{
+      flex:0 0 auto;display:grid;place-items:center;
+      width:1.75rem;height:1.75rem;border-radius:7px;
+      background:rgba(255,255,255,.07);
+    }
+    .mark svg{width:1rem;height:1rem;display:block}
+
+    .name{flex:1 1 auto;text-align:left}
+
+    /* the signature: where this button actually sends you */
+    .issuer{
+      flex:0 0 auto;
+      font-family:"Red Hat Mono",ui-monospace,monospace;
+      font-size:.6875rem;letter-spacing:.01em;
+      color:#5f7280;transition:color .18s ease;
+    }
+    .provider:hover .issuer,.provider:focus-visible .issuer{color:var(--red)}
+
+    /* ---------- divider + sso ---------- */
+    .or{
+      display:flex;align-items:center;gap:.75rem;
+      margin:1.125rem 0;
+      font-family:"Red Hat Mono",monospace;font-size:.625rem;
+      letter-spacing:.18em;text-transform:uppercase;color:#5f7280;
+    }
+    .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+    .provider.sso{background:transparent;border-style:dashed}
+    .provider.sso .mark{background:rgba(224,164,88,.13)}
+
+    footer{
+      margin-top:1.5rem;padding-top:1.125rem;border-top:1px solid var(--line);
+      font-size:.75rem;color:#6e8090;line-height:1.5;
+    }
+    footer a{color:var(--muted);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.16)}
+    footer a:hover{color:var(--red);border-color:var(--red)}
+    footer a:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:2px}
+
+    @media (max-width:420px){
+      .card{padding:1.75rem 1.25rem 1.25rem;border-radius:14px}
+      h1{font-size:1.625rem}
+      .issuer{display:none}
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      *{animation:none!important;transition-duration:.01ms!important}
+      .provider:hover{transform:none}
+    }
+    </style>
+  </head>
+  <body>
+
+
+
+<div class="field" aria-hidden="true">
+  <span class="a"></span><span class="b"></span><span class="c"></span>
+  <div class="veil"></div>
+</div>
+
+<main class="card">
+  <!--
+  <div class="brand">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 2 21 7v10l-9 5-9-5V7l9-5Z" stroke="#e0a458" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M12 7.5 16.5 10v4.5L12 17l-4.5-2.5V10L12 7.5Z" fill="#e0a458" fill-opacity=".28"/>
+    </svg>
+    <b>Platform Console</b>
+  </div>
+  -->
+
+  <h1>Log In with</h1>
+
+  <div class="providers">
+
+    {{ range $provider := .Providers }}
+    <a class="provider" href="{{$provider.URL}}">
+      <span class="name">{{$provider.Name}}</span>
+    </a>
+    {{ end }}
+
+  </div>
+
+  <footer>
+    <strong>WARNING:</strong> You are accessing a protected computer system that is provided for authorized use only.
+  </footer>
+</main>
+
+
+  </body>
+</html>

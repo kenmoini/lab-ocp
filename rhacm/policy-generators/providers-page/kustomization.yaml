@@ -1,0 +1,12 @@
+generators:
+  - policy-generator.yaml
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+  - name: providers-login-template
+    namespace: openshift-config
+    files:
+      - providers.html
+commonAnnotations:
+  argocd.argoproj.io/compare-options: IgnoreExtraneous
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
