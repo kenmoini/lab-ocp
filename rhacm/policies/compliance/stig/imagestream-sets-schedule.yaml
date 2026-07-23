@@ -18,7 +18,7 @@ spec:
           severity: low
           object-templates-raw: |
             {{/* ##  Loop through all the ImageStreams ## */}}
-            {{- $imageStreamList := (lookup "image.openshift.io/v1" "ImageStream" "openshift" "").items }}
+            {{- $imageStreamList := (lookup "image.openshift.io/v1" "ImageStream" "" "").items }}
             {{- range $imageStream := $imageStreamList }}
             - complianceType: musthave
               objectDefinition:
