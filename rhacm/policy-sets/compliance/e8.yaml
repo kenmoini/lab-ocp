@@ -5,7 +5,7 @@ metadata:
   name: e8
   #namespace: open-cluster-management-policies
 spec:
-  description: "E8 Level Remediation"
+  description: "Australian Cyber Security Centre (ACSC) Essential Eight Remediation"
   policies:
     - configure-crypto-policy
     - no-empty-passwords
