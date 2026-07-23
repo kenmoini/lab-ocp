@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: openshift-logging
+
+resources:
+  - rh-loki-4.19-binding.yaml
+  - rh-loki-4.19.yaml
+  - rh-loki-4.20-binding.yaml
+  - rh-loki-4.20.yaml
+  - rh-loki-4.21-binding.yaml
+  - rh-loki-4.21.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

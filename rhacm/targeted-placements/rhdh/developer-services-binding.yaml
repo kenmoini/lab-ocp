@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: developer-services
+  # namespace: rhdh
+placementRef:
+  name: developer-services
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: secrets-rhdh-rhdh
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

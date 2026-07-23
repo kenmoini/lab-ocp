@@ -3,25 +3,16 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - acs-secured-cluster.yaml
-  - acs-secured-cluster-binding.yaml
-  - acs-secured-xks.yaml
-  - acs-secured-xks-binding.yaml
-  - developer-services-rhbk.yaml
-  - developer-services-rhdh.yaml
-  - developer-services-openshift-gitops.yaml
-  - loki-format-secret.yaml
-  - loki-format-secret-binding.yaml
-  - kube-system_community-eso.yaml
-  - kube-system_community-eso_binding.yaml
-  - netobserv-loki.yaml
-  - netobserv-loki-binding.yaml
-  - maas-pgsql-format-secret-binding.yaml
-  - maas-pgsql-format-secret.yaml
-  - maas-o11y-cfg-to-secret-binding.yaml
-  - maas-o11y-cfg-to-secret.yaml
-  - open-cluster-management-observability-all-openshift-clusters.yaml
-  - open-cluster-management-observability-all-openshift-clusters-binding.yaml
+  - kube-system/
+  - netobserv/
+  - open-cluster-management-observability/
+  - openshift-logging/
+  - openshift-gitops/
+  - redhat-ods-applications/
+  - redhat-ods-monitoring/
+  - rhbk/
+  - rhdh/
+  - stackrox/
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

@@ -1,0 +1,42 @@
+# Shamelessly stolen from https://github.com/bry-tam/acm-policy-samples/blob/main/policies/cluster-health/clusteroperator.yml
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: health-check-odf
+  #namespace: open-cluster-management-observability
+  annotations:
+    policy.open-cluster-management.io/description: Check for the presence of ODF StorageClasses and raise a policy violation if they are not present.
+    policy.open-cluster-management.io/categories: O11Y - OpenShift Observability
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CH - Cluster Health
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: health-check-odf
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: storage.k8s.io/v1
+                kind: StorageClass
+                metadata:
+                  name: ocs-storagecluster-ceph-rbd
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: storage.k8s.io/v1
+                kind: StorageClass
+                metadata:
+                  name: ocs-storagecluster-cephfs
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: storage.k8s.io/v1
+                kind: StorageClass
+                metadata:
+                  name: openshift-storage.noobaa.io

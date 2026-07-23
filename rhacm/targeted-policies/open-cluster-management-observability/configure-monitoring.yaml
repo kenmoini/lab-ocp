@@ -1,0 +1,108 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: configure-monitoring
+  # namespace: open-cluster-management-observability
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: health-check-odf
+      namespace: ""
+      compliance: Compliant
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: configure-monitoring-cm
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            - complianceType: musthave
+              objectDefinition:
+                kind: ConfigMap
+                apiVersion: v1
+                metadata:
+                  name: cluster-monitoring-config
+                  namespace: openshift-monitoring
+                data:
+                  config.yaml: |
+                    enableUserWorkload: true
+                    nodeExporter:
+                      collectors:
+                        buddyinfo: {}
+                        cpufreq: {}
+                        ksmd: {}
+                        mountstats: {}
+                        netclass: {}
+                        netdev: {}
+                        processes: {}
+                        systemd: {}
+                        tcpstat: {}
+                    alertmanagerMain:
+                      enableUserAlertmanagerConfig: true
+                      nodeSelector:
+                        node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+                      tolerations:
+                        - operator: Exists
+                          key: node-role.kubernetes.io/infra
+                      volumeClaimTemplate:
+                        spec:
+                          storageClassName: ocs-storagecluster-cephfs
+                          resources:
+                            requests:
+                              storage: 10Gi
+                    prometheusK8s:
+                      retention: 7d
+                      retentionSize: 70GB
+                      nodeSelector:
+                        node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+                      tolerations:
+                        - operator: Exists
+                          key: node-role.kubernetes.io/infra
+                      volumeClaimTemplate:
+                        spec:
+                          storageClassName: ocs-storagecluster-cephfs
+                          resources:
+                            requests:
+                              storage: 100Gi
+                      additionalAlertmanagerConfigs:
+                      - apiVersion: v2
+                        bearerToken:
+                          key: token
+                          #name: observability-alertmanager-accessor-{{ $n := split "." (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.apiServerURL }}{{ $n._1 }}
+                          name: observability-alertmanager-accessor-{{ fromClusterClaim "id.openshift.io" | replace "-" "" | trunc 19 }}
+                        scheme: https
+                        staticConfigs:
+                        - {{hub (lookup "route.openshift.io/v1" "Route" "open-cluster-management-observability" "alertmanager").spec.host hub}}
+                        tlsConfig:
+                          ca:
+                            key: service-ca.crt
+                            # ACM < 2.15.0...
+                            #name: hub-alertmanager-router-ca-{{ $n := split "." (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.apiServerURL }}{{ $n._1 }}
+                            # ACM 2.15.0...
+                            #name: hub-alertmanager-router-ca-{{ $n := split "." (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.apiServerURL }}{{ $n._1 }}
+                            # ACM 2.15.1+...I hate these idiots
+                            name: hub-alertmanager-router-ca-{{ fromClusterClaim "id.openshift.io" | replace "-" "" | trunc 19 }}
+                          insecureSkipVerify: false
+                      externalLabels:
+                        managed_cluster: {{hub index .ManagedClusterLabels "clusterID" hub}}
+                        instance_name: {{ $n := split "." (lookup "config.openshift.io/v1" "Infrastructure" "" "cluster").status.apiServerURL }}{{ $n._1 }}
+                        product: {{ fromClusterClaim "product.open-cluster-management.io" }}
+
+            {{/* ##  group all remaining components together since the only config is for infra nodes  ## */}}
+            {{- range $key := (list "prometheusOperator" "kubeStateMetrics" "openshiftStateMetrics" "telemeterClient" "thanosQuerier")}}
+                    {{ $key }}:
+                      nodeSelector:
+                        node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}: ""
+                      tolerations:
+                        - operator: Exists
+                          key: node-role.kubernetes.io/infra
+            {{- end }}
