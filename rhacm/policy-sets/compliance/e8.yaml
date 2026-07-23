@@ -1,0 +1,11 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: e8
+  #namespace: open-cluster-management-policies
+spec:
+  description: "E8 Level Remediation"
+  policies:
+    - configure-crypto-policy
+    - no-empty-passwords

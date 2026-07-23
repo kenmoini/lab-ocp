@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: cis
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: cis
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: cis
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet

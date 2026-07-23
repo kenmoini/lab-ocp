@@ -1,0 +1,10 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: cis
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Center for Internet Security (CIS) Level Remediation"
+  policies:
+    - ingress-cipher
