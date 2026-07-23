@@ -10,3 +10,4 @@ spec:
     - console-logout-redirect
     - check-fips
     - oauth-token-config
+    - classification-banner
