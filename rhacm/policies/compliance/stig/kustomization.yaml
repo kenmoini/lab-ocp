@@ -20,3 +20,4 @@ resources:
   - sysctls.yaml
   - oauth-inactivity-timeout.yaml
   - oauth-token-maxage.yaml
+  - oauth-token-config.yaml

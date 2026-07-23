@@ -9,5 +9,4 @@ spec:
   policies:
     - console-logout-redirect
     - check-fips
-    - oauth-inactivity-timeout
-    - oauth-token-maxage
+    - oauth-token-config
