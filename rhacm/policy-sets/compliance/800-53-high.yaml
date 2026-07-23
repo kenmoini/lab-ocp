@@ -1,0 +1,13 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: 800-53-high
+  #namespace: open-cluster-management-policies
+spec:
+  description: "NIST 800-53 High Level Remediation"
+  policies:
+    - check-fips
+    - oauth-token-config
+    - cli-motd
+    - cluster-file-integrity

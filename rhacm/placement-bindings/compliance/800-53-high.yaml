@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: 800-53-high
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: 800-53-high
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: 800-53-high
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet

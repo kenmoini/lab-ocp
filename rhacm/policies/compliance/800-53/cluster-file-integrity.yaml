@@ -1,0 +1,32 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: cluster-file-integrity
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cluster-file-integrity
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: fileintegrity.openshift.io/v1alpha1
+                kind: FileIntegrity
+                metadata:
+                  name: cluster-fileintegrity
+                  namespace: openshift-file-integrity
+                spec:
+                #  nodeSelector:
+                #      node-role.kubernetes.io/worker: ""
+                  config: {}

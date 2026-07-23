@@ -11,3 +11,5 @@ resources:
   - auditd-file-deletion-events.yaml
   - auditd-log-directory-access.yaml
   - auditd-priv-cmds.yaml
+  - cli-motd.yaml
+  - cluster-file-integrity.yaml

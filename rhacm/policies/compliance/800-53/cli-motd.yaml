@@ -1,0 +1,33 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: cli-motd
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cli-motd
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: mustonlyhave
+              objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: motd
+                  namespace: openshift
+                data:
+                  message: |
+                    =================================================================
+                    WARNING: Authorized use only!
+                    =================================================================
