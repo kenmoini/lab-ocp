@@ -30,4 +30,3 @@ spec:
                 spec:
                   fips: true
             {{- end }}
-            {{- end }}
