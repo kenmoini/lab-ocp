@@ -7,6 +7,7 @@ namespace: open-cluster-management-policies
 resources:
   - stig/
   - 800-53/
+  - variables/
   - auditd-configuration.yaml
   - rhcos-crypto-policy.yaml
   - rhcos-no-empty-passwords.yaml

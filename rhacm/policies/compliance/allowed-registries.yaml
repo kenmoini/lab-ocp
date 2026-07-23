@@ -26,6 +26,7 @@ spec:
                 metadata:
                   name: cluster
                 spec:
+                  # ocp4-e8-ocp-allowed-registries-for-import
                   allowedRegistriesForImport:
                     - domainName: disconn-harbor.d70.kemo.labs
                     - domainName: disconn-harbor.d70.kemo.labs/registry-redhat-io-ptc
@@ -42,6 +43,7 @@ spec:
                     - domainName: image-registry.openshift-image-registry.svc
                     - domainName: default-route-openshift-image-registry.apps.tri-force.lab.kemo.network
                   registrySources:
+                    # ocp4-e8-ocp-allowed-registries
                     allowedRegistries:
                       - disconn-harbor.d70.kemo.labs
                       - disconn-harbor.d70.kemo.labs/registry-redhat-io-ptc

@@ -7,5 +7,82 @@ metadata:
 spec:
   description: "Australian Cyber Security Centre (ACSC) Essential Eight Remediation"
   policies:
+  # Node Level
+    # rhcos4-e8-master-configure-crypto-policy
+    # rhcos4-e8-worker-configure-crypto-policy
     - configure-crypto-policy
+    # rhcos4-e8-master-no-empty-passwords
+    # rhcos4-e8-worker-no-empty-passwords
     - no-empty-passwords
+    # rhcos4-e8-master-sshd-disable-gssapi-auth
+    # rhcos4-e8-master-sshd-disable-user-known-hosts
+    # rhcos4-e8-worker-sshd-disable-gssapi-auth
+    # rhcos4-e8-worker-sshd-disable-user-known-hosts
+    - sshd-configuration
+  # Audit Level
+    # rhcos4-e8-master-auditd-name-format
+    # rhcos4-e8-master-audit-rules-kernel-module-loading-delete
+    # rhcos4-e8-master-audit-rules-kernel-module-loading-finit
+    # rhcos4-e8-master-audit-rules-kernel-module-loading-init
+    # rhcos4-e8-master-audit-rules-login-events-faillock
+    # rhcos4-e8-master-audit-rules-login-events-lastlog
+    # rhcos4-e8-master-audit-rules-login-events-tallylog
+    # rhcos4-e8-master-audit-rules-networkconfig-modification
+    # rhcos4-e8-master-audit-rules-sysadmin-actions
+    # rhcos4-e8-master-audit-rules-time-adjtimex
+    # rhcos4-e8-master-audit-rules-time-clock-settime
+    # rhcos4-e8-master-audit-rules-time-settimeofday
+    # rhcos4-e8-master-audit-rules-time-stime
+    # rhcos4-e8-master-audit-rules-time-watch-localtime
+    # rhcos4-e8-master-audit-rules-usergroup-modification
+    # rhcos4-e8-master-audit-rules-dac-modification-chmod
+    # rhcos4-e8-master-audit-rules-dac-modification-chown
+    # rhcos4-e8-master-audit-rules-execution-chcon
+    # rhcos4-e8-master-audit-rules-execution-restorecon
+    # rhcos4-e8-master-audit-rules-execution-semanage
+    # rhcos4-e8-master-audit-rules-execution-setfiles
+    # rhcos4-e8-master-audit-rules-execution-setsebool
+    # rhcos4-e8-master-audit-rules-execution-seunshare
+    # rhcos4-e8-master-audit-rules-kernel-module-loading-delete
+    # rhcos4-e8-worker-auditd-name-format
+    # rhcos4-e8-worker-audit-rules-networkconfig-modification
+    # rhcos4-e8-worker-audit-rules-kernel-module-loading-delete
+    # rhcos4-e8-worker-audit-rules-kernel-module-loading-finit
+    # rhcos4-e8-worker-audit-rules-kernel-module-loading-init
+    # rhcos4-e8-worker-audit-rules-login-events-faillock
+    # rhcos4-e8-worker-audit-rules-login-events-lastlog
+    # rhcos4-e8-worker-audit-rules-login-events-tallylog
+    # rhcos4-e8-worker-audit-rules-sysadmin-actions
+    # rhcos4-e8-worker-audit-rules-usergroup-modification
+    # rhcos4-e8-worker-audit-rules-time-adjtimex
+    # rhcos4-e8-worker-audit-rules-time-clock-settime
+    # rhcos4-e8-worker-audit-rules-time-settimeofday
+    # rhcos4-e8-worker-audit-rules-time-stime
+    # rhcos4-e8-worker-audit-rules-time-watch-localtime
+    # rhcos4-e8-worker-audit-rules-dac-modification-chmod
+    # rhcos4-e8-worker-audit-rules-dac-modification-chown
+    # rhcos4-e8-worker-audit-rules-execution-chcon
+    # rhcos4-e8-worker-audit-rules-execution-restorecon
+    # rhcos4-e8-worker-audit-rules-execution-semanage
+    # rhcos4-e8-worker-audit-rules-execution-setfiles
+    # rhcos4-e8-worker-audit-rules-execution-setsebool
+    # rhcos4-e8-worker-audit-rules-execution-seunshare
+    # rhcos4-e8-worker-audit-rules-kernel-module-loading-delete
+    - auditd-configuration
+    # rhcos4-e8-master-sysctl-kernel-yama-ptrace-scope
+    # rhcos4-e8-master-sysctl-kernel-unprivileged-bpf-disabled
+    # rhcos4-e8-master-sysctl-kernel-randomize-va-space
+    # rhcos4-e8-master-sysctl-kernel-dmesg-restrict
+    # rhcos4-e8-master-sysctl-net-core-bpf-jit-harden
+    # rhcos4-e8-worker-sysctl-kernel-yama-ptrace-scope
+    # rhcos4-e8-worker-sysctl-kernel-unprivileged-bpf-disabled
+    # rhcos4-e8-worker-sysctl-kernel-randomize-va-space
+    # rhcos4-e8-worker-sysctl-kernel-dmesg-restrict
+    # rhcos4-e8-worker-sysctl-net-core-bpf-jit-harden
+    - rhcos4-sysctls
+  # Platform Level
+    # ocp4-e8-ocp-allowed-registries
+    # ocp4-e8-ocp-allowed-registries-for-import
+    - allowed-registries
+    # ocp4-e8-scc-limit-container-allowed-capabilities
+    - allowed-sccs

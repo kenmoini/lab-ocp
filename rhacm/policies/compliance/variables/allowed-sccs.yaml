@@ -1,0 +1,32 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: allowed-sccs
+  annotations:
+    policy.open-cluster-management.io/categories: OCPC - OpenShift Compliance
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CR - Compliance Remediation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: allowed-sccs
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: compliance.openshift.io/v1alpha1
+                kind: Variable
+                metadata:
+                  name: ocp4-var-sccs-with-allowed-capabilities-regex
+                  namespace: openshift-compliance
+                id: xccdf_org.ssgproject.content_value_var_sccs_with_allowed_capabilities_regex
+                title: Permitted SCCs with allowedCapabilities
+                description: A regular expression that lists all SCCs that are permitted to set the allowedCapabilities attribute
+                type: string
+                value: ^privileged$|^hostnetwork-v2$|^restricted-v2$|^restricted-v3$|^nonroot-v2$|^insights-runtime-extractor-scc|^nested-container$|^application-aware-quota$|^ceph-csi-op-scc$|^forklift-controller-scc$|^kubevirt-controller$|^noobaa-endpoint$|^openshift-ai-llminferenceservice-scc$|^nvidia-.*$|^odf-blackbox-scc$|^rook-.*$
