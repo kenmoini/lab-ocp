@@ -32,6 +32,14 @@ spec:
                   clusterLabels:
                     vendor: OpenShift
                     managed-by: '{{hub .ManagedClusterName hub}}'
+                  scanner:
+                    scannerComponent: AutoSense
+                    analyzer:
+                      scaling:
+                        autoScaling: Disabled
+                        maxReplicas: 2
+                        minReplicas: 1
+                        replicas: 1
                   scannerV4:
                     db:
                       persistence:
@@ -39,8 +47,8 @@ spec:
                           claimName: scanner-v4-db
                     indexer:
                       scaling:
-                        autoScaling: Enabled
-                        maxReplicas: 3
+                        autoScaling: Disabled
+                        maxReplicas: 2
                         minReplicas: 1
                         replicas: 1
                     scannerComponent: AutoSense
@@ -64,6 +72,7 @@ spec:
                     listenOnCreates: true
                     timeoutSeconds: 20
                     listenOnEvents: true
+                    replicas: 1
                   tls:
                     additionalCAs:
                       - name: kl-n-r-ca
