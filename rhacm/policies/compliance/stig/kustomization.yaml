@@ -18,3 +18,5 @@ resources:
   - kernelarg-slub-debug.yaml
   - kernelarg-vsyscall.yaml
   - sysctls.yaml
+  - oauth-inactivity-timeout.yaml
+  - oauth-token-maxage.yaml
