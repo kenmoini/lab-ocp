@@ -17,7 +17,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: health-check-noobaa
+          name: ocmo-health-check-noobaa
         spec:
           remediationAction: inform
           severity: high

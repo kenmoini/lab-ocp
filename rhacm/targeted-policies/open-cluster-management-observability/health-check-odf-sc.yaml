@@ -17,7 +17,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: health-check-odf
+          name: ocmo-health-check-odf
         spec:
           remediationAction: inform
           severity: high
