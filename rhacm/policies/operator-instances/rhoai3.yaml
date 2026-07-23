@@ -279,8 +279,14 @@ spec:
                   namespace: openshift-ingress
                 data:
                   deployment: |
+                    metadata:
+                      labels:
+                        istio-prometheus-ignore: ""
                     spec:
                       template:
+                        metadata:
+                          labels:
+                            istio-prometheus-ignore: ""
                         spec:
                           containers:
                           - name: istio-proxy
