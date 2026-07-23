@@ -12,3 +12,9 @@ subjects:
   - name: configure-monitoring
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: health-check-noobaa
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+  - name: health-check-odf
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
