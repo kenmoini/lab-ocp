@@ -34,3 +34,9 @@ spec:
                 kind: StorageClass
                 metadata:
                   name: ocs-storagecluster-cephfs
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: storage.k8s.io/v1
+                kind: StorageClass
+                metadata:
+                  name: openshift-storage.noobaa.io
