@@ -8,3 +8,4 @@ spec:
   description: "DISA STIG Platform Level Remediation"
   policies:
     - console-logout-redirect
+    - check-fips

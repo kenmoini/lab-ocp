@@ -6,6 +6,7 @@ namespace: open-cluster-management-policies
 
 resources:
   - auditd-rules.yaml
+  - check-fips.yaml
   - classification-banner.yaml
   - console-logout-redirect.yaml
   - disable-sshd.yaml

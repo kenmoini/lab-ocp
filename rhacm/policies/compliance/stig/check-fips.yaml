@@ -1,0 +1,33 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: check-fips
+  annotations:
+    policy.open-cluster-management.io/description: Ensures FIPS mode is enabled
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: check-fips
+        spec:
+          remediationAction: inform
+          severity: low
+          object-templates-raw: |
+            {{/* ##  Loop through all the MachineConfigPools, extract the named config ## */}}
+            {{- $mcpList := (lookup "machineconfiguration.openshift.io/v1" "MachineConfigPool" "" "").items }}
+            {{- range $mcp := $mcpList }}
+            {{- $mcpRenderedConfig := $mcp.spec.configuration.name }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  name: {{ $mcpRenderedConfig }}
+                spec:
+                  fips: true
+            {{- end }}
+            {{- end }}
