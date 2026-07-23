@@ -16,6 +16,9 @@ subjects:
   - name: health-check-odf
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: health-check-noobaa
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
 
   # HCP Integration
   - name: hcp-bmh-acm-infra-creds
