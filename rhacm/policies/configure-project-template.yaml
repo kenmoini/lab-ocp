@@ -143,6 +143,18 @@ spec:
                     podSelector: {}
                     policyTypes:
                     - Ingress
+                - apiVersion: v1
+                  kind: ResourceQuota
+                  metadata:
+                    name: default
+                  spec:
+                    hard:
+                      pods: '8'
+                      requests.cpu: '1'
+                      requests.memory: 4Gi
+                      limits.cpu: '8'
+                      limits.memory: 16Gi
+
                 parameters:
                 - name: PROJECT_NAME
                 - name: PROJECT_DISPLAYNAME
