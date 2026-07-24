@@ -29,6 +29,8 @@ spec:
                 metadata:
                   name: {{ $imageStream.metadata.name }}
                   namespace: {{ $imageStream.metadata.namespace }}
+                  labels:
+                    policy.kemo.dev/managed-by: imagestream-sets-schedule
                 spec:
                   tags:
                   {{- range $tag := $imageStream.spec.tags }}
