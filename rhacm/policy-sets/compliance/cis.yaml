@@ -7,4 +7,12 @@ metadata:
 spec:
   description: "Center for Internet Security (CIS) Level Remediation"
   policies:
+    # ocp4-cis-ingress-controller-tls-cipher-suites
     - ingress-cipher
+    # ocp4-cis-kubeadmin-removed
+    - remove-kubeadmin
+    # ocp4-cis-ocp-allowed-registries
+    # ocp4-cis-ocp-allowed-registries-for-import
+    - allowed-registries
+    # ocp4-cis-scc-limit-container-allowed-capabilities
+    - allowed-sccs

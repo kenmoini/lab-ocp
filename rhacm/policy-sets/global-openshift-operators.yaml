@@ -16,6 +16,7 @@ spec:
     - operators-compliance
     - operators-nmo
     - operators-coo
+    - check-oauth-idps
     # - operators-oadp
     # - operators-gatekeeper
     # - operators-sscsi

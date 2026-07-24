@@ -1,7 +1,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: remove-kubeadmin
+  name: check-oauth-idps
   annotations:
     policy.open-cluster-management.io/standards: NIST SP 800-53
     policy.open-cluster-management.io/categories: SC System and Communications Protection
@@ -9,27 +9,24 @@ metadata:
 spec:
   disabled: false
   policy-templates:
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: Policy
-          name: check-oauth-idps
-          namespace: ""
-          compliance: Compliant
 
-      objectDefinition:
+    - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: remove-kubeadmin
+          name: check-oauth-idps
         spec:
-          remediationAction: enforce
-          severity: low
-          object-templates:
+          remediationAction: inform
+          severity: high
+          object-templates-raw: |
+            {{- $oauthConfig := lookup "config.openshift.io/v1" "OAuth" "" "cluster" }}
+            {{- if eq $oauthConfig.spec.identityProviders nil }}
             - complianceType: mustnothave
               objectDefinition:
-                kind: Secret
-                apiVersion: v1
+                apiVersion: config.openshift.io/v1
+                kind: OAuth
                 metadata:
-                  name: kubeadmin
-                  namespace: kube-system
-                type: Opaque
+                  name: cluster
+                spec:
+                  identityProviders: []
+            {{- end }}
