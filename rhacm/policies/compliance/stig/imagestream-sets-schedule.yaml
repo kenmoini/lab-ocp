@@ -36,7 +36,7 @@ spec:
                   namespace: {{ $imageStream.metadata.namespace }}
                   labels:
                     policy.kemo.dev/managed-by: imagestream-sets-schedule
-                    numTags: '{{ len $imageStream.spec.tags }}'
+                    numTags: '{{ $tagLength }}'
                     hasTags: '{{ $hasTags }}'
                     hasOwner: '{{ $hasOwner }}'
             {{- end }}
