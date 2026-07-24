@@ -23,7 +23,7 @@ spec:
             {{- $hasOwner := (hasKey $imageStream.metadata "ownerReferences") }}
             {{- $tagLength := 0 }}
             {{- $hasTags := (hasKey $imageStream.spec "tags") }}
-            {{- if $hasTags }}
+            {{- if eq $hasTags true }}
             {{- $tagLength := len $imageStream.spec.tags | default 0 }}
             {{- end }}
             {{- if and ($hasOwner) (gt $tagLength 0) }}
