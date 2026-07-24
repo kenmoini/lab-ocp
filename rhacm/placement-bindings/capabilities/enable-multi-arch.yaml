@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: enable-multi-arch
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: enable-multi-arch
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: enable-multi-arch
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

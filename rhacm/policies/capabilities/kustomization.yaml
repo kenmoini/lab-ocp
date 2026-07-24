@@ -14,6 +14,7 @@ resources:
   - vsphere-storage/
   - managed-boot-images/
   - masters-schedulable/
+  - cluster-multi-arch.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

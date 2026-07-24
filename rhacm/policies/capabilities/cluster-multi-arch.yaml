@@ -1,0 +1,35 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: cluster-multi-arch
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: CC - Capability Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cluster-multi-arch
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates-raw: |
+            {{- $clusterVersion := lookup "config.openshift.io/v1" "ClusterVersion" "" "version" }}
+            {{- if ne $clusterVersion.status.desired.architecture "Multi" }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: config.openshift.io/v1
+                kind: ClusterVersion
+                metadata:
+                  name: version
+                spec:
+                  desiredUpdate:
+                    version: "{{ $clusterVersion.status.desired.version }}"
+                    architecture: Multi
+                    force: false
+                    image: ''
+            {{- end }}

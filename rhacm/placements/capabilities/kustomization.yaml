@@ -6,6 +6,7 @@ resources:
   - disable-vsphere-csi.yaml
   - masters-unschedulable.yaml
   - masters-schedulable.yaml
+  - enable-multi-arch.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
