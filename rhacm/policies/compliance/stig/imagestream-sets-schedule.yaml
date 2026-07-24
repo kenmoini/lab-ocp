@@ -25,7 +25,7 @@ spec:
             {{- $tagLength := 0 }}
             {{- $hasTags := (hasKey $imageStream.spec "tags") }}
             {{- if eq $hasTags true }}
-            {{- $tagLength := len $imageStream.spec.tags | default 0 }}
+            {{- $tagLength := len $imageStream.spec.tags }}
             {{- end }}
             - complianceType: musthave
               objectDefinition:
