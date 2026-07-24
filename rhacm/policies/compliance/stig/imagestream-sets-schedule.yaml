@@ -21,6 +21,7 @@ spec:
             {{- $imageStreamList := (lookup "image.openshift.io/v1" "ImageStream" "" "").items }}
             {{- range $imageStream := $imageStreamList }}
             {{- if hasKey $imageStream.spec "tags" }}
+            {{- if $imageStream.spec.tags }}
             {{- if gt (len $imageStream.spec.tags) 0 }}
             - complianceType: musthave
               objectDefinition:
@@ -40,6 +41,7 @@ spec:
                       scheduled: true
                   {{- end -}}
                   {{- end -}}
+            {{- end }}
             {{- end }}
             {{- end }}
             {{- end }}
