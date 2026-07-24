@@ -20,9 +20,8 @@ spec:
             {{/* ##  Loop through all the ImageStreams ## */}}
             {{- $imageStreamList := (lookup "image.openshift.io/v1" "ImageStream" "" "").items }}
             {{- range $imageStream := $imageStreamList }}
-            {{- if hasKey $imageStream.spec "tags" }}
-            {{- if $imageStream.spec.tags }}
-            {{- if gt (len $imageStream.spec.tags) 0 }}
+            {{- $hasTags := gt (len $imageStream.spec.tags) 0 }}
+            {{- if $hasTags }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: image.openshift.io/v1
@@ -32,6 +31,7 @@ spec:
                   namespace: {{ $imageStream.metadata.namespace }}
                   labels:
                     policy.kemo.dev/managed-by: imagestream-sets-schedule
+                    numTags: '{{ len $imageStream.spec.tags }}'
                 spec:
                   tags:
                   {{- range $tag := $imageStream.spec.tags }}
@@ -41,7 +41,5 @@ spec:
                       scheduled: true
                   {{- end -}}
                   {{- end -}}
-            {{- end }}
-            {{- end }}
             {{- end }}
             {{- end }}
