@@ -21,11 +21,21 @@ spec:
             {{/* ##  Loop through all the ImageStreams ## */}}
             {{- $imageStreamList := (lookup "image.openshift.io/v1" "ImageStream" "" "").items }}
             {{- range $imageStream := $imageStreamList }}
-            {{- $hasOwner := (hasKey $imageStream.metadata "ownerReferences") }}
             {{- $tagLength := 0 }}
+            {{- $dockerTagLength := 0 }}
+            {{- $dockerImageDetected := false }}
+            {{- $hasOwner := (hasKey $imageStream.metadata "ownerReferences") }}
             {{- $hasTags := (hasKey $imageStream.spec "tags") }}
             {{- if eq $hasTags true }}
-            {{- $tagLength := len $imageStream.spec.tags }}
+              {{- range $tag := $imageStream.spec.tags }}
+                {{- if eq $tag.from.kind "DockerImage" }}
+                  {{- $dockerImageDetected = true }}
+                  {{- $dockerTagLength = add $dockerTagLength 1 }}
+                {{- end }}
+              {{- end }}
+            {{- end }}
+            {{- if eq $hasTags true }}
+              {{- $tagLength := len $imageStream.spec.tags }}
             {{- end }}
             - complianceType: musthave
               objectDefinition:
@@ -39,14 +49,16 @@ spec:
                     numTags: '{{ $tagLength }}'
                     hasTags: '{{ $hasTags }}'
                     hasOwner: '{{ $hasOwner }}'
+                {{- if $dockerImageDetected }}
+                spec:
+                  tags:
+                  {{- range $tag := $imageStream.spec.tags }}
+                  {{- if eq $tag.from.kind "DockerImage" }}
+                  - name: '{{ $tag.name }}'
+                    importPolicy:
+                      scheduled: true
+                  {{- end -}}
+                  {{- end -}}
+                {{- end -}}
             {{- end }}
-        # spec:
-        #   tags:
-        #   {{- range $tag := $imageStream.spec.tags }}
-        #   {{- if eq $tag.from.kind "DockerImage" }}
-        #   - name: '{{ $tag.name }}'
-        #     importPolicy:
-        #       scheduled: true
-        #   {{- end -}}
-        #   {{- end -}}
-            # {{- end }}
+            {{- end }}
