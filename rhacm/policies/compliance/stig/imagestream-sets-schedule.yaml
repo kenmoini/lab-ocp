@@ -20,10 +20,13 @@ spec:
             {{/* ##  Loop through all the ImageStreams ## */}}
             {{- $imageStreamList := (lookup "image.openshift.io/v1" "ImageStream" "" "").items }}
             {{- range $imageStream := $imageStreamList }}
-            {{- $hasTags := hasKey $imageStream.spec "tags" }}
-            {{- $tagLength := len $imageStream.spec.tags | default 0 }}
             {{- $hasOwner := hasKey $imageStream.metadata "ownerReferences" }}
-            {{- if $hasTags and gt $tagLength 0 }}
+            {{- $tagLength := 0 }}
+            {{- $hasTags := hasKey $imageStream.spec "tags" }}
+            {{- if $hasTags }}
+            {{- $tagLength := len $imageStream.spec.tags | default 0 }}
+            {{- end }}
+            {{- if and $hasOwner (gt $tagLength 0) }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: image.openshift.io/v1
