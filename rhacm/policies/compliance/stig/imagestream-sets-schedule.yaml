@@ -22,7 +22,7 @@ spec:
             {{- range $imageStream := $imageStreamList }}
             {{- $hasOwner := hasKey $imageStream.metadata "ownerReferences" }}
             {{- $tagLength := 0 }}
-            {{- $hasTags := hasKey $imageStream.spec "tags" }}
+            {{- $hasTags := (hasKey $imageStream.spec "tags") }}
             {{- if $hasTags }}
             {{- $tagLength := len $imageStream.spec.tags | default 0 }}
             {{- end }}
