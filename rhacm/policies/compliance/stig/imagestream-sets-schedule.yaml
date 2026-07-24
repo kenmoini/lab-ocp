@@ -16,6 +16,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: low
+    # {{- if and (not $hasOwner) ($hasTags) (gt $tagLength 0) }}
           object-templates-raw: |
             {{/* ##  Loop through all the ImageStreams ## */}}
             {{- $imageStreamList := (lookup "image.openshift.io/v1" "ImageStream" "" "").items }}
@@ -26,7 +27,6 @@ spec:
             {{- if eq $hasTags true }}
             {{- $tagLength := len $imageStream.spec.tags | default 0 }}
             {{- end }}
-            {{- if and (not $hasOwner) ($hasTags) (gt $tagLength 0) }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: image.openshift.io/v1
@@ -37,14 +37,16 @@ spec:
                   labels:
                     policy.kemo.dev/managed-by: imagestream-sets-schedule
                     numTags: '{{ len $imageStream.spec.tags }}'
-                spec:
-                  tags:
-                  {{- range $tag := $imageStream.spec.tags }}
-                  {{- if eq $tag.from.kind "DockerImage" }}
-                  - name: '{{ $tag.name }}'
-                    importPolicy:
-                      scheduled: true
-                  {{- end -}}
-                  {{- end -}}
+                    hasTags: '{{ $hasTags }}'
+                    hasOwner: '{{ $hasOwner }}'
             {{- end }}
-            {{- end }}
+        # spec:
+        #   tags:
+        #   {{- range $tag := $imageStream.spec.tags }}
+        #   {{- if eq $tag.from.kind "DockerImage" }}
+        #   - name: '{{ $tag.name }}'
+        #     importPolicy:
+        #       scheduled: true
+        #   {{- end -}}
+        #   {{- end -}}
+            # {{- end }}
