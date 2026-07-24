@@ -26,7 +26,7 @@ spec:
             {{- if eq $hasTags true }}
             {{- $tagLength := len $imageStream.spec.tags | default 0 }}
             {{- end }}
-            {{- if and ($hasOwner) (gt $tagLength 0) }}
+            {{- if and (not $hasOwner) ($hasTags) (gt $tagLength 0) }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: image.openshift.io/v1
