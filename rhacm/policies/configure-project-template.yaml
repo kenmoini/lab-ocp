@@ -154,6 +154,16 @@ spec:
                       requests.memory: 4Gi
                       limits.cpu: '8'
                       limits.memory: 16Gi
+                - apiVersion: v1
+                  kind: LimitRange
+                  metadata:
+                    name: default
+                  spec:
+                    limits:
+                    - defaultRequest:
+                        cpu: 500m
+                        memory: 256Mi
+                      type: Container
 
                 parameters:
                 - name: PROJECT_NAME
