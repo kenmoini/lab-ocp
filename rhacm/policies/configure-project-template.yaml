@@ -143,27 +143,27 @@ spec:
                     podSelector: {}
                     policyTypes:
                     - Ingress
-                - apiVersion: v1
-                  kind: ResourceQuota
-                  metadata:
-                    name: default
-                  spec:
-                    hard:
-                      pods: '8'
-                      requests.cpu: '1'
-                      requests.memory: 4Gi
-                      limits.cpu: '8'
-                      limits.memory: 16Gi
-                - apiVersion: v1
-                  kind: LimitRange
-                  metadata:
-                    name: default
-                  spec:
-                    limits:
-                    - defaultRequest:
-                        cpu: 500m
-                        memory: 256Mi
-                      type: Container
+                # - apiVersion: v1
+                #   kind: ResourceQuota
+                #   metadata:
+                #     name: default
+                #   spec:
+                #     hard:
+                #       pods: '8'
+                #       requests.cpu: '1'
+                #       requests.memory: 4Gi
+                #       limits.cpu: '8'
+                #       limits.memory: 16Gi
+                # - apiVersion: v1
+                #   kind: LimitRange
+                #   metadata:
+                #     name: default
+                #   spec:
+                #     limits:
+                #     - defaultRequest:
+                #         cpu: 500m
+                #         memory: 256Mi
+                #       type: Container
 
                 parameters:
                 - name: PROJECT_NAME
