@@ -7,7 +7,28 @@ metadata:
 spec:
   description: "DISA STIG Platform Level Remediation"
   policies:
-    - console-logout-redirect
+    # ocp4-stig-fips-mode-enabled-on-all-nodes
     - check-fips
+    # ocp4-stig-oauth-or-oauthclient-inactivity-timeout
+    # ocp4-stig-oauth-or-oauthclient-token-maxage
     - oauth-token-config
+    # ocp4-stig-classification-banner
     - classification-banner
+    # ocp4-stig-cluster-logging-operator-exist
+    - operators-logging-base
+    # ocp4-stig-idp-is-configured
+    # ocp4-stig-oauth-provider-selection-set
+    - check-oauth-idps
+    # ocp4-stig-imagestream-sets-schedule
+    - imagestream-sets-schedule
+    # ocp4-stig-kubeadmin-removed
+    - remove-kubeadmin
+    # ocp4-stig-oauth-logout-url-set
+    - console-logout-redirect
+    # ocp4-stig-ocp-allowed-registries
+    # ocp4-stig-ocp-allowed-registries-for-import
+    - allowed-registries
+    # ocp4-stig-openshift-motd-exists
+    - cli-motd
+    # ocp4-stig-resource-requests-quota-per-project
+    - configure-project-template
