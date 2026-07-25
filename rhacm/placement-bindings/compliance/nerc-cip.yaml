@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: nerc-cip
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: nerc-cip
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: nerc-cip
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet

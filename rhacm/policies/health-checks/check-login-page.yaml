@@ -1,0 +1,34 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: check-login-page
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: SC System and Communications Protection
+    policy.open-cluster-management.io/controls: SC-1 System and Communications Protection Policy and Procedures
+spec:
+  disabled: false
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: check-login-page
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates-raw: |
+            {{- $oauthConfig := lookup "config.openshift.io/v1" "OAuth" "" "cluster" }}
+            {{- if eq $oauthConfig.spec.templates.login.name nil }}
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: config.openshift.io/v1
+                kind: OAuth
+                metadata:
+                  name: cluster
+                spec:
+                  templates:
+                    login:
+                      name: ''
+            {{- end }}

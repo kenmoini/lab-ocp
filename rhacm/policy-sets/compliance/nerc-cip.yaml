@@ -1,0 +1,25 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: nerc-cip
+  #namespace: open-cluster-management-policies
+spec:
+  description: "North American Electric Reliability Corporation (NERC) Critical Infrastructure Protection (CIP) cybersecurity standards profile for the Red Hat OpenShift Container Platform"
+  policies:
+    # ocp4-nerc-cip-fips-mode-enabled-on-all-nodes
+    - check-fips
+    # ocp4-nerc-cip-banner-or-login-template-set
+    - check-login-page
+    # ocp4-nerc-cip-openshift-motd-exists
+    - cli-motd
+    # ocp4-nerc-cip-ingress-controller-tls-cipher-suites
+    - ingress-cipher
+    # ocp4-nerc-cip-kubeadmin-removed
+    - check-oauth-idps
+    - remove-kubeadmin
+    # ocp4-nerc-cip-oauth-or-oauthclient-inactivity-timeout
+    # ocp4-nerc-cip-oauth-or-oauthclient-token-maxage
+    - oauth-token-config
+    # ocp4-nerc-cip-scc-limit-container-allowed-capabilities
+    - allowed-sccs
