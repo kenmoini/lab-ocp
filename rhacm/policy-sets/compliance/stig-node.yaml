@@ -69,3 +69,38 @@ spec:
     # rhcos4-stig-worker-audit-rules-suid-privilege-function
     # rhcos4-stig-worker-audit-rules-media-export
     - auditd-disa-stig
+
+    # rhcos4-stig-master-coreos-audit-backlog-limit-kernel-argument
+    # rhcos4-stig-worker-coreos-audit-backlog-limit-kernel-argument
+    - kernelarg-backlog-limit
+    # rhcos4-stig-master-coreos-audit-option
+    # rhcos4-stig-worker-coreos-audit-option
+    - kernelarg-audit
+    # rhcos4-stig-master-coreos-page-poison-kernel-argument
+    # rhcos4-stig-worker-coreos-page-poison-kernel-argument
+    - kernelarg-page-poison
+    # rhcos4-stig-master-coreos-slub-debug-kernel-argument
+    # rhcos4-stig-worker-coreos-slub-debug-kernel-argument
+    - kernelarg-slub-debug
+    # rhcos4-stig-master-coreos-vsyscall-kernel-argument
+    # rhcos4-stig-worker-coreos-vsyscall-kernel-argument
+    - kernelarg-vsyscall
+    # rhcos4-stig-master-kernel-module-usb-storage-disabled
+    # rhcos4-stig-worker-kernel-module-usb-storage-disabled
+    # rhcos4-stig-master-package-usbguard-installed
+    # rhcos4-stig-worker-package-usbguard-installed
+    # rhcos4-stig-master-service-usbguard-enabled
+    # rhcos4-stig-worker-service-usbguard-enabled
+    # rhcos4-stig-master-usbguard-allow-hid-and-hub
+    # rhcos4-stig-worker-usbguard-allow-hid-and-hub
+    - enable-usb-guard
+    # rhcos4-stig-master-service-sshd-disabled
+    # rhcos4-stig-worker-service-sshd-disabled
+    - disable-sshd
+    # rhcos4-stig-master-sysctl-kernel-dmesg-restrict
+    # rhcos4-stig-worker-sysctl-kernel-dmesg-restrict
+    # rhcos4-stig-master-sysctl-kernel-perf-event-paranoid
+    # rhcos4-stig-worker-sysctl-kernel-perf-event-paranoid
+    # rhcos4-stig-master-sysctl-kernel-randomize-va-space
+    # rhcos4-stig-worker-sysctl-kernel-randomize-va-space
+    - disa-stig-sysctls
