@@ -21,6 +21,14 @@ spec:
     - sshd-configuration
   # Audit Level
     # rhcos4-e8-master-auditd-name-format
+    # rhcos4-e8-master-audit-rules-dac-modification-chmod
+    # rhcos4-e8-master-audit-rules-dac-modification-chown
+    # rhcos4-e8-master-audit-rules-execution-chcon
+    # rhcos4-e8-master-audit-rules-execution-restorecon
+    # rhcos4-e8-master-audit-rules-execution-semanage
+    # rhcos4-e8-master-audit-rules-execution-setfiles
+    # rhcos4-e8-master-audit-rules-execution-setsebool
+    # rhcos4-e8-master-audit-rules-execution-seunshare
     # rhcos4-e8-master-audit-rules-kernel-module-loading-delete
     # rhcos4-e8-master-audit-rules-kernel-module-loading-finit
     # rhcos4-e8-master-audit-rules-kernel-module-loading-init
@@ -35,15 +43,6 @@ spec:
     # rhcos4-e8-master-audit-rules-time-stime
     # rhcos4-e8-master-audit-rules-time-watch-localtime
     # rhcos4-e8-master-audit-rules-usergroup-modification
-    # rhcos4-e8-master-audit-rules-dac-modification-chmod
-    # rhcos4-e8-master-audit-rules-dac-modification-chown
-    # rhcos4-e8-master-audit-rules-execution-chcon
-    # rhcos4-e8-master-audit-rules-execution-restorecon
-    # rhcos4-e8-master-audit-rules-execution-semanage
-    # rhcos4-e8-master-audit-rules-execution-setfiles
-    # rhcos4-e8-master-audit-rules-execution-setsebool
-    # rhcos4-e8-master-audit-rules-execution-seunshare
-    # rhcos4-e8-master-audit-rules-kernel-module-loading-delete
     # rhcos4-e8-worker-auditd-name-format
     # rhcos4-e8-worker-audit-rules-networkconfig-modification
     # rhcos4-e8-worker-audit-rules-kernel-module-loading-delete
@@ -67,7 +66,6 @@ spec:
     # rhcos4-e8-worker-audit-rules-execution-setfiles
     # rhcos4-e8-worker-audit-rules-execution-setsebool
     # rhcos4-e8-worker-audit-rules-execution-seunshare
-    # rhcos4-e8-worker-audit-rules-kernel-module-loading-delete
     - auditd-configuration
     # rhcos4-e8-master-sysctl-kernel-yama-ptrace-scope
     # rhcos4-e8-master-sysctl-kernel-unprivileged-bpf-disabled
