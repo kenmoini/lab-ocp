@@ -20,4 +20,5 @@ spec:
               operator: In
               values:
                 - "true"
+                - "enable"
                 - "enabled"

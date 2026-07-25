@@ -17,11 +17,13 @@ spec:
               operator: In
               values:
                 - "true"
+                - "enable"
                 - "enabled"
             - key: servicemesh3
               operator: NotIn
               values:
                 - "true"
+                - "enable"
                 - "enabled"
 ---
 apiVersion: cluster.open-cluster-management.io/v1beta1
@@ -42,9 +44,11 @@ spec:
               operator: In
               values:
                 - "true"
+                - "enable"
                 - "enabled"
             - key: servicemesh2
               operator: NotIn
               values:
                 - "true"
+                - "enable"
                 - "enabled"

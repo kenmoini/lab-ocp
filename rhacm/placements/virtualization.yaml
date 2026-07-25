@@ -17,6 +17,7 @@ spec:
               operator: In
               values:
                 - "true"
+                - "enable"
                 - "enabled"
 ---
 apiVersion: cluster.open-cluster-management.io/v1beta1
@@ -32,6 +33,7 @@ spec:
               operator: In
               values:
                 - "true"
+                - "enable"
                 - "enabled"
             - key: openshiftVersion-major-minor
               operator: In
@@ -51,6 +53,7 @@ spec:
               operator: In
               values:
                 - "true"
+                - "enable"
                 - "enabled"
             - key: openshiftVersion-major-minor
               operator: In
@@ -70,6 +73,7 @@ spec:
               operator: In
               values:
                 - "true"
+                - "enable"
                 - "enabled"
             - key: openshiftVersion-major-minor
               operator: In
