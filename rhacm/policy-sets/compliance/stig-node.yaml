@@ -1,0 +1,71 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: stig-node
+  #namespace: open-cluster-management-policies
+spec:
+  description: "DISA STIG Node Level Remediation"
+  policies:
+    # rhcos4-stig-master-audit-rules-immutable
+    # rhcos4-stig-master-audit-access-failed
+    # rhcos4-stig-master-audit-create-failed
+    # rhcos4-stig-master-audit-delete-failed
+    # rhcos4-stig-master-audit-modify-failed
+    # rhcos4-stig-master-audit-immutable-login-uids
+    # rhcos4-stig-master-audit-rules-dac-modification-umount2
+    # rhcos4-stig-master-audit-rules-dac-modification-umount
+    # rhcos4-stig-master-audit-rules-execution-chacl
+    # rhcos4-stig-master-audit-rules-execution-setfacl
+    # rhcos4-stig-master-audit-rules-privileged-commands-dbus-daemon-launch-helper
+    # rhcos4-stig-master-audit-rules-privileged-commands-fusermount
+    # rhcos4-stig-master-audit-rules-privileged-commands-fusermount3
+    # rhcos4-stig-master-audit-rules-privileged-commands-grub2-set-bootflag
+    # rhcos4-stig-master-audit-rules-privileged-commands-kmod
+    # rhcos4-stig-master-audit-rules-privileged-commands-mount-nfs
+    # rhcos4-stig-master-audit-rules-privileged-commands-pkexec
+    # rhcos4-stig-master-audit-rules-privileged-commands-polkit-helper
+    # rhcos4-stig-master-audit-rules-privileged-commands-ssh-agent
+    # rhcos4-stig-master-audit-rules-privileged-commands-sssd-krb5-child
+    # rhcos4-stig-master-audit-rules-privileged-commands-sssd-ldap-child
+    # rhcos4-stig-master-audit-rules-privileged-commands-sssd-proxy-child
+    # rhcos4-stig-master-audit-rules-privileged-commands-sssd-selinux-child
+    # rhcos4-stig-master-audit-rules-privileged-commands-unix-update
+    # rhcos4-stig-master-audit-rules-privileged-commands-usermod
+    # rhcos4-stig-master-audit-rules-privileged-commands-utempter
+    # rhcos4-stig-master-audit-rules-privileged-commands-write
+    # rhcos4-stig-master-audit-rules-session-events
+    # rhcos4-stig-master-audit-rules-suid-privilege-function
+    # rhcos4-stig-master-audit-rules-media-export
+    
+    # rhcos4-stig-worker-audit-rules-immutable
+    # rhcos4-stig-worker-audit-access-failed
+    # rhcos4-stig-worker-audit-create-failed
+    # rhcos4-stig-worker-audit-delete-failed
+    # rhcos4-stig-worker-audit-modify-failed
+    # rhcos4-stig-worker-audit-immutable-login-uids
+    # rhcos4-stig-worker-audit-rules-dac-modification-umount2
+    # rhcos4-stig-worker-audit-rules-dac-modification-umount
+    # rhcos4-stig-worker-audit-rules-execution-chacl
+    # rhcos4-stig-worker-audit-rules-execution-setfacl
+    # rhcos4-stig-worker-audit-rules-privileged-commands-dbus-daemon-launch-helper
+    # rhcos4-stig-worker-audit-rules-privileged-commands-fusermount
+    # rhcos4-stig-worker-audit-rules-privileged-commands-fusermount3
+    # rhcos4-stig-worker-audit-rules-privileged-commands-grub2-set-bootflag
+    # rhcos4-stig-worker-audit-rules-privileged-commands-kmod
+    # rhcos4-stig-worker-audit-rules-privileged-commands-mount-nfs
+    # rhcos4-stig-worker-audit-rules-privileged-commands-pkexec
+    # rhcos4-stig-worker-audit-rules-privileged-commands-polkit-helper
+    # rhcos4-stig-worker-audit-rules-privileged-commands-ssh-agent
+    # rhcos4-stig-worker-audit-rules-privileged-commands-sssd-krb5-child
+    # rhcos4-stig-worker-audit-rules-privileged-commands-sssd-ldap-child
+    # rhcos4-stig-worker-audit-rules-privileged-commands-sssd-proxy-child
+    # rhcos4-stig-worker-audit-rules-privileged-commands-sssd-selinux-child
+    # rhcos4-stig-worker-audit-rules-privileged-commands-unix-update
+    # rhcos4-stig-worker-audit-rules-privileged-commands-usermod
+    # rhcos4-stig-worker-audit-rules-privileged-commands-utempter
+    # rhcos4-stig-worker-audit-rules-privileged-commands-write
+    # rhcos4-stig-worker-audit-rules-session-events
+    # rhcos4-stig-worker-audit-rules-suid-privilege-function
+    # rhcos4-stig-worker-audit-rules-media-export
+    - auditd-disa-stig

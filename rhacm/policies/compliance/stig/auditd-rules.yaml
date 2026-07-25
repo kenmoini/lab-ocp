@@ -33,62 +33,72 @@ spec:
                       version: 3.1.0
                     storage:
                       files:
+                        # rhcos4-stig-master-audit-rules-immutable
                         - contents:
                             source: 'data:,-e%202%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/90-immutable.rules
+                        # rhcos4-stig-master-audit-access-failed
                         - contents:
                             source: 'data:,%23%23%20Unsuccessful%20file%20access%20%28any%20other%20opens%29%20This%20has%20to%20go%20last.%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%2Copenat%2Copenat2%2Copen_by_handle_at%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-access%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%2Copenat%2Copenat2%2Copen_by_handle_at%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-access%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%2Copenat%2Copenat2%2Copen_by_handle_at%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-access%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%2Copenat%2Copenat2%2Copen_by_handle_at%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-access%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/30-ospp-v42-3-access-failed.rules
+                        # rhcos4-stig-master-audit-create-failed
                         - contents:
                             source: 'data:,%23%23%20Unsuccessful%20file%20creation%20%28open%20with%20O_CREAT%29%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&0100%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20creat%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20creat%20-F%20exit=-EACCES%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20openat%2Copen_by_handle_at%20-F%20a2&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20open%20-F%20a1&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20open%20-F%20a1&0100%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b32%20-S%20creat%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20creat%20-F%20exit=-EPERM%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=unsuccessful-create%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/30-ospp-v42-1-create-failed.rules
+                        # rhcos4-stig-master-audit-delete-failed
                         - contents:
                             source: 'data:,%23%23%20Unsuccessful%20file%20delete%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlink%2Cunlinkat%2Crename%2Crenameat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-delete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlink%2Cunlinkat%2Crename%2Crenameat%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-delete%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20unlink%2Cunlinkat%2Crename%2Crenameat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-delete%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20unlink%2Cunlinkat%2Crename%2Crenameat%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-delete%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/30-ospp-v42-4-delete-failed.rules
+                        # rhcos4-stig-master-audit-modify-failed
                         - contents:
                             source: 'data:,%23%23%20Unsuccessful%20file%20modifications%20%28open%20for%20write%20or%20truncate%29%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%2Copen_by_handle_at%20-F%20a2%2601003%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%2Copen_by_handle_at%20-F%20a2%2601003%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2601003%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2601003%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20truncate%2Cftruncate%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20truncate%2Cftruncate%20-F%20exit%3D-EACCES%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20openat%2Copen_by_handle_at%20-F%20a2%2601003%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20openat%2Copen_by_handle_at%20-F%20a2%2601003%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20open%20-F%20a1%2601003%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20open%20-F%20a1%2601003%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20truncate%2Cftruncate%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20truncate%2Cftruncate%20-F%20exit%3D-EPERM%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dunsuccessful-modification%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/30-ospp-v42-2-modify-failed.rules
+                        # rhcos4-stig-master-audit-immutable-login-uids
                         - contents:
                             source: 'data:,%23%23%20Make%20the%20loginuid%20immutable.%20This%20prevents%20tampering%20with%20the%20auid.%0A--loginuid-immutable%0A%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/11-loginuid.rules
+                        # rhcos4-stig-master-audit-rules-dac-modification-umount2
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20umount2%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20umount2%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dperm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-umount2_dac_modification.rules
+                        # rhcos4-stig-master-audit-rules-dac-modification-umount
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch=b32%20-S%20umount%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=perm_mod%0A-a%20always%2Cexit%20-F%20arch=b64%20-S%20umount%20-F%20auid%3E=1000%20-F%20auid%21=unset%20-F%20key=perm_mod%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-umount_dac_modification.rules
+                        # rhcos4-stig-master-audit-rules-execution-chacl
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/chacl%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_chacl_execution.rules
+                        # rhcos4-stig-master-audit-rules-execution-setfacl
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/bin/setfacl%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_setfacl_execution.rules
+                        # rhcos4-stig-master-audit-rules-media-export
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20arch%3Db32%20-S%20mount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dexport%0A-a%20always%2Cexit%20-F%20arch%3Db64%20-S%20mount%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dexport%0A'
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-mount_dac_modification.rules
-                          
                         # rhcos4-stig-master-audit-rules-privileged-commands-dbus-daemon-launch-helper
                         - contents:
                             source: 'data:,-a%20always%2Cexit%20-F%20path%3D/usr/libexec/dbus-1/dbus-daemon-launch-helper-1%20-F%20auid%3E%3D1000%20-F%20auid%21%3Dunset%20-F%20key%3Dprivileged%0A'
@@ -191,7 +201,6 @@ spec:
                           mode: 384
                           overwrite: true
                           path: /etc/audit/rules.d/75-usr_bin_write_execution.rules
-
                         # rhcos4-stig-master-audit-rules-session-events
                         - contents:
                             source: 'data:,%0A-w%20%2Fvar%2Frun%2Futmp%20-p%20wa%20-k%20session%0A-w%20%2Fvar%2Flog%2Fbtmp%20-p%20wa%20-k%20session%0A-w%20%2Fvar%2Flog%2Fwtmp%20-p%20wa%20-k%20session%0A'
