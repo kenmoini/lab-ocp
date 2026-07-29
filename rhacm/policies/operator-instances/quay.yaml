@@ -27,6 +27,10 @@ spec:
                 kind: Namespace
                 metadata:
                   name: quay
+                  annotations:
+                    openshift.io/cluster-monitoring: "true"
+                    scheduler.alpha.kubernetes.io/defaultTolerations: '[{"key":"node-role.kubernetes.io/infra","operator":"Exists","effect":"NoSchedule"}]'
+                    openshift.io/node-selector: 'node-role.kubernetes.io/{{ hasNodesWithExactRoles "infra" | ternary "infra" "worker" }}='
 
     # DO NOT STORE LIKE THIS IF YOU CAN HELP IT
     # PULL THE SECRET FROM ESO LIKE COMMENTED OUT BELOWWWWW
