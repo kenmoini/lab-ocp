@@ -1,9 +1,9 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: reloader-deployment
+  name: reloader-statefulset
   annotations:
-    policy.open-cluster-management.io/description: Reloads deployments when configmaps or secrets change
+    policy.open-cluster-management.io/description: Reloads StatefulSets when configmaps or secrets change
     policy.open-cluster-management.io/categories: OCPWM - OpenShift Workload Management
     policy.open-cluster-management.io/standards: Kemo Labs 2026
     policy.open-cluster-management.io/controls: OCP-FN - OpenShift Functions
@@ -14,7 +14,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: reloader-deployment-cmap
+          name: reloader-statefulset-cmap
         spec:
           remediationAction: enforce
           severity: low
@@ -23,14 +23,14 @@ spec:
             {{- $configMapList := (lookup "v1" "ConfigMap" "" "" "function.kemo.dev/reloader=enabled").items }}
             {{- range $configMap := $configMapList }}
             {{/* ## Check for the needed labels on the ConfigMap ## */}}
-            {{- if and (hasKey $configMap.metadata.labels "reloader.kemo.dev/target") (hasKey $configMap.metadata.labels "reloader.kemo.dev/target-type") (eq "deployment" (lower (get $configMap.metadata.labels "reloader.kemo.dev/target-type") ) ) }}
+            {{- if and (hasKey $configMap.metadata.labels "reloader.kemo.dev/target") (hasKey $configMap.metadata.labels "reloader.kemo.dev/target-type") (eq "statefulset" (lower (get $configMap.metadata.labels "reloader.kemo.dev/target-type") ) ) }}
             {{- $target := get $configMap.metadata.labels "reloader.kemo.dev/target" }}
-            {{- $deployment := (lookup "apps/v1" "Deployment" $configMap.metadata.namespace $target) }}
-            {{- if $deployment }}
+            {{- $statefulset := (lookup "apps/v1" "StatefulSet" $configMap.metadata.namespace $target) }}
+            {{- if $statefulset }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: apps/v1
-                kind: Deployment
+                kind: StatefulSet
                 metadata:
                   name: '{{ $target }}'
                   namespace: '{{ $configMap.metadata.namespace }}'
@@ -48,7 +48,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: reloader-deployment-secret
+          name: reloader-statefulset-secret
         spec:
           remediationAction: enforce
           severity: low
@@ -57,14 +57,14 @@ spec:
             {{- $secretList := (lookup "v1" "Secret" "" "" "function.kemo.dev/reloader=enabled").items }}
             {{- range $secret := $secretList }}
             {{/* ## Check for the needed labels on the Secret ## */}}
-            {{- if and (hasKey $secret.metadata.labels "reloader.kemo.dev/target") (hasKey $secret.metadata.labels "reloader.kemo.dev/target-type") (eq "deployment" (lower (get $secret.metadata.labels "reloader.kemo.dev/target-type") ) ) }}
+            {{- if and (hasKey $secret.metadata.labels "reloader.kemo.dev/target") (hasKey $secret.metadata.labels "reloader.kemo.dev/target-type") (eq "statefulset" (lower (get $secret.metadata.labels "reloader.kemo.dev/target-type") ) ) }}
             {{- $target := get $secret.metadata.labels "reloader.kemo.dev/target" }}
-            {{- $deployment := (lookup "apps/v1" "Deployment" $secret.metadata.namespace $target) }}
-            {{- if $deployment }}
+            {{- $statefulset := (lookup "apps/v1" "StatefulSet" $secret.metadata.namespace $target) }}
+            {{- if $statefulset }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: apps/v1
-                kind: Deployment
+                kind: StatefulSet
                 metadata:
                   name: '{{ $target }}'
                   namespace: '{{ $secret.metadata.namespace }}'
