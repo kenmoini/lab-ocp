@@ -25,14 +25,14 @@ spec:
             {{/* ## Check for the needed labels on the ConfigMap ## */}}
             {{- if and (hasKey $configMap.metadata.labels "reloader.kemo.dev/target") (hasKey $configMap.metadata.labels "reloader.kemo.dev/target-type") }}
 
-            {{- $deployment := (lookup "apps/v1" "Deployment" $configMap.metadata.namespace (printf "%s" $configMap.metadata.labels."reloader.kemo.dev/target")).items }}
+            {{- $deployment := (lookup "apps/v1" "Deployment" $configMap.metadata.namespace $configMap.metadata.labels."reloader.kemo.dev/target").items }}
             {{- if (gt (len $deployment) 0) }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: apps/v1
                 kind: Deployment
                 metadata:
-                  name: {{ (printf "%s" $configMap.metadata.labels."reloader.kemo.dev/target") }}
+                  name: {{ $configMap.metadata.labels."reloader.kemo.dev/target" }}
                   namespace: {{ $configMap.metadata.namespace }}
                   labels:
                     reloader.kemo.dev/trigger: '{{ $configMap.metadata.namespace }}'
