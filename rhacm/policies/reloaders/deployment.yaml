@@ -34,3 +34,4 @@ spec:
                   labels:
                     function.kemo.dev/reloader-started: 'truee'
             {{- end }}
+            {{- end }}
