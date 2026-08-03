@@ -24,7 +24,7 @@ spec:
             {{- range $configMap := $configMapList }}
             {{/* ## Check for the needed labels on the ConfigMap ## */}}
             {{- if and (hasKey $configMap.metadata.labels "reloader.kemo.dev/target") (hasKey $configMap.metadata.labels "reloader.kemo.dev/target-type") }}
-            {{- $target := $configMap.metadata.labels."reloader.kemo.dev/target" }}
+            {{- $target := get $configMap.metadata.labels "reloader.kemo.dev/target" }}
             {{- $deployment := (lookup "apps/v1" "Deployment" $configMap.metadata.namespace $target).items }}
             {{- if (gt (len $deployment) 0) }}
             - complianceType: musthave
