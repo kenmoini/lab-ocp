@@ -1,0 +1,16 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: all-clusters
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: all-clusters
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+
+  - name: all-clusters
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
+

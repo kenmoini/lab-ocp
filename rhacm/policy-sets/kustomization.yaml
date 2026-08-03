@@ -6,6 +6,7 @@ namespace: open-cluster-management-policies
 resources:
   - compliance/
 
+  - all-clusters.yaml
   - best-practices.yaml
   - developer-services.yaml
   - enhanced-metrics.yaml

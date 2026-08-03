@@ -20,6 +20,7 @@ resources:
   - capabilities/
   - compliance/
   - composition/
+  - reloaders/
   # - best-practices/
   - audit-logging-config.yaml
   - compliance-scan-cis.yaml

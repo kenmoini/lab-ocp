@@ -7,6 +7,7 @@ resources:
   - capabilities/
   - compliance/
 
+  - all-clusters.yaml
   - all-openshift-clusters.yaml
   - all-hcp-virt-clusters.yaml
 

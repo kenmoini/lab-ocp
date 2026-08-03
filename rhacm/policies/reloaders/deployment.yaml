@@ -1,0 +1,34 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: reloader-deployment
+  annotations:
+    policy.open-cluster-management.io/description: Reloads deployments when configmaps or secrets change
+    policy.open-cluster-management.io/categories: OCPWM - OpenShift Workload Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OCP-FN - OpenShift Functions
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: reloader-deployment-cmap
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{/* ## Loop through the ConfigMaps with the reloader label ## */}}
+            {{- $configMapList := (lookup "v1" "ConfigMap" "" "" "function.kemo.dev/reloader=enabled").items }}
+            {{- range $configMap := $configMapList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: {{ $configMap.metadata.name }}
+                  namespace: {{ $configMap.metadata.namespace }}
+                  labels:
+                    function.kemo.dev/reloader-started: 'true'
+            {{- end }}
