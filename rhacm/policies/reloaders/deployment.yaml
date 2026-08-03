@@ -35,7 +35,12 @@ spec:
                   name: '{{ $target }}'
                   namespace: '{{ $configMap.metadata.namespace }}'
                   labels:
-                    reloader.kemo.dev/trigger: '{{ $configMap.metadata.namespace }}'
+                    trigger.reloader.kemo.dev/{{ substr 0 35 $configMap.metadata.name }}: '{{ $configMap.metadata.resourceVersion }}'
+                spec:
+                  template:
+                    metadata:
+                      labels:
+                        trigger.reloader.kemo.dev/{{ substr 0 35 $configMap.metadata.name }}: '{{ $configMap.metadata.resourceVersion }}'
             {{- end }}
             {{- end }}
             {{- end }}
