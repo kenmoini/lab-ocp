@@ -8,3 +8,5 @@ spec:
   description: "Policies applied to all Kubernetes/OpenShift clusters"
   policies:
     - reloader-deployment
+    - reloader-statefulset
+    - reloader-daemonset

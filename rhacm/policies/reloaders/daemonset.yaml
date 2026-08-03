@@ -1,0 +1,80 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: reloader-daemonset
+  annotations:
+    policy.open-cluster-management.io/description: Reloads DaemonSets when configmaps or secrets change
+    policy.open-cluster-management.io/categories: OCPWM - OpenShift Workload Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OCP-FN - OpenShift Functions
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: reloader-daemonset-cmap
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{/* ## Loop through the ConfigMaps with the reloader label ## */}}
+            {{- $configMapList := (lookup "v1" "ConfigMap" "" "" "function.kemo.dev/reloader=enabled").items }}
+            {{- range $configMap := $configMapList }}
+            {{/* ## Check for the needed labels on the ConfigMap ## */}}
+            {{- if and (hasKey $configMap.metadata.labels "reloader.kemo.dev/target") (hasKey $configMap.metadata.labels "reloader.kemo.dev/target-type") (eq "daemonset" (lower (get $configMap.metadata.labels "reloader.kemo.dev/target-type") ) ) }}
+            {{- $target := get $configMap.metadata.labels "reloader.kemo.dev/target" }}
+            {{- $daemonset := (lookup "apps/v1" "DaemonSet" $configMap.metadata.namespace $target) }}
+            {{- if $daemonset }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: DaemonSet
+                metadata:
+                  name: '{{ $target }}'
+                  namespace: '{{ $configMap.metadata.namespace }}'
+                  labels:
+                    trigger.reloader.kemo.dev/{{ substr 0 35 $configMap.metadata.name }}: '{{ $configMap.metadata.resourceVersion }}'
+                spec:
+                  template:
+                    metadata:
+                      labels:
+                        trigger.reloader.kemo.dev/{{ substr 0 35 $configMap.metadata.name }}: '{{ $configMap.metadata.resourceVersion }}'
+            {{- end }}
+            {{- end }}
+            {{- end }}
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: reloader-daemonset-secret
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{/* ## Loop through the Secrets with the reloader label ## */}}
+            {{- $secretList := (lookup "v1" "Secret" "" "" "function.kemo.dev/reloader=enabled").items }}
+            {{- range $secret := $secretList }}
+            {{/* ## Check for the needed labels on the Secret ## */}}
+            {{- if and (hasKey $secret.metadata.labels "reloader.kemo.dev/target") (hasKey $secret.metadata.labels "reloader.kemo.dev/target-type") (eq "daemonset" (lower (get $secret.metadata.labels "reloader.kemo.dev/target-type") ) ) }}
+            {{- $target := get $secret.metadata.labels "reloader.kemo.dev/target" }}
+            {{- $daemonset := (lookup "apps/v1" "DaemonSet" $secret.metadata.namespace $target) }}
+            {{- if $daemonset }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: DaemonSet
+                metadata:
+                  name: '{{ $target }}'
+                  namespace: '{{ $secret.metadata.namespace }}'
+                  labels:
+                    trigger.reloader.kemo.dev/{{ substr 0 35 $secret.metadata.name }}: '{{ $secret.metadata.resourceVersion }}'
+                spec:
+                  template:
+                    metadata:
+                      labels:
+                        trigger.reloader.kemo.dev/{{ substr 0 35 $secret.metadata.name }}: '{{ $secret.metadata.resourceVersion }}'
+            {{- end }}
+            {{- end }}
+            {{- end }}
