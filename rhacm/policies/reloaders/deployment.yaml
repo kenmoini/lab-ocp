@@ -44,3 +44,37 @@ spec:
             {{- end }}
             {{- end }}
             {{- end }}
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: reloader-deployment-secret
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{/* ## Loop through the Secrets with the reloader label ## */}}
+            {{- $secretList := (lookup "v1" "Secret" "" "" "function.kemo.dev/reloader=enabled").items }}
+            {{- range $secret := $secretList }}
+            {{/* ## Check for the needed labels on the Secret ## */}}
+            {{- if and (hasKey $secret.metadata.labels "reloader.kemo.dev/target") (hasKey $secret.metadata.labels "reloader.kemo.dev/target-type") }}
+            {{- $target := get $secret.metadata.labels "reloader.kemo.dev/target" }}
+            {{- $deployment := (lookup "apps/v1" "Deployment" $secret.metadata.namespace $target) }}
+            {{- if $deployment }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: '{{ $target }}'
+                  namespace: '{{ $secret.metadata.namespace }}'
+                  labels:
+                    trigger.reloader.kemo.dev/{{ substr 0 35 $secret.metadata.name }}: '{{ $secret.metadata.resourceVersion }}'
+                spec:
+                  template:
+                    metadata:
+                      labels:
+                        trigger.reloader.kemo.dev/{{ substr 0 35 $secret.metadata.name }}: '{{ $secret.metadata.resourceVersion }}'
+            {{- end }}
+            {{- end }}
+            {{- end }}
