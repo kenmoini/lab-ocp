@@ -30,35 +30,7 @@ spec:
                   labels:
                     openshift.io/cluster-monitoring: 'true'
 
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
-          name: sandbox-namespace
-          namespace: ""
-          compliance: Compliant
-      objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: sandbox-og-check
-        spec:
-          remediationAction: inform
-          severity: low
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: operators.coreos.com/v1
-                kind: OperatorGroup
-                metadata:
-                  namespace: openshift-sandboxed-containers-operator
-
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
-          name: sandbox-og-check
-          compliance: NonCompliant
-      ignorePending: true
-      objectDefinition:
+    - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
@@ -79,6 +51,7 @@ spec:
                   upgradeStrategy: Default
                   targetNamespaces:
                     - openshift-sandboxed-containers-operator
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
