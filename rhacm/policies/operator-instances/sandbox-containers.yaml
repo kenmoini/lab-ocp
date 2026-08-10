@@ -67,3 +67,33 @@ spec:
                               matchExpressions:
                                 kvm: { op: Exists }
                                 kvm_amd: { op: Exists }
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: sandboxed-nfd-rule
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: sandboxed-kataconfig
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: kataconfiguration.openshift.io/v1
+                kind: KataConfig
+                metadata:
+                  name: sandboxed-kataconfig
+                spec:
+                  checkNodeEligibility: false
+                  enablePeerPods: false
+                  kataConfigPoolSelector:
+                    matchExpressions:
+                      - key: feature.node.kubernetes.io/runtime.kata
+                        operator: Exists
+                  logLevel: info
