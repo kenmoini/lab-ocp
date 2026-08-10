@@ -54,6 +54,7 @@ resources:
   - rh-loki.yaml
   - virtualization.yaml
   - servicemesh.yaml
+  - sandboxed-containers.yaml
   - openshift-ai.yaml
 
 commonAnnotations:

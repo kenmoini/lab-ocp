@@ -41,15 +41,16 @@ resources:
   - rh-otel.yaml
   - rh-tempo.yaml
   - rhoai.yaml
+  - sandbox-containers.yaml
+  - serverless.yaml
+  - servicemesh-3.yaml
+  - servicemesh-2.yaml
   - sscsi.yaml
   - snr.yaml
   - talm.yaml
   - truenas-csi.yaml
   - virtualization.yaml
   - web-terminal.yaml
-  - serverless.yaml
-  - servicemesh-3.yaml
-  - servicemesh-2.yaml
 
 
 commonAnnotations:
