@@ -40,3 +40,10 @@ spec:
                             - "12"
                           deviceLabelFields:
                             - "vendor"
+                        custom:
+                          - name: "feature.node.kubernetes.io/runtime.kata"
+                            matchOn:
+                              - cpuId: ["SSE4", "VMX"]
+                                loadedKMod: ["kvm", "kvm_intel"]
+                              - cpuId: ["SSE4", "SVM"]
+                                loadedKMod: ["kvm", "kvm_amd"]
