@@ -1,0 +1,51 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: enable-iommu
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CC - Capability Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: enable-iommu-mc
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: master
+                  name: 100-iommu-kargs-master
+                spec:
+                  config:
+                    ignition:
+                      version: 3.2.0
+                  kernelArguments:
+                    - amd_iommu=on
+                    - intel_iommu=on
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: machineconfiguration.openshift.io/v1
+                kind: MachineConfig
+                metadata:
+                  labels:
+                    machineconfiguration.openshift.io/role: worker
+                  name: 100-iommu-kargs-worker
+                spec:
+                  config:
+                    ignition:
+                      version: 3.2.0
+                  kernelArguments:
+                    - amd_iommu=on
+                    - intel_iommu=on

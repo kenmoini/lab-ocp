@@ -7,6 +7,7 @@ resources:
   - masters-unschedulable.yaml
   - masters-schedulable.yaml
   - enable-multi-arch.yaml
+  - enable-iommu.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: enable-iommu
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: enable-iommu
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: enable-iommu
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
