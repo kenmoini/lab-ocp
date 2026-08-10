@@ -97,3 +97,25 @@ spec:
                       - key: feature.node.kubernetes.io/runtime.kata
                         operator: Exists
                   logLevel: info
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: sandboxed-kataconfig
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: sandboxed-runtime-check
+        spec:
+          remediationAction: inform
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: node.k8s.io/v1
+                kind: RuntimeClass
+                metadata:
+                  name: kata
