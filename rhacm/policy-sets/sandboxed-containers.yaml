@@ -8,3 +8,4 @@ spec:
   description: "Set of policies that will enable OpenShift Sandboxed Containers"
   policies:
     - operators-sandbox-containers
+    - instance-sandbox-containers

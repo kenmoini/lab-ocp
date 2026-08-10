@@ -32,6 +32,7 @@ resources:
   - quay.yaml
   - rhbk.yaml
   - rhoai3.yaml
+  - sandbox-containers.yaml
   - virtualization.yaml
 
 commonAnnotations:

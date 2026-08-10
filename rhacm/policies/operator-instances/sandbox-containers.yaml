@@ -1,0 +1,69 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-sandbox-containers
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the objects needed to enable OpenShift Sandboxed Containers
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-nfd
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: instance-nfd
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-sandbox-containers
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: sandboxed-nfd-rule
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: nfd.openshift.io/v1alpha1
+                kind: NodeFeatureRule
+                metadata:
+                  name: consolidated-hardware-features
+                  namespace: openshift-nfd
+                spec:
+                  rules:
+                    - name: "runtime.kata"
+                      labels:
+                        feature.node.kubernetes.io/runtime.kata: "true"
+                      matchAny:
+                        - matchFeatures:
+                            - feature: cpu.cpuid
+                              matchExpressions:
+                                SSE42: { op: Exists }
+                                VMX: { op: Exists }
+                            - feature: kernel.loadedmodule
+                              matchExpressions:
+                                kvm: { op: Exists }
+                                kvm_intel: { op: Exists }
+                        - matchFeatures:
+                            - feature: cpu.cpuid
+                              matchExpressions:
+                                SSE42: { op: Exists }
+                                SVM: { op: Exists }
+                            - feature: kernel.loadedmodule
+                              matchExpressions:
+                                kvm: { op: Exists }
+                                kvm_amd: { op: Exists }
