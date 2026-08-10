@@ -7,4 +7,4 @@ metadata:
 spec:
   description: "Set of policies that will enable OpenShift Sandboxed Containers"
   policies:
-    - operators-sandboxed-containers
+    - operators-sandbox-containers
