@@ -60,20 +60,12 @@ spec:
                 metadata:
                   name: gpu-cluster-policy
                 spec:
-                  vgpuDeviceManager:
-                    enabled: false
-                  gdrcopy:
-                    enabled: false
-                  migManager:
-                    enabled: true
                   operator:
                     defaultRuntime: crio
                     initContainer: {}
                     runtimeClass: nvidia
                     use_ocp_driver_toolkit: true
                   dcgm:
-                    enabled: true
-                  gfd:
                     enabled: true
                   dcgmExporter:
                     enabled: true
@@ -115,8 +107,18 @@ spec:
                     mps:
                       root: /run/nvidia/mps
                     enabled: true
+                  gdrcopy:
+                    enabled: false
+                  gds:
+                    enabled: false
+                  gfd:
+                    enabled: true
+                  migManager:
+                    enabled: true
                   mig:
                     strategy: single
+                  nodeStatusExporter:
+                    enabled: true
                   sandboxDevicePlugin:
                     enabled: true
                   kataManager:
@@ -127,8 +129,6 @@ spec:
                       env: []
                         # - name: WITH_WORKLOAD
                         #   value: 'true'
-                  nodeStatusExporter:
-                    enabled: true
                   daemonsets:
                     rollingUpdate:
                       maxUnavailable: '1'
@@ -136,12 +136,12 @@ spec:
                   sandboxWorkloads:
                     defaultWorkload: container
                     enabled: false
-                  gds:
-                    enabled: false
-                  vgpuManager:
-                    enabled: false
                   vfioManager:
                     enabled: true
+                  vgpuManager:
+                    enabled: false
+                  vgpuDeviceManager:
+                    enabled: false
                   toolkit:
                     enabled: true
                     installDir: /usr/local/nvidia

@@ -151,3 +151,48 @@ spec:
                 kind: RuntimeClass
                 metadata:
                   name: kata
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: nvidia-gpu-operator-status
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: sandboxed-runtime-check
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: nvidia-gpu-instance
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: nvidia-gpu-kata
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: nvidia.com/v1
+                kind: ClusterPolicy
+                metadata:
+                  name: gpu-cluster-policy
+                spec:
+                  kataSandboxDevicePlugin:
+                    enabled: true
+                    env:
+                      - name: P_GPU_ALIAS
+                        value: pgpu
+                      - name: NVSWITCH_ALIAS
+                        value: nvswitch
+                  vfioManager:
+                    enabled: true
+                    env:
+                      - name: BIND_NVSWITCHES
+                        value: 'true'
