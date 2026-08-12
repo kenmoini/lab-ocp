@@ -68,3 +68,30 @@ spec:
                   name: agent-sandbox-operator
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: agent-sandbox-csv-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: ClusterServiceVersion
+                metadata:
+                  namespace: agent-sandbox-system
+                spec:
+                  displayName: Red Hat build of Agent Sandbox
+                status:
+                  phase: Succeeded
+                  reason: InstallSucceeded
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-sandbox-sub
+          namespace: ""
+          compliance: Compliant
