@@ -9,3 +9,4 @@ spec:
   policies:
     - operators-sandbox-containers
     - instance-sandbox-containers
+    - operators-agent-sandbox
