@@ -66,6 +66,10 @@ spec:
     #                 FEATURE_USER_INITIALIZE: true
     #                 FEATURE_APP_SPECIFIC_TOKENS: true
     #                 FEATURE_ASSIGN_OAUTH_TOKEN: true
+    #                 FEATURE_PROGRAMMATIC_BOOTSTRAP: true
+    #                 BOOTSTRAP_TOKEN_OWNER: kemo
+    #                 BOOTSTRAP_TOKEN_EXPIRATION: 7776000
+    #                 BOOTSTRAP_TOKEN_SCOPE: "org:admin repo:admin repo:create repo:read repo:write super:user user:admin user:read"
     #                 BROWSER_API_CALLS_XHR_ONLY: false
     #                 REGISTRY_TITLE: Red Hat Quay
     #                 REGISTRY_TITLE_SHORT: Red Hat Quay
@@ -107,6 +111,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -171,6 +176,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
@@ -252,6 +258,7 @@ spec:
         spec:
           remediationAction: enforce
           severity: critical
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
