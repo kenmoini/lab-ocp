@@ -3,33 +3,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - aws-self-managed-o-c-m-p.yaml
-  - aws-self-managed-kube-system.yaml
-  - aws-self-managed-openshift-monitoring.yaml
-  - aws-self-managed-stackrox.yaml
-  - aws-self-managed-open-cluster-management-observability.yaml
-
-  - azure-self-managed-o-c-m-p.yaml
-  - azure-self-managed-kube-system.yaml
-  - azure-self-managed-openshift-monitoring.yaml
-  - azure-self-managed-stackrox.yaml
-  - azure-self-managed-open-cluster-management-observability.yaml
-
-  - vsphere-o-c-m-p.yaml
-  - vsphere-kube-system.yaml
-  - vsphere-openshift-monitoring.yaml
-  - vsphere-stackrox.yaml
-  - vsphere-open-cluster-management-observability.yaml
-  
   - default-o-c-m-p.yaml
-  - global-o-c-m-p.yaml
-  - global-kube-system.yaml
-  - global-openshift-monitoring.yaml
-  - global-open-cluster-management-observability.yaml
-  # the stackrox namespace must exist for the stackrox policies to work - we make this with a policy
-  #- global-stackrox.yaml
-#transformers:
-#  - annotations-transformer.yaml
+
+  - global/
+  - aws-self-managed/
+  - azure-self-managed/
+  - vsphere/
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
