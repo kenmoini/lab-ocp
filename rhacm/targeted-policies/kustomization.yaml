@@ -8,6 +8,7 @@ resources:
   - open-cluster-management-observability/
   - openshift-gitops/
   - openshift-logging/
+  - quay/
   - redhat-ods-applications/
   - redhat-ods-monitoring/
   - rhbk/
