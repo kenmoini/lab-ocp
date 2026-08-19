@@ -91,19 +91,19 @@ jobs:
           roxctl image scan --output=sarif --image="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.get-tags.outputs.tag3 }}" > results3.sarif
           
       - name: First Tag - Upload roxctl scan results to GitHub code scanning
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v4.37.4
         with:
           category: stackrox-io/kl-golden-ubi:sha256@${{ steps.get-tags.outputs.tag1 }}
           sarif_file: results1.sarif
           
       - name: Second Tag - Upload roxctl scan results to GitHub code scanning
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v4.37.4
         with:
           category: stackrox-io/kl-golden-ubi:sha256@${{ steps.get-tags.outputs.tag2 }}
           sarif_file: results2.sarif
           
       - name: Third Tag - Upload roxctl scan results to GitHub code scanning
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@v4.37.4
         with:
           category: stackrox-io/kl-golden-ubi:sha256@${{ steps.get-tags.outputs.tag3 }}
           sarif_file: results3.sarif
