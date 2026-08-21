@@ -42,6 +42,7 @@ spec:
                     - domainName: docker.io
                     - domainName: reg.kyverno.io
                     - domainName: image-registry.openshift-image-registry.svc
+                    - domainName: image-registry.openshift-image-registry.svc:5000
                     - domainName: default-route-openshift-image-registry.apps.tri-force.lab.kemo.network
                   registrySources:
                     # ocp4-e8-ocp-allowed-registries
@@ -60,4 +61,5 @@ spec:
                       - docker.io
                       - reg.kyverno.io
                       - image-registry.openshift-image-registry.svc
+                      - image-registry.openshift-image-registry.svc:5000
                       - default-route-openshift-image-registry.apps.tri-force.lab.kemo.network
