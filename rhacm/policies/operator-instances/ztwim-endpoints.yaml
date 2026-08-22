@@ -153,7 +153,7 @@ spec:
                   logLevel: "info"
                   logFormat: "text"
                   csiDriverName: "csi.spiffe.io"
-                  jwtIssuer: 'https://oidc-discovery.{{hub (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console." "" hub}}'
+                  jwtIssuer: 'https://oidc-discovery.{{hub (lookup "route.openshift.io/v1" "Route" "openshift-console" "console").spec.host | replace "console-openshift-console." "" hub}}'
                   replicaCount: 1
                   managedRoute: "true"
                   externalSecretRef: ""
