@@ -110,3 +110,26 @@ spec:
                           kind: HTTPProxy
                           spec:
                             url: 'http://rbac-query-proxy.open-cluster-management-observability.svc.cluster.local:8080'
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: hub-o11y-cma-scrapeconfig
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: addon.open-cluster-management.io/v1beta1
+                kind: ClusterManagementAddOn
+                metadata:
+                  name: multicluster-observability-addon
+                spec:
+                  installStrategy:
+                    placements:
+                      - configs:
+                          - group: monitoring.rhobs
+                            name: acm-clusters-overview-custom-metrics
+                            namespace: open-cluster-management-observability
+                            resource: scrapeconfigs
