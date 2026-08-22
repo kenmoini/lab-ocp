@@ -344,29 +344,22 @@ spec:
                     #             requests:
                     #               storage: 30Gi
 
+    # - objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: truenas-nfs-sc-check
+    #     spec:
+    #       remediationAction: inform
+    #       severity: low
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: storage.k8s.io/v1
+    #             kind: StorageClass
+    #             metadata:
+    #               name: truenas-nfs-csi
     - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: truenas-nfs-sc-check
-        spec:
-          remediationAction: inform
-          severity: low
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: storage.k8s.io/v1
-                kind: StorageClass
-                metadata:
-                  name: truenas-nfs-csi
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
-          name: truenas-nfs-sc-check
-          namespace: ""
-          compliance: Compliant
-      ignorePending: true
-      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
@@ -374,7 +367,8 @@ spec:
         spec:
           remediationAction: enforce
           severity: low
-          object-templates:
+          object-templates-raw: |
+            {{- if lookup "storage.k8s.io/v1" "StorageClass" "" "truenas-nfs-csi" }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: cdi.kubevirt.io/v1beta1
@@ -388,3 +382,11 @@ spec:
                         - ReadWriteOnce
                       volumeMode:
                         Filesystem
+            {{- end }}
+      # extraDependencies:
+      #   - apiVersion: policy.open-cluster-management.io/v1
+      #     kind: ConfigurationPolicy
+      #     name: truenas-nfs-sc-check
+      #     namespace: ""
+      #     compliance: Compliant
+      # ignorePending: true
