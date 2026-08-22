@@ -11,6 +11,7 @@ resources:
 
   # Hub things
   - managed-mcsb/
+  - hub-mco-enhancements.yaml
 
   # Health Signals
   - health-checks/

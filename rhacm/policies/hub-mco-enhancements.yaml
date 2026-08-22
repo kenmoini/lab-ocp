@@ -1,0 +1,112 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: hub-mco-enhancements
+  annotations:
+    policy.open-cluster-management.io/description: Add enhanced MultiClusterObservability functions provided by COO/Perses
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CBC - Cluster Baseline Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: mco-check
+        spec:
+          remediationAction: inform
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: observability.open-cluster-management.io/v1beta2
+                kind: MultiClusterObservability
+                metadata:
+                  name: observability
+                spec:
+                  capabilities:
+                    platform:
+                      metrics:
+                        default:
+                          enabled: true
+                        ui:
+                          enabled: true
+                    userWorkloads:
+                      metrics:
+                        default:
+                          enabled: true
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: mco-check
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-coo
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: mco-coo-scrape-configs
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            # Shamelessly stolen from https://github.com/bharathi-tenneti/custom-perses-openshift-dashboards/blob/main/base/acm-clusters-overview-custom-metrics-scrapeconfig.yaml
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: monitoring.rhobs/v1alpha1
+                kind: ScrapeConfig
+                metadata:
+                  name: acm-clusters-overview-custom-metrics
+                  namespace: open-cluster-management-observability
+                  labels:
+                    app.kubernetes.io/component: platform-metrics-collector
+                spec:
+                  jobName: acm-clusters-overview-custom
+                  metricsPath: /federate
+                  params:
+                    match[]:
+                      - '{__name__="kube_pod_status_ready"}'
+                      - '{__name__="kube_pod_container_status_waiting_reason"}'
+                      - '{__name__="cluster_operator_conditions"}'
+                      - '{__name__="kube_node_status_condition"}'
+                      - '{__name__="cluster:master_nodes"}'
+                      - '{__name__="cluster:infra_nodes"}'
+                      - '{__name__="kube_node_spec_unschedulable"}'
+                      - '{__name__="kube_pod_status_phase"}'
+                      - '{__name__="argocd_app_info"}'
+                      - '{__name__="kube_pod_owner"}'
+                      - '{__name__="container_cpu_usage_seconds_total"}'
+            # Shamelessly stolen from https://github.com/bharathi-tenneti/custom-perses-openshift-dashboards/blob/main/base/dynamic-fleet-thanos-datasource.yaml
+            - complianceType: musthave
+              objectDefinition:
+                # Reaches RHACM's fleet-wide Thanos through rbac-query-proxy's plain-HTTP
+                # internal port (8080). This is a PersesGlobalDatasource
+                # dashboards across namespaces can use.
+                apiVersion: perses.dev/v1alpha2
+                kind: PersesGlobalDatasource
+                metadata:
+                  name: dynamic-fleet-thanos-datasource
+                spec:
+                  client:
+                    tls:
+                      enable: true
+                      caCert:
+                        type: file
+                        certPath: /ca/service-ca.crt
+                  config:
+                    default: false
+                    display:
+                      name: "ACM MultiCluster Thanos Engine"
+                    plugin:
+                      kind: PrometheusDatasource
+                      spec:
+                        proxy:
+                          kind: HTTPProxy
+                          spec:
+                            url: 'http://rbac-query-proxy.open-cluster-management-observability.svc.cluster.local:8080'
