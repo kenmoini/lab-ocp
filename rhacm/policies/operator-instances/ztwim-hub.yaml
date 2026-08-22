@@ -150,6 +150,69 @@ spec:
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
+          name: ztwim-oidc-discovery
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-oidc-route-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: route.openshift.io/v1
+                kind: Route
+                metadata:
+                  namespace: zero-trust-workload-identity-manager
+                  name: spire-oidc-discovery-provider
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-hub-cluster
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-hub-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1alpha1
+                kind: ZeroTrustWorkloadIdentityManager
+                metadata:
+                  name: cluster
+                status:
+                  operands:
+                    - kind: SpireServer
+                      message: Ready
+                      name: cluster
+                      ready: 'true'
+                    - kind: SpireAgent
+                      message: Ready
+                      name: cluster
+                      ready: 'true'
+                    - kind: SpiffeCSIDriver
+                      message: Ready
+                      name: cluster
+                      ready: 'true'
+                    - kind: SpireOIDCDiscoveryProvider
+                      message: Ready
+                      name: cluster
+                      ready: 'true'
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
           name: ztwim-hub-server-check
           namespace: ""
           compliance: Compliant
