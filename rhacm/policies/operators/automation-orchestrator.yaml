@@ -2,7 +2,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: operators-automation-orchestrator
+  name: operators-auto-orch
   annotations:
     policy.open-cluster-management.io/description: Installs the Automation Orchestrator Operator
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
@@ -15,7 +15,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: automation-orchestrator-ns
+          name: auto-orch-ns
         spec:
           remediationAction: enforce
           severity: critical
@@ -30,7 +30,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: automation-orchestrator-og
+          name: auto-orch-og
         spec:
           remediationAction: enforce
           severity: high
@@ -49,7 +49,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: automation-orchestrator-sub
+          name: auto-orch-sub
         spec:
           remediationAction: enforce
           severity: high
@@ -69,11 +69,17 @@ spec:
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
 
-    - objectDefinition:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: auto-orch-sub
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: automation-orchestrator-op-check
+          name: auto-orch-op-check
         spec:
           remediationAction: inform
           severity: high
