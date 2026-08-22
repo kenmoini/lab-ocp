@@ -149,8 +149,8 @@ spec:
                 kind: ServiceMonitor
                 metadata:
                   labels:
-                    app.kubernetes.io/name: agent
-                    app.kubernetes.io/instance: spire
+                    app.kubernetes.io/name: spire-agent
+                    name: spire-agent-metrics
                   name: spire-agent-metrics
                   namespace: zero-trust-workload-identity-manager
                 spec:
@@ -160,8 +160,7 @@ spec:
                       path: /metrics
                   selector:
                     matchLabels:
-                      app.kubernetes.io/name: agent
-                      app.kubernetes.io/instance: spire
+                      app.kubernetes.io/name: spire-agent
                   namespaceSelector:
                     matchNames:
                       - zero-trust-workload-identity-manager
