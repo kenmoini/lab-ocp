@@ -127,33 +127,3 @@ spec:
                     {{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled | toInt }}
                   numberAvailable: >-
                     {{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled | toInt }}
-
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
-          name: ztwim-csi-check
-          namespace: ""
-          compliance: Compliant
-      objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: ztwim-oidc-discovery
-        spec:
-          remediationAction: enforce
-          severity: critical
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: operator.openshift.io/v1alpha1
-                kind: SpireOIDCDiscoveryProvider
-                metadata:
-                  name: cluster
-                spec:
-                  logLevel: "info"
-                  logFormat: "text"
-                  csiDriverName: "csi.spiffe.io"
-                  jwtIssuer: 'https://oidc-discovery.{{hub (lookup "route.openshift.io/v1" "Route" "openshift-console" "console").spec.host | replace "console-openshift-console." "" hub}}'
-                  replicaCount: 1
-                  managedRoute: "true"
-                  externalSecretRef: ""
