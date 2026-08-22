@@ -128,7 +128,9 @@ spec:
                 spec:
                   installStrategy:
                     placements:
-                      - configs:
+                      - name: global
+                        namespace: open-cluster-management-global-set
+                        configs:
                           - group: monitoring.rhobs
                             name: acm-clusters-overview-custom-metrics
                             namespace: open-cluster-management-observability
