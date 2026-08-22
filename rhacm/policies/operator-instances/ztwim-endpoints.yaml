@@ -1,0 +1,151 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-ztwim
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the objects needed to enable Zero Trust WIM Services on managed cluster.
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-ztwim
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-spire-agent
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1alpha1
+                kind: SpireAgent
+                metadata:
+                  name: cluster
+                spec:
+                  socketPath: "/run/spire/agent-sockets"
+                  logLevel: "info"
+                  logFormat: "text"
+                  nodeAttestor:
+                    k8sPSATEnabled: "true"
+                  workloadAttestors:
+                    k8sEnabled: "true"
+                    workloadAttestorsVerification:
+                      type: "auto"
+                      hostCertBasePath: "/etc/kubernetes"
+                      hostCertFileName: "kubelet-ca.crt"
+                    disableContainerSelectors: "false"
+                    useNewContainerLocator: "true"
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-spire-agent
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-agent-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: DaemonSet
+                metadata:
+                  name: spire-agent
+                  namespace: zero-trust-workload-identity-manager
+                status:
+                  numberReady: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-agent").status.desiredNumberScheduled }}'
+                  numberAvailable: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-agent").status.desiredNumberScheduled }}'
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-agent-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-spire-csi
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1alpha1
+                kind: SpiffeCSIDriver
+                metadata:
+                  name: cluster
+                spec:
+                  agentSocketPath: "/run/spire/agent-sockets"
+                  pluginName: "csi.spiffe.io"
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-spire-csi
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-csi-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: DaemonSet
+                metadata:
+                  name: spire-spiffe-csi-driver
+                  namespace: zero-trust-workload-identity-manager
+                status:
+                  numberReady: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled }}'
+                  numberAvailable: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled }}'
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-csi-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-oidc-discovery
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1alpha1
+                kind: SpiffeCSIDriver
+                metadata:
+                  name: cluster
+                spec:
+                  agentSocketPath: "/run/spire/agent-sockets"
+                  pluginName: "csi.spiffe.io"
+

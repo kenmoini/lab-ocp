@@ -1,0 +1,118 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-ztwim-hub
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the objects needed to enable Zero Trust WIM Services on the hub cluster. This policy is intended to be applied to the hub cluster only, or at least whatever cluster is meant to host the SPIRE Server.
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-ztwim
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-hub-cluster
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1alpha1
+                kind: ZeroTrustWorkloadIdentityManager
+                metadata:
+                  name: cluster
+                  labels:
+                    app.kubernetes.io/name: zero-trust-workload-identity-manager
+                    app.kubernetes.io/managed-by: zero-trust-workload-identity-manager
+                spec:
+                  trustDomain: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console." "" }}'
+                  clusterName: '{{ (fromClusterClaim "name") }}'
+                  bundleConfigMap: "spire-bundle"
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-hub-cluster
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-hub-server
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates-raw: |
+            {{- range $sc := (lookup "storage.k8s.io/v1" "StorageClass" "" "").items }}
+            {{- range $key, $value := $sc.metadata.annotations }}
+            {{- if and (eq $key "storageclass.kubernetes.io/is-default-class") (eq $value "true") }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operator.openshift.io/v1alpha1
+                kind: SpireServer
+                metadata:
+                  name: cluster
+                spec:
+                  logLevel: "info"
+                  logFormat: "text"
+                  jwtIssuer: 'https://oidc-discovery.{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console." "" }}'
+                  caValidity: "24h"
+                  defaultX509Validity: "1h"
+                  defaultJWTValidity: "5m"
+                  jwtKeyType: "rsa-2048"
+                  caSubject:
+                    country: "US"
+                    organization: "Example Corporation"
+                    commonName: '{{ (fromClusterClaim "name") }} SPIRE Server CA'
+                  persistence:
+                    size: "5Gi"
+                    accessMode: "ReadWriteOnce"
+                    storageClass: "{{ $sc.metadata.name }}"
+                  datastore:
+                    databaseType: "sqlite3"
+                    connectionString: "/run/spire/data/datastore.sqlite3"
+                    tlsSecretName: ""
+                    maxOpenConns: 100
+                    maxIdleConns: 10
+                    connMaxLifetime: 0
+                    disableMigration: "false"
+            {{- end }}
+            {{- end }}
+            {{- end }}
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-hub-server
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-hub-server-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: StatefulSet
+                metadata:
+                  name: spire-server
+                  namespace: zero-trust-workload-identity-manager
+                status:
+                  readyReplicas: 1

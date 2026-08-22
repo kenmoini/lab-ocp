@@ -12,3 +12,20 @@ subjects:
   - name: operators-ztwim
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: instance-ztwim
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: ztwim-hub
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: ztwim-hub
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: instance-ztwim-hub
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
