@@ -70,8 +70,8 @@ spec:
                   name: spire-agent
                   namespace: zero-trust-workload-identity-manager
                 status:
-                  numberReady: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-agent").status.desiredNumberScheduled }}'
-                  numberAvailable: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-agent").status.desiredNumberScheduled }}'
+                  numberReady: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-agent").status.desiredNumberScheduled | int }}'
+                  numberAvailable: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-agent").status.desiredNumberScheduled | int }}'
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
@@ -121,8 +121,8 @@ spec:
                   name: spire-spiffe-csi-driver
                   namespace: zero-trust-workload-identity-manager
                 status:
-                  numberReady: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled }}'
-                  numberAvailable: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled }}'
+                  numberReady: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled | int }}'
+                  numberAvailable: '{{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled | int }}'
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
