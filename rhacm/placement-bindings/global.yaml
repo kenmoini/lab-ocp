@@ -12,3 +12,6 @@ subjects:
   - name: failing-inform
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: check-infra-nodes
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

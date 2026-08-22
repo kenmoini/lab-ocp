@@ -39,8 +39,7 @@ spec:
           object-templates-raw: |
             {{/* ##  Check if we have infra nodes available.  If so then make sure they're ready - if not, raise an alert with a fake infra node ## */}}
             {{- if hasNodesWithExactRoles "infra" }}
-            {{- $nodeList := (lookup "v1" "Node" "" "").items }}
-            {{- range $node := $nodeList }}
+            {{- range $node := (getNodesWithExactRoles "infra").items }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
