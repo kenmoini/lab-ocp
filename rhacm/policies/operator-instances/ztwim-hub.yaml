@@ -145,4 +145,4 @@ spec:
                   jwtIssuer: 'https://oidc-discovery.{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console." "" }}'
                   replicaCount: 1
                   managedRoute: "true"
-                  externalSecretRef: ""
+                  # externalSecretRef: ""
