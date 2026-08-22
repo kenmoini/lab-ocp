@@ -13,6 +13,15 @@ spec:
           enabled: true
         virtualizationRightSizingRecommendation:
           enabled: true
+      metrics:
+        default:
+          enabled: true
+        ui:
+          enabled: true
+    userWorkloads:
+      metrics:
+        default:
+          enabled: true
   enableDownsampling: true
   imagePullPolicy: Always
   imagePullSecret: multiclusterhub-operator-pull-secret
