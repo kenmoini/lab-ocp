@@ -26,6 +26,7 @@ spec:
                 kind: Namespace
                 metadata:
                   name: zero-trust-workload-identity-manager
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -45,6 +46,7 @@ spec:
                   namespace: zero-trust-workload-identity-manager
                 spec:
                   upgradeStrategy: Default
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -68,6 +70,7 @@ spec:
                   name: openshift-zero-trust-workload-identity-manager
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -92,5 +95,98 @@ spec:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
           name: ztwim-sub
+          namespace: ""
+          compliance: Compliant
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-mgr-rbac
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                type: kubernetes.io/service-account-token
+                metadata:
+                  name: zero-trust-workload-identity-manager-metrics-auth
+                  namespace: zero-trust-workload-identity-manager
+                  annotations:
+                    kubernetes.io/service-account.name: zero-trust-workload-identity-manager-controller-manager
+                  labels:
+                    name: zero-trust-workload-identity-manager
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: ClusterRoleBinding
+                metadata:
+                  labels:
+                    name: zero-trust-workload-identity-manager
+                  name: zero-trust-workload-identity-manager-allow-metrics-access
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: zero-trust-workload-identity-manager-metrics-reader
+                subjects:
+                - kind: ServiceAccount
+                  name: zero-trust-workload-identity-manager-controller-manager
+                  namespace: zero-trust-workload-identity-manager
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-csv-check
+          namespace: ""
+          compliance: Compliant
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-mgr-svcmon
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: monitoring.coreos.com/v1
+                kind: ServiceMonitor
+                metadata:
+                  labels:
+                    name: zero-trust-workload-identity-manager
+                  name: zero-trust-workload-identity-manager-metrics-monitor
+                  namespace: zero-trust-workload-identity-manager
+                spec:
+                  endpoints:
+                    - authorization:
+                        credentials:
+                          name: zero-trust-workload-identity-manager-metrics-auth
+                          key: token
+                        type: Bearer
+                      interval: 60s
+                      path: /metrics
+                      port: metrics-https
+                      scheme: https
+                      scrapeTimeout: 30s
+                      tlsConfig:
+                        ca:
+                          configMap:
+                            name: openshift-service-ca.crt
+                            key: service-ca.crt
+                        serverName: zero-trust-workload-identity-manager-metrics-service.zero-trust-workload-identity-manager.svc.cluster.local
+                  namespaceSelector:
+                    matchNames:
+                      - zero-trust-workload-identity-manager
+                  selector:
+                    matchLabels:
+                      name: zero-trust-workload-identity-manager
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-mgr-rbac
           namespace: ""
           compliance: Compliant
