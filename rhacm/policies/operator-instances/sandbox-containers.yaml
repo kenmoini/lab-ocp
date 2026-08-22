@@ -73,6 +73,7 @@ spec:
                 kind: NodeFeatureRule
                 metadata:
                   name: nvidia-kernel-modules
+                  namespace: openshift-nfd
                 spec:
                   rules:
                     - name: kernel-module-gdrdrv
