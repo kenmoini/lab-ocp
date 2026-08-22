@@ -127,3 +127,41 @@ spec:
                     {{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled | toInt }}
                   numberAvailable: >-
                     {{ (lookup "apps/v1" "DaemonSet" "zero-trust-workload-identity-manager" "spire-spiffe-csi-driver").status.desiredNumberScheduled | toInt }}
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-agent-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-agent-svcmon
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: monitoring.coreos.com/v1
+                kind: ServiceMonitor
+                metadata:
+                  labels:
+                    app.kubernetes.io/name: agent
+                    app.kubernetes.io/instance: spire
+                  name: spire-agent-metrics
+                  namespace: zero-trust-workload-identity-manager
+                spec:
+                  endpoints:
+                    - port: metrics
+                      interval: 30s
+                      path: /metrics
+                  selector:
+                    matchLabels:
+                      app.kubernetes.io/name: agent
+                      app.kubernetes.io/instance: spire
+                  namespaceSelector:
+                    matchNames:
+                      - zero-trust-workload-identity-manager

@@ -146,3 +146,42 @@ spec:
                   replicaCount: 1
                   managedRoute: "true"
                   # externalSecretRef: ""
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: ztwim-hub-server-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ztwim-hub-server-svcmon
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: monitoring.coreos.com/v1
+                kind: ServiceMonitor
+                metadata:
+                  labels:
+                    app.kubernetes.io/name: server
+                    app.kubernetes.io/instance: spire
+                  name: spire-server-metrics
+                  namespace: zero-trust-workload-identity-manager
+                spec:
+                  endpoints:
+                    - port: metrics
+                      interval: 30s
+                      path: /metrics
+                  selector:
+                    matchLabels:
+                      app.kubernetes.io/name: server
+                      app.kubernetes.io/instance: spire
+                  namespaceSelector:
+                    matchNames:
+                      - zero-trust-workload-identity-manager
+
