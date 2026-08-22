@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: ztwim
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: ztwim
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: operators-ztwim
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

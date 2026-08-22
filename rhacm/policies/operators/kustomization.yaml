@@ -8,6 +8,7 @@ resources:
   # - aap.yaml -- REPLACED BY VERSIONED OPERATOR POLICIES --
   - agent-sandbox.yaml
   - authorino.yaml
+  - automation-orchestrator.yaml
   - cco.yaml
   - cert-manager.yaml
   - cnpgsql.yaml
@@ -52,6 +53,7 @@ resources:
   - truenas-csi.yaml
   - virtualization.yaml
   - web-terminal.yaml
+  - zero-trust-wim.yaml
 
 
 commonAnnotations:

@@ -1,0 +1,17 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: ztwim
+  #namespace: open-cluster-management-policies
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: policy.kemo.dev/ztwim
+              operator: In
+              values:
+                - "true"
+                - "enable"
+                - "enabled"
