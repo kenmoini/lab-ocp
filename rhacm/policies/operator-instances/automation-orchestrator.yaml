@@ -137,7 +137,7 @@ spec:
                   clientCertificate:
                     enabled: true
                   passwordSecret:
-                    name: auto-orch-pg
+                    name: auto-orch-pg-user
                   # inRoles:
                   #   - pg_monitor
 
@@ -165,7 +165,7 @@ spec:
     #               namespace: automation-orchestrator
     #             spec:
     #               fileStorage:
-    #                 caCertSecretRef:
+    #                 caCertSecretRef: s3-ca-cert
     #                 credentialSecretRef: auto-orch-s3
 
     #               postgres:
