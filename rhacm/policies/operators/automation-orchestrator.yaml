@@ -89,7 +89,7 @@ spec:
                 apiVersion: apps/v1
                 kind: Deployment
                 metadata:
-                  name: automation-orchestrator-operator
+                  name: automation-orchestrator-operator-controller-manager
                   namespace: automation-orchestrator
                 status:
                   conditions:
