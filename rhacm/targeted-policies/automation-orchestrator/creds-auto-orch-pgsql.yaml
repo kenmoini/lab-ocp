@@ -35,3 +35,29 @@ spec:
                 data:
                   password: '{{ fromSecret "automation-orchestrator" "automation-orchestrator-app" "password" }}'
                   username: '{{ "autoorch" | base64enc }}'
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: orchestrator-pg-credentials
+                  namespace: automation-orchestrator
+                type: Opaque
+                data:
+                  password: '{{ fromSecret "automation-orchestrator" "automation-orchestrator-app" "password" }}'
+                  username: '{{ "autoorch" | base64enc }}'
+                  database: '{{ "orchestrator" | base64enc }}'
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: temporal-pg-credentials
+                  namespace: automation-orchestrator
+                type: Opaque
+                data:
+                  password: '{{ fromSecret "automation-orchestrator" "automation-orchestrator-app" "password" }}'
+                  username: '{{ "autoorch" | base64enc }}'
+                  database: '{{ "temporal" | base64enc }}'
