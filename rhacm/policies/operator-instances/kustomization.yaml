@@ -9,6 +9,7 @@ resources:
   # Operator instances 
   - aap.yaml
   - acs-central.yaml
+  - automation-orchestrator.yaml
   - community-eso.yaml
   - cost-management-metrics.yaml
   - descheduler.yaml
