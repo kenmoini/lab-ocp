@@ -19,6 +19,7 @@ resources:
   # - nad-vlan70-disconnected.yaml
   - nad-vmnet-lab-lan.yaml
   - nad-baremetal-network.yaml
+  - nad-live-migration.yaml
 
   # - egressip-dbnet.yaml
   # - egressip-isolated.yaml
