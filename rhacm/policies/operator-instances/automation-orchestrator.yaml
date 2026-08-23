@@ -141,42 +141,65 @@ spec:
                   # inRoles:
                   #   - pg_monitor
 
-    # - extraDependencies:
-    #     - apiVersion: policy.open-cluster-management.io/v1
-    #       kind: ConfigurationPolicy
-    #       name: auto-orch-op-check
-    #       namespace: ""
-    #       compliance: Compliant
-    #   objectDefinition:
-    #     apiVersion: policy.open-cluster-management.io/v1
-    #     kind: ConfigurationPolicy
-    #     metadata:
-    #       name: auto-orch-instance
-    #     spec:
-    #       remediationAction: enforce
-    #       severity: high
-    #       object-templates:
-    #         - complianceType: musthave
-    #           objectDefinition:
-    #             apiVersion: aap.ansible.com/v1alpha1
-    #             kind: AutomationOrchestrator
-    #             metadata:
-    #               name: automation-orchestrator
-    #               namespace: automation-orchestrator
-    #             spec:
-    #               fileStorage:
-    #                 caCertSecretRef: s3-ca-cert
-    #                 credentialSecretRef: auto-orch-s3
-
-    #               postgres:
-    #                 host: automation-orchestrator-rw.automation-orchestrator.svc.cluster.local
-    #                 port: 5432
-    #                 sslMode: require
-    #                 backendDatabase:
-    #                   secretRef:
-    #                     name: orchestrator-pg-credentials
-    #                 temporalDatabase:
-    #                   secretRef:
-    #                     name: temporal-pg-credentials
-    #               ingress:
-    #                 host: 'orchestrator.{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console." "" }}'
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: auto-orch-op-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auto-orch-instance
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: aap.ansible.com/v1alpha1
+                kind: AutomationOrchestrator
+                metadata:
+                  name: automation-orchestrator
+                  namespace: automation-orchestrator
+                spec:
+                  backend:
+                    replicas: 2
+                  ui:
+                    replicas: 2
+                  worker:
+                    replicas: 2
+                  backgroundWorker:
+                    hpa:
+                      minReplicas: 1
+                      maxReplicas: 2
+                  temporal:
+                    server:
+                      replicas: 1
+                  fileStorage:
+                    caCertSecretRef:
+                      name: s3-ca-cert
+                    credentialSecretRef:
+                      name: auto-orch-s3
+                    endpointURL: 'https://s3.openshift-storage.svc'
+                    bucketName: auto-orch
+                    region: the-moon
+                    verifySSL: true
+                    usePathStyle: true
+                  postgres:
+                    host: automation-orchestrator-rw.automation-orchestrator.svc.cluster.local
+                    port: 5432
+                    sslMode: require
+                    backendDatabase:
+                      secretRef:
+                        name: orchestrator-pg-credentials
+                    temporalDatabase:
+                      secretRef:
+                        name: temporal-pg-credentials
+                    caCertSecretRef:
+                      name: automation-orchestrator-ca
+                    # clientCertSecretRef:
+                    #   name: role-auto-orch-client-cert
+                  ingress:
+                    host: 'orchestrator.{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console." "" }}'
