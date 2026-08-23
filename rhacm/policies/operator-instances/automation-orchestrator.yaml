@@ -121,6 +121,19 @@ spec:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: postgresql.cnpg.io/v1
+                kind: Database
+                metadata:
+                  name: temporal-visibility
+                  namespace: automation-orchestrator
+                spec:
+                  name: temporal_visibility
+                  owner: autoorch
+                  cluster:
+                    name: automation-orchestrator
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: postgresql.cnpg.io/v1
                 kind: DatabaseRole
                 metadata:
                   name: role-auto-orch
@@ -140,6 +153,31 @@ spec:
                     name: auto-orch-pg-user
                   # inRoles:
                   #   - pg_monitor
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-rh-cert-manager
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auto-orch-issuer
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cert-manager.io/v1
+                kind: Issuer
+                metadata:
+                  name: automation-orchestrator
+                  namespace: automation-orchestrator
+                spec:
+                  selfSigned: {}
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
