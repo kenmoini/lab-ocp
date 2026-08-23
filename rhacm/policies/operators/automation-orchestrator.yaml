@@ -69,6 +69,62 @@ spec:
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
 
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auto-orch-netpols
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-kube-apiserver
+                  namespace: automation-orchestrator
+                spec:
+                  egress:
+                    - to:
+                      - namespaceSelector:
+                          matchLabels:
+                            kubernetes.io/metadata.name: openshift-kube-apiserver
+                        podSelector:
+                          matchLabels:
+                            app: openshift-kube-apiserver
+                  # ingress:
+                  #   - from:
+                  #     - namespaceSelector:
+                  #         matchLabels:
+                  #           kubernetes.io/metadata.name: openshift-kube-apiserver
+                  #       podSelector:
+                  #         matchLabels:
+                  #           app: openshift-kube-apiserver
+                  policyTypes:
+                    # - Ingress
+                    - Egress
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-same-namespace
+                  namespace: automation-orchestrator
+                spec:
+                  podSelector: {} # Selects all pods in this namespace
+                  policyTypes:
+                    - Ingress
+                    - Egress
+                  ingress:
+                    - from:
+                      - podSelector: {} # Allows ingress from all pods in this same namespace
+                  egress:
+                    - to:
+                      - podSelector: {} # Allows egress to all pods in this same namespace
+
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
