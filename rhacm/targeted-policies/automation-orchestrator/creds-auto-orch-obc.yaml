@@ -1,0 +1,37 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: creds-auto-orch-obc
+  # namespace: automation-orchestrator
+  annotations:
+    policy.open-cluster-management.io/description: Copies the Object Bucket Claim credentials to the expected format
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: creds-auto-orch-obc
+        spec:
+          remediationAction: enforce
+          severity: critical
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: auto-orch-s3
+                  namespace: automation-orchestrator
+                  labels:
+                    cnpg.io/reload: "true"
+                type: Opaque
+                data:
+                  access-key-id: '{{ fromSecret "automation-orchestrator" "auto-orch" "AWS_ACCESS_KEY_ID" }}'
+                  secret-access-key: '{{ fromSecret "automation-orchestrator" "auto-orch" "AWS_SECRET_ACCESS_KEY" }}'

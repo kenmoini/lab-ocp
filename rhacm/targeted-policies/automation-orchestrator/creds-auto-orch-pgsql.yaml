@@ -1,0 +1,37 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: creds-auto-orch-pgsql
+  # namespace: automation-orchestrator
+  annotations:
+    policy.open-cluster-management.io/description: Copies the CNPGSQL userpass credentials to the expected format
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: creds-auto-orch-pgsql
+        spec:
+          remediationAction: enforce
+          severity: critical
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: auto-orch-pg-user
+                  namespace: automation-orchestrator
+                  labels:
+                    cnpg.io/reload: "true"
+                type: kubernetes.io/basic-auth
+                data:
+                  password: '{{ fromSecret "automation-orchestrator" "automation-orchestrator-app" "password" }}'
+                  username: '{{ "autoorch" | base64enc }}'

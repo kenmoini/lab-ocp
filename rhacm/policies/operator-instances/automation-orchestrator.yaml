@@ -136,10 +136,10 @@ spec:
                   databaseRoleReclaimPolicy: retain
                   clientCertificate:
                     enabled: true
+                  passwordSecret:
+                    name: auto-orch-pg
                   # inRoles:
                   #   - pg_monitor
-                  # passwordSecret:
-                  #   name: auto-orch-pg
 
     # - extraDependencies:
     #     - apiVersion: policy.open-cluster-management.io/v1
@@ -166,7 +166,7 @@ spec:
     #             spec:
     #               fileStorage:
     #                 caCertSecretRef:
-    #                 credentialSecretRef: 
+    #                 credentialSecretRef: auto-orch-s3
 
     #               postgres:
     #                 host: automation-orchestrator-rw.automation-orchestrator.svc.cluster.local
