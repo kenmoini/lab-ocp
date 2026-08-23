@@ -26,8 +26,10 @@ spec:
     - operators-coo
     - operators-rhoai
     - operators-cnpgsql
+    - operators-auto-orch
     - default-gatewayclass
     - instance-serverless
     - instance-leaderworkerset
     - instance-jobset
     - instance-rhoai3
+    - instance-auto-orch

@@ -71,3 +71,30 @@ spec:
                   name: cloudnative-pg
                   source: certified-operators 
                   sourceNamespace: openshift-marketplace
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cnpgsql-clusterimagecatalog
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: postgresql.cnpg.io/v1
+                kind: ClusterImageCatalog
+                metadata:
+                  name: postgresql-global
+                spec:
+                  images:
+                    - major: 15
+                      image: ghcr.io/cloudnative-pg/postgresql:15.14-system-trixie
+                    - major: 16
+                      image: ghcr.io/cloudnative-pg/postgresql:16.10-system-trixie
+                    - major: 17
+                      image: ghcr.io/cloudnative-pg/postgresql:17.6-system-trixie
+                    - major: 18
+                      image: ghcr.io/cloudnative-pg/postgresql:18.6-system-trixie

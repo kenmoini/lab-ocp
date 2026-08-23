@@ -1,0 +1,178 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-auto-orch
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Red Hat Automation Orchestrator Operator Instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: health-check-odf
+          namespace: ""
+          compliance: Compliant
+      ignorePending: true
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auto-orch-obc
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: auto-orch
+                  namespace: automation-orchestrator
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  bucketName: auto-orch
+                  objectBucketName: obc-odf-auto-orch
+                  storageClassName: openshift-storage.noobaa.io
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-cnpgsql
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-auto-orch
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auto-orch-pgsql
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: Cluster
+                apiVersion: postgresql.cnpg.io/v1
+                metadata:
+                  name: automation-orchestrator
+                  namespace: automation-orchestrator
+                spec:
+                  imageCatalogRef:
+                    apiGroup: postgresql.cnpg.io
+                    kind: ClusterImageCatalog # Or 'ImageCatalog'
+                    name: postgresql-global
+                    major: 15
+                  instances: 1
+                  enablePDB: false
+                  enableSuperuserAccess: true
+                  logLevel: info
+                  primaryUpdateStrategy: unsupervised
+                  storage:
+                    size: 1Gi
+                  walStorage:
+                    size: 1Gi
+                  postgresql:
+                    parameters:
+                      max_connections: "1000"
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: postgresql.cnpg.io/v1
+                kind: Database
+                metadata:
+                  name: orchestrator
+                  namespace: automation-orchestrator
+                spec:
+                  name: orchestrator
+                  owner: autoorch
+                  cluster:
+                    name: automation-orchestrator
+                  # extensions:
+                  #   - name: bloom
+                  #     ensure: present
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: postgresql.cnpg.io/v1
+                kind: Database
+                metadata:
+                  name: temporal
+                  namespace: automation-orchestrator
+                spec:
+                  name: temporal
+                  owner: autoorch
+                  cluster:
+                    name: automation-orchestrator
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: postgresql.cnpg.io/v1
+                kind: DatabaseRole
+                metadata:
+                  name: role-auto-orch
+                  namespace: automation-orchestrator
+                spec:
+                  cluster:
+                    name: automation-orchestrator
+                  name: autoorch
+                  comment: "Automation Orchestrator"
+                  login: true
+                  superuser: false
+                  createdb: true
+                  databaseRoleReclaimPolicy: retain
+                  clientCertificate:
+                    enabled: true
+                  inRoles:
+                    - pg_monitor
+                  passwordSecret:
+                    name: auto-orch-pg
+
+    # - extraDependencies:
+    #     - apiVersion: policy.open-cluster-management.io/v1
+    #       kind: ConfigurationPolicy
+    #       name: auto-orch-op-check
+    #       namespace: ""
+    #       compliance: Compliant
+    #   objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: auto-orch-instance
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: high
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: aap.ansible.com/v1alpha1
+    #             kind: AutomationOrchestrator
+    #             metadata:
+    #               name: automation-orchestrator
+    #               namespace: automation-orchestrator
+    #             spec:
+    #               postgres:
+    #                 host: automation-orchestrator-rw.automation-orchestrator.svc.cluster.local
+    #                 port: 5432
+    #                 sslMode: require
+    #                 backendDatabase:
+    #                   secretRef:
+    #                     name: orchestrator-pg-credentials
+    #                 temporalDatabase:
+    #                   secretRef:
+    #                     name: temporal-pg-credentials
+    #               ingress:
+    #                 host: 'orchestrator.{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console." "" }}'
