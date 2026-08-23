@@ -183,15 +183,22 @@ spec:
                     server:
                       duration: 24h0m0s
                       renewBefore: 12h0m0s
-                  enableCommonBootImageImport: true
-                  enableApplicationAwareQuota: true
                   applicationAwareConfig:
                     allowApplicationAwareClusterResourceQuota: true
                     vmiCalcConfigName: DedicatedVirtualResources
+                  enableCommonBootImageImport: true
+                  enableApplicationAwareQuota: true
+                  deployVmConsoleProxy: true
                   featureGates:
                     deployKubeSecondaryDNS: false
                     disableMDevConfiguration: false
+                    decentralizedLiveMigration: true
+                    declarativeHotplugVolumes: true
                     objectGraph: true
+                    videoConfig: true
+                    downwardMetrics: true
+                    persistentReservation: true
+                    enableMultiArchBootImageImport: false
                     #deployTektonTaskResources: true
                     #nonRoot: true
                     #withHostPassthroughCPU: true
@@ -390,3 +397,26 @@ spec:
       #     namespace: ""
       #     compliance: Compliant
       # ignorePending: true
+
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cnv-live-migration-net
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates-raw: |
+            {{- if lookup "k8s.cni.cncf.io/v1" "NetworkAttachmentDefinition" "openshift-cnv" "nad-live-migrate" }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: hco.kubevirt.io/v1beta1
+                kind: HyperConverged
+                metadata:
+                  name: kubevirt-hyperconverged
+                  namespace: openshift-cnv
+                spec:
+                  liveMigrationConfig:
+                    network: nad-live-migrate
+            {{- end }}
