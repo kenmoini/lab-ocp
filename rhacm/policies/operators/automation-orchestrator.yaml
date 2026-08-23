@@ -130,6 +130,21 @@ spec:
                 apiVersion: networking.k8s.io/v1
                 kind: NetworkPolicy
                 metadata:
+                  name: allow-egress-to-privnet
+                  namespace: automation-orchestrator
+                spec:
+                  podSelector: {} # Selects all pods in this namespace
+                  policyTypes:
+                    - Egress
+                  egress:
+                    - to:
+                      - ipBlock:
+                          cidr: 192.168.0.0/16
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
                   name: allow-same-namespace
                   namespace: automation-orchestrator
                 spec:
