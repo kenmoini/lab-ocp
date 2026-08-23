@@ -108,6 +108,25 @@ spec:
                     - Egress
             - complianceType: musthave
               objectDefinition:
+                kind: NetworkPolicy
+                apiVersion: networking.k8s.io/v1
+                metadata:
+                  name: automation-orchestrator-allow-s3
+                  namespace: automation-orchestrator
+                spec:
+                  podSelector:
+                    matchLabels:
+                      app.kubernetes.io/component: backend
+                      app.kubernetes.io/name: automation-orchestrator
+                  egress:
+                    - to:
+                        - namespaceSelector:
+                            matchLabels:
+                              kubernetes.io/metadata.name: openshift-storage
+                  policyTypes:
+                    - Egress
+            - complianceType: musthave
+              objectDefinition:
                 apiVersion: networking.k8s.io/v1
                 kind: NetworkPolicy
                 metadata:

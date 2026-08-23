@@ -241,3 +241,59 @@ spec:
                     #   name: role-auto-orch-client-cert
                   ingress:
                     host: 'orchestrator.{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "https://console-openshift-console." "" }}'
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: auto-orch-instance
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auto-orch-ui-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: automation-orchestrator-ui
+                  namespace: automation-orchestrator
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: auto-orch-ui-status
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auto-orch-consolelink
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: console.openshift.io/v1
+                kind: ConsoleLink
+                metadata:
+                  name: auto-orch-console-link
+                spec:
+                  applicationMenu:
+                    imageURL: 'static/assets/public/imgs/logos/redhat.svg'
+                    section: OpenShift Self Managed Services
+                  href: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "console-openshift-console" "orchestrator"  }}'
+                  location: ApplicationMenu
+                  text: Automation Orchestrator
