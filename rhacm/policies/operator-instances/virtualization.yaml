@@ -420,3 +420,28 @@ spec:
                   liveMigrationConfig:
                     network: nad-live-migrate
             {{- end }}
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cnv-ui-features
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: kubevirt-ui-features
+                  namespace: openshift-cnv
+                data:
+                  treeViewFolders: 'true'
+                  loadBalancerEnabled: 'true'
+                  hideCredentialsNonPrivileged: 'true'
+                  confirmVMActions: 'true'
+                  kubevirtApiserverProxy: 'true'
+                  nodePortEnabled: 'false'
+                  disabledGuestSystemLogsAccess: 'false'
