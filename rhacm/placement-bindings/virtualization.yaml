@@ -13,6 +13,9 @@ subjects:
   - name: operator-bundle-virt
     apiGroup: policy.open-cluster-management.io
     kind: PolicySet
+  - name: workload-availability
+    apiGroup: policy.open-cluster-management.io
+    kind: PolicySet
   # Used for Storage Migration
   - name: operators-mtc-base
     apiGroup: policy.open-cluster-management.io

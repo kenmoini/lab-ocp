@@ -1,0 +1,16 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: workload-availability
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Set of policies that enable Workload Availability features on OpenShift clusters, namely used for OpenShift Virtualization."
+  policies:
+    - operators-descheduler
+    - operators-far
+    - operators-nmo
+    - operators-node-healthcheck
+    - operators-numa-resources
+    - operators-sbr
+    - operators-snr

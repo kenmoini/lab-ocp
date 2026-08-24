@@ -30,6 +30,7 @@ resources:
   - openshift-ai-aws.yaml
   - openshift-ai-azure.yaml
   - sandboxed-containers.yaml
+  - workload-availability.yaml
 
 
 commonAnnotations:

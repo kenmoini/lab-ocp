@@ -7,8 +7,8 @@ kind: Kustomization
 resources:
   - descheduler.yaml
   - fence-agents-remediation.yaml
-  - node-maintenance.yaml
   - node-health-check.yaml
+  - node-maintenance.yaml
   - numa-resources.yaml
   - self-node-remediation.yaml
   - storage-based-remediation.yaml
