@@ -17,3 +17,4 @@ spec:
     - operators-oadp
     - operators-snr
     - operators-virtualization
+    - operators-numa-resources

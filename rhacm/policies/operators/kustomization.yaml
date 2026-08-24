@@ -31,6 +31,7 @@ resources:
   - nmstate.yaml
   - nmo.yaml
   - nhc.yaml
+  - numa-resources.yaml
   - nvidia-gpu.yaml
   - oadp.yaml
   - openshift-builds.yaml
