@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# namespace: open-cluster-management-policies
+
+resources:
+  - coo.yaml
+  - cost-management-metrics.yaml
+  - network-observability.yaml
+  - power-monitoring.yaml # Deprecated
+  - rh-otel.yaml
+  - rh-tempo.yaml
+
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

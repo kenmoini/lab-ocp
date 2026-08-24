@@ -5,52 +5,52 @@ kind: Kustomization
 namespace: open-cluster-management-policies
 
 resources:
+  - observability/
+  - workload-availability/
+
   # - aap.yaml -- REPLACED BY VERSIONED OPERATOR POLICIES --
+  # AI Things
   - agent-sandbox.yaml
+  - sandbox-containers.yaml
+  - rhoai.yaml
+
+  # Developer Things
   - authorino.yaml
-  - automation-orchestrator.yaml
-  - cco.yaml
-  - cert-manager.yaml
-  - cnpgsql.yaml
-  - compliance.yaml
-  - cost-management-metrics.yaml
-  - descheduler.yaml
   - dev-hub.yaml
   - devspaces.yaml
-  - community-eso.yaml
-  - far.yaml
-  - file-integrity.yaml
-  - gatekeeper.yaml
-  - keda.yaml
   - limitador.yaml
-  - lso.yaml
-  - metallb.yaml
-  # - mtv.yaml
-  - network-observability.yaml
-  - nfd.yaml
-  - nmstate.yaml
-  - nmo.yaml
-  - nhc.yaml
-  - numa-resources.yaml
-  - nvidia-gpu.yaml
-  - oadp.yaml
   - openshift-builds.yaml
-  - odf.yaml
   - pipelines.yaml
-  - power-monitoring.yaml
-  - rhacs.yaml
-  - rhcl.yaml
-  - rh-dns.yaml
-  - rh-otel.yaml
-  - rh-tempo.yaml
-  - rhoai.yaml
-  - sandbox-containers.yaml
   - serverless.yaml
   - servicemesh-3.yaml
   - servicemesh-2.yaml
-  - sscsi.yaml
-  - snr.yaml
+  - rhcl.yaml
+
+  # Security Things
+  - cert-manager.yaml
+  - community-eso.yaml
+  - compliance.yaml
+  - file-integrity.yaml
+
+  # Hub things
+  - automation-orchestrator.yaml
+  - cnpgsql.yaml
+  - gatekeeper.yaml
   - talm.yaml
+
+  # Platform/Infrastructure Things
+  - keda.yaml
+  - lso.yaml
+  - metallb.yaml
+  # - mtv.yaml
+  - nfd.yaml
+  - nmstate.yaml
+  - nvidia-gpu.yaml
+  - oadp.yaml
+  - odf.yaml
+  - rhacs.yaml
+  - rh-dns.yaml
+  - sscsi.yaml
   - truenas-csi.yaml
   - virtualization.yaml
   - web-terminal.yaml
