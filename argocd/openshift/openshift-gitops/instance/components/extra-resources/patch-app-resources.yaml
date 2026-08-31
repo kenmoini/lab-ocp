@@ -6,7 +6,7 @@ spec:
   controller:
     resources:
       limits:
-        cpu: '4'
+        # cpu: '4'
         memory: 16Gi
       requests:
         cpu: 250m

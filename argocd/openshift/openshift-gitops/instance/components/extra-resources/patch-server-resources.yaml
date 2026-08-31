@@ -6,8 +6,8 @@ spec:
   server:
     resources:
       limits:
-        cpu: '1'
-        memory: 1Gi
+        # cpu: '1'
+        memory: 1.5Gi
       requests:
         cpu: 125m
         memory: 128Mi
