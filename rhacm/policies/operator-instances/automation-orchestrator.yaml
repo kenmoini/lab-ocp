@@ -208,6 +208,12 @@ spec:
                     replicas: 2
                   ui:
                     replicas: 2
+                    resources:
+                      limits:
+                        memory: 512Mi
+                      requests:
+                        cpu: 20m
+                        memory: 64Mi
                   worker:
                     replicas: 2
                   backgroundWorker:
