@@ -68,6 +68,14 @@ spec:
                   name: automation-orchestrator-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
+                  config:
+                    resources:
+                      limits:
+                        # cpu: 500m
+                        memory: 512Mi
+                      requests:
+                        cpu: 100m
+                        memory: 256Mi
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
