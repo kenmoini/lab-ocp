@@ -12,7 +12,7 @@
 #FROM quay.io/devfile/base-developer-image:ubi9-latest
 FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2
 
-ENV OC_VERSION=4.21 \
+ENV OC_VERSION=4.22 \
     NETOBSERV_VERSION=1.9.0 \
     OCM_VERSION=1.0.8 \
     ROSA_VERSION=1.2.57 \
@@ -26,6 +26,7 @@ ENV OC_VERSION=4.21 \
     ISTIOCTL_VERSION=1.27.3 \
     ROXCTL_VERSION=4.9.1 \
     K9S_VERSION=0.51.0 \
+    ARGOCD_AGENTCTL_VERSION=0.10.0 \
     MILLER_VERSION=6.15.0
 
 USER 0
@@ -104,6 +105,13 @@ RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && 
     curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/netobserv/${NETOBSERV_VERSION}/oc-netobserv-${ARCH_DETECT} \
     -o /usr/local/bin/oc-netobserv && \
     chmod a+x /usr/local/bin/oc-netobserv
+
+# Install ArgoCD Agent CLI
+RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && \
+    OS_DETECT=$(uname -s | tr '[:upper:]' '[:lower:]') && \
+    curl -L https://github.com/argoproj-labs/argocd-agent/releases/download/v${ARGOCD_AGENTCTL_VERSION}/argocd-agentctl-${OS_DETECT}-${ARCH_DETECT} \
+    -o /usr/local/bin/argocd-agentctl && \
+    chmod a+x /usr/local/bin/argocd-agentctl
 
 # Install OCM
 # ONLY SUPPORTS AMD64

@@ -129,4 +129,9 @@ if command -v gcloud &>/dev/null; then
   append_ver "gcloud   |${GCLOUD_VER}     |Google Cloud CLI"
 fi
 
+if command -v argocd-agentctl &>/dev/null; then
+  ARGOCD_AGENTCTL_VER=$(argocd-agentctl version | jq -r '.version')
+  append_ver "argocd-agentctl   |${ARGOCD_AGENTCTL_VER}     |ArgoCD Agent CLI"
+fi
+
 echo -e "$INSTALLED_TOOLS" | column -t -s '|'
