@@ -14,5 +14,6 @@ resources:
   - hub-acm-policies.yaml
   - hub-acm-policy-generators.yaml
   - hub-acm-targeted-policies.yaml
+  - hub-rbac.yaml
   # - hub-simple-chat.yaml
   # - hub-debug-receiver.yaml
