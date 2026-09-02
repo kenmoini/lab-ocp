@@ -14,17 +14,18 @@ FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2
 
 ENV OC_VERSION=4.22 \
     NETOBSERV_VERSION=1.9.0 \
-    OCM_VERSION=1.0.8 \
-    ROSA_VERSION=1.2.57 \
-    VIRTCTL_VERSION=v1.6.3 \
+    OCM_VERSION=1.0.9 \
+    ROSA_VERSION=1.2.64 \
+    VIRTCTL_VERSION=v1.9.0 \
     OPERATOR_SDK_VERSION="v1.42.3" \
-    OPM_VERSION="v1.72.0" \
+    OPM_VERSION="v1.74.0" \
     ODO_VERSION=v3.16.1 \
     RHOAS_VERSION=0.53.0 \
-    KN_VERSION=1.17.0-3 \
+    KN_VERSION=1.17.0-4 \
     KN_WORKFLOW_VERSION=1.36.0 \
-    ISTIOCTL_VERSION=1.27.3 \
-    ROXCTL_VERSION=4.9.1 \
+    ISTIOCTL_VERSION=1.30.3 \
+    TKN_VERSION=1.23.2 \
+    ROXCTL_VERSION=4.11.3 \
     K9S_VERSION=0.51.0 \
     ARGOCD_VERSION=3.5.2 \
     ARGOCD_AGENTCTL_VERSION=0.10.0 \
@@ -181,7 +182,7 @@ RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && 
 
 # Install Tekton (tkn)
 RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && \
-    curl -L https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/latest/tkn-linux-${ARCH_DETECT}.tar.gz | \
+    curl -L https://mirror.openshift.com/pub/openshift-v4/clients/pipelines/${TKN_VERSION}/tkn-linux-${ARCH_DETECT}.tar.gz | \
     tar -C /usr/local/bin -xz --no-same-owner && \
     chmod a+x /usr/local/bin/tkn
 
