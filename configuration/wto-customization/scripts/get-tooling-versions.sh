@@ -129,6 +129,11 @@ if command -v gcloud &>/dev/null; then
   append_ver "gcloud   |${GCLOUD_VER}     |Google Cloud CLI"
 fi
 
+if command -v argocd &>/dev/null; then
+  ARGOCD_VER=$(argocd version --client -o json | jq -r '.client.Version')
+  append_ver "argocd   |${ARGOCD_VER}     |ArgoCD CLI"
+fi
+
 if command -v argocd-agentctl &>/dev/null; then
   ARGOCD_AGENTCTL_VER=$(argocd-agentctl version | jq -r '.version')
   append_ver "argocd-agentctl   |${ARGOCD_AGENTCTL_VER}     |ArgoCD Agent CLI"

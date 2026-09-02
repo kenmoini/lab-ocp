@@ -65,6 +65,10 @@ if command -v k9s &>/dev/null; then
   k9s completion bash > $COMPDIR/k9s
 fi
 
+if command -v argocd &>/dev/null; then
+  argocd completion bash > $COMPDIR/argocd
+fi
+
 if command -v argocd-agentctl &>/dev/null; then
   argocd-agentctl completion bash > $COMPDIR/argocd-agentctl
 fi

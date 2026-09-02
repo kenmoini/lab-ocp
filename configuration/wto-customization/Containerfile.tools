@@ -26,6 +26,7 @@ ENV OC_VERSION=4.22 \
     ISTIOCTL_VERSION=1.27.3 \
     ROXCTL_VERSION=4.9.1 \
     K9S_VERSION=0.51.0 \
+    ARGOCD_VERSION=3.5.2 \
     ARGOCD_AGENTCTL_VERSION=0.10.0 \
     MILLER_VERSION=6.15.0
 
@@ -105,6 +106,13 @@ RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && 
     curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/netobserv/${NETOBSERV_VERSION}/oc-netobserv-${ARCH_DETECT} \
     -o /usr/local/bin/oc-netobserv && \
     chmod a+x /usr/local/bin/oc-netobserv
+
+# Install ArgoCD CLI
+RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && \
+    OS_DETECT=$(uname -s | tr '[:upper:]' '[:lower:]') && \
+    curl -L https://github.com/argoproj/argo-cd/releases/download/v${ARGOCD_VERSION}/argocd-${OS_DETECT}-${ARCH_DETECT} \
+    -o /usr/local/bin/argocd && \
+    chmod a+x /usr/local/bin/argocd
 
 # Install ArgoCD Agent CLI
 RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && \
