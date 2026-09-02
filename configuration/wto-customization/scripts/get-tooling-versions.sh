@@ -139,4 +139,9 @@ if command -v argocd-agentctl &>/dev/null; then
   append_ver "argocd-agentctl   |${ARGOCD_AGENTCTL_VER}     |ArgoCD Agent CLI"
 fi
 
+if command -v amtool &>/dev/null; then
+  AMTOOL_VER=$(amtool --version | head -n1 | awk '{print $3}')
+  append_ver "amtool    |${AMTOOL_VER}     |Prometheus Alertmanager CLI (amtool)"
+fi
+
 echo -e "$INSTALLED_TOOLS" | column -t -s '|'

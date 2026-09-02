@@ -24,11 +24,12 @@ ENV OC_VERSION=4.22 \
     KN_VERSION=1.17.0-4 \
     KN_WORKFLOW_VERSION=1.36.0 \
     ISTIOCTL_VERSION=1.30.3 \
-    TKN_VERSION=1.23.2 \
+    TKN_VERSION=1.20.0 \
     ROXCTL_VERSION=4.11.3 \
     K9S_VERSION=0.51.0 \
     ARGOCD_VERSION=3.5.2 \
     ARGOCD_AGENTCTL_VERSION=0.10.0 \
+    AMTOOL_VERSION=0.34.0 \
     MILLER_VERSION=6.15.0
 
 USER 0
@@ -134,6 +135,19 @@ RUN if [ "$(uname -m)" = "x86_64" ]; then \
 RUN if [ "$(uname -m)" = "x86_64" ]; then \
     curl -L https://developers.redhat.com/content-gateway/file/pub/cgw/rosa/${ROSA_VERSION}/rosa-linux \
     -o /usr/local/bin/rosa && chmod a+x /usr/local/bin/rosa; \
+    fi
+
+# Install amtool
+# ONLY SUPPORTS AMD64 FOR LINUX
+RUN if [ "$(uname -m)" = "x86_64" ]; then \
+    ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && \
+    OS_DETECT=$(uname -s | tr '[:upper:]' '[:lower:]') && \
+    curl -L https://github.com/prometheus/alertmanager/releases/download/v${AMTOOL_VERSION}/alertmanager-${AMTOOL_VERSION}.${OS_DETECT}-${ARCH_DETECT}.tar.gz \
+    -o /tmp/alertmanager.tar.gz && \
+    tar -C /usr/local/bin -xz --no-same-owner -f /tmp/alertmanager.tar.gz alertmanager-${AMTOOL_VERSION}.${OS_DETECT}-${ARCH_DETECT}/amtool && \
+    mv /usr/local/bin/alertmanager-${AMTOOL_VERSION}.${OS_DETECT}-${ARCH_DETECT}/amtool /usr/local/bin/amtool && \
+    chmod a+x /usr/local/bin/amtool && \
+    rm -rf /tmp/alertmanager.tar.gz /usr/local/bin/alertmanager-${AMTOOL_VERSION}.${OS_DETECT}-${ARCH_DETECT}; \
     fi
 
 # Install virtctl (upstream)
