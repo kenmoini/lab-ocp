@@ -6,3 +6,22 @@ metadata:
     openshift.io/display-name: "OpenShift GitOps Operator"
   labels:
     openshift.io/cluster-monitoring: 'true'
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openshift-gitops
+  annotations:
+    openshift.io/display-name: "Local cluster ArgoCD instance"
+  labels:
+    openshift.io/cluster-monitoring: 'true'
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd-agent-managed-clusters
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: argocd

@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1beta1
+kind: ArgoCD
+metadata:
+  name: argocd
+spec:
+  controller:
+    enabled: false
+  # This could be enabled but would need to be configured
+  # to support AppSets in Any Namespace
+  applicationSet:
+    enabled: false
+  argoCDAgent:
+    principal:
+      allowedNamespaces:
+        - argocd-agent-managed-clusters
+      enabled: true
+      # image: 'quay.io/argoprojlabs/argocd-agent:v0.5.1'
+      auth: mtls:CN=([^,]+)
+      jwt:
+        insecureGenerate: true
+  sourceNamespaces:
+    - argocd-agent-managed-clusters
