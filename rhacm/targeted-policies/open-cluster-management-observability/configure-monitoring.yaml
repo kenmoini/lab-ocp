@@ -22,7 +22,7 @@ spec:
         metadata:
           name: configure-monitoring-cm
         spec:
-          remediationAction: enforce
+          remediationAction: inform
           severity: low
           object-templates-raw: |
             - complianceType: musthave
