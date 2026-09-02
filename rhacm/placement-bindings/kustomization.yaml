@@ -41,15 +41,16 @@ resources:
   - hub-4.20-clusters.yaml
   - hub-4.21-clusters.yaml
 
-  - community-eso.yaml
   - bmh-lso-odf.yaml
-  - nvidia-gpu.yaml
-  - virtualization.yaml
-  - rh-loki.yaml
+  - community-eso.yaml
   - developer-services.yaml
-  - servicemesh.yaml
+  - nvidia-gpu.yaml
   - openshift-ai.yaml
+  - rh-loki.yaml
   - sandboxed-containers.yaml
+  - servicemesh.yaml
+  - truenas-csi.yaml
+  - virtualization.yaml
   - ztwim.yaml
 
 commonAnnotations:

@@ -1,0 +1,16 @@
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: truenas-csi
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: policy.kemo.dev/truenas-csi
+              operator: In
+              values:
+                - "true"
+                - "enable"
+                - "enabled"
