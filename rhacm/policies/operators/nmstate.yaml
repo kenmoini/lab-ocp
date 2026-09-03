@@ -27,6 +27,7 @@ spec:
                   name: openshift-nmstate
                   labels:
                     openshift.io/cluster-monitoring: "true"
+
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
@@ -37,28 +38,33 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: nmstate-operatorgroup-check
+          name: nmstate-rm-og
         spec:
-          remediationAction: inform
+          remediationAction: enforce
           severity: low
-          object-templates:
-            - complianceType: musthave
+          object-templates-raw: |
+            {{- range $og := (lookup "operators.coreos.com/v1" "OperatorGroup" "" "").items }}
+            {{- if and (ne $og.metadata.name "nmstate-group") (eq $og.metadata.namespace "openshift-nmstate") }}
+            - complianceType: mustnothave
               objectDefinition:
                 apiVersion: operators.coreos.com/v1
                 kind: OperatorGroup
                 metadata:
-                  namespace: openshift-nmstate
+                  name: {{ $og.metadata.name }}
+                  namespace: {{ $og.metadata.namespace }}
+            {{- end }}
+            {{- end }}
+
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
-          name: nmstate-operatorgroup-check
-          compliance: NonCompliant
-      ignorePending: true
+          name: nmstate-rm-og
+          compliance: Compliant
       objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: nmstate-create-operator-group
+          name: nmstate-og
         spec:
           remediationAction: enforce
           severity: high
@@ -75,10 +81,21 @@ spec:
                     - openshift-nmstate
                   upgradeStrategy: Default
           pruneObjectBehavior: DeleteIfCreated
+
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
           name: nmstate-namespace
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: nmstate-rm-og
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: nmstate-og
           namespace: ""
           compliance: Compliant
       objectDefinition:
