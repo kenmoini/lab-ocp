@@ -32,6 +32,7 @@ resources:
   - openshift-4.19-clusters.yaml
   - openshift-4.20-clusters.yaml
   - openshift-4.21-clusters.yaml
+  - openshift-4.22-clusters.yaml
   - global.yaml
   - acs-central.yaml
   - enhanced-metrics.yaml
@@ -45,6 +46,7 @@ resources:
   - hub-4.19-clusters.yaml
   - hub-4.20-clusters.yaml
   - hub-4.21-clusters.yaml
+  - hub-4.22-clusters.yaml
   - kyverno-policies.yaml
 
   - bmh-lso-odf.yaml

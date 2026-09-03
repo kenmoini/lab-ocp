@@ -20,6 +20,7 @@ resources:
   - logging-6.3.yaml
   - logging-6.4.yaml
   - logging-6.5.yaml
+  - logging-6.6.yaml
 
   - rh-loki-base.yaml
   - rh-loki-6.3.yaml
@@ -48,6 +49,7 @@ resources:
 
   - quay-3.16.yaml
   - quay-3.17.yaml
+  - quay-3.18.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
