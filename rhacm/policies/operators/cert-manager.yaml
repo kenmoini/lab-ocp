@@ -29,6 +29,35 @@ spec:
                   name: cert-manager-operator
                   labels:
                     openshift.io/cluster-monitoring: "true"
+
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rh-cert-manager-namespace
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rh-cert-manager-rm-og
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{- range $og := (lookup "operators.coreos.com/v1" "OperatorGroup" "" "").items }}
+            {{- if and (ne $og.metadata.name "cert-manager-operator") (eq $og.metadata.namespace "cert-manager-operator") }}
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1
+                kind: OperatorGroup
+                metadata:
+                  name: {{ $og.metadata.name }}
+                  namespace: {{ $og.metadata.namespace }}
+            {{- end }}
+            {{- end }}
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy

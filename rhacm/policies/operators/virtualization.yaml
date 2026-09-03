@@ -14,7 +14,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: namespace
+          name: cnv-namespace
         spec:
           remediationAction: enforce
           severity: critical
@@ -25,11 +25,39 @@ spec:
                 kind: Namespace
                 metadata:
                   name: openshift-cnv
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: cnv-namespace
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: cnv-rm-og
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{- range $og := (lookup "operators.coreos.com/v1" "OperatorGroup" "" "").items }}
+            {{- if and (ne $og.metadata.name "kubevirt-hyperconverged-group") (eq $og.metadata.namespace "openshift-cnv") }}
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1
+                kind: OperatorGroup
+                metadata:
+                  name: {{ $og.metadata.name }}
+                  namespace: {{ $og.metadata.namespace }}
+            {{- end }}
+            {{- end }}
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: operator-group
+          name: cnv-og
         spec:
           remediationAction: enforce
           severity: high
@@ -50,7 +78,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: subscription
+          name: cnv-sub
         spec:
           remediationAction: enforce
           severity: high

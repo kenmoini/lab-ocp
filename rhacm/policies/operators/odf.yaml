@@ -28,6 +28,34 @@ spec:
                   name: openshift-storage
                   labels:
                     openshift.io/cluster-monitoring: "true"
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: odf-namespace
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-rm-og
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{- range $og := (lookup "operators.coreos.com/v1" "OperatorGroup" "" "").items }}
+            {{- if and (ne $og.metadata.name "openshift-storage") (eq $og.metadata.namespace "openshift-storage") }}
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1
+                kind: OperatorGroup
+                metadata:
+                  name: {{ $og.metadata.name }}
+                  namespace: {{ $og.metadata.namespace }}
+            {{- end }}
+            {{- end }}
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy

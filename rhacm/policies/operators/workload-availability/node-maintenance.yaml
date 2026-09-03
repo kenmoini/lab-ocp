@@ -28,6 +28,34 @@ spec:
                   name: openshift-workload-availability
                   labels:
                     openshift.io/cluster-monitoring: "true"
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: nmo-namespace
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: nmo-rm-og
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates-raw: |
+            {{- range $og := (lookup "operators.coreos.com/v1" "OperatorGroup" "" "").items }}
+            {{- if and (ne $og.metadata.name "openshift-workload-availability") (eq $og.metadata.namespace "openshift-workload-availability") }}
+            - complianceType: mustnothave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1
+                kind: OperatorGroup
+                metadata:
+                  name: {{ $og.metadata.name }}
+                  namespace: {{ $og.metadata.namespace }}
+            {{- end }}
+            {{- end }}
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
