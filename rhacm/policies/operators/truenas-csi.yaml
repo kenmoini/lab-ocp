@@ -15,6 +15,23 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: truenas-csi-ns
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: None
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: truenas-csi
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: truenas-csi-subscription
         spec:
           remediationAction: enforce
