@@ -1,0 +1,80 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-truenas-csi
+  annotations:
+    policy.open-cluster-management.io/description: Configures the TrueNAS CSI Operator
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: truenas-api-key
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: None
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: external-secrets.io/v1beta1
+                kind: ExternalSecret
+                metadata:
+                  name: truenas-api-key
+                  namespace: truenas-csi
+                spec:
+                  refreshInterval: "3600s"
+                  secretStoreRef:
+                    name: kemo-labs-vault
+                    kind: ClusterSecretStore
+                  target:
+                    name: deep-thought-api # name of the k8s Secret to make in this namespace
+                    creationPolicy: Owner
+                    deletionPolicy: Retain
+                    template:
+                      engineVersion: v2
+                      type: Opaque # type of k8s Secret to make
+                  data:
+                    - secretKey: api-key
+                      remoteRef:
+                        key: 'kemo.labs/infrastructure/storage/deep-thought' # name of the secret under the target Vault path
+                        property: apiKey # # name of the key in that named Vault secret
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: truenas-csi-cr
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: None
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: csi.truenas.io/v1alpha1
+                kind: TrueNASCSI
+                metadata:
+                  name: truenas
+                spec:
+                  truenasURL: "wss://deep-thought.kemo.labs/api/current"
+                  credentialsSecret: "deep-thought-api"
+                  defaultPool: "nvmePool"
+                  nfsServer: "deep-thought.kemo.labs"
+                  iscsiPortal: "deep-thought.kemo.labs:3260"
+                  iscsiIQNBase: "iqn.2005-10.org.freenas.ctl"
+                  insecureSkipTLS: false
+                  controllerReplicas: 2
+                  # nodeSelector:
+                  #   node-role.kubernetes.io/worker: ""
+                  # tolerations:
+                  #   - key: "node.kubernetes.io/not-ready"
+                  #     operator: "Exists"
+                  #     effect: "NoExecute"
+                  #     tolerationSeconds: 300

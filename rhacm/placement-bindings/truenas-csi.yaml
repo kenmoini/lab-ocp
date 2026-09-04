@@ -12,3 +12,6 @@ subjects:
   - name: operators-truenas-csi
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: instance-truenas-csi
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
