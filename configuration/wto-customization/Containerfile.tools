@@ -13,6 +13,7 @@
 FROM registry.access.redhat.com/ubi10/ubi-minimal:10.2
 
 ENV OC_VERSION=4.22 \
+    CCOCTL_VERSION=4.22 \
     NETOBSERV_VERSION=1.9.0 \
     OCM_VERSION=1.0.9 \
     ROSA_VERSION=1.2.64 \
@@ -68,6 +69,7 @@ RUN update-ca-trust && \
 COPY google-cloud.repo /etc/yum.repos.d/google-cloud-sdk.repo
 RUN microdnf install -y google-cloud-cli
 
+# Install Azure CLI
 RUN wget https://packages.microsoft.com/keys/microsoft-2025.asc && \
     rpm --import microsoft-2025.asc && \
     rm -f microsoft-2025.asc && \
@@ -77,6 +79,7 @@ RUN wget https://packages.microsoft.com/keys/microsoft-2025.asc && \
     microdnf install -y azure-cli && \
     rm -rf /home/user/.azure
 
+# Install AWS CLI v2
 RUN ARCH_DETECT=$(uname -m | sed -e 's/amd64/x86_64/' -e 's/arm64/aarch64/') && \
     mkdir -p /tmp/awscli && \
     cd /tmp/awscli && \
@@ -92,6 +95,14 @@ RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && 
     tar -C /usr/local/bin -xz --no-same-owner && \
     chmod a+x /usr/local/bin/oc && \
     chmod a+x /usr/local/bin/kubectl
+
+# Install CCOCTL
+RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && \
+    curl -L -o /tmp/ccoctl-linux-rhel9.tar.gz https://mirror.openshift.com/pub/openshift-v4/${ARCH_DETECT}/clients/ocp/stable-${CCOCTL_VERSION}/ccoctl-linux-rhel9.tar.gz \
+    cd /tmp && tar xzfv /tmp/ccoctl-linux-rhel9.tar.gz && \
+    mv -v /tmp/ccoctl /usr/local/bin/ccoctl && \
+    rm -f /tmp/ccoctl-linux-rhel9.tar.gz /tmp/README.md && \
+    chmod a+x /usr/local/bin/ccoctl
 
 # Install kustomize
 RUN curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash && \
