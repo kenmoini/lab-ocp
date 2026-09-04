@@ -69,7 +69,7 @@ spec:
                   nfsServer: "deep-thought.kemo.labs"
                   iscsiPortal: "deep-thought.kemo.labs:3260"
                   iscsiIQNBase: "iqn.2005-10.org.freenas.ctl"
-                  insecureSkipTLS: false
+                  insecureSkipTLS: true
                   controllerReplicas: 2
                   # nodeSelector:
                   #   node-role.kubernetes.io/worker: ""
