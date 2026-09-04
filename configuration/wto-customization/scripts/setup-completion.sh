@@ -72,3 +72,7 @@ fi
 if command -v argocd-agentctl &>/dev/null; then
   argocd-agentctl completion bash > $COMPDIR/argocd-agentctl
 fi
+
+if command -v ccoctl &>/dev/null; then
+  ccoctl completion bash > $COMPDIR/ccoctl
+fi

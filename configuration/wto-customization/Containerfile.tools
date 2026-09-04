@@ -98,7 +98,7 @@ RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && 
 
 # Install CCOCTL
 RUN ARCH_DETECT=$(uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/') && \
-    curl -L -o /tmp/ccoctl-linux-rhel9.tar.gz https://mirror.openshift.com/pub/openshift-v4/${ARCH_DETECT}/clients/ocp/stable-${CCOCTL_VERSION}/ccoctl-linux-rhel9.tar.gz \
+    curl -L -o /tmp/ccoctl-linux-rhel9.tar.gz https://mirror.openshift.com/pub/openshift-v4/${ARCH_DETECT}/clients/ocp/stable-${CCOCTL_VERSION}/ccoctl-linux-rhel9.tar.gz && \
     cd /tmp && tar xzfv /tmp/ccoctl-linux-rhel9.tar.gz && \
     mv -v /tmp/ccoctl /usr/local/bin/ccoctl && \
     rm -f /tmp/ccoctl-linux-rhel9.tar.gz /tmp/README.md && \
