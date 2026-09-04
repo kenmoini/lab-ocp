@@ -70,7 +70,7 @@ spec:
                   iscsiPortal: "deep-thought.kemo.labs:3260"
                   iscsiIQNBase: "iqn.2005-10.org.freenas.ctl"
                   insecureSkipTLS: true
-                  controllerReplicas: 2
+                  controllerReplicas: 1
                   # nodeSelector:
                   #   node-role.kubernetes.io/worker: ""
                   # tolerations:
