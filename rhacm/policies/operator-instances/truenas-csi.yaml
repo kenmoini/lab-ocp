@@ -52,7 +52,7 @@ spec:
         metadata:
           name: truenas-csi-cr
         spec:
-          remediationAction: enforce
+          remediationAction: inform
           severity: high
           pruneObjectBehavior: None
           object-templates:
