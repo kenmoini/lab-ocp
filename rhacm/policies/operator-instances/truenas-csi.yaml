@@ -67,7 +67,7 @@ spec:
                   credentialsSecret: "deep-thought-api"
                   defaultPool: "nvmePool"
                   nfsServer: "deep-thought.kemo.labs"
-                  iscsiPortal: "deep-thought.kemo.labs:3260"
+                  iscsiPortal: "192.168.42.48:3260"
                   iscsiIQNBase: "iqn.2005-10.org.freenas.ctl"
                   insecureSkipTLS: true
                   controllerReplicas: 1
@@ -93,6 +93,7 @@ spec:
           pruneObjectBehavior: None
           object-templates:
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 # NFS StorageClass — full parameter reference
                 # Creates ReadWriteMany volumes backed by NFS shares on TrueNAS.
@@ -113,7 +114,7 @@ spec:
 
                   # --- Common (all protocols) ---
                   # ZFS pool for volumes. Default: the driver's TRUENAS_DEFAULT_POOL.
-                  # pool: "pool01"
+                  pool: "nvmePool"
                   # Parent path for volume datasets, RELATIVE to the pool (no pool prefix, no
                   # leading/trailing "/", no ".."). WITHOUT this, volume datasets land at the POOL
                   # ROOT (pool/<pvc-name>); set it to keep CSI volumes grouped. With
@@ -154,6 +155,7 @@ spec:
                   # --- Delete behavior (optional) ---
                   # forceDelete: "false"
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 # iSCSI StorageClass — full parameter reference
                 # Creates ReadWriteOnce block volumes backed by ZVOLs on TrueNAS.
@@ -176,7 +178,7 @@ spec:
                   protocol: "iscsi"
                   # --- Common (all protocols) ---
                   # ZFS pool for volumes. Default: the driver's TRUENAS_DEFAULT_POOL.
-                  # pool: "pool01"
+                  pool: "nvmePool"
                   # Parent path for volume datasets, RELATIVE to the pool (no pool prefix, no
                   # leading/trailing "/", no ".."). WITHOUT this, volume datasets land at the POOL
                   # ROOT (pool/<pvc-name>); set it to keep CSI volumes grouped. With
@@ -184,6 +186,7 @@ spec:
                   datasetPath: "truenas-csi/{{hub .ManagedClusterName hub}}/iscsi"
                   # ZFS compression: OFF, LZ4 (default), GZIP[-1|-9], ZSTD[-1..-9], ZLE, LZJB.
                   compression: "LZ4"
+                  fsType: xfs
                   # ZFS sync mode: STANDARD (default), ALWAYS, DISABLED.
                   # sync: "STANDARD"
 
