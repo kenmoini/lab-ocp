@@ -118,7 +118,7 @@ spec:
                   # leading/trailing "/", no ".."). WITHOUT this, volume datasets land at the POOL
                   # ROOT (pool/<pvc-name>); set it to keep CSI volumes grouped. With
                   # datasetPath: "k8s/nfs" a volume becomes pool/k8s/nfs/<pvc-name>.
-                  datasetPath: "truenas-csi/{{ .ManagedClusterName }}/nfs"
+                  datasetPath: "truenas-csi/{{hub .ManagedClusterName hub}}/nfs"
                   # ZFS compression: OFF, LZ4 (default), GZIP[-1|-9], ZSTD[-1..-9], ZLE, LZJB.
                   compression: "LZ4"
                   # ZFS sync mode: STANDARD (default), ALWAYS, DISABLED.
@@ -181,7 +181,7 @@ spec:
                   # leading/trailing "/", no ".."). WITHOUT this, volume datasets land at the POOL
                   # ROOT (pool/<pvc-name>); set it to keep CSI volumes grouped. With
                   # datasetPath: "k8s/iscsi" a volume becomes pool/k8s/iscsi/<pvc-name>.
-                  datasetPath: "truenas-csi/{{ .ManagedClusterName }}/iscsi"
+                  datasetPath: "truenas-csi/{{hub .ManagedClusterName hub}}/iscsi"
                   # ZFS compression: OFF, LZ4 (default), GZIP[-1|-9], ZSTD[-1..-9], ZLE, LZJB.
                   compression: "LZ4"
                   # ZFS sync mode: STANDARD (default), ALWAYS, DISABLED.
