@@ -67,7 +67,7 @@ spec:
                   credentialsSecret: "deep-thought-api"
                   defaultPool: "nvmePool"
                   nfsServer: "deep-thought.kemo.labs"
-                  iscsiPortal: "192.168.42.48:3260"
+                  # iscsiPortal: "192.168.42.48:3260"
                   iscsiIQNBase: "iqn.2005-10.org.freenas.ctl"
                   insecureSkipTLS: true
                   controllerReplicas: 1
