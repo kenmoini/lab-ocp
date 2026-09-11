@@ -10,6 +10,7 @@ resources:
   - appset-egress-ips.yaml
   - appset-hashicorp-vault.yaml
   - appset-hub-dev-services.yaml
+  - appset-helm-github-arc.yaml
   - appset-install-kyverno.yaml
   - appset-kagent-crds.yaml
   - appset-kagent-kmcp.yaml
