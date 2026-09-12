@@ -43,7 +43,7 @@ spec:
           repoURL: '{{helmRepoURL}}'
           targetRevision: '{{helmRevision}}'
           helm:
-            releaseName: '{{helmChartName}}'
+            releaseName: '{{appName}}'
             parameters:
               - name: "githubConfigSecret"
                 value: kemo-labs-ocp-arc
