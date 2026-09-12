@@ -157,6 +157,9 @@ spec:
                   - kind: ServiceAccount
                     name: arc-gha-rs-controller
                     namespace: arc-systems
+                  - kind: ServiceAccount
+                    name: tri-force-gha-rs-no-permission
+                    namespace: arc-systems
                 roleRef:
                   apiGroup: rbac.authorization.k8s.io
                   kind: Role
