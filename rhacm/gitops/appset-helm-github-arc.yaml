@@ -62,8 +62,8 @@ spec:
                 value: kemo-labs-ocp-arc
               - name: "githubConfigUrl"
                 value: https://github.com/kenmoini/lab-ocp
-              - name: "runnerGroup"
-                value: "tri-force"
+              # - name: "runnerGroup"
+              #   value: "KemoLabs-OCP-ARC"
               - name: "controllerServiceAccount.name"
                 value: arc-gha-rs-controller
               - name: "controllerServiceAccount.namespace"
