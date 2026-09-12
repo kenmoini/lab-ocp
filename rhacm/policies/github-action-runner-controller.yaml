@@ -93,44 +93,21 @@ spec:
                   name: arc-ss-init
                   namespace: arc-systems
                 rules:
-                  - apiGroups:
-                      - ""
-                    resources:
-                      - pods
-                      - secrets
-                    verbs:
-                      - get
-                      - list
-                      - create
-                      - delete
-                  - apiGroups:
-                      - ""
-                    resources:
-                      - pods
-                    subresources:
-                      - exec
-                    verbs:
-                      - get
-                      - create
-                  - apiGroups:
-                      - ""
-                    resources:
-                      - pods
-                    subresources:
-                      - log
-                    verbs:
-                      - get
-                      - list
-                      - watch
-                  - apiGroups:
-                      - "batch"
-                    resources:
-                      - jobs
-                    verbs:
-                      - get
-                      - list
-                      - create
-                      - delete
+                  - apiGroups: [""]
+                    resources: ["pods"]
+                    verbs: ["get", "list", "create", "delete"]
+                  - apiGroups: [""]
+                    resources: ["pods/exec"]
+                    verbs: ["get", "create"]
+                  - apiGroups: [""]
+                    resources: ["pods/log"]
+                    verbs: ["get", "list", "watch"]
+                  - apiGroups: ["batch"]
+                    resources: ["jobs"]
+                    verbs: ["get", "list", "create", "delete"]
+                  - apiGroups: [""]
+                    resources: ["secrets"]
+                    verbs: ["create", "delete", "get", "list"]
             - complianceType: musthave
               objectDefinition:
                 kind: RoleBinding
