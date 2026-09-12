@@ -21,9 +21,11 @@ spec:
           - list:
               elements:
               - appName: arc
+                scaleSetAppName: arc-ss
                 namespace: arc-systems
                 helmRepoURL: 'ghcr.io/actions/actions-runner-controller-charts'
                 helmChartName: gha-runner-scale-set-controller
+                scaleSetHelmChartName: gha-runner-scale-set
                 helmRevision: 0.14.2
   template:
     metadata:
@@ -44,6 +46,17 @@ spec:
           targetRevision: '{{helmRevision}}'
           helm:
             releaseName: '{{appName}}'
+            valuesObject:
+              metrics:
+                controllerManagerAddr: ":8080"
+                listenerAddr: ":8080"
+                listenerEndpoint: "/metrics"
+
+        - chart: '{{scaleSetHelmChartName}}'
+          repoURL: '{{helmRepoURL}}'
+          targetRevision: '{{helmRevision}}'
+          helm:
+            releaseName: '{{scaleSetAppName}}'
             parameters:
               - name: "githubConfigSecret"
                 value: kemo-labs-ocp-arc
