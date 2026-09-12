@@ -22,7 +22,7 @@ spec:
               elements:
               - appName: arc
                 namespace: arc-systems
-                helmRepoURL: 'oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller'
+                helmRepoURL: 'ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller'
                 helmChartName: arc
                 helmRevision: 0.14.2
   template:
@@ -40,6 +40,8 @@ spec:
       project: default
       sources:
         - chart: '{{helmChartName}}'
+          repoURL: '{{helmRepoURL}}'
+          targetRevision: '{{helmRevision}}'
           helm:
             parameters:
               - name: "githubConfigSecret"
@@ -76,8 +78,6 @@ spec:
                                 storage: 10Gi
             #valueFiles:
             #  - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
-          repoURL: '{{helmRepoURL}}'
-          targetRevision: '{{helmRevision}}'
         #- ref: values
         #  repoURL: 'https://github.com/kenmoini/lab-ocp'
         #  targetRevision: main
