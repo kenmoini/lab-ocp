@@ -87,6 +87,52 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: Role
+                metadata:
+                  name: arc-ss-init
+                  namespace: arc-systems
+                rules:
+                  - apiGroups:
+                      - ""
+                    resources:
+                      - pods
+                      - secrets
+                    verbs:
+                      - get
+                      - list
+                      - create
+                      - delete
+                  - apiGroups:
+                      - ""
+                    resources:
+                      - pods
+                    subresources:
+                      - exec
+                    verbs:
+                      - get
+                      - create
+                  - apiGroups:
+                      - ""
+                    resources:
+                      - pods
+                    subresources:
+                      - log
+                    verbs:
+                      - get
+                      - list
+                      - watch
+                  - apiGroups:
+                      - "batch"
+                    resources:
+                      - jobs
+                    verbs:
+                      - get
+                      - list
+                      - create
+                      - delete
+            - complianceType: musthave
+              objectDefinition:
                 kind: RoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
@@ -100,3 +146,18 @@ spec:
                   apiGroup: rbac.authorization.k8s.io
                   kind: ClusterRole
                   name: 'system:openshift:scc:restricted-v3'
+            - complianceType: musthave
+              objectDefinition:
+                kind: RoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: gharc-ss-init
+                  namespace: arc-systems
+                subjects:
+                  - kind: ServiceAccount
+                    name: arc-gha-rs-controller
+                    namespace: arc-systems
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: Role
+                  name: 'arc-ss-init'
