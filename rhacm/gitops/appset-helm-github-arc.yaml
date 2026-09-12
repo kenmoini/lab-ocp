@@ -47,6 +47,10 @@ spec:
             parameters:
               - name: "githubConfigSecret"
                 value: kemo-labs-ocp-arc
+              - name: "githubConfigUrl"
+                value: https://github.com/kemo-labs/lab-ocp
+              - name: "runnerGroup"
+                value: "tri-force"
             valuesObject:
               template:
                 spec:
