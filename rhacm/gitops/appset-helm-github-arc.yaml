@@ -61,7 +61,7 @@ spec:
               - name: "githubConfigSecret"
                 value: kemo-labs-ocp-arc
               - name: "githubConfigUrl"
-                value: https://github.com/kemo-labs/lab-ocp
+                value: https://github.com/kenmoini/lab-ocp
               - name: "runnerGroup"
                 value: "tri-force"
               - name: "controllerServiceAccount.name"
