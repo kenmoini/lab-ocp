@@ -44,6 +44,36 @@ spec:
             parameters:
               - name: "githubConfigSecret"
                 value: kemo-labs-ocp-arc
+            valuesObject:
+              template:
+                spec:
+                  hostUsers: false # Enable User Namespaces
+                  containers:
+                  - name: runner
+                    image: ghcr.io/actions/actions-runner:latest
+                    command: ["/home/runner/run.sh"]
+                    env:
+                      - name: ACTIONS_RUNNER_CONTAINER_HOOKS
+                        value: /home/runner/k8s/index.js
+                      - name: ACTIONS_RUNNER_POD_NAME
+                        valueFrom:
+                          fieldRef:
+                            fieldPath: metadata.name
+                      - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+                        value: "true"
+                    volumeMounts:
+                      - name: work
+                        mountPath: /home/runner/_work
+                  volumes:
+                    - name: work
+                      ephemeral:
+                        volumeClaimTemplate:
+                          spec:
+                            accessModes: [ "ReadWriteOnce" ]
+                            # storageClassName: "ocs-storagecluster-ceph-rbd"
+                            resources:
+                              requests:
+                                storage: 10Gi
             #valueFiles:
             #  - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
           repoURL: '{{helmRepoURL}}'
