@@ -76,7 +76,7 @@ spec:
                   namespace: arc-systems
                 subjects:
                   - kind: ServiceAccount
-                    name: hub-cluster-arc-gha-rs-controller
+                    name: arc-gha-rs-controller
                     namespace: arc-systems
                 roleRef:
                   apiGroup: rbac.authorization.k8s.io
