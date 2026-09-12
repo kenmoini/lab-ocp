@@ -1,0 +1,59 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: gha-controller
+  #namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/categories: OCPCM - OpenShift Configuration Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: CC - Capability Configuration
+spec:
+  disabled: false
+  policy-templates:
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: eso-vault-clustersecretstore
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gha-ext-secret
+        spec:
+          remediationAction: enforce
+          severity: low
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: external-secrets.io/v1beta1
+                kind: ExternalSecret
+                metadata:
+                  name: gha-controller
+                  namespace: arc-systems
+                spec:
+                  refreshInterval: "3600s"
+                  secretStoreRef:
+                    name: kemo-labs-vault
+                    kind: ClusterSecretStore
+                  target:
+                    name: kemo-labs-ocp-arc # name of the k8s Secret to make in this namespace
+                    creationPolicy: Owner
+                    deletionPolicy: Retain
+                    template:
+                      engineVersion: v2
+                      type: Opaque # type of k8s Secret to make
+                  data:
+                    - secretKey: github_app_id
+                      remoteRef:
+                        key: external/github/arc # name of the secret under the target Vault path
+                        property: github_app_id # # name of the key in that named Vault secret
+                    - secretKey: github_app_installation_id
+                      remoteRef:
+                        key: external/github/arc # name of the secret under the target Vault path
+                        property: github_app_installation_id # # name of the key in that named Vault secret
+                    - secretKey: github_app_private_key
+                      remoteRef:
+                        key: external/github/arc # name of the secret under the target Vault path
+                        property: github_app_private_key # # name of the key in that named Vault secret

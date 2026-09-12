@@ -43,6 +43,7 @@ resources:
   - hub-4.21-clusters.yaml
   - hub-4.22-clusters.yaml
 
+  - appset-helm-github-arc.yaml
   - bmh-lso-odf.yaml
   - community-eso.yaml
   - developer-services.yaml

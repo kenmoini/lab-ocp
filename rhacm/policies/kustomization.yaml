@@ -36,6 +36,7 @@ resources:
   - enable-internal-registry.yaml
   - enable-multinetworkpolicy.yaml
   - encrypt-etcd.yaml
+  - github-action-runner-controller.yaml
   - hcp-bmh-infra-creds.yaml
   - image-vuln-scanning.yaml
   - increase-fd-limits.yaml

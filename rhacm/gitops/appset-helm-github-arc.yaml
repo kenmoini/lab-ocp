@@ -39,9 +39,10 @@ spec:
           kind: CustomResourceDefinition
       project: default
       sources:
-    
         - chart: '{{helmChartName}}'
-          helm: {}
+          helm:
+            valuesObject:
+              githubConfigSecret: kemo-labs-ocp-arc
             #valueFiles:
             #  - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
           repoURL: '{{helmRepoURL}}'
