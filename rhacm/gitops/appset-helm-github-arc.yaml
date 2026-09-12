@@ -62,14 +62,12 @@ spec:
                 value: kemo-labs-ocp-arc
               - name: "githubConfigUrl"
                 value: https://github.com/kenmoini/lab-ocp
-              # - name: "runnerGroup"
-              #   value: "KemoLabs-OCP-ARC"
               - name: "controllerServiceAccount.name"
                 value: arc-gha-rs-controller
               - name: "controllerServiceAccount.namespace"
                 value: arc-systems
             valuesObject:
-              runnerScaleSetName: tri-force
+              runnerScaleSetName: tri-force # This is what the runs-on should be in the GHA Workflow
               template:
                 spec:
                   hostUsers: false # Enable User Namespaces
