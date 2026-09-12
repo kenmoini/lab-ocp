@@ -66,6 +66,8 @@ spec:
                 value: "tri-force"
               - name: "controllerServiceAccount.name"
                 value: arc-gha-rs-controller
+              - name: "controllerServiceAccount.namespace"
+                value: arc-systems
             valuesObject:
               template:
                 spec:
