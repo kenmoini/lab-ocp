@@ -2,12 +2,12 @@ FROM registry.access.redhat.com/ubi9/ubi:latest
 
 ARG RUNNER_VERSION="2.337.0"
 
-RUN dnf config-manager --set-disabled rhel-9* && \
-    useradd -m docker && \
-    dnf update -y && \
-    dnf install -y ca-certificates curl-minimal jq wget dnf-plugins-core && \
+RUN useradd -m docker && \
+    dnf update -y --disablerepo="rhel-9*" && \
+    dnf install -y --disablerepo="rhel-9*" ca-certificates curl-minimal jq wget dnf-plugins-core && \
+    dnf config-manager --set-disabled rhel-9* && \
     dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo && \
-    dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
+    dnf install -y --disablerepo="rhel-9*" docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
