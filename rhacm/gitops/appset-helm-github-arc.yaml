@@ -45,7 +45,7 @@ spec:
           repoURL: '{{helmRepoURL}}'
           targetRevision: '{{helmRevision}}'
           helm:
-            releaseName: '{{appName}}'
+            # releaseName: '{{appName}}'
             valuesObject:
               metrics:
                 controllerManagerAddr: ":8080"
@@ -56,7 +56,7 @@ spec:
           repoURL: '{{helmRepoURL}}'
           targetRevision: '{{helmRevision}}'
           helm:
-            releaseName: '{{scaleSetAppName}}'
+            # releaseName: '{{scaleSetAppName}}'
             parameters:
               - name: "githubConfigSecret"
                 value: kemo-labs-ocp-arc
