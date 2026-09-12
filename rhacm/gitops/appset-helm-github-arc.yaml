@@ -41,8 +41,9 @@ spec:
       sources:
         - chart: '{{helmChartName}}'
           helm:
-            valuesObject:
-              githubConfigSecret: kemo-labs-ocp-arc
+            parameters:
+              - name: "githubConfigSecret"
+                value: kemo-labs-ocp-arc
             #valueFiles:
             #  - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
           repoURL: '{{helmRepoURL}}'
