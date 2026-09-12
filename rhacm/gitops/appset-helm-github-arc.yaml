@@ -75,6 +75,7 @@ spec:
                   - name: runner
                     image: ghcr.io/actions/actions-runner:latest
                     command: ["/home/runner/run.sh"]
+                    imagePullPolicy: Always
                     securityContext:
                       procMount: Unmasked
                     env:
