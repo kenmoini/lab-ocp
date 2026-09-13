@@ -31,3 +31,6 @@ jobs:
       - name: Prepare
         run: |
           echo "Hello from a GitHub Actions workflow"
+
+      - name: Check out code
+        uses: actions/checkout@v7
