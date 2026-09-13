@@ -74,11 +74,12 @@ RUN cd "$RUNNER_ASSETS_DIR" \
 # We place the scripts in `/usr/bin` so that users who extend this image can
 # override them with scripts of the same name placed in `/usr/local/bin`.
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/entrypoint.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/entrypoint-dind.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/startup.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/logger.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/graceful-stop.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/update-status /usr/bin/
-RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/startup.sh /usr/bin/logger.sh /usr/bin/graceful-stop.sh /usr/bin/update-status
+RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/entrypoint-dind.sh /usr/bin/startup.sh /usr/bin/logger.sh /usr/bin/graceful-stop.sh /usr/bin/update-status
 
 # Copy the docker shim which propagates the docker MTU to underlying networks
 # to replace the docker binary in the PATH.
@@ -106,4 +107,6 @@ RUN echo "PATH=${PATH}" > /etc/environment && \
 USER runner
 WORKDIR /home/runner
 ENTRYPOINT ["/bin/bash", "-c"]
-CMD ["entrypoint.sh"]
+# ENTRYPOINT ["/sbin/init"]
+# ENTRYPOINT ["/usr/bin/dumb-init"]
+CMD ["entrypoint-dind.sh"]
