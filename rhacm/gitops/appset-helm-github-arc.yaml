@@ -92,6 +92,8 @@ spec:
                         valueFrom:
                           fieldRef:
                             fieldPath: metadata.name
+                      - name: RUNNER_REPO
+                        value: "github.com/kenmoini/lab-ocp"
                     volumeMounts:
                       - name: work
                         mountPath: /home/runner/_work
