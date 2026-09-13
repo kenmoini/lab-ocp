@@ -94,6 +94,8 @@ spec:
                             fieldPath: metadata.name
                       - name: RUNNER_REPO
                         value: "github.com/kenmoini/lab-ocp"
+                      - name: RUNNER_TOKEN
+                        value: "$ACTIONS_RUNNER_INPUT_JITCONFIG"
                     volumeMounts:
                       - name: work
                         mountPath: /home/runner/_work
