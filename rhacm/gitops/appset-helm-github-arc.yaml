@@ -88,22 +88,22 @@ spec:
                             fieldPath: metadata.name
                       - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                         value: "false"
-                      - name: RUNNER_NAME
-                        valueFrom:
-                          fieldRef:
-                            fieldPath: metadata.name
-                      - name: RUNNER_REPO
-                        value: "github.com/kenmoini/lab-ocp"
-                      - name: RUNNER_TOKEN
-                        value: "$ACTIONS_RUNNER_INPUT_JITCONFIG"
+                      # - name: RUNNER_NAME
+                      #   valueFrom:
+                      #     fieldRef:
+                      #       fieldPath: metadata.name
+                      # - name: RUNNER_REPO
+                      #   value: "github.com/kenmoini/lab-ocp"
+                      # - name: RUNNER_TOKEN
+                      #   value: "$ACTIONS_RUNNER_INPUT_JITCONFIG"
                     volumeMounts:
                       - name: work
                         mountPath: /home/runner/_work
-                      - name: tmpwork
-                        mountPath: /runner
+                      # - name: tmpwork
+                      #   mountPath: /runner
                   volumes:
-                    - name: tmpwork
-                      emptyDir: {}
+                    # - name: tmpwork
+                    #   emptyDir: {}
                     - name: work
                       ephemeral:
                         volumeClaimTemplate:
