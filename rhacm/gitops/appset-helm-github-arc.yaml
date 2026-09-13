@@ -88,6 +88,10 @@ spec:
                             fieldPath: metadata.name
                       - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
                         value: "false"
+                      - name: RUNNER_NAME
+                        valueFrom:
+                          fieldRef:
+                            fieldPath: metadata.name
                     volumeMounts:
                       - name: work
                         mountPath: /home/runner/_work
