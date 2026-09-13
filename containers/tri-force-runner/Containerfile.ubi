@@ -54,7 +54,8 @@ RUN mkdir -p "$RUNNER_ASSETS_DIR" && \
 
 # Setup Dependencies for the Runner
 RUN dnf config-manager --set-disabled "rhel-9*" || true && \
-    chown -R runner ~runner && /runnertmp/bin/installdependencies.sh && \
+    chown -R runner ~runner && chmod ug+rwx ~runner && \
+    /runnertmp/bin/installdependencies.sh && \
     dnf install -y libyaml-devel && \
     dnf clean all && rm -rf /var/cache/dnf
 

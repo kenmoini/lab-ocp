@@ -12,7 +12,8 @@ on:
     branches:
       - main
     paths:
-      - containers/tri-force-runner/**
+      - containers/tri-force-runner/root-ca/**
+      - containers/tri-force-runner/Containerfile.ubuntu
       - .github/workflows/build-gha-runner-ubuntu.yaml
 
   # Schedule workflow run at 00:00 on Sunday
