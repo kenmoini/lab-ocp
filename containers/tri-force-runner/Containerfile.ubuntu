@@ -117,7 +117,8 @@ ENV PATH="${PATH}:${HOME}/.local/bin/"
 ENV ImageOS=ubuntu24
 
 RUN echo "PATH=${PATH}" > /etc/environment \
-    && echo "ImageOS=${ImageOS}" >> /etc/environment
+    && echo "ImageOS=${ImageOS}" >> /etc/environment && \
+    chown -R runner:runner ~runner && chmod ug+rwx ~runner
 
 USER runner
 
