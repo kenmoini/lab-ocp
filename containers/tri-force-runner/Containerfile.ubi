@@ -82,7 +82,8 @@ RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/startup.sh /usr/bin/logger.sh /us
 # Copy the docker shim which propagates the docker MTU to underlying networks
 # to replace the docker binary in the PATH.
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/docker-shim.sh /usr/local/bin/docker
-RUN chmod a+rx /usr/local/bin/docker
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/docker-shim.sh /home/runner/.local/bin/docker
+RUN chmod a+rx /usr/local/bin/docker /home/runner/.local/bin/docker
 
 # Configure hooks folder structure.
 RUN mkdir -p /etc/arc/hooks/{job-started.d,job-completed.d}
@@ -96,8 +97,9 @@ RUN chmod a+rx /etc/arc/hooks/job-started.sh /etc/arc/hooks/job-completed.sh /et
 ENV PATH="${PATH}:${HOME}/.local/bin/"
 ENV ImageOS=ubi9
 
-RUN echo "PATH=${PATH}" > /etc/environment \
-    && echo "ImageOS=${ImageOS}" >> /etc/environment
+RUN echo "PATH=${PATH}" > /etc/environment && \
+    echo "ImageOS=${ImageOS}" >> /etc/environment && \
+    chown -R runner:runner ~runner && chmod ug+rwx ~runner
 
 USER runner
 WORKDIR /home/runner
