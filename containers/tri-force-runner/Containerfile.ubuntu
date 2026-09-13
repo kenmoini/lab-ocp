@@ -1,28 +1,125 @@
-FROM ubuntu:22.04
+FROM ubuntu:24.04
 
-ARG RUNNER_VERSION="2.294.0"
+ARG RUNNER_VERSION="2.337.0"
+ARG RUNNER_CONTAINER_HOOKS_VERSION="0.8.1"
+# Docker and Docker Compose arguments
+ARG CHANNEL=stable
+ARG DOCKER_VERSION=28.0.4
+ARG DOCKER_COMPOSE_VERSION=v2.38.2
+ARG DUMB_INIT_VERSION=1.2.5
+ARG RUNNER_USER_UID=1001
+ARG DOCKER_GROUP_GID=121
 
-# Prevents installdependencies.sh from prompting the user and blocking the image creation
-ARG DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -y \
+    && apt-get install -y software-properties-common \
+    && add-apt-repository -y ppa:git-core/ppa \
+    && apt-get update -y \
+    && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    git \
+    jq \
+    sudo \
+    unzip \
+    zip \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt update -y && apt upgrade -y && useradd -m docker
-RUN apt install -y --no-install-recommends \
-    curl jq build-essential libssl-dev libffi-dev python3 python3-venv python3-dev python3-pip
+# Download latest git-lfs version
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
+    apt-get install -y --no-install-recommends git-lfs
 
+RUN adduser --disabled-password --gecos "" --uid $RUNNER_USER_UID runner \
+    && groupadd docker --gid $DOCKER_GROUP_GID \
+    && usermod -aG sudo runner \
+    && usermod -aG docker runner \
+    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers \
+    && echo "Defaults env_keep += \"DEBIAN_FRONTEND\"" >> /etc/sudoers
 
-RUN cd /home/docker && mkdir actions-runner && cd actions-runner \
-    && curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz \
-    && tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz
+ENV HOME=/home/runner
 
-RUN chown -R docker ~docker && /home/docker/actions-runner/bin/installdependencies.sh
+RUN export ARCH=$(uname -m) \
+    && if [ "$ARCH" = "arm64" ]; then export ARCH=aarch64 ; fi \
+    && if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ]; then export ARCH=x86_64 ; fi \
+    && curl -fLo /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_${ARCH} \
+    && chmod +x /usr/bin/dumb-init
 
-COPY start.sh start.sh
+ENV RUNNER_ASSETS_DIR=/runnertmp
+RUN export ARCH=$(uname -m) \
+    && if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "x86_64" ] || [ "$ARCH" = "i386" ]; then export ARCH=x64 ; fi \
+    && if [ "$ARCH" = "aarch64" ]; then export ARCH=arm64 ; fi \
+    && mkdir -p "$RUNNER_ASSETS_DIR" \
+    && cd "$RUNNER_ASSETS_DIR" \
+    && curl -fLo runner.tar.gz https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-${ARCH}-${RUNNER_VERSION}.tar.gz \
+    && tar xzf ./runner.tar.gz \
+    && rm runner.tar.gz \
+    && ./bin/installdependencies.sh \
+    && mv ./externals ./externalstmp \
+    # libyaml-dev is required for ruby/setup-ruby action.
+    # It is installed after installdependencies.sh and before removing /var/lib/apt/lists
+    # to avoid rerunning apt-update on its own.
+    && apt-get install -y libyaml-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# make the script executable
-RUN chmod +x start.sh
+ENV RUNNER_TOOL_CACHE=/opt/hostedtoolcache
+RUN mkdir /opt/hostedtoolcache \
+    && chgrp docker /opt/hostedtoolcache \
+    && chmod g+rwx /opt/hostedtoolcache
 
-# since the config and run script for actions are not allowed to be run by root,
-# set the user to "docker" so all subsequent commands are run as the docker user
-USER docker
+RUN cd "$RUNNER_ASSETS_DIR" \
+    && curl -fLo runner-container-hooks.zip https://github.com/actions/runner-container-hooks/releases/download/v${RUNNER_CONTAINER_HOOKS_VERSION}/actions-runner-hooks-k8s-${RUNNER_CONTAINER_HOOKS_VERSION}.zip \
+    && unzip ./runner-container-hooks.zip -d ./k8s \
+    && rm -f runner-container-hooks.zip
 
-ENTRYPOINT ["./start.sh"]
+RUN set -vx; \
+    export ARCH=$(uname -m) \
+    && if [ "$ARCH" = "arm64" ]; then export ARCH=aarch64 ; fi \
+    && if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ]; then export ARCH=x86_64 ; fi \
+    && curl -fLo docker.tgz https://download.docker.com/linux/static/${CHANNEL}/${ARCH}/docker-${DOCKER_VERSION}.tgz \
+    && tar zxvf docker.tgz \
+    && install -o root -g root -m 755 docker/docker /usr/bin/docker \
+    && rm -rf docker docker.tgz
+
+RUN export ARCH=$(uname -m) \
+    && if [ "$ARCH" = "arm64" ]; then export ARCH=aarch64 ; fi \
+    && if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ]; then export ARCH=x86_64 ; fi \
+    && mkdir -p /usr/libexec/docker/cli-plugins \
+    && curl -fLo /usr/libexec/docker/cli-plugins/docker-compose https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-${ARCH} \
+    && chmod +x /usr/libexec/docker/cli-plugins/docker-compose \
+    && ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/bin/docker-compose \
+    && which docker-compose \
+    && docker compose version
+
+# We place the scripts in `/usr/bin` so that users who extend this image can
+# override them with scripts of the same name placed in `/usr/local/bin`.
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/entrypoint.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/startup.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/logger.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/graceful-stop.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/update-status /usr/bin/
+RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/startup.sh /usr/bin/logger.sh /usr/bin/graceful-stop.sh /usr/bin/update-status
+
+# Copy the docker shim which propagates the docker MTU to underlying networks
+# to replace the docker binary in the PATH.
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/docker-shim.sh /usr/local/bin/docker
+RUN chmod a+rx /usr/local/bin/docker
+
+# Configure hooks folder structure.
+RUN mkdir -p /etc/arc/hooks/{job-started.d,job-completed.d}
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/hooks/job-started.sh /etc/arc/hooks/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/hooks/job-completed.sh /etc/arc/hooks/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/hooks/job-started.d/update-status /etc/arc/hooks/job-started.d/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/hooks/job-completed.d/update-status /etc/arc/hooks/job-completed.d/
+RUN chmod a+rx /etc/arc/hooks/job-started.sh /etc/arc/hooks/job-completed.sh /etc/arc/hooks/job-started.d/update-status /etc/arc/hooks/job-completed.d/update-status
+
+# Add the Python "User Script Directory" to the PATH
+ENV PATH="${PATH}:${HOME}/.local/bin/"
+ENV ImageOS=ubuntu24
+
+RUN echo "PATH=${PATH}" > /etc/environment \
+    && echo "ImageOS=${ImageOS}" >> /etc/environment
+
+USER runner
+
+ENTRYPOINT ["/bin/bash", "-c"]
+CMD ["entrypoint.sh"]

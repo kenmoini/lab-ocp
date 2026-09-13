@@ -1,10 +1,10 @@
-name: Build Container - GitHub Actions Runner UBI
+name: Build Container - GitHub Actions Runner Ubuntu
 
 env:
   REGISTRY_HOSTNAME: quay.io
-  REGISTRY_IMAGE: quay.io/kenmoini/gha-runner-ubi
+  REGISTRY_IMAGE: quay.io/kenmoini/gha-runner-ubuntu
   BUILD_CONTEXT_PATH: containers/tri-force-runner
-  CONTAINERFILE_PATH: containers/tri-force-runner/Containerfile.ubi
+  CONTAINERFILE_PATH: containers/tri-force-runner/Containerfile.ubuntu
   WORKFLOW_TRIGGER: 1
 
 on:
@@ -13,7 +13,7 @@ on:
       - main
     paths:
       - containers/tri-force-runner/**
-      - .github/workflows/build-gha-runner-ubi.yaml
+      - .github/workflows/build-gha-runner-ubuntu.yaml
 
   # Schedule workflow run at 00:00 on Sunday
   schedule:

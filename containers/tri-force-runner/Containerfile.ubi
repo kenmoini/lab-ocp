@@ -1,7 +1,7 @@
 FROM registry.access.redhat.com/ubi9/ubi:latest
 
-ARG RUNNER_CONTAINER_HOOKS_VERSION="0.8.1"
 ARG RUNNER_VERSION="2.337.0"
+ARG RUNNER_CONTAINER_HOOKS_VERSION="0.8.1"
 # Docker and Docker Compose arguments
 ARG CHANNEL=stable
 ARG DOCKER_VERSION=28.0.4
