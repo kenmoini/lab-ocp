@@ -99,8 +99,9 @@ ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/hea
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/startup.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/logger.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/graceful-stop.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/wait.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/update-status /usr/bin/
-RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/entrypoint-dind.sh /usr/bin/startup.sh /usr/bin/logger.sh /usr/bin/graceful-stop.sh /usr/bin/update-status
+RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/entrypoint-dind.sh /usr/bin/startup.sh /usr/bin/logger.sh /usr/bin/graceful-stop.sh /usr/bin/wait.sh /usr/bin/update-status
 
 # Copy the docker shim which propagates the docker MTU to underlying networks
 # to replace the docker binary in the PATH.

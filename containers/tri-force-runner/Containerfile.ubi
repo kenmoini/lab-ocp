@@ -15,12 +15,12 @@ RUN adduser --create-home --comment "" --uid $RUNNER_USER_UID runner \
     && groupadd docker --gid $DOCKER_GROUP_GID \
     && usermod -aG wheel runner \
     && usermod -aG docker runner \
-    && echo "%sudo   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers
+    && echo "%wheel   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers
 
 # Install Packages
 RUN dnf update -y --disablerepo="rhel-9*" && \
     dnf install -y --disablerepo="rhel-9*" \
-    ca-certificates git unzip zip sudo curl-minimal jq wget dnf-plugins-core && \
+    ca-certificates git unzip zip sudo curl-minimal jq wget dnf-plugins-core procps-ng && \
     dnf config-manager --set-disabled "rhel-9*" || true && \
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && \
     dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo && \
@@ -78,8 +78,9 @@ ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/hea
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/startup.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/logger.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/graceful-stop.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/wait.sh /usr/bin/
 ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/update-status /usr/bin/
-RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/entrypoint-dind.sh /usr/bin/startup.sh /usr/bin/logger.sh /usr/bin/graceful-stop.sh /usr/bin/update-status
+RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/entrypoint-dind.sh /usr/bin/startup.sh /usr/bin/logger.sh /usr/bin/graceful-stop.sh /usr/bin/wait.sh /usr/bin/update-status
 
 # Copy the docker shim which propagates the docker MTU to underlying networks
 # to replace the docker binary in the PATH.
