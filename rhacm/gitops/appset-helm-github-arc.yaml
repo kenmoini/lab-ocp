@@ -99,7 +99,11 @@ spec:
                     volumeMounts:
                       - name: work
                         mountPath: /home/runner/_work
+                      - name: tmpwork
+                        mountPath: /runner
                   volumes:
+                    - name: tmpwork
+                      emptyDir: {}
                     - name: work
                       ephemeral:
                         volumeClaimTemplate:
