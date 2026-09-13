@@ -1,0 +1,350 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: aa-prncpl-pki-init
+  namespace: open-cluster-management-policies
+  annotations:
+    policy.open-cluster-management.io/description: Bootstraps the ArgoCD Agent Principal PKI and Instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: gitops-agent-principal
+      namespace: open-cluster-management-policies
+      compliance: Compliant
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: agent-prncpl-ca-init
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: ClusterRole
+                metadata:
+                  annotations:
+                    rbac.authorization.kubernetes.io/autoupdate: "true"
+                  name: argocd-agent-pki
+                rules:
+                  - apiGroups:
+                      - ""
+                    resources:
+                      - secrets
+                    verbs:
+                      - get
+                      - list
+                      - create
+                      - patch
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: ClusterRoleBinding
+                metadata:
+                  name: argocd-agent-pki
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: argocd-agent-pki
+                subjects:
+                  - kind: ServiceAccount
+                    name: argocd-agent-pki
+                    namespace: argocd-principal
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ServiceAccount
+                metadata:
+                  name: argocd-agent-pki
+                  namespace: argocd-principal
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: batch/v1
+                kind: Job
+                metadata:
+                  name: argocd-agent-tls
+                  namespace: argocd-principal
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - image: registry.redhat.io/openshift4/ose-cli:latest
+                          env:
+                          - name: PRINCIPAL_NS
+                            valueFrom:
+                              fieldRef:
+                                fieldPath: metadata.namespace
+                          command:
+                            - /bin/bash
+                            - -c
+                            - |
+
+                              if oc get secret argocd-agent-ca -n $PRINCIPAL_NS &> /dev/null; then
+                                echo "Secret exists!"
+                              else
+                                echo "Creating Root CA..."
+                                openssl req -x509 -newkey rsa:4096 -nodes -keyout tls.key -out tls.crt -days 3650 -subj "/CN=argocd-agent-ca/O=ArgoCD Agent Test"
+                              
+                                echo "Storing Root CA as a secret...."
+                                oc create secret tls argocd-agent-ca --cert=tls.crt --key=tls.key -n $PRINCIPAL_NS
+                              fi
+
+                          imagePullPolicy: IfNotPresent
+                          name: pki-init
+                      dnsPolicy: ClusterFirst
+                      restartPolicy: OnFailure
+                      terminationGracePeriodSeconds: 30
+                      serviceAccount: argocd-agent-pki
+                      serviceAccountName: argocd-agent-pki
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: Policy
+          name: operators-rh-cert-manager
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-ca-init
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: agent-prncpl-issuer
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cert-manager.io/v1
+                kind: Issuer
+                metadata:
+                  name: argocd-agent-ca
+                  namespace: argocd-principal
+                spec:
+                  ca:
+                    secretName: argocd-agent-ca
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-issuer
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: agent-prncpl-argocd
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: argoproj.io/v1beta1
+                kind: ArgoCD
+                metadata:
+                  name: hub-argocd
+                  namespace: argocd-principal
+                spec:
+                  networkPolicy: {}
+                  statusBadgeEnabled: true
+                  resourceTrackingMethod: annotation
+                  imageUpdater:
+                    enabled: true
+                  server:
+                    autoscale:
+                      enabled: false
+                    grpc:
+                      ingress:
+                        enabled: false
+                    ingress:
+                      enabled: false
+                    route:
+                      enabled: true
+                    service:
+                      type: ''
+                  grafana:
+                    enabled: false
+                    ingress:
+                      enabled: false
+                    route:
+                      enabled: false
+                  monitoring:
+                    enabled: false
+                  notifications:
+                    enabled: true
+                  prometheus:
+                    enabled: false
+                    ingress:
+                      enabled: false
+                    route:
+                      enabled: false
+                  argoCDAgent:
+                    principal:
+                      auth: 'mtls:CN=([^,]+)'
+                      enabled: true
+                      jwt:
+                        insecureGenerate: false
+                      logLevel: info
+                      namespace:
+                        allowedNamespaces:
+                          - '*'
+                      tls:
+                        insecureGenerate: false
+                  initialSSHKnownHosts: {}
+                  sso:
+                    dex:
+                      openShiftOAuth: true
+                      resources:
+                        limits:
+                          cpu: 500m
+                          memory: 256Mi
+                        requests:
+                          cpu: 250m
+                          memory: 128Mi
+                    provider: dex
+                  rbac:
+                    policy: |-
+                      g, system:cluster-admins, role:admin
+                      g, gitops-admins, role:admin
+                      g, cluster-admins, role:admin
+                    scopes: '[groups]'
+                    defaultPolicy: ''
+                  repo: {}
+                  sourceNamespaces:
+                    - '*'
+                  ha:
+                    enabled: false
+                  tls:
+                    ca: {}
+                  redis: {}
+                  controller:
+                    enabled: false
+                    processors: {}
+                    sharding: {}
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-issuer
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: agent-prncpl-tls
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cert-manager.io/v1
+                kind: Certificate
+                metadata:
+                  name: argocd-agent-principal-tls
+                  namespace: argocd-principal
+                spec:
+                  # name of the tls secret to store
+                  # the generated certificate/key pair
+                  secretName: argocd-agent-principal-tls
+                  isCA: false
+                  duration: 8760h # 1 year
+                  privateKey:
+                    algorithm: RSA
+                    size: 4096
+                  issuerRef:
+                    name: argocd-agent-ca
+                    kind: Issuer
+                  commonName: argocd-agent-principal
+                  dnsNames:
+                    - '{{ (lookup "route.openshift.io/v1" "Route" "argocd-principal" "hub-argocd-agent-principal").spec.host }}'
+                  ipAddresses:
+                    - 127.0.0.1
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-issuer
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: agent-prncpl-proxy-tls
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cert-manager.io/v1
+                kind: Certificate
+                metadata:
+                  name: argocd-agent-proxy-tls
+                  namespace: argocd-principal
+                spec:
+                  secretName: argocd-agent-resource-proxy-tls
+                  commonName: argocd-agent-resource-proxy
+                  dnsNames:
+                    - hub-argocd-agent-principal-resource-proxy
+                  isCA: false
+                  duration: 8760h
+                  privateKey:
+                    algorithm: RSA
+                    size: 4096
+                  issuerRef:
+                    name: argocd-agent-ca
+                    kind: Issuer
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-issuer
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: agent-prncpl-jwt-tls
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                # ArgoCD Agent JWT Key
+                # Copy to argocd-agent-jwt with a jwt.key data
+                apiVersion: cert-manager.io/v1
+                kind: Certificate
+                metadata:
+                  name: argocd-agent-jwt-tls
+                  namespace: argocd-principal
+                spec:
+                  secretName: argocd-agent-jwt-tls
+                  isCA: false
+                  duration: 8760h
+                  privateKey:
+                    algorithm: RSA
+                    size: 4096
+                  issuerRef:
+                    name: argocd-agent-ca
+                    kind: Issuer
+                  commonName: argocd-agent-jwt

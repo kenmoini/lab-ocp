@@ -1,0 +1,20 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # Install the Operator
+  - operators-gitops-agent-principal.yaml
+  - operators-gitops-agent-spoke.yaml
+
+  # Hub/Principal - Initialize PKI
+  - gitops-agent-principal-bootstrap.yaml
+
+  # Hub/Principal - Reformat JWT secret
+  - gitops-agent-principal-jwt-formatting.yaml
+
+  # Hub/Principal - Copy CA to Agent Spoke Clusters
+  - gitops-agent-copy-ca.yaml
+
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

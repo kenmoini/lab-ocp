@@ -152,16 +152,48 @@ spec:
                         ca:
                           key: service-ca.crt
                           configMapName: openshift-service-ca.crt
+                  inputs:
+                    - name: extra-app-infra
+                      application:
+                        includes:
+                          - namespace: "arc-systems"
+                      type: application
+                    - name: node-logs
+                      type: infrastructure
+                      infrastructure:
+                        sources:
+                          - node
+                    - name: infra-logs
+                      type: infrastructure
+                      infrastructure:
+                        sources:
+                          - container
+                    - name: audit-logs
+                      type: audit
+                      audit:
+                        sources:
+                          - kubeAPI
+                          - openshiftAPI
+                          - ovn
+                          - auditd
                   pipelines:
-                    - name: infra-app-logs
+                    - name: infra-logs
                       inputRefs:
-                        - application
-                        - infrastructure
+                        - node-logs
+                        - infra-logs
                       outputRefs:
                         - local-lokistack
                       filterRefs:
                         - only-important
                         - multiline-detect
+                    - name: extra-infra-logs
+                      inputRefs:
+                        - extra-app-infra
+                      outputRefs:
+                        - local-lokistack
+                      filterRefs:
+                        - multiline-detect
+                        - parse-json
                     # - name: audit-logs
                     #   inputRefs:
                     #   - audit
