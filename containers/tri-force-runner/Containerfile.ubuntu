@@ -29,7 +29,9 @@ RUN apt-get update -y \
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
     apt-get install -y --no-install-recommends git-lfs
 
-RUN adduser --disabled-password --gecos "" --uid $RUNNER_USER_UID runner \
+RUN userdel ubuntu && \
+    rm -rf /home/ubuntu && \
+    adduser --disabled-password --gecos "" --uid $RUNNER_USER_UID runner \
     && groupadd docker --gid $DOCKER_GROUP_GID \
     && usermod -aG sudo runner \
     && usermod -aG docker runner \
