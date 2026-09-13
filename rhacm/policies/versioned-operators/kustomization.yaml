@@ -26,6 +26,7 @@ resources:
   - rh-loki-6.3.yaml
   - rh-loki-6.4.yaml
   - rh-loki-6.5.yaml
+  - rh-loki-6.6.yaml
 
   - mtc-base.yaml
   - mtc-1.8.yaml

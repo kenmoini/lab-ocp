@@ -9,6 +9,7 @@ resources:
   - openshift-logging.6.3.yaml
   - openshift-logging.6.4.yaml
   - openshift-logging.6.5.yaml
+  - openshift-logging.6.6.yaml
   - leaderworkerset.yaml
 
 commonAnnotations:

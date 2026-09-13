@@ -10,6 +10,8 @@ resources:
   - rh-loki-4.20.yaml
   - rh-loki-4.21-binding.yaml
   - rh-loki-4.21.yaml
+  - rh-loki-4.22-binding.yaml
+  - rh-loki-4.22.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
