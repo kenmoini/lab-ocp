@@ -65,6 +65,7 @@ RUN mkdir /opt/hostedtoolcache \
     && chgrp docker /opt/hostedtoolcache \
     && chmod g+rwx /opt/hostedtoolcache
 
+# Add extra runner container hooks
 RUN cd "$RUNNER_ASSETS_DIR" \
     && curl -fLo runner-container-hooks.zip https://github.com/actions/runner-container-hooks/releases/download/v${RUNNER_CONTAINER_HOOKS_VERSION}/actions-runner-hooks-k8s-${RUNNER_CONTAINER_HOOKS_VERSION}.zip \
     && unzip ./runner-container-hooks.zip -d ./k8s \
@@ -97,6 +98,7 @@ RUN chmod a+rx /etc/arc/hooks/job-started.sh /etc/arc/hooks/job-completed.sh /et
 ENV PATH="${PATH}:${HOME}/.local/bin/"
 ENV ImageOS=ubi9
 
+# Final environment setup
 RUN echo "PATH=${PATH}" > /etc/environment && \
     echo "ImageOS=${ImageOS}" >> /etc/environment && \
     chown -R runner:runner ~runner && chmod ug+rwx ~runner
