@@ -73,9 +73,9 @@ spec:
                   hostUsers: false # Enable User Namespaces
                   containers:
                   - name: runner
-                    # image: ghcr.io/actions/actions-runner:latest
-                    image: quay.io/kenmoini/gha-runner-ubuntu:latest
-                    # command: ["/home/runner/run.sh"]
+                    image: ghcr.io/actions/actions-runner:latest
+                    # image: quay.io/kenmoini/gha-runner-ubuntu:latest
+                    command: ["/home/runner/run.sh"]
                     imagePullPolicy: Always
                     securityContext:
                       procMount: Unmasked
