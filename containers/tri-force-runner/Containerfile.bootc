@@ -1,0 +1,106 @@
+FROM quay.io/fedora/fedora-bootc:44
+
+ARG RUNNER_VERSION="2.337.0"
+ARG RUNNER_CONTAINER_HOOKS_VERSION="0.8.1"
+# Docker and Docker Compose arguments
+ARG CHANNEL=stable
+ARG DOCKER_VERSION=28.0.4
+ARG DOCKER_COMPOSE_VERSION=v2.38.2
+ARG DUMB_INIT_VERSION=1.2.5
+ARG RUNNER_USER_UID=1000
+ARG DOCKER_GROUP_GID=121
+
+
+# Setup Runner Users - do this before installing docker
+RUN adduser --create-home --comment "" --uid $RUNNER_USER_UID runner \
+    && groupadd docker --gid $DOCKER_GROUP_GID \
+    && usermod -aG wheel runner \
+    && usermod -aG docker runner \
+    && echo "%wheel   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers
+
+# Install Packages
+RUN dnf update -y && \
+    dnf install -y \
+    ca-certificates git unzip zip sudo curl-minimal jq wget dnf-plugins-core procps-ng python3-dnf && \
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && \
+    dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo && \
+    dnf install -y git-lfs docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+# Add Internal Root CAs
+COPY root-ca/* /etc/pki/ca-trust/source/anchors/
+RUN update-ca-trust
+
+# Set Home Directory
+ENV HOME=/home/runner
+
+# Setup Dumb Init
+RUN export ARCH=$(uname -m) \
+    && if [ "$ARCH" = "arm64" ]; then export ARCH=aarch64 ; fi \
+    && if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ]; then export ARCH=x86_64 ; fi \
+    && curl -fLo /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_${ARCH} \
+    && chmod +x /usr/bin/dumb-init
+
+# Setup GitHub Actions runner
+ENV RUNNER_ASSETS_DIR=/runnertmp
+
+RUN mkdir -p "$RUNNER_ASSETS_DIR" && \
+    cd "$RUNNER_ASSETS_DIR" && \
+    curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz && \
+    tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz && \
+    rm -f ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz && \
+    mv ./externals ./externalstmp
+
+# Setup Dependencies for the Runner
+RUN chown -R runner ~runner && chmod ug+rwx ~runner && \
+    /runnertmp/bin/installdependencies.sh && \
+    dnf install -y libyaml-devel && \
+    dnf clean all && rm -rf /var/cache/dnf
+
+# Setup Runner Tool Cache Directory
+ENV RUNNER_TOOL_CACHE=/opt/hostedtoolcache
+RUN mkdir /opt/hostedtoolcache \
+    && chgrp docker /opt/hostedtoolcache \
+    && chmod g+rwx /opt/hostedtoolcache
+
+# Add extra runner container hooks
+RUN cd "$RUNNER_ASSETS_DIR" \
+    && curl -fLo runner-container-hooks.zip https://github.com/actions/runner-container-hooks/releases/download/v${RUNNER_CONTAINER_HOOKS_VERSION}/actions-runner-hooks-k8s-${RUNNER_CONTAINER_HOOKS_VERSION}.zip \
+    && unzip ./runner-container-hooks.zip -d ./k8s \
+    && rm -f runner-container-hooks.zip
+
+# We place the scripts in `/usr/bin` so that users who extend this image can
+# override them with scripts of the same name placed in `/usr/local/bin`.
+COPY runner-files/entrypoint.sh runner-files/entrypoint-dind.sh runner-files/startup.sh runner-files/logger.sh runner-files/graceful-stop.sh runner-files/wait.sh runner-files/update-status /usr/bin/
+RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/entrypoint-dind.sh /usr/bin/startup.sh /usr/bin/logger.sh /usr/bin/graceful-stop.sh /usr/bin/wait.sh /usr/bin/update-status
+
+# Copy the docker shim which propagates the docker MTU to underlying networks
+# to replace the docker binary in the PATH.
+ADD runner-files/docker-shim.sh /usr/local/bin/docker
+ADD runner-files/docker-shim.sh /home/runner/.local/bin/docker
+RUN chmod a+rx /usr/local/bin/docker /home/runner/.local/bin/docker
+
+# Configure hooks folder structure.
+RUN mkdir -p /etc/arc/hooks/{job-started.d,job-completed.d}
+COPY runner-files/hooks/job-started.sh runner-files/hooks/job-completed.sh /etc/arc/hooks/
+COPY runner-files/hooks/job-started.d/update-status /etc/arc/hooks/job-started.d/
+COPY runner-files/hooks/job-completed.d/update-status /etc/arc/hooks/job-completed.d/
+RUN chmod a+rx /etc/arc/hooks/job-started.sh /etc/arc/hooks/job-completed.sh /etc/arc/hooks/job-started.d/update-status /etc/arc/hooks/job-completed.d/update-status
+
+# Add the Python "User Script Directory" to the PATH
+ENV PATH="${PATH}:${HOME}/.local/bin/"
+ENV ImageOS=fedora44
+
+# Final environment setup
+RUN echo "PATH=${PATH}" > /etc/environment && \
+    echo "ImageOS=${ImageOS}" >> /etc/environment && \
+    chown -R runner:runner ~runner && chmod ug+rwx ~runner && \
+    systemctl enable docker.service
+
+# USER runner
+# WORKDIR /home/runner
+# ENTRYPOINT ["/bin/bash", "-c"]
+# # ENTRYPOINT ["/sbin/init"]
+# # ENTRYPOINT ["/usr/bin/dumb-init"]
+# CMD ["entrypoint-dind.sh"]

@@ -1,0 +1,107 @@
+FROM registry.access.redhat.com/ubi9/ubi:latest
+
+ENV BUILDAH_ISOLATION=chroot
+ARG RUNNER_VERSION="2.337.0"
+ARG RUNNER_CONTAINER_HOOKS_VERSION="0.8.1"
+# The Runner UID should be 1000 since that's what the ARC defaults to
+ARG RUNNER_USER_UID=1000
+
+# Setup Runner Users - do this before installing docker
+RUN adduser --create-home --comment "" --uid $RUNNER_USER_UID runner \
+    && usermod -aG wheel runner \
+    && echo "%wheel   ALL=(ALL:ALL) NOPASSWD:ALL" > /etc/sudoers
+
+# Install Packages
+RUN dnf update -y --disablerepo="rhel-9*" && \
+    dnf install -y --disablerepo="rhel-9*" \
+    ca-certificates git unzip zip sudo curl-minimal jq wget dnf-plugins-core procps-ng && \
+    dnf config-manager --set-disabled "rhel-9*" || true && \
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && \
+    dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo && \
+    dnf install -y --disablerepo="rhel-9*" git-lfs docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+# Add Internal Root CAs
+COPY root-ca/* /etc/pki/ca-trust/source/anchors/
+RUN update-ca-trust
+
+# Set Home Directory
+ENV HOME=/home/runner
+
+# Setup Dumb Init
+RUN export ARCH=$(uname -m) \
+    && if [ "$ARCH" = "arm64" ]; then export ARCH=aarch64 ; fi \
+    && if [ "$ARCH" = "amd64" ] || [ "$ARCH" = "i386" ]; then export ARCH=x86_64 ; fi \
+    && curl -fLo /usr/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_${ARCH} \
+    && chmod +x /usr/bin/dumb-init
+
+# Setup GitHub Actions runner
+ENV RUNNER_ASSETS_DIR=/runnertmp
+
+RUN mkdir -p "$RUNNER_ASSETS_DIR" && \
+    cd "$RUNNER_ASSETS_DIR" && \
+    curl -O -L https://github.com/actions/runner/releases/download/v${RUNNER_VERSION}/actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz && \
+    tar xzf ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz && \
+    rm -f ./actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz && \
+    mv ./externals ./externalstmp
+
+# Setup Dependencies for the Runner
+RUN dnf config-manager --set-disabled "rhel-9*" || true && \
+    chown -R runner ~runner && chmod ug+rwx ~runner && \
+    /runnertmp/bin/installdependencies.sh && \
+    dnf install -y libyaml-devel && \
+    dnf clean all && rm -rf /var/cache/dnf
+
+# Setup Runner Tool Cache Directory
+ENV RUNNER_TOOL_CACHE=/opt/hostedtoolcache
+RUN mkdir /opt/hostedtoolcache \
+    && chgrp docker /opt/hostedtoolcache \
+    && chmod g+rwx /opt/hostedtoolcache
+
+# Add extra runner container hooks
+RUN cd "$RUNNER_ASSETS_DIR" \
+    && curl -fLo runner-container-hooks.zip https://github.com/actions/runner-container-hooks/releases/download/v${RUNNER_CONTAINER_HOOKS_VERSION}/actions-runner-hooks-k8s-${RUNNER_CONTAINER_HOOKS_VERSION}.zip \
+    && unzip ./runner-container-hooks.zip -d ./k8s \
+    && rm -f runner-container-hooks.zip
+
+# We place the scripts in `/usr/bin` so that users who extend this image can
+# override them with scripts of the same name placed in `/usr/local/bin`.
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/entrypoint.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/entrypoint-dind.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/startup.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/logger.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/graceful-stop.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/wait.sh /usr/bin/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/update-status /usr/bin/
+RUN chmod a+rx /usr/bin/entrypoint.sh /usr/bin/entrypoint-dind.sh /usr/bin/startup.sh /usr/bin/logger.sh /usr/bin/graceful-stop.sh /usr/bin/wait.sh /usr/bin/update-status
+
+# Copy the docker shim which propagates the docker MTU to underlying networks
+# to replace the docker binary in the PATH.
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/docker-shim.sh /usr/local/bin/docker
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/docker-shim.sh /home/runner/.local/bin/docker
+RUN chmod a+rx /usr/local/bin/docker /home/runner/.local/bin/docker
+
+# Configure hooks folder structure.
+RUN mkdir -p /etc/arc/hooks/{job-started.d,job-completed.d}
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/hooks/job-started.sh /etc/arc/hooks/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/hooks/job-completed.sh /etc/arc/hooks/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/hooks/job-started.d/update-status /etc/arc/hooks/job-started.d/
+ADD https://raw.githubusercontent.com/actions/actions-runner-controller/refs/heads/master/runner/hooks/job-completed.d/update-status /etc/arc/hooks/job-completed.d/
+RUN chmod a+rx /etc/arc/hooks/job-started.sh /etc/arc/hooks/job-completed.sh /etc/arc/hooks/job-started.d/update-status /etc/arc/hooks/job-completed.d/update-status
+
+# Add the Python "User Script Directory" to the PATH
+ENV PATH="${PATH}:${HOME}/.local/bin/"
+ENV ImageOS=ubi9
+
+# Final environment setup
+RUN echo "PATH=${PATH}" > /etc/environment && \
+    echo "ImageOS=${ImageOS}" >> /etc/environment && \
+    chown -R runner:runner ~runner && chmod ug+rwx ~runner
+
+USER runner
+WORKDIR /home/runner
+ENTRYPOINT ["/bin/bash", "-c"]
+# ENTRYPOINT ["/sbin/init"]
+# ENTRYPOINT ["/usr/bin/dumb-init"]
+CMD ["entrypoint-dind.sh"]
