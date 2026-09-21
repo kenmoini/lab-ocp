@@ -404,8 +404,8 @@ spec:
                   name: argocd-agent-principal
                 spec:
                   applicationMenu:
-                    imageURL: ''
-                    section: Hub Applications
+                    imageURL: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAEjElEQVR4nKyVW2wUVRjH/3OfdtpdtqW0tLTbFsqlUgMGbBOUi2hDEEPsi2JQKy/GAg+oIcZL1CAEE+BJeNAHMRoeFIgxpagtCZIQLhaxQJtKubS73ZZtt3vrzM7Odc0s7NLubneD+H/YnD3fd/6/832Tcw6NLCIBosmWv2aNQ3ixoYBfWcExzjySLJBNUxxRtKHrYrT7j6DUcSEUOWsC5kw+xAyTREuJbWvbvOJPqni2LttGLA1H1dtHPP69x8dCR2NALCdkDkPNPVRX/kOjPf+5XOap6g5Hzu0aGH3tnqp7ZoTU8syi7+orO8s4pvJRAQmNqbqntc/dPCCrfWkQq4ITDc5LjwOwpJiAW7FAQ01eVR/G/W97/xtYLfo/AHIMmM0yFXvnlx8jH/hT1k9Lie311vKidzOuJEmU7P4c9pYtiPZcgSlNgl+2EsVt78PxxtsQnl0HmDFM3hqIAxLNKeMY57iqufojylXCqqJzWU2/M49dmInBLqqHffMrkC6eA1e7EKYkomTXR2l5vvaTGNwzff6eot7d3HNnAdloy1udCcBUz4etZQuMMS/oOWUo2rYDyt1b4Ldtx8SED37/BGQ5ksyfvakFjvUbpnmUcWxNoy1/PbW1zLH9qcK8VamQ8oNfQ7nZB9vGlxH49ggIloNEENDqlkDXdci//ITQhzthhEMQGp+JryEYBoHOjmk+Yd3wkw0CvyJTm2KaBraqBsZkODlHFM1Ojo0zHYAsY7L95MPqp8QTqhfyVpDlHOPMBBnd3QZ24RIEv/8GbN1ixJQohLrF4HkeLMuCq54PbslSFLe9l1wTdQ2m+ZSytJMWKLIgE8QMB2H4xuE80QXN44bY2Y6SVWsfJuz/KmWBifHjx9J8BJoU6Ihhig6GmpMWXP085L//hHpnIF5RNpmaBteBPZB6r6XFIkZMoj2K5qrgmdrUoKP1HfCLn4B89TK8+z4GU1GJSMAPnaJBEATU61ehD7ug+cYR6DoNxePOuAGvornoG1K0+2l7/tppEYIA/2D3ZKEdbFU1+IbliLafQOGrrZBlGeOnfobYdTprhZb6ItEr5NmAeCotEovBjMrxIeUogu73Qf7rMpiKKjAMA5vNBkpRcgIsnQ+KHfETf2Z5zc1Knl0wNVj62QEUNm+Kj/XABMxwGKyzJv7fkET0vLQufvqzyWrV5p7btaT1yBwenvgiNWH08EGovrH4mHYUJwGWXIf25QRYOjo6sc8AjPgF2R9RrjXZ89dUcEw1HtymkijC3/UrGEcR2LK5ICgSUu91DO7/FMEzv+UE3BDlC18OendYRSTfk1KWKj/ZUH3JTtPzpt6m/0V+Tfe+1TvUOKJqQ0i8J5a8qjHyZp+7eVgxRh4HENB0785+d3MCgMR7ktyBbvi6/OEflwp5jaUcU/WogF5Rvrjzn+ENg4p6c+o8lZooGma43Rc66lN1T10+92QBTc3KZT6mau7D7vEP9g96d4QNM5Aaz9oXCqCa7MILq2YVbKwX+JVzOcbJkWSBYprSPUUb6pOi3edDUseFoPi7Aegz+fwbAAD//y/z3/PVaXlqAAAAAElFTkSuQmCC'
+                    section: OpenShift GitOps
                   href: 'https://{{ (lookup "route.openshift.io/v1" "Route" "argocd-principal" "hub-argocd-server").spec.host }}'
                   location: ApplicationMenu
                   text: ArgoCD Agent Principal
