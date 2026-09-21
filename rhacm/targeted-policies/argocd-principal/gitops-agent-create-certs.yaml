@@ -58,6 +58,7 @@ spec:
             {{- with $managedClusterList }}
             {{- range $managedCluster := . }}
             {{- $mcn := $managedCluster.metadata.name }}
+            {{- $secName := printf "aac-%s" $mcn }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
@@ -79,8 +80,8 @@ spec:
                       "tlsClientConfig": {
                         "insecure": false,
                         "caData": '{{hub fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt" | base64enc hub}}',
-                        "certData": '{{hub fromSecret "argocd-principal" (list "aac" $mcn | join "-") "tls.crt" | base64enc hub}}',
-                        "keyData": '{{hub fromSecret "argocd-principal" (list "aac" $mcn | join "-") "tls.key" | base64enc hub}}'
+                        "certData": '{{hub fromSecret "argocd-principal" $secName "tls.crt" | base64enc hub}}',
+                        "keyData": '{{hub fromSecret "argocd-principal" $secName "tls.key" | base64enc hub}}'
                       }
                     }
             {{- end }}
