@@ -27,7 +27,7 @@ spec:
                 kind: Secret
                 metadata:
                   name: argocd-agent-ca
-                  namespace: 'argocd-agent-{{ .ManagedClusterName }}'
+                  namespace: 'argocd-agent-{{hub .ManagedClusterName hub}}'
                 type: Opaque
                 data:
                   ca.crt: '{{hub (fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt") hub}}'
