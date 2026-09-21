@@ -74,6 +74,7 @@ spec:
                   annotations:
                     argocd.argoproj.io/skip-reconcile: 'true'
                     managed-by: argocd-agent
+                type: Opaque
                 stringData:
                   server: '{{ printf "https://hub-argocd-agent-principal-resource-proxy:9090?agentName=%s" $mcn }}'
                   name: '{{ $mcn }}'
