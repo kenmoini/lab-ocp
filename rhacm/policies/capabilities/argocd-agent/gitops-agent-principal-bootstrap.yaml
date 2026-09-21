@@ -67,6 +67,7 @@ spec:
                   name: argocd-agent-pki
                   namespace: argocd-principal
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: batch/v1
                 kind: Job
