@@ -12,5 +12,8 @@ resources:
   # Hub/Principal - Copy CA to Agent Spoke Clusters
   - gitops-agent-copy-ca.yaml
 
+  # Hub/Principal - Generate and Distribute Spoke Cluster Certificates
+  - gitops-spoke-credentials.yaml
+
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

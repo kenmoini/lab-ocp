@@ -12,3 +12,6 @@ subjects:
   - name: aa-prncpl-jwt-format
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: gitops-spoke-creds
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
