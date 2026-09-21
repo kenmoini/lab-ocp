@@ -30,4 +30,4 @@ spec:
                   namespace: 'argocd-agent-{{ .ManagedClusterName }}'
                 type: Opaque
                 data:
-                  ca.crt: '{{hub (lookup "v1" "Secret" "argocd-principal" "argocd-agent-ca").data.tls.crt hub}}'
+                  ca.crt: '{{hub (fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt") hub}}'
