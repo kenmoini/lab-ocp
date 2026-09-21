@@ -57,29 +57,30 @@ spec:
             {{- $managedClusterList := (lookup "cluster.open-cluster-management.io/v1" "ManagedCluster" "" "" "policy.kemo.dev/argocd-agent-auto").items }}
             {{- with $managedClusterList }}
             {{- range $managedCluster := . }}
+            {{- $mcn := $managedCluster.metadata.name }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: cluster-{{ $managedCluster.metadata.name }}
+                  name: cluster-{{ $mcn }}
                   namespace: argocd-principal
                   labels:
-                    argocd-agent.argoproj-labs.io/agent-name: '{{ $managedCluster.metadata.name }}'
+                    argocd-agent.argoproj-labs.io/agent-name: '{{ $mcn }}'
                     argocd.argoproj.io/secret-type: cluster
                   annotations:
                     argocd.argoproj.io/skip-reconcile: 'true'
                     managed-by: argocd-agent
                 stringData:
-                  server: '{{ printf "https://hub-argocd-agent-principal-resource-proxy:9090?agentName=%s" $managedCluster.metadata.name }}'
-                  name: '{{ $managedCluster.metadata.name }}'
+                  server: '{{ printf "https://hub-argocd-agent-principal-resource-proxy:9090?agentName=%s" $mcn }}'
+                  name: '{{ $mcn }}'
                   config: |
                     {
                       "tlsClientConfig": {
                         "insecure": false,
                         "caData": '{{hub fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt" | base64enc hub}}',
-                        "certData": '{{hub fromSecret "argocd-principal" (list "aac" $managedCluster.metadata.name | join "-") "tls.crt" | base64enc hub}}',
-                        "keyData": '{{hub fromSecret "argocd-principal" (list "aac" $managedCluster.metadata.name | join "-") "tls.key" | base64enc hub}}'
+                        "certData": '{{hub fromSecret "argocd-principal" (list "aac" $mcn | join "-") "tls.crt" | base64enc hub}}',
+                        "keyData": '{{hub fromSecret "argocd-principal" (list "aac" $mcn | join "-") "tls.key" | base64enc hub}}'
                       }
                     }
             {{- end }}
