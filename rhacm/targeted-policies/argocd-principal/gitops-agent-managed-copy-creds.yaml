@@ -22,6 +22,7 @@ spec:
           severity: critical
           object-templates:
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: v1
                 kind: Secret
