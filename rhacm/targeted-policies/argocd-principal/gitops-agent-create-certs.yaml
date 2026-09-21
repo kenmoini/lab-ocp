@@ -73,6 +73,12 @@ spec:
                 stringData:
                   server: '{{ printf "https://hub-argocd-agent-principal-resource-proxy:9090?agentName=%s" $managedCluster.metadata.name }}'
                   name: '{{ $managedCluster.metadata.name }}'
+                  config: |
+                    {
+                      "tlsClientConfig": {
+                        "insecure": false
+                      }
+                    }
             {{- end }}
             {{- end }}
 
