@@ -74,7 +74,7 @@ spec:
                 apiVersion: argoproj.io/v1beta1
                 kind: ArgoCD
                 metadata:
-                  name: agent-auto-argocd
+                  name: agent-argocd
                   namespace: "aa-auto-{{hub .ManagedClusterName hub}}"
                 spec:
                   server:
