@@ -48,7 +48,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: gitops-spoke-auto-cert
+          name: gitops-spoke-auto-sec
         spec:
           remediationAction: enforce
           severity: critical
@@ -120,7 +120,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: gitops-spoke-managed-cert
+          name: gitops-spoke-managed-sec
         spec:
           remediationAction: enforce
           severity: critical
