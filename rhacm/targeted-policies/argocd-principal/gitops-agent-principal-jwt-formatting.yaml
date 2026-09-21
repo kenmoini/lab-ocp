@@ -36,4 +36,4 @@ spec:
                   namespace: argocd-principal
                 type: Opaque
                 data:
-                  jwt.key: '{{ (lookup "v1" "Secret" "argocd-principal" "argocd-agent-jwt-tls").data["tls.key"] }}'
+                  jwt.key: '{{ fromSecret "argocd-principal" "argocd-agent-jwt-tls" "tls.key" }}'
