@@ -92,10 +92,10 @@ spec:
                                 echo "Secret exists!"
                               else
                                 echo "Creating Root CA..."
-                                openssl req -x509 -newkey rsa:4096 -nodes -keyout tls.key -out tls.crt -days 3650 -subj "/CN=argocd-agent-ca/O=ArgoCD Agent Test"
+                                openssl req -x509 -newkey rsa:4096 -nodes -keyout /tmp/tls.key -out /tmp/tls.crt -days 3650 -subj "/CN=argocd-agent-ca/O=ArgoCD Agent Test"
                               
                                 echo "Storing Root CA as a secret...."
-                                oc create secret tls argocd-agent-ca --cert=tls.crt --key=tls.key -n $PRINCIPAL_NS
+                                oc create secret tls argocd-agent-ca --cert=/tmp/tls.crt --key=/tmp/tls.key -n $PRINCIPAL_NS
                               fi
 
                           imagePullPolicy: IfNotPresent
