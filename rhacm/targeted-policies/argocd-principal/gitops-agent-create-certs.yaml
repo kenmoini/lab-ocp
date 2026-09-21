@@ -76,7 +76,8 @@ spec:
                   config: |
                     {
                       "tlsClientConfig": {
-                        "insecure": false
+                        "insecure": false,
+                        "caData": '{{hub fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt" | base64enc hub}}'
                       }
                     }
             {{- end }}
