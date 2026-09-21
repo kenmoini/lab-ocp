@@ -59,8 +59,8 @@ spec:
             {{- range $managedCluster := . }}
             {{- $mcn := $managedCluster.metadata.name }}
             {{- $secName := printf "aac-%s" $mcn }}
-            {{hub- $certData := (fromSecret "argocd-principal" $secName "tls.crt") hub}}
-            {{hub- $keyData := (fromSecret "argocd-principal" $secName "tls.key") hub}}
+            {{- $certData := (fromSecret "argocd-principal" $secName "tls.crt") }}
+            {{- $keyData := (fromSecret "argocd-principal" $secName "tls.key") }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
@@ -81,7 +81,7 @@ spec:
                     {
                       "tlsClientConfig": {
                         "insecure": false,
-                        "caData": {{hub (fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt") | base64enc | quote hub}},
+                        "caData": {{ (fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt") | base64enc | quote }},
                         "certData": {{ $certData | base64enc | quote }}
                       }
                     }
