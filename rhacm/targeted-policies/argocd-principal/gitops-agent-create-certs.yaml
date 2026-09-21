@@ -55,7 +55,8 @@ spec:
           object-templates-raw: |
             {{/* ## Loop through the ManagedClusters - check for the spoke label, then create the Certificates ## */}}
             {{- $managedClusterList := (lookup "cluster.open-cluster-management.io/v1" "ManagedCluster" "" "" "policy.kemo.dev/argocd-agent-auto").items }}
-            {{- range $managedCluster := $managedClusterList }}
+            {{- with $managedClusterList }}
+            {{- range $managedCluster := . }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
@@ -81,6 +82,7 @@ spec:
                         "caData": "{{hub fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt" | base64enc hub}}"
                       }
                     }
+            {{- end }}
             {{- end }}
 
     - objectDefinition:
