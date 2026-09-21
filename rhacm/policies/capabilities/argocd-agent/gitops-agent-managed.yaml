@@ -38,6 +38,37 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: agent-managed-netpol
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: custom-agent-redis-network-policy
+                  namespace: "argocd-agent-{{hub .ManagedClusterName hub}}"
+                spec:
+                  podSelector:
+                    matchLabels:
+                      app.kubernetes.io/name: agent-argocd-redis
+                  ingress:
+                    - ports:
+                        - protocol: TCP
+                          port: 6379
+                      from:
+                        - podSelector:
+                            matchLabels:
+                              app.kubernetes.io/name: argocd-agent-agent
+                  policyTypes:
+                    - Ingress
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: agent-managed-appproj
         spec:
           remediationAction: enforce
