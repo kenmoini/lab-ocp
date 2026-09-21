@@ -244,6 +244,7 @@ spec:
                   duration: 8760h
                   privateKey:
                     algorithm: RSA
+                    encoding: PKCS8
                     size: 4096
                   issuerRef:
                     name: argocd-agent-ca
