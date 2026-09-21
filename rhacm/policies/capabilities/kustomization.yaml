@@ -5,6 +5,7 @@ kind: Kustomization
 namespace: open-cluster-management-policies
 
 resources:
+  - argocd-principal/
   - platform-monitoring/enable-prometheus.yaml
   - platform-monitoring/disable-prometheus.yaml
   - openshift-console/enable.yaml

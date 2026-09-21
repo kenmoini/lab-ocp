@@ -2,6 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - argocd-agent-auto.yaml
+  - argocd-agent-managed.yaml
+  - argocd-agent-principal.yaml
+
   - enable-vsphere-csi.yaml
   - disable-vsphere-csi.yaml
   - masters-schedulable.yaml

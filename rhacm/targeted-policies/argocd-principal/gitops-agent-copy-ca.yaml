@@ -3,7 +3,7 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   name: aa-copy-ca
-  namespace: argocd-principal
+  # namespace: argocd-principal
   annotations:
     policy.open-cluster-management.io/description: Distributes the CA certificate for the ArgoCD Agent Principal to Managed Clusters
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
@@ -12,13 +12,7 @@ metadata:
 spec:
   disabled: false
   policy-templates:
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
-          name: agent-prncpl-issuer
-          namespace: ""
-          compliance: Compliant
-      objectDefinition:
+    - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:

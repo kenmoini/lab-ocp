@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: argocd-agent-principal
+  # namespace: automation-orchestrator
+placementRef:
+  name: argocd-agent-principal
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: aa-prncpl-jwt-format
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

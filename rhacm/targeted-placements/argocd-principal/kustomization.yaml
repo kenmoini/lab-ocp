@@ -1,17 +1,16 @@
+---
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-resources:
-  - argocd-agent-auto.yaml
-  - argocd-agent-managed.yaml
-  - argocd-agent-principal.yaml
+namespace: argocd-principal
 
-  - enable-vsphere-csi.yaml
-  - disable-vsphere-csi.yaml
-  - masters-unschedulable.yaml
-  - masters-schedulable.yaml
-  - enable-multi-arch.yaml
-  - enable-iommu.yaml
+resources:
+  - argocd-agent-auto_binding.yaml
+  - argocd-agent-auto.yaml
+  - argocd-agent-managed_binding.yaml
+  - argocd-agent-managed.yaml
+  - argocd-agent-principal_binding.yaml
+  - argocd-agent-principal.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

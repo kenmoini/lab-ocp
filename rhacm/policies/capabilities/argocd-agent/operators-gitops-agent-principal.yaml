@@ -45,14 +45,6 @@ spec:
                   name: agent-principal
                   labels:
                     openshift.io/cluster-monitoring: "true"
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: v1
-                kind: Namespace
-                metadata:
-                  name: "agent-{{hub .ManagedClusterName hub}}"
-                  labels:
-                    openshift.io/cluster-monitoring: "true"
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
@@ -101,7 +93,7 @@ spec:
                     env:
                       - name: ARGOCD_CLUSTER_CONFIG_NAMESPACES
                         value: '*'
-                      - name: DISABLE_DEFAULT_ARGOCD_INSTANCE
-                        value: "true"
-                      - name: DISABLE_DEFAULT_ARGOCD_CONSOLELINK
-                        value: "true"
+                      # - name: DISABLE_DEFAULT_ARGOCD_INSTANCE
+                      #   value: "true"
+                      # - name: DISABLE_DEFAULT_ARGOCD_CONSOLELINK
+                      #   value: "true"

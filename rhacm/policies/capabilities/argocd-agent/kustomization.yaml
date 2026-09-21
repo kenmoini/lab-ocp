@@ -10,11 +10,11 @@ resources:
   # Hub/Principal - Initialize PKI
   - gitops-agent-principal-bootstrap.yaml
 
-  # Hub/Principal - Reformat JWT secret
-  - gitops-agent-principal-jwt-formatting.yaml
+  # Spoke/Managed - Initialize Agent Instance
+  - gitops-agent-managed.yaml
 
-  # Hub/Principal - Copy CA to Agent Spoke Clusters
-  - gitops-agent-copy-ca.yaml
+  # Spoke/Autonomous - Initialize Agent Instance
+  - gitops-agent-auto.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

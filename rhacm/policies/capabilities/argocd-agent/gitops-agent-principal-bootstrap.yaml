@@ -3,7 +3,7 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   name: aa-prncpl-pki-init
-  namespace: open-cluster-management-policies
+  # namespace: open-cluster-management-policies
   annotations:
     policy.open-cluster-management.io/description: Bootstraps the ArgoCD Agent Principal PKI and Instance
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
@@ -147,106 +147,6 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: agent-prncpl-argocd
-        spec:
-          remediationAction: enforce
-          severity: critical
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: argoproj.io/v1beta1
-                kind: ArgoCD
-                metadata:
-                  name: hub-argocd
-                  namespace: argocd-principal
-                spec:
-                  networkPolicy: {}
-                  statusBadgeEnabled: true
-                  resourceTrackingMethod: annotation
-                  imageUpdater:
-                    enabled: true
-                  server:
-                    autoscale:
-                      enabled: false
-                    grpc:
-                      ingress:
-                        enabled: false
-                    ingress:
-                      enabled: false
-                    route:
-                      enabled: true
-                    service:
-                      type: ''
-                  grafana:
-                    enabled: false
-                    ingress:
-                      enabled: false
-                    route:
-                      enabled: false
-                  monitoring:
-                    enabled: false
-                  notifications:
-                    enabled: true
-                  prometheus:
-                    enabled: false
-                    ingress:
-                      enabled: false
-                    route:
-                      enabled: false
-                  argoCDAgent:
-                    principal:
-                      auth: 'mtls:CN=([^,]+)'
-                      enabled: true
-                      jwt:
-                        insecureGenerate: false
-                      logLevel: info
-                      namespace:
-                        allowedNamespaces:
-                          - '*'
-                      tls:
-                        insecureGenerate: false
-                  initialSSHKnownHosts: {}
-                  sso:
-                    dex:
-                      openShiftOAuth: true
-                      resources:
-                        limits:
-                          cpu: 500m
-                          memory: 256Mi
-                        requests:
-                          cpu: 250m
-                          memory: 128Mi
-                    provider: dex
-                  rbac:
-                    policy: |-
-                      g, system:cluster-admins, role:admin
-                      g, gitops-admins, role:admin
-                      g, cluster-admins, role:admin
-                    scopes: '[groups]'
-                    defaultPolicy: ''
-                  repo: {}
-                  sourceNamespaces:
-                    - '*'
-                  ha:
-                    enabled: false
-                  tls:
-                    ca: {}
-                  redis: {}
-                  controller:
-                    enabled: false
-                    processors: {}
-                    sharding: {}
-
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
-          name: agent-prncpl-issuer
-          namespace: ""
-          compliance: Compliant
-      objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
           name: agent-prncpl-tls
         spec:
           remediationAction: enforce
@@ -348,3 +248,170 @@ spec:
                     name: argocd-agent-ca
                     kind: Issuer
                   commonName: argocd-agent-jwt
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-issuer
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-jwt-tls
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-proxy-tls
+          namespace: ""
+          compliance: Compliant
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-tls
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: agent-prncpl-argocd
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: argoproj.io/v1beta1
+                kind: ArgoCD
+                metadata:
+                  name: hub-argocd
+                  namespace: argocd-principal
+                spec:
+                  networkPolicy: {}
+                  statusBadgeEnabled: true
+                  resourceTrackingMethod: annotation
+                  imageUpdater:
+                    enabled: true
+                  server:
+                    autoscale:
+                      enabled: false
+                    grpc:
+                      ingress:
+                        enabled: false
+                    ingress:
+                      enabled: false
+                    route:
+                      enabled: true
+                    service:
+                      type: ''
+                  grafana:
+                    enabled: false
+                    ingress:
+                      enabled: false
+                    route:
+                      enabled: false
+                  monitoring:
+                    enabled: false
+                  notifications:
+                    enabled: true
+                  prometheus:
+                    enabled: false
+                    ingress:
+                      enabled: false
+                    route:
+                      enabled: false
+                  argoCDAgent:
+                    principal:
+                      auth: 'mtls:CN=([^,]+)'
+                      enabled: true
+                      jwt:
+                        insecureGenerate: false
+                      logLevel: info
+                      namespace:
+                        allowedNamespaces:
+                          - '*'
+                      tls:
+                        insecureGenerate: false
+                  initialSSHKnownHosts: {}
+                  sso:
+                    dex:
+                      openShiftOAuth: true
+                      resources:
+                        limits:
+                          cpu: 500m
+                          memory: 256Mi
+                        requests:
+                          cpu: 250m
+                          memory: 128Mi
+                    provider: dex
+                  rbac:
+                    policy: |-
+                      g, system:cluster-admins, role:admin
+                      g, gitops-admins, role:admin
+                      g, cluster-admins, role:admin
+                    scopes: '[groups]'
+                    defaultPolicy: ''
+                  repo: {}
+                  sourceNamespaces:
+                    - '*'
+                  ha:
+                    enabled: false
+                  tls:
+                    ca: {}
+                  redis: {}
+                  controller:
+                    enabled: false
+                    processors: {}
+                    sharding: {}
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: principal-route-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: route.openshift.io/v1
+                kind: Route
+                metadata:
+                  namespace: argocd-principal
+                  name: hub-argocd-server
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: agent-prncpl-argocd
+          namespace: ""
+          compliance: Compliant
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: argocd-prncpl-consolelink
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: console.openshift.io/v1
+                kind: ConsoleLink
+                metadata:
+                  name: argocd-agent-principal
+                spec:
+                  applicationMenu:
+                    imageURL: ''
+                    section: Hub Applications
+                  href: 'https://{{ (lookup "route.openshift.io/v1" "Route" "argocd-principal" "hub-argocd-server").spec.host }}'
+                  location: ApplicationMenu
+                  text: ArgoCD Agent Principal
+      extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: principal-route-check
+          namespace: ""
+          compliance: Compliant
