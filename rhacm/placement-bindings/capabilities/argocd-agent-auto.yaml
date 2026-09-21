@@ -12,3 +12,6 @@ subjects:
   - name: gitops-agent-spoke
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: aa-agent-auto
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
