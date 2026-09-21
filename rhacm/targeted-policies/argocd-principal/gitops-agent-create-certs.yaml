@@ -1,0 +1,156 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: gitops-spoke-create-certs
+  # namespace: argocd-principal
+  annotations:
+    policy.open-cluster-management.io/description: Creates and distributes the ArgoCD Agent credentials to Managed Clusters
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitops-spoke-auto-cert
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates-raw: |
+            {{/* ## Loop through the ManagedClusters - check for the spoke label, then create the Certificates ## */}}
+            {{- $managedClusterList := (lookup "cluster.open-cluster-management.io/v1" "ManagedCluster" "" "" "policy.kemo.dev/argocd-agent-auto").items }}
+            {{- range $managedCluster := $managedClusterList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cert-manager.io/v1
+                kind: Certificate
+                metadata:
+                  name: cluster-{{ $managedCluster.metadata.name }}
+                  namespace: argocd-principal
+                spec:
+                  secretName: aac-{{ $managedCluster.metadata.name }}
+                  commonName: {{ $managedCluster.metadata.name }}
+                  isCA: false
+                  duration: 8760h
+                  privateKey:
+                    algorithm: RSA
+                    size: 4096
+                  issuerRef:
+                    name: argocd-agent-ca
+                    kind: Issuer
+            {{- end }}
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitops-spoke-auto-cert
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates-raw: |
+            {{/* ## Loop through the ManagedClusters - check for the spoke label, then create the Certificates ## */}}
+            {{- $managedClusterList := (lookup "cluster.open-cluster-management.io/v1" "ManagedCluster" "" "" "policy.kemo.dev/argocd-agent-auto").items }}
+            {{- range $managedCluster := $managedClusterList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: cluster-{{ $managedCluster.metadata.name }}
+                  namespace: argocd-principal
+                  labels:
+                    argocd-agent.argoproj-labs.io/agent-name: '{{ $managedCluster.metadata.name }}'
+                    argocd.argoproj.io/secret-type: cluster
+                  annotations:
+                    argocd.argoproj.io/skip-reconcile: 'true'
+                    managed-by: argocd-agent
+                stringData:
+                  server: '{{ printf "https://hub-argocd-agent-principal-resource-proxy:9090?agentName=%s" $managedCluster.metadata.name }}'
+                  name: '{{ $managedCluster.metadata.name }}'
+                  config: |
+                    {
+                      "tlsClientConfig": {
+                        "insecure": false,
+                        "certData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' (printf "aac-%s" $managedCluster.metadata.name)).data.tls.crt hub}}",
+                        "keyData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' (printf "aac-%s" $managedCluster.metadata.name)).data.tls.key hub}}",
+                        "caData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' 'argocd-agent-ca').data.tls.crt | base64enc hub}}"
+                      }
+                    }
+            {{- end }}
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitops-spoke-managed-cert
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates-raw: |
+            {{/* ## Loop through the ManagedClusters - check for the spoke label, then create the Certificates ## */}}
+            {{- $managedClusterList := (lookup "cluster.open-cluster-management.io/v1" "ManagedCluster" "" "" "policy.kemo.dev/argocd-agent-managed").items }}
+            {{- range $managedCluster := $managedClusterList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cert-manager.io/v1
+                kind: Certificate
+                metadata:
+                  name: cluster-{{ $managedCluster.metadata.name }}
+                  namespace: argocd-principal
+                spec:
+                  secretName: aac-{{ $managedCluster.metadata.name }}
+                  commonName: {{ $managedCluster.metadata.name }}
+                  isCA: false
+                  duration: 8760h
+                  privateKey:
+                    algorithm: RSA
+                    size: 4096
+                  issuerRef:
+                    name: argocd-agent-ca
+                    kind: Issuer
+            {{- end }}
+
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitops-spoke-managed-cert
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates-raw: |
+            {{/* ## Loop through the ManagedClusters - check for the spoke label, then create the Certificates ## */}}
+            {{- $managedClusterList := (lookup "cluster.open-cluster-management.io/v1" "ManagedCluster" "" "" "policy.kemo.dev/argocd-agent-managed").items }}
+            {{- range $managedCluster := $managedClusterList }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: cluster-{{ $managedCluster.metadata.name }}
+                  namespace: argocd-principal
+                  labels:
+                    argocd-agent.argoproj-labs.io/agent-name: '{{ $managedCluster.metadata.name }}'
+                    argocd.argoproj.io/secret-type: cluster
+                  annotations:
+                    argocd.argoproj.io/skip-reconcile: 'true'
+                    managed-by: argocd-agent
+                stringData:
+                  server: '{{ printf "https://hub-argocd-agent-principal-resource-proxy:9090?agentName=%s" $managedCluster.metadata.name }}'
+                  name: '{{ $managedCluster.metadata.name }}'
+                  config: |
+                    {
+                      "tlsClientConfig": {
+                        "insecure": false,
+                        "certData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' (printf "aac-%s" $managedCluster.metadata.name)).data.tls.crt | base64enc hub}}",
+                        "keyData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' (printf "aac-%s" $managedCluster.metadata.name)).data.tls.key | base64enc hub}}",
+                        "caData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' 'argocd-agent-ca').data.tls.crt | base64enc hub}}"
+                      }
+                    }
+            {{- end }}

@@ -12,7 +12,10 @@ resources:
   # Hub/Principal - Copy CA to Agent Spoke Clusters
   - gitops-agent-copy-ca.yaml
 
-  # Hub/Principal - Generate and Distribute Spoke Cluster Certificates
+  # Hub/Principal - Generate Spoke Cluster Certificates
+  - gitops-agent-create-certs.yaml
+
+  # Agent Spoke - Copy Cluster Credentials to Agent Spoke Clusters
   - gitops-spoke-credentials.yaml
 
 commonAnnotations:

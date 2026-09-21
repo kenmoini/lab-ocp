@@ -12,3 +12,6 @@ subjects:
   - name: aa-copy-ca
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: aa-spoke-copy-creds
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
