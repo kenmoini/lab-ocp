@@ -2,7 +2,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: aa-spoke-copy-creds
+  name: aa-spoke-managed-copy-creds
   # namespace: argocd-principal
   annotations:
     policy.open-cluster-management.io/description: Creates and distributes the ArgoCD Agent credentials to Managed Clusters
@@ -16,7 +16,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: aa-spoke-copy-creds
+          name: aa-spoke-managed-copy-creds
         spec:
           remediationAction: enforce
           severity: critical

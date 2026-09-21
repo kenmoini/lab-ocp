@@ -1,0 +1,34 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: aa-spoke-auto-copy-creds
+  # namespace: argocd-principal
+  annotations:
+    policy.open-cluster-management.io/description: Creates and distributes the ArgoCD Agent credentials to Managed Clusters
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: aa-spoke-auto-copy-creds
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: argocd-agent-client-tls
+                  namespace: "aa-auto-{{hub .ManagedClusterName hub}}"
+                data:
+                  server: '{{hub (lookup "v1" "Secret" "argocd-principal" (printf "cluster-%s" .ManagedClusterName )).data.server hub}}'
+                  name: '{{hub (lookup "v1" "Secret" "argocd-principal" (printf "cluster-%s" .ManagedClusterName )).data.name hub}}'
+                  config: '{{hub (lookup "v1" "Secret" "argocd-principal" (printf "cluster-%s" .ManagedClusterName )).data.config hub}}'

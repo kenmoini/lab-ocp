@@ -12,7 +12,7 @@ subjects:
   - name: aa-auto-copy-ca
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: aa-spoke-copy-creds
+  - name: aa-spoke-auto-copy-creds
     apiGroup: policy.open-cluster-management.io
     kind: Policy
   - name: aa-agent-auto-instance

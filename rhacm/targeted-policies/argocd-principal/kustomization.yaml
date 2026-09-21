@@ -17,7 +17,8 @@ resources:
   - gitops-agent-create-certs.yaml
 
   # Agent Spoke - Copy Cluster Credentials to Agent Spoke Clusters
-  - gitops-spoke-credentials.yaml
+  - gitops-agent-auto-copy-creds.yaml
+  - gitops-agent-managed-copy-creds.yaml
 
   # Agent Spoke - Instances
   - gitops-agent-auto-instance.yaml

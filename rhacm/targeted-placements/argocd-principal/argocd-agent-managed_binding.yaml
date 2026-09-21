@@ -12,7 +12,7 @@ subjects:
   - name: aa-managed-copy-ca
     apiGroup: policy.open-cluster-management.io
     kind: Policy
-  - name: aa-spoke-copy-creds
+  - name: aa-spoke-managed-copy-creds
     apiGroup: policy.open-cluster-management.io
     kind: Policy
   - name: aa-agent-managed-instance
