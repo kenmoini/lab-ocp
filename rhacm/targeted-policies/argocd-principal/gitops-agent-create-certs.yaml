@@ -76,9 +76,9 @@ spec:
                     {
                       "tlsClientConfig": {
                         "insecure": false,
-                        "certData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' (printf "aac-%s" $managedCluster.metadata.name)).data.tls.crt hub}}",
-                        "keyData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' (printf "aac-%s" $managedCluster.metadata.name)).data.tls.key hub}}",
-                        "caData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' 'argocd-agent-ca').data.tls.crt | base64enc hub}}"
+                        "certData": "{{hub fromSecret "argocd-principal" (printf "aac-%s" $managedCluster.metadata.name) "tls.crt" | base64enc hub}}",
+                        "keyData": "{{hub fromSecret "argocd-principal" (printf "aac-%s" $managedCluster.metadata.name) "tls.key" | base64enc hub}}",
+                        "caData": "{{hub fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt" | base64enc hub}}"
                       }
                     }
             {{- end }}
