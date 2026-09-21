@@ -53,7 +53,7 @@ spec:
           remediationAction: enforce
           severity: critical
           object-templates-raw: |
-            {{/* ## Loop through the ManagedClusters - check for the spoke label, then create the Certificates ## */}}
+            {{/* ## Loop through the ManagedClusters - check for the spoke label, then create the Secret on the Hub ## */}}
             {{- $managedClusterList := (lookup "cluster.open-cluster-management.io/v1" "ManagedCluster" "" "" "policy.kemo.dev/argocd-agent-auto").items }}
             {{- with $managedClusterList }}
             {{- range $managedCluster := . }}
@@ -83,7 +83,8 @@ spec:
                       "tlsClientConfig": {
                         "insecure": false,
                         "caData": {{ (fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt") | base64enc | quote }},
-                        "certData": {{ $certData | base64enc | quote }}
+                        "certData": {{ $certData | base64enc | quote }},
+                        "keyData": {{ $keyData | base64enc | quote }}
                       }
                     }
             {{- end }}
@@ -131,32 +132,39 @@ spec:
           remediationAction: enforce
           severity: critical
           object-templates-raw: |
-            {{/* ## Loop through the ManagedClusters - check for the spoke label, then create the Certificates ## */}}
+            {{/* ## Loop through the ManagedClusters - check for the spoke label, then create the Secret on the Hub ## */}}
             {{- $managedClusterList := (lookup "cluster.open-cluster-management.io/v1" "ManagedCluster" "" "" "policy.kemo.dev/argocd-agent-managed").items }}
-            {{- range $managedCluster := $managedClusterList }}
+            {{- with $managedClusterList }}
+            {{- range $managedCluster := . }}
+            {{- $mcn := $managedCluster.metadata.name }}
+            {{- $secName := printf "aac-%s" $mcn }}
+            {{- $certData := (fromSecret "argocd-principal" $secName "tls.crt") }}
+            {{- $keyData := (fromSecret "argocd-principal" $secName "tls.key") }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: v1
                 kind: Secret
                 metadata:
-                  name: cluster-{{ $managedCluster.metadata.name }}
+                  name: cluster-{{ $mcn }}
                   namespace: argocd-principal
                   labels:
-                    argocd-agent.argoproj-labs.io/agent-name: '{{ $managedCluster.metadata.name }}'
+                    argocd-agent.argoproj-labs.io/agent-name: '{{ $mcn }}'
                     argocd.argoproj.io/secret-type: cluster
                   annotations:
                     argocd.argoproj.io/skip-reconcile: 'true'
                     managed-by: argocd-agent
+                type: Opaque
                 stringData:
-                  server: '{{ printf "https://hub-argocd-agent-principal-resource-proxy:9090?agentName=%s" $managedCluster.metadata.name }}'
-                  name: '{{ $managedCluster.metadata.name }}'
+                  server: '{{ printf "https://hub-argocd-agent-principal-resource-proxy:9090?agentName=%s" $mcn }}'
+                  name: '{{ $mcn }}'
                   config: |
                     {
                       "tlsClientConfig": {
                         "insecure": false,
-                        "certData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' (printf "aac-%s" $managedCluster.metadata.name)).data.tls.crt | base64enc hub}}",
-                        "keyData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' (printf "aac-%s" $managedCluster.metadata.name)).data.tls.key | base64enc hub}}",
-                        "caData": "{{hub (lookup 'v1' 'Secret' 'argocd-principal' 'argocd-agent-ca').data.tls.crt | base64enc hub}}"
+                        "caData": {{ (fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt") | base64enc | quote }},
+                        "certData": {{ $certData | base64enc | quote }},
+                        "keyData": {{ $keyData | base64enc | quote }}
                       }
                     }
+            {{- end }}
             {{- end }}
