@@ -2,7 +2,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: aa-copy-ca
+  name: aa-auto-copy-ca
   # namespace: argocd-principal
   annotations:
     policy.open-cluster-management.io/description: Distributes the CA certificate for the ArgoCD Agent Principal to Managed Clusters
@@ -16,7 +16,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: aa-copy-ca
+          name: aa-auto-copy-ca
         spec:
           remediationAction: enforce
           severity: critical
@@ -27,7 +27,7 @@ spec:
                 kind: Secret
                 metadata:
                   name: argocd-agent-ca
-                  namespace: 'argocd-agent-{{hub .ManagedClusterName hub}}'
+                  namespace: 'aa-auto-{{hub .ManagedClusterName hub}}'
                 type: Opaque
                 data:
                   ca.crt: '{{hub (fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt") hub}}'

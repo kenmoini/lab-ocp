@@ -9,7 +9,7 @@ placementRef:
   apiGroup: cluster.open-cluster-management.io
   kind: Placement
 subjects:
-  - name: aa-copy-ca
+  - name: aa-managed-copy-ca
     apiGroup: policy.open-cluster-management.io
     kind: Policy
   - name: aa-spoke-copy-creds

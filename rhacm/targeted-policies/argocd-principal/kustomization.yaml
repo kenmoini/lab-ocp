@@ -10,7 +10,8 @@ resources:
   - gitops-agent-principal-jwt-formatting.yaml
 
   # Hub/Principal - Copy CA to Agent Spoke Clusters
-  - gitops-agent-copy-ca.yaml
+  - gitops-agent-auto-copy-ca.yaml
+  - gitops-agent-managed-copy-ca.yaml
 
   # Hub/Principal - Generate Spoke Cluster Certificates
   - gitops-agent-create-certs.yaml
