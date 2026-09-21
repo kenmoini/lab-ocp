@@ -73,15 +73,6 @@ spec:
                 stringData:
                   server: '{{ printf "https://hub-argocd-agent-principal-resource-proxy:9090?agentName=%s" $managedCluster.metadata.name }}'
                   name: '{{ $managedCluster.metadata.name }}'
-                  config: |
-                    {
-                      "tlsClientConfig": {
-                        "insecure": false,
-                        "certData": '{{hub fromSecret "argocd-principal" (printf "aac-%s" $managedCluster.metadata.name) "tls.crt" | base64enc hub}}',
-                        "keyData": '{{hub fromSecret "argocd-principal" (printf "aac-%s" $managedCluster.metadata.name) "tls.key" | base64enc hub}}',
-                        "caData": '{{hub fromSecret "argocd-principal" "argocd-agent-ca" "tls.crt" | base64enc hub}}'
-                      }
-                    }
             {{- end }}
             {{- end }}
 
