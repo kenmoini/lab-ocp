@@ -28,7 +28,7 @@ spec:
                 metadata:
                   name: argocd-agent-client-tls
                   namespace: "aa-auto-{{hub .ManagedClusterName hub}}"
+                type: kubernetes.io/tls
                 data:
-                  server: '{{hub (lookup "v1" "Secret" "argocd-principal" (printf "cluster-%s" .ManagedClusterName )).data.server hub}}'
-                  name: '{{hub (lookup "v1" "Secret" "argocd-principal" (printf "cluster-%s" .ManagedClusterName )).data.name hub}}'
-                  config: '{{hub (lookup "v1" "Secret" "argocd-principal" (printf "cluster-%s" .ManagedClusterName )).data.config hub}}'
+                  tls.crt: '{{hub (fromSecret "argocd-principal" (printf "aac-%s" .ManagedClusterName) "tls.crt") hub}}'
+                  tls.key: '{{hub (fromSecret "argocd-principal" (printf "aac-%s" .ManagedClusterName) "tls.key") hub}}'
