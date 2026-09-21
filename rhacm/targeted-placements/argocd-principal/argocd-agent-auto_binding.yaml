@@ -15,3 +15,6 @@ subjects:
   - name: aa-spoke-copy-creds
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: aa-agent-auto-instance
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

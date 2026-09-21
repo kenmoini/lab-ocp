@@ -1,0 +1,49 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: aa-agent-auto-instance
+  # namespace: argocd-principal
+  annotations:
+    policy.open-cluster-management.io/description: Bootstraps the ArgoCD Agent Spoke Instance in Autonomous Mode.
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-SUB - Operator Installation
+spec:
+  disabled: false
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: gitops-agent-spoke
+      namespace: open-cluster-management-policies
+      compliance: Compliant
+  policy-templates:
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: agent-auto-argocd
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: argoproj.io/v1beta1
+                kind: ArgoCD
+                metadata:
+                  name: agent-argocd
+                  namespace: "aa-auto-{{hub .ManagedClusterName hub}}"
+                spec:
+                  server:
+                    enabled: false
+                  argoCDAgent:
+                    agent:
+                      allowedNamespaces:
+                        - '*'
+                      enabled: true
+                      client:
+                        principalServerAddress: '{{hub (lookup "route.openshift.io/v1" "Route" "argocd-principal" "hub-argocd-agent-principal").spec.host hub}}'
+                        principalServerPort: "443"
+                        mode: autonomous
