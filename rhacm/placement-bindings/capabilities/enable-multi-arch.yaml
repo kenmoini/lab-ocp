@@ -9,6 +9,6 @@ placementRef:
   apiGroup: cluster.open-cluster-management.io
   kind: Placement
 subjects:
-  - name: enable-multi-arch
+  - name: cluster-multi-arch
     apiGroup: policy.open-cluster-management.io
     kind: Policy
