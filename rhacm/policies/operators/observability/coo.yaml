@@ -124,7 +124,7 @@ spec:
                   name: cluster-observability-operator
                   source: redhat-operators 
                   sourceNamespace: openshift-marketplace
-                  startingCSV: cluster-observability-operator.v1.4.0
+                  # startingCSV: cluster-observability-operator.v1.4.0
                   config:
                     resources:
                       requests:
