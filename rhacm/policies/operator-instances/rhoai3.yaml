@@ -651,21 +651,33 @@ spec:
                     app.kubernetes.io/name: datasciencecluster
                 spec:
                   components:
+                    ogx:
+                      managementState: Managed
+                    aigateway:
+                      batchGateway:
+                        managementState: Managed
+                      managementState: Managed
+                      modelsAsAService:
+                        managementState: Managed
                     dashboard:
                       managementState: Managed
                     aipipelines:
                       managementState: Managed
                     feastoperator:
                       managementState: Managed
+                    mcplifecycleoperator:
+                      managementState: Managed
                     kserve:
                       managementState: Managed
                       rawDeploymentServiceConfig: Headed
-                      modelsAsService:
-                        managementState: Managed
-                    llamastackoperator:
-                      managementState: Managed
+                      # Replaced by aigateway
+                      #modelsAsService:
+                      #  managementState: Managed
+                    # llamastackoperator has been replaced by OGX 
+                    #llamastackoperator:
+                    #  managementState: Managed
                     kueue:
-                      managementState: Unmanaged
+                      #managementState: Unmanaged
                       defaultClusterQueueName: default
                       defaultLocalQueueName: default
                     mlflowoperator:
