@@ -380,7 +380,7 @@ spec:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: maas.opendatahub.io/v1alpha1
-                kind: Tenant
+                kind: MaasTenantConfig
                 metadata:
                   name: default-tenant
                   namespace: models-as-a-service
@@ -405,7 +405,7 @@ spec:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: maas.opendatahub.io/v1alpha1
-                kind: Tenant
+                kind: MaasTenantConfig
                 metadata:
                   name: default-tenant
                   namespace: models-as-a-service
