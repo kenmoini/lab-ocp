@@ -754,7 +754,6 @@ spec:
                   dashboardConfig:
                     genAiStudio: true
                     vLLMDeploymentOnMaaS: true
-                    maasAuthPolicies: true
                     observabilityDashboard: true
                     modelAsService: true
                     disableTracking: false
@@ -762,6 +761,8 @@ spec:
                     disableLMEval: false
                     disableModelCatalog: false
                     disableModelRegistry: false
+                    # Deprecated in 3.5
+                    #maasAuthPolicies: true
                   notebookController:
                     enabled: true
                     notebookNamespace: rhods-notebooks
