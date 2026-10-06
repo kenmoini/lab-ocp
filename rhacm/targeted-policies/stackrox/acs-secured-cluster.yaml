@@ -33,14 +33,15 @@ spec:
                   clusterLabels:
                     vendor: OpenShift
                     managed-by: '{{hub .ManagedClusterName hub}}'
+                  # We don't need old scanner any more
                   scanner:
-                    scannerComponent: AutoSense
-                    analyzer:
-                      scaling:
-                        autoScaling: Disabled
-                        maxReplicas: 2
-                        minReplicas: 1
-                        replicas: 1
+                    scannerComponent: Disabled
+                    # analyzer:
+                    #   scaling:
+                    #     autoScaling: Disabled
+                    #     maxReplicas: 2
+                    #     minReplicas: 1
+                    #     replicas: 1
                   scannerV4:
                     db:
                       persistence:
@@ -69,11 +70,12 @@ spec:
                   admissionControl:
                     listenOnUpdates: true
                     bypass: BreakGlassAnnotation
-                    contactImageScanners: DoNotScanInline
                     listenOnCreates: true
                     timeoutSeconds: 20
                     listenOnEvents: true
-                    replicas: 1
+                    replicas: 2
+                    # deprecated scanner integration
+                    # contactImageScanners: DoNotScanInline
                   tls:
                     additionalCAs:
                       - name: kl-n-r-ca

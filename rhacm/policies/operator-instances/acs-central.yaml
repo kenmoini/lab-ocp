@@ -90,6 +90,18 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
+                kind: ConfigMap
+                apiVersion: v1
+                metadata:
+                  name: collector-config
+                  namespace: stackrox
+                data:
+                  runtime_config.yaml: |
+                    networking:
+                      externalIps:
+                        enabled: ENABLED
+            - complianceType: musthave
+              objectDefinition:
                 # This lets us bootstrap the SecuredCluster instance policy allowing secrets to be created
                 apiVersion: cluster.open-cluster-management.io/v1beta2
                 kind: ManagedClusterSetBinding
@@ -153,6 +165,13 @@ spec:
                         minReplicas: 1
                         replicas: 1
                     matcher:
+                      resources:
+                        requests:
+                          cpu: 1
+                          memory: 2Gi
+                        limits:
+                          cpu: 2
+                          memory: 4Gi
                       scaling:
                         autoScaling: Enabled
                         maxReplicas: 3
