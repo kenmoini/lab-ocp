@@ -10,6 +10,81 @@ metadata:
 spec:
   disabled: false
   policy-templates:
+    # - objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: gha-rbac-scc
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: low
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: rbac.authorization.k8s.io/v1
+    #             kind: ClusterRole
+    #             metadata:
+    #               name: system:openshift:scc:github-arc
+    #             rules:
+    #             - apiGroups:
+    #               - security.openshift.io
+    #               resourceNames:
+    #               - github-arc
+    #               resources:
+    #               - securitycontextconstraints
+    #               verbs:
+    #               - use
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             kind: SecurityContextConstraints
+    #             metadata:
+    #               annotations:
+    #                 kubernetes.io/description: Based on restricted SCC, but forces uid/gid 1001/123
+    #               name: github-arc
+    #             allowHostDirVolumePlugin: false
+    #             allowHostIPC: false
+    #             allowHostNetwork: false
+    #             allowHostPID: false
+    #             allowHostPorts: false
+    #             allowPrivilegeEscalation: true
+    #             allowPrivilegedContainer: false
+    #             allowedCapabilities: null
+    #             apiVersion: security.openshift.io/v1
+    #             defaultAddCapabilities: null
+    #             userNamespaceLevel: RequirePodLevel
+    #             fsGroup:
+    #               ranges:
+    #               - max: 65534
+    #                 min: 123
+    #               type: MustRunAs
+    #             groups: []
+    #             priority: null
+    #             readOnlyRootFilesystem: false
+    #             requiredDropCapabilities:
+    #             - KILL
+    #             - MKNOD
+    #             - SETUID
+    #             - SETGID
+    #             runAsUser:
+    #               type: MustRunAs
+    #               uid: 1001
+    #             seLinuxContext:
+    #               type: MustRunAs
+    #             supplementalGroups:
+    #               ranges:
+    #               - max: 123
+    #                 min: 123
+    #               type: MustRunAs
+    #             users: []
+    #             volumes:
+    #             - configMap
+    #             - csi
+    #             - downwardAPI
+    #             - emptyDir
+    #             - ephemeral
+    #             - persistentVolumeClaim
+    #             - projected
+    #             - secret
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
@@ -26,8 +101,8 @@ spec:
                 metadata:
                   name: arc-systems
                   annotations:
-                    openshift.io/sa.scc.supplemental-groups: 1000/10000
-                    openshift.io/sa.scc.uid-range: 1000/10000
+                    openshift.io/sa.scc.supplemental-groups: 0/10000
+                    openshift.io/sa.scc.uid-range: 0/10000
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
@@ -113,21 +188,6 @@ spec:
                 kind: RoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
-                  name: gharc-userns
-                  namespace: arc-systems
-                subjects:
-                  - kind: ServiceAccount
-                    name: arc-gha-rs-controller
-                    namespace: arc-systems
-                roleRef:
-                  apiGroup: rbac.authorization.k8s.io
-                  kind: ClusterRole
-                  name: 'system:openshift:scc:restricted-v3'
-            - complianceType: musthave
-              objectDefinition:
-                kind: RoleBinding
-                apiVersion: rbac.authorization.k8s.io/v1
-                metadata:
                   name: gharc-ss-init
                   namespace: arc-systems
                 subjects:
@@ -141,3 +201,34 @@ spec:
                   apiGroup: rbac.authorization.k8s.io
                   kind: Role
                   name: 'arc-ss-init'
+
+            - complianceType: musthave
+              objectDefinition:
+                kind: RoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: gharc-nested-container
+                  namespace: arc-systems
+                subjects:
+                  - kind: ServiceAccount
+                    name: arc-gha-rs-controller
+                    namespace: arc-systems
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: 'system:openshift:scc:nested-container'
+            # - complianceType: musthave
+            #   objectDefinition:
+            #     kind: RoleBinding
+            #     apiVersion: rbac.authorization.k8s.io/v1
+            #     metadata:
+            #       name: gharc-userns
+            #       namespace: arc-systems
+            #     subjects:
+            #       - kind: ServiceAccount
+            #         name: arc-gha-rs-controller
+            #         namespace: arc-systems
+            #     roleRef:
+            #       apiGroup: rbac.authorization.k8s.io
+            #       kind: ClusterRole
+            #       name: 'system:openshift:scc:github-arc'
