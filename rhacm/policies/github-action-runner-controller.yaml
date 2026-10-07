@@ -163,6 +163,21 @@ spec:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: rbac.authorization.k8s.io/v1
+                kind: ClusterRole
+                metadata:
+                  name: system:openshift:scc:nested-container-arc
+                rules:
+                - apiGroups:
+                  - security.openshift.io
+                  resourceNames:
+                  - nested-container-arc
+                  resources:
+                  - securitycontextconstraints
+                  verbs:
+                  - use
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
                 kind: Role
                 metadata:
                   name: arc-ss-init
@@ -204,10 +219,70 @@ spec:
 
             - complianceType: musthave
               objectDefinition:
+                apiVersion: security.openshift.io/v1
+                kind: SecurityContextConstraints
+                metadata:
+                  annotations:
+                    kubernetes.io/description: 'nested-container-arc is specially tailored for running nested containers for GitHub Actions Runner Controller. It balances a tight security profile, while remaining loose enough to be useful to run nested containers in. In addition to requiring pods run with a user namespace, it allows SETUID and SETGID capabilities, requires the "container_engine_t" SELinux type, allows any users within the range of 0-65534, allows privilege escalation (to allow a container engine to run new{uid/gid}map), and allows any seccomp profile. Since any pods running within this SCC must use a user namespace ("hostUsers: false"), their actual UID/GID on the host will be allocated by the kubelet to be unprivileged, and any capabilities the pod is granted will not apply outside of the pods user namespace.'
+                  name: nested-container-arc
+                userNamespaceLevel: RequirePodLevel
+                allowPrivilegedContainer: true # true?
+                allowPrivilegeEscalation: true
+                allowHostPorts: false
+                allowHostDirVolumePlugin: false
+                allowHostIPC: false
+                allowHostPID: false
+                allowHostNetwork: false
+                runAsUser:
+                  type: MustRunAsRange
+                  uidRangeMax: 65534
+                  uidRangeMin: 0
+                fsGroup:
+                  ranges:
+                    - max: 65534
+                  type: MustRunAs
+                supplementalGroups:
+                  ranges:
+                    - max: 65534
+                  type: MustRunAs
+
+                requiredDropCapabilities: null
+                defaultAddCapabilities: null
+                allowedCapabilities:
+                  - SETUID
+                  - SETGID
+                  - SYS_ADMIN
+                  - NET_ADMIN
+                  - MKNOD
+
+                seccompProfiles:
+                  - '*'
+                seLinuxContext:
+                  seLinuxOptions:
+                    type: container_engine_t
+                  type: MustRunAs
+
+                readOnlyRootFilesystem: false
+                volumes:
+                  - configMap
+                  - csi
+                  - downwardAPI
+                  - emptyDir
+                  - ephemeral
+                  - image
+                  - persistentVolumeClaim
+                  - projected
+                  - secret
+                users: []
+                groups: []
+                priority: null
+
+            - complianceType: musthave
+              objectDefinition:
                 kind: RoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
-                  name: gharc-nested-container
+                  name: gharc-nested-container-arc
                   namespace: arc-systems
                 subjects:
                   - kind: ServiceAccount
@@ -216,7 +291,7 @@ spec:
                 roleRef:
                   apiGroup: rbac.authorization.k8s.io
                   kind: ClusterRole
-                  name: 'system:openshift:scc:nested-container'
+                  name: 'system:openshift:scc:nested-container-arc'
             # - complianceType: musthave
             #   objectDefinition:
             #     kind: RoleBinding
