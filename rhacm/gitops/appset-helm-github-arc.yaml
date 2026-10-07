@@ -71,6 +71,30 @@ spec:
               template:
                 spec:
                   hostUsers: false # Enable User Namespaces
+                  initContainers:
+                  - name: docker
+                    image: docker.io/library/docker:29.8-dind
+                    imagePullPolicy: Always
+                    restartPolicy: Always
+                    securityContext:
+                      runAsNonRoot: false
+                      runAsUser: 0
+                      runAsGroup: 0
+                      procMount: Unmasked
+                      privileged: true
+                    env:
+                      - name: DOCKER_TLS_CERTDIR
+                        value: /certs
+                    volumeMounts:
+                      - name: docker-graph-storage
+                        mountPath: /var/lib/docker
+                      - name: docker-certs
+                        mountPath: /certs
+                    startupProbe:
+                      exec:
+                        command: ["docker", "info"]
+                      periodSeconds: 2
+                      failureThreshold: 10
                   containers:
                   - name: runner
                     image: ghcr.io/actions/actions-runner:latest
@@ -79,6 +103,13 @@ spec:
                     imagePullPolicy: Always
                     securityContext:
                       procMount: Unmasked
+                      allowPrivilegeEscalation: false
+                      capabilities:
+                        drop:
+                          - ALL
+                      runAsNonRoot: true
+                      runAsUser: 1001
+                      runAsGroup: 123
                     env:
                       - name: ACTIONS_RUNNER_CONTAINER_HOOKS
                         value: /home/runner/k8s/index.js
@@ -96,7 +127,13 @@ spec:
                       #   value: "github.com/kenmoini/lab-ocp"
                       # - name: RUNNER_TOKEN
                       #   value: "$ACTIONS_RUNNER_INPUT_JITCONFIG"
+                      - name: DOCKER_TLS_CERTDIR
+                        value: /certs
                     volumeMounts:
+                      - name: docker-graph-storage
+                        mountPath: /var/lib/docker
+                      - name: docker-certs
+                        mountPath: /certs
                       - name: work
                         mountPath: /home/runner/_work
                       # - name: tmpwork
@@ -104,6 +141,12 @@ spec:
                   volumes:
                     # - name: tmpwork
                     #   emptyDir: {}
+                    # Shared volume to exchange TLS certs and connection sockets
+                    - name: docker-graph-storage
+                      emptyDir: {}
+                    - name: docker-certs
+                      emptyDir: {}
+                    # Work volume for the runner
                     - name: work
                       ephemeral:
                         volumeClaimTemplate:
