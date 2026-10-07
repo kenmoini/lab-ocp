@@ -18,7 +18,7 @@ spec:
         app: debug-receiver
     spec:
       containers:
-        - image: registry.access.redhat.com/ubi8/python-39:latest
+        - image: registry.access.redhat.com/ubi10/python-314:latest
           name: python
           ports:
             - containerPort: 9393
