@@ -245,9 +245,10 @@ spec:
                 seccompProfiles:
                   - '*'
                 seLinuxContext:
-                  seLinuxOptions:
-                    type: container_engine_t
-                  type: MustRunAs
+                  type: RunAsAny
+                  # seLinuxOptions:
+                  #   type: container_engine_t
+                  # type: MustRunAs
 
                 readOnlyRootFilesystem: false
                 volumes:
