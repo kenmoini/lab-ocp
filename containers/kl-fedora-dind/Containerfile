@@ -84,11 +84,11 @@ RUN chmod +x /usr/local/bin/dind \
 VOLUME /var/lib/docker
 EXPOSE 2375 2376
 
-ENV DOCKERD_ROOTLESS_ROOTLESSKIT_NET=slirp4netns
+# ENV DOCKERD_ROOTLESS_ROOTLESSKIT_NET=slirp4netns
 
-# The SCC that we are using will ensure that the user runs as UID 1000 in its own user namespace on the host node.
-USER 1000
-WORKDIR ${USER_HOME_DIR}
+# # The SCC that we are using will ensure that the user runs as UID 1000 in its own user namespace on the host node.
+# USER 1000
+# WORKDIR ${USER_HOME_DIR}
 # RUN dockerd-rootless-setuptool.sh install
 
 ENTRYPOINT ["dockerd-entrypoint.sh"]
