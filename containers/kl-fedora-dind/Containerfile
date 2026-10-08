@@ -12,7 +12,7 @@ RUN dnf config-manager addrepo --from-repofile https://download.docker.com/linux
 
 # RUN alternatives --set iptables /usr/bin/iptables-nft
 
-RUN dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns wget git erofs-utils qemu-user-static overlayfs-tools \
+RUN dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns wget git erofs-utils qemu-user-static overlayfs-tools iptables-nft \
     && dnf clean all
 
 RUN set -eux; \
