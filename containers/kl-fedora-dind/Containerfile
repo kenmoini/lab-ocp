@@ -3,7 +3,7 @@ FROM registry.fedoraproject.org/fedora:44
 RUN dnf -y update && dnf -y install dnf-plugins-core crun \
     && dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo \
     && dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
-    && dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns wget git erofs-utils qemu-user-static overlayfs-tools iptables-nft \
+    && dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns wget git erofs-utils qemu-user-static overlayfs-tools iptables-nft procps-ng \
     && dnf clean all
 
 RUN set -eux; \
@@ -51,9 +51,11 @@ RUN set -eux; \
 
 COPY daemon.json /etc/docker/daemon.json
 COPY dind /usr/local/bin/dind
+COPY --chown=0:0 setup-cgroups.sh /
 COPY dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
 RUN chmod +x /usr/local/bin/dind \
-    && chmod +x /usr/local/bin/dockerd-entrypoint.sh
+    && chmod +x /usr/local/bin/dockerd-entrypoint.sh \
+    && chmod +x /setup-cgroups.sh
 
 VOLUME /var/lib/docker
 EXPOSE 2375 2376
