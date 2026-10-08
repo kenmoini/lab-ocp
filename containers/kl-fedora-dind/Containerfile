@@ -7,7 +7,7 @@ ENV HOME=${USER_HOME_DIR}
 RUN dnf -y update && dnf -y install dnf-plugins-core crun \
     && dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo \
     && dnf install -y docker-ce-3:29.8.2-1.fc44 docker-ce-cli-1:29.8.2-1.fc44 docker-ce-rootless-extras-0:29.8.2-1.fc44 containerd.io docker-buildx-plugin docker-compose-plugin \
-    && dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns sudo wget git erofs-utils qemu-user-static overlayfs-tools iptables-nft procps-ng \
+    && dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns sudo wget git erofs-utils qemu-user-static bash overlayfs-tools iptables-nft procps-ng \
     && dnf clean all
 
 RUN set -eux; \
