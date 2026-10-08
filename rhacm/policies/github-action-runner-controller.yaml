@@ -101,8 +101,8 @@ spec:
                 metadata:
                   name: arc-systems
                   annotations:
-                    openshift.io/sa.scc.supplemental-groups: 0/100000
-                    openshift.io/sa.scc.uid-range: 0/100000
+                    openshift.io/sa.scc.supplemental-groups: 0/165537
+                    openshift.io/sa.scc.uid-range: 0/165537
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
