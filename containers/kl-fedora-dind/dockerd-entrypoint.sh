@@ -11,6 +11,7 @@ fi
 current_user="$(id -u)"
 if [ "$current_user" -ne 0 ]; then
     sudo /setup-cgroups.sh
+    dockerd-rootless-setuptool.sh install
 else
     /setup-cgroups.sh
 fi
