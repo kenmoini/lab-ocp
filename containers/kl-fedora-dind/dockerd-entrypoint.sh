@@ -2,12 +2,12 @@
 set -eu
 
 # Setup CGroups
-current_user="$(id -u)"
-if [ "$current_user" -ne 0 ]; then
-    sudo /setup-cgroups.sh
-else
-    /setup-cgroups.sh
-fi
+# current_user="$(id -u)"
+# if [ "$current_user" -ne 0 ]; then
+#     sudo /setup-cgroups.sh
+# else
+#     /setup-cgroups.sh
+# fi
 
 _tls_ensure_private() {
 	local f="$1"; shift
