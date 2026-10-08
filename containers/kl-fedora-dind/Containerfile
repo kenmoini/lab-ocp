@@ -108,7 +108,8 @@ RUN chmod +x /usr/local/bin/dind \
     && chmod +x /setup-cgroups.sh \
     && wget -O /usr/local/bin/ocp https://raw.githubusercontent.com/lmcclint/ocp-version-manager/refs/heads/main/ocp \
     && chmod a+x /usr/local/bin/ocp \
-    && OCP_BIN_DIR=/usr/local/bin ocp get stable-4.22
+    && OCP_BIN_DIR=/usr/local/bin ocp get stable-4.22 \
+    && OCP_BIN_DIR=/usr/local/bin ocp use stable-4.22
 
 VOLUME /var/lib/docker
 EXPOSE 2375 2376
