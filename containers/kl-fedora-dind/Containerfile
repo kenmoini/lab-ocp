@@ -1,0 +1,73 @@
+FROM registry.fedoraproject.org/fedora:44
+
+RUN dnf -y update && dnf -y install dnf-plugins-core \
+    && dnf clean all
+
+RUN dnf install -y crun \
+    && dnf clean all
+
+RUN dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo \
+    && dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
+    && dnf clean all
+
+# RUN alternatives --set iptables /usr/bin/iptables-nft
+
+RUN dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns wget git erofs-utils \
+    && dnf clean all
+
+RUN set -eux; \
+	\
+	apkArch="$(uname -m)"; \
+	case "$apkArch" in \
+		'x86_64') \
+			url='https://download.docker.com/linux/static/stable/x86_64/docker-29.8.2.tgz'; \
+			;; \
+		'armhf') \
+			url='https://download.docker.com/linux/static/stable/armel/docker-29.8.2.tgz'; \
+			;; \
+		'armv7') \
+			url='https://download.docker.com/linux/static/stable/armhf/docker-29.8.2.tgz'; \
+			;; \
+		'aarch64') \
+			url='https://download.docker.com/linux/static/stable/aarch64/docker-29.8.2.tgz'; \
+			;; \
+		*) echo >&2 "error: unsupported 'docker.tgz' architecture ($apkArch)"; exit 1 ;; \
+	esac; \
+	\
+	wget -O 'docker.tgz' "$url"; \
+	\
+	tar --extract \
+		--file docker.tgz \
+		--strip-components 1 \
+		--directory /usr/local/bin/ \
+		--no-same-owner \
+# we exclude the CLI binary because we already extracted that over in the "docker:29-cli" image that we're FROM and we don't want to duplicate those bytes again in this layer
+		--exclude 'docker/docker' \
+		--exclude 'docker/containerd' \
+		--exclude 'docker/runc' \
+		--exclude 'docker/dockerd' \
+		--exclude 'docker/ctr' \
+		--exclude 'docker/containerd-shim-runc-v2' \
+	; \
+	rm docker.tgz;
+
+# set up subuid/subgid so that "--userns-remap=default" works out-of-the-box
+RUN set -eux; \
+	groupadd -r dockremap; \
+	useradd -r -g dockremap dockremap; \
+	echo 'dockremap:165536:65536' >> /etc/subuid; \
+	echo 'dockremap:165536:65536' >> /etc/subgid
+
+COPY daemon.json /etc/docker/daemon.json
+COPY dind /usr/local/bin/dind
+COPY dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+RUN chmod +x /usr/local/bin/dind \
+    && chmod +x /usr/local/bin/dockerd-entrypoint.sh
+
+VOLUME /var/lib/docker
+EXPOSE 2375 2376
+
+ENV DOCKERD_ROOTLESS_ROOTLESSKIT_NET=slirp4netns
+
+ENTRYPOINT ["dockerd-entrypoint.sh"]
+CMD []
