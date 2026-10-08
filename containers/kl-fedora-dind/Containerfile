@@ -1,18 +1,9 @@
 FROM registry.fedoraproject.org/fedora:44
 
-RUN dnf -y update && dnf -y install dnf-plugins-core \
-    && dnf clean all
-
-RUN dnf install -y crun \
-    && dnf clean all
-
-RUN dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo \
+RUN dnf -y update && dnf -y install dnf-plugins-core crun \
+    && dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo \
     && dnf install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
-    && dnf clean all
-
-# RUN alternatives --set iptables /usr/bin/iptables-nft
-
-RUN dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns wget git erofs-utils qemu-user-static overlayfs-tools iptables-nft \
+    && dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns wget git erofs-utils qemu-user-static overlayfs-tools iptables-nft \
     && dnf clean all
 
 RUN set -eux; \
