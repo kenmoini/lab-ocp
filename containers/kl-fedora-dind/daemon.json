@@ -1,7 +1,4 @@
 {
-  "hosts": [
-    "unix:///var/run/docker/docker.sock"
-  ],
   "runtimes": {
     "crun": {
       "path": "/usr/bin/crun"
