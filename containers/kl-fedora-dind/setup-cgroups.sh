@@ -2,6 +2,7 @@
 
 USER="${SUDO_USER:-$(id -u -n)}"
 GROUP="${SUDO_GID:-$(id -g -n)}"
+echo "CGroup setup beginning for user $USER and group $GROUP."
 
 mkdir /sys/fs/cgroup/inner
 echo 1 > /sys/fs/cgroup/inner/cgroup.procs

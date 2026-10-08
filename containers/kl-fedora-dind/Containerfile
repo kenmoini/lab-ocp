@@ -55,8 +55,7 @@ COPY --chown=0:0 setup-cgroups.sh /
 COPY dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
 RUN chmod +x /usr/local/bin/dind \
     && chmod +x /usr/local/bin/dockerd-entrypoint.sh \
-    && chmod +x /setup-cgroups.sh \
-    && /setup-cgroups.sh
+    && chmod +x /setup-cgroups.sh
 
 VOLUME /var/lib/docker
 EXPOSE 2375 2376
