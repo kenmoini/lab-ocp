@@ -45,6 +45,32 @@ RUN set -eux; \
 	; \
 	rm docker.tgz;
 
+RUN set -eux; \
+	\
+	apkArch="$(uname -m)"; \
+	case "$apkArch" in \
+		'x86_64') \
+			url='https://github.com/moby/buildkit/releases/download/v0.34.0/buildkit-v0.34.0.linux-amd64.tar.gz'; \
+			;; \
+		'armv7') \
+			url='https://github.com/moby/buildkit/releases/download/v0.34.0/buildkit-v0.34.0.linux-arm-v7.tar.gz'; \
+			;; \
+		'aarch64') \
+			url='https://github.com/moby/buildkit/releases/download/v0.34.0/buildkit-v0.34.0.linux-arm64.tar.gz'; \
+			;; \
+		*) echo >&2 "error: unsupported 'docker.tgz' architecture ($apkArch)"; exit 1 ;; \
+	esac; \
+	\
+	wget -O 'buildkit.tgz' "$url"; \
+	\
+	tar --extract \
+		--file buildkit.tgz \
+		--strip-components 1 \
+		--directory /usr/local/bin/ \
+		--no-same-owner \
+	; \
+	rm buildkit.tgz;
+
 # set up subuid/subgid so that "--userns-remap=default" works out-of-the-box
 RUN set -eux; \
 	groupadd -r dockremap; \
