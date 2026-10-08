@@ -105,7 +105,10 @@ COPY --chown=0:0 setup-cgroups.sh /
 COPY dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
 RUN chmod +x /usr/local/bin/dind \
     && chmod +x /usr/local/bin/dockerd-entrypoint.sh \
-    && chmod +x /setup-cgroups.sh
+    && chmod +x /setup-cgroups.sh \
+    && wget -O /usr/local/bin/ocp https://raw.githubusercontent.com/lmcclint/ocp-version-manager/refs/heads/main/ocp \
+    && chmod a+x /usr/local/bin/ocp \
+    && OCP_BIN_DIR=/usr/local/bin ocp get stable-4.22
 
 VOLUME /var/lib/docker
 EXPOSE 2375 2376
