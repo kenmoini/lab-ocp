@@ -221,15 +221,15 @@ spec:
                 allowHostNetwork: false
                 runAsUser:
                   type: MustRunAsRange
-                  uidRangeMax: 165534
+                  uidRangeMax: 165537
                   uidRangeMin: 0
                 fsGroup:
                   ranges:
-                    - max: 165534
+                    - max: 165537
                   type: MustRunAs
                 supplementalGroups:
                   ranges:
-                    - max: 165534
+                    - max: 165537
                   type: MustRunAs
 
                 requiredDropCapabilities: null
