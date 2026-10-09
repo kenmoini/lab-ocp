@@ -7,7 +7,7 @@ ENV HOME=${USER_HOME_DIR}
 RUN dnf -y update && dnf -y install dnf-plugins-core crun \
     && dnf config-manager addrepo --from-repofile https://download.docker.com/linux/fedora/docker-ce.repo \
     && dnf install -y docker-ce-3:29.8.2-1.fc44 docker-ce-cli-1:29.8.2-1.fc44 docker-ce-rootless-extras-0:29.8.2-1.fc44 containerd.io docker-buildx-plugin docker-compose-plugin \
-    && dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns sudo curl wget git erofs-utils qemu-user-static bash overlayfs-tools iptables-nft procps-ng \
+    && dnf install -y iproute shadow-utils fuse-overlayfs slirp4netns sudo curl wget openssl git erofs-utils qemu-user-static bash overlayfs-tools iptables-nft procps-ng \
     && dnf clean all
 
 RUN set -eux; \
@@ -80,7 +80,7 @@ RUN set -eux; \
 
 RUN \
     ##
-    ## Setup for root-less podman
+    ## Setup for root-less docker
     ##
     #
     # Add the user to /etc/passwd and /etc/group
@@ -92,7 +92,7 @@ RUN \
     chmod 400 /etc/shadow  ; \
     chown -R 1000:1000 ${USER_HOME_DIR} ; \
     #
-    # Enable podman to create uid and gid maps for the user
+    # Enable docker to create uid and gid maps for the user
     chown root:user /etc/subuid /etc/subgid ; \
     chmod 664 /etc/subuid /etc/subgid ; \
     setcap cap_setuid+ep /usr/bin/newuidmap ; \

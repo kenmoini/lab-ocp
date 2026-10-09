@@ -1,3 +1,7 @@
 [worker.oci]
   # Specify crun as the alternate OCI worker binary name
   binary = "crun"
+
+[registry."image-registry.openshift-image-registry.svc:5000"]
+  http = true
+  insecure = true
