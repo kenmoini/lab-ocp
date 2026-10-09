@@ -41,3 +41,11 @@ jobs:
           registry: "${{ env.REGISTRY_HOSTNAME }}"
           username: "${{ secrets.REGISTRY_USERNAME }}"
           password: "${{ secrets.REGISTRY_TOKEN }}"
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ${{ env.REGISTRY_IMAGE }}
