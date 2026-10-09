@@ -209,7 +209,7 @@ spec:
                 kind: SecurityContextConstraints
                 metadata:
                   annotations:
-                    kubernetes.io/description: 'nested-container-arc is specially tailored for running nested containers for GitHub Actions Runner Controller. It balances a tight security profile, while remaining loose enough to be useful to run nested containers in. In addition to requiring pods run with a user namespace, it allows SETUID and SETGID capabilities, requires the "container_engine_t" SELinux type, allows any users within the range of 0-65534, allows privilege escalation (to allow a container engine to run new{uid/gid}map), and allows any seccomp profile. Since any pods running within this SCC must use a user namespace ("hostUsers: false"), their actual UID/GID on the host will be allocated by the kubelet to be unprivileged, and any capabilities the pod is granted will not apply outside of the pods user namespace.'
+                    kubernetes.io/description: 'nested-container-arc is specially tailored for running nested containers for GitHub Actions Runner Controller. It balances a tight security profile, while remaining loose enough to be useful to run nested containers in. In addition to requiring pods run with a user namespace, it allows some capabilities, allows any users within the range of 0-165537, allows privilege escalation (to allow a container engine to run new{uid/gid}map), and allows any seccomp profile. Since any pods running within this SCC must use a user namespace ("hostUsers: false"), their actual UID/GID on the host will be allocated by the kubelet to be unprivileged, and any capabilities the pod is granted will not apply outside of the pods user namespace.'
                   name: nested-container-arc
                 userNamespaceLevel: RequirePodLevel
                 allowPrivilegedContainer: true # true?
@@ -219,6 +219,11 @@ spec:
                 allowHostIPC: false
                 allowHostPID: false
                 allowHostNetwork: false
+                # Requires the matching KubeletConfig to allow the specified unsafe sysctls, needs reboot and I'm tired boss
+                allowedUnsafeSysctls:
+                  - net.ipv6.conf.all.disable_ipv6
+                  - net.ipv6.conf.default.disable_ipv6
+
                 runAsUser:
                   type: MustRunAsRange
                   uidRangeMax: 165537
