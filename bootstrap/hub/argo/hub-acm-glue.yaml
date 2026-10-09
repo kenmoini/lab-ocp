@@ -13,23 +13,23 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: rhacm/mcsb/
-      kustomize: {}
+      # kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: rhacm/managedclustersets/
-      kustomize: {}
+      # kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: rhacm/gitops/
-      kustomize: {}
+      # kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: rhacm/policy-sets/
-      kustomize: {}
+      # kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: rhacm/addondeploymentconfigs/
-      kustomize: {}
+      # kustomize: {}
 
   project: default
   syncPolicy:

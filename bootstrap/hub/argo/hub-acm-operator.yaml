@@ -13,7 +13,7 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: argocd/openshift/advanced-cluster-management/operator/overlays/release-2.17/
-      kustomize: {}
+      # kustomize: {}
 
   project: default
   syncPolicy:

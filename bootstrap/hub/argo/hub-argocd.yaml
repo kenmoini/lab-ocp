@@ -13,7 +13,7 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: argocd/openshift/openshift-gitops/instance/overlays/hub-cluster/
-      kustomize: {}
+      # kustomize: {}
 
   project: default
   syncPolicy:

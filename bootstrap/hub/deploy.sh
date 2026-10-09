@@ -43,6 +43,8 @@ until [ "$(oc get -n openshift-gitops statefulset/openshift-gitops-application-c
   sleep 10
 done
 
+oc apply -k ../../argocd/openshift/openshift-gitops/instance/overlays/hub-cluster/
+
 # Apply the ArgoCD Application to self-configure ArgoCD
 oc apply -f bootstrap-application.yaml
 
@@ -50,13 +52,14 @@ until $(oc get managedclusters.cluster.open-cluster-management.io/hub-cluster &>
 
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster location=kemo-labs-rdu
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster community-eso=enabled
-oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/vlan-stacks=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/egress-ips=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster nvidia-gpu=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster virtualization=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster hcpServices=enabled
 oc label managedclusters.cluster.open-cluster-management.io/hub-cluster rhLoki=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster cluster-gitops-config=enabled
+oc label managedclusters.cluster.open-cluster-management.io/hub-cluster policy.kemo.dev/truenas-csi=enabled
 # oc label managedclusters.cluster.open-cluster-management.io/hub-cluster policy.kemo.dev/openshift-ai=enabled
 
 # oc label managedclusters.cluster.open-cluster-management.io/hub-cluster appset/kyverno=enabled

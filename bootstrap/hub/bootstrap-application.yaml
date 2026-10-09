@@ -24,7 +24,7 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: bootstrap/hub/argo/
-      kustomize: {}
+      # kustomize: {}
   project: default
   syncPolicy:
     syncOptions:

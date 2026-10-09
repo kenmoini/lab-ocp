@@ -13,11 +13,11 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: rhacm/targeted-policies/
-      kustomize: {}
+      # kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: rhacm/targeted-placements/
-      kustomize: {}
+      # kustomize: {}
 
   project: default
   syncPolicy:

@@ -13,11 +13,11 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: argocd/openshift/nmstate/operator/overlays/stable/
-      kustomize: {}
+      # kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: argocd/openshift/local-storage/operator/overlays/stable/
-      kustomize: {}
+      # kustomize: {}
     # - repoURL: 'https://github.com/kenmoini/lab-ocp'
     #   targetRevision: main
     #   path: argocd/openshift/openshift-data-foundation-operator/operator/overlays/stable-4.21/
@@ -25,7 +25,7 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: argocd/openshift/nmstate/instance/overlays/default/
-      kustomize: {}
+      # kustomize: {}
   project: default
   syncPolicy:
     syncOptions:

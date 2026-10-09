@@ -13,7 +13,7 @@ spec:
     - repoURL: 'https://github.com/kenmoini/smart-drone-patterns/'
       targetRevision: main
       path: apps/simple-chat/deployment/overlays/persistent/
-      kustomize: {}
+      # kustomize: {}
 
   project: default
   syncPolicy:

@@ -18,11 +18,11 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: clusters/hub-cluster/infrastructure/storage/networking/
-      kustomize: {}
+      # kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: clusters/hub-cluster/infrastructure/storage/lso/
-      kustomize: {}
+      # kustomize: {}
     # - repoURL: 'https://github.com/kenmoini/lab-ocp'
     #   targetRevision: main
     #   path: clusters/hub-cluster/infrastructure/storage/odf/

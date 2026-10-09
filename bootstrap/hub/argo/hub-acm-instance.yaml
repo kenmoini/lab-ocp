@@ -26,7 +26,7 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: argocd/openshift/advanced-cluster-management/instance/base/
-      kustomize: {}
+      # kustomize: {}
 
   project: default
   syncPolicy:
