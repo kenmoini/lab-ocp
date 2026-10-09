@@ -6,6 +6,8 @@ metadata:
   name: github-arc
   namespace: openshift-gitops
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
         generators:
@@ -29,7 +31,7 @@ spec:
                 helmRevision: 0.14.2
   template:
     metadata:
-      name: "{{name}}-{{appName}}"
+      name: "{{.name}}-{{.appName}}"
       annotations:
         argocd.argoproj.io/manifest-generate-paths: ".;.."
         argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
@@ -41,22 +43,22 @@ spec:
           kind: CustomResourceDefinition
       project: default
       sources:
-        - chart: '{{helmChartName}}'
-          repoURL: '{{helmRepoURL}}'
-          targetRevision: '{{helmRevision}}'
+        - chart: '{{.helmChartName}}'
+          repoURL: '{{.helmRepoURL}}'
+          targetRevision: '{{.helmRevision}}'
           helm:
-            releaseName: '{{appName}}'
+            releaseName: '{{.appName}}'
             valuesObject:
               metrics:
                 controllerManagerAddr: ":8080"
                 listenerAddr: ":8080"
                 listenerEndpoint: "/metrics"
 
-        - chart: '{{scaleSetHelmChartName}}'
-          repoURL: '{{helmRepoURL}}'
-          targetRevision: '{{helmRevision}}'
+        - chart: '{{.scaleSetHelmChartName}}'
+          repoURL: '{{.helmRepoURL}}'
+          targetRevision: '{{.helmRevision}}'
           helm:
-            releaseName: '{{scaleSetAppName}}'
+            releaseName: '{{.scaleSetAppName}}'
             parameters:
               - name: "githubConfigSecret"
                 value: kemo-labs-ocp-arc
@@ -225,13 +227,14 @@ spec:
                               requests:
                                 storage: 10Gi
             #valueFiles:
-            #  - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
+            #  - "$values/clusters/{{.name}}/helm-values/{{.appName}}.yaml"
         #- ref: values
         #  repoURL: 'https://github.com/kenmoini/lab-ocp'
         #  targetRevision: main
       destination:
-        name: "{{name}}"
-        namespace: "{{namespace}}"
+        name: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{else}}{{.name}}{{end}}'
+        #name: "{{name}}"
+        namespace: "{{.namespace}}"
       syncPolicy:
         # managedNamespaceMetadata:
         #   labels: # The labels to set on the application namespace
