@@ -135,7 +135,7 @@ spec:
                         - mountPath: /etc/pki/ca-trust/extracted/pem
                           name: ca-certs
                           readOnly: true
-                        - name: docker-sock
+                        - name: docker-socket
                           mountPath: /var/run/docker
                         - name: docker-graph-storage
                           mountPath: /var/lib/docker
@@ -153,52 +153,54 @@ spec:
                         failureThreshold: 10
 
                   containers:
-                  - name: runner
-                    image: ghcr.io/actions/actions-runner:latest
-                    # image: quay.io/kenmoini/gha-runner-ubuntu:latest
-                    command: ["/home/runner/run.sh"]
-                    imagePullPolicy: Always
-                    securityContext:
-                      procMount: Unmasked
-                      allowPrivilegeEscalation: false
-                      capabilities:
-                        drop:
-                          - ALL
-                      runAsNonRoot: true
-                      runAsUser: 1001
-                      runAsGroup: 123
-                    env:
-                      - name: ACTIONS_RUNNER_CONTAINER_HOOKS
-                        value: /home/runner/k8s/index.js
-                      - name: ACTIONS_RUNNER_POD_NAME
-                        valueFrom:
-                          fieldRef:
-                            fieldPath: metadata.name
-                      - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
-                        value: "false"
-                      # - name: RUNNER_NAME
-                      #   valueFrom:
-                      #     fieldRef:
-                      #       fieldPath: metadata.name
-                      # - name: RUNNER_REPO
-                      #   value: "github.com/kenmoini/lab-ocp"
-                      # - name: RUNNER_TOKEN
-                      #   value: "$ACTIONS_RUNNER_INPUT_JITCONFIG"
-                      - name: DOCKER_TLS_CERTDIR
-                        value: ""
-                      - name: DOCKER_HOST
-                        value: unix:///var/run/docker/docker.sock
-                      # - name: DOCKER_TLS_VERIFY
-                      #   value: "1"
-                    volumeMounts:
-                      - name: docker-graph-storage
-                        mountPath: /var/lib/docker
-                      # - name: docker-certs
-                      #   mountPath: /certs
-                      - name: work
-                        mountPath: /home/runner/_work
-                      # - name: tmpwork
-                      #   mountPath: /runner
+                    - name: runner
+                      image: ghcr.io/actions/actions-runner:latest
+                      # image: quay.io/kenmoini/gha-runner-ubuntu:latest
+                      command: ["/home/runner/run.sh"]
+                      imagePullPolicy: Always
+                      securityContext:
+                        procMount: Unmasked
+                        allowPrivilegeEscalation: false
+                        capabilities:
+                          drop:
+                            - ALL
+                        runAsNonRoot: true
+                        runAsUser: 1001
+                        runAsGroup: 123
+                      env:
+                        - name: ACTIONS_RUNNER_CONTAINER_HOOKS
+                          value: /home/runner/k8s/index.js
+                        - name: ACTIONS_RUNNER_POD_NAME
+                          valueFrom:
+                            fieldRef:
+                              fieldPath: metadata.name
+                        - name: ACTIONS_RUNNER_REQUIRE_JOB_CONTAINER
+                          value: "false"
+                        # - name: RUNNER_NAME
+                        #   valueFrom:
+                        #     fieldRef:
+                        #       fieldPath: metadata.name
+                        # - name: RUNNER_REPO
+                        #   value: "github.com/kenmoini/lab-ocp"
+                        # - name: RUNNER_TOKEN
+                        #   value: "$ACTIONS_RUNNER_INPUT_JITCONFIG"
+                        - name: DOCKER_TLS_CERTDIR
+                          value: ""
+                        - name: DOCKER_HOST
+                          value: unix:///var/run/docker/docker.sock
+                        # - name: DOCKER_TLS_VERIFY
+                        #   value: "1"
+                      volumeMounts:
+                        - name: docker-graph-storage
+                          mountPath: /var/lib/docker
+                        - name: docker-socket
+                          mountPath: /var/run/docker
+                        # - name: docker-certs
+                        #   mountPath: /certs
+                        - name: work
+                          mountPath: /home/runner/_work
+                        # - name: tmpwork
+                        #   mountPath: /runner
                   volumes:
                     # - name: tmpwork
                     #   emptyDir: {}
