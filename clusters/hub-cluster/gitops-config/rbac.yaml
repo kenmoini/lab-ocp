@@ -13,11 +13,11 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: configuration/rbac/groups/
-      kustomize: {}
+      # kustomize: {}
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: configuration/rbac/roles/
-      kustomize: {}
+      # kustomize: {}
 
   project: default
   syncPolicy:

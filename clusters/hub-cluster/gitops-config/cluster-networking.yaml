@@ -13,7 +13,7 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: clusters/hub-cluster/infrastructure/networking/
-      kustomize: {}
+      # kustomize: {}
 
   project: default
   syncPolicy:
