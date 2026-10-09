@@ -1,0 +1,3 @@
+[worker.oci]
+  # Specify crun as the alternate OCI worker binary name
+  binary = "crun"

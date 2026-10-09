@@ -101,6 +101,7 @@ RUN \
 
 COPY daemon.json /etc/docker/daemon.json
 COPY dind /usr/local/bin/dind
+COPY buildkitd.toml /etc/buildkit/buildkitd.toml
 COPY --chown=0:0 setup-cgroups.sh /
 COPY dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
 RUN chmod +x /usr/local/bin/dind \
