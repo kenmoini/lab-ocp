@@ -69,32 +69,87 @@ spec:
             valuesObject:
               runnerScaleSetName: tri-force # This is what the runs-on should be in the GHA Workflow
               template:
+                metadata:
+                  annotations:
+                    openshift.io/scc: nested-container-arc
+                    io.kubernetes.cri-o.Devices: "/dev/fuse,/dev/net/tun"
+                    io.kubernetes.cri-o.cgroup2-mount-hierarchy-rw: 'true'
                 spec:
                   hostUsers: false # Enable User Namespaces
                   initContainers:
-                  - name: docker
-                    image: docker.io/library/docker:29.8-dind
-                    imagePullPolicy: Always
-                    restartPolicy: Always
-                    securityContext:
-                      runAsNonRoot: false
-                      runAsUser: 0
-                      runAsGroup: 0
-                      procMount: Unmasked
-                      privileged: true
-                    env:
-                      - name: DOCKER_TLS_CERTDIR
-                        value: /certs
-                    volumeMounts:
-                      - name: docker-graph-storage
-                        mountPath: /var/lib/docker
-                      - name: docker-certs
-                        mountPath: /certs
-                    startupProbe:
-                      exec:
-                        command: ["docker", "info"]
-                      periodSeconds: 2
-                      failureThreshold: 10
+                    # Native Sidecar: Docker Daemon (DinD)
+                    - name: dind-daemon
+                      image: quay.io/kenmoini/fedora-dind:latest
+                      imagePullPolicy: Always
+                      securityContext:
+                        # Used for User Namespaces in OpenShift
+                        procMount: Unmasked
+                        privileged: true
+                        runAsUser: 0
+                        runAsGroup: 0
+                        runAsNonRoot: false
+                        seccompProfile: { type: Unconfined }
+                        capabilities:
+                          add:
+                          - "SETUID"
+                          - "SETGID"
+                          - "SYS_ADMIN"
+                          - "NET_ADMIN"
+                          - "MKNOD"
+                          - "CHOWN"
+                      env:
+                        - name: DOCKER_CERT_PATH
+                          value: ""
+                        - name: DOCKER_TLS_CERTDIR
+                          value: ""
+                        - name: DOCKER_BUILDKIT_RUNC_COMMAND
+                          value: "crun"
+                        - name: BUILDKIT_SETUP_CGROUPV2_ROOT
+                          value: "0"
+                        - name: KUBERNETES_NAMESPACE
+                          valueFrom:
+                            fieldRef:
+                              fieldPath: metadata.namespace
+                      command:
+                        - sh
+                        - -c
+                        - |
+                          # Disable IPv6 if you want
+                          /bin/sysctl -w net.ipv6.conf.all.disable_ipv6=1
+                          /bin/sysctl -w net.ipv6.conf.default.disable_ipv6=1
+                          
+                          # I have no idea what this does but it's needed
+                          CG=$(sed 's#^0::##' /proc/self/cgroup)
+                          mount --bind /sys/fs/cgroup$CG /sys/fs/cgroup
+                          exec dockerd-entrypoint.sh "$@"
+                        - --
+                      args:
+                        - --host=unix:///var/run/docker/docker.sock
+                        #- --host=tcp://0.0.0.0:2375 # non-TLS port for Docker daemon
+                        #- --host=tcp://0.0.0.0:2376 # TLS port for Docker daemon
+                        - --mtu=1400                   # avoids packet drops under the OVN overlay
+                        - --tls=false  # disables the TLS for simple testing without needing to gen/share certs
+                      volumeMounts:
+                        - mountPath: /etc/pki/ca-trust/extracted/pem
+                          name: ca-certs
+                          readOnly: true
+                        - name: docker-sock
+                          mountPath: /var/run/docker
+                        - name: docker-graph-storage
+                          mountPath: /var/lib/docker
+                        # - name: docker-certs
+                        #   mountPath: /certs
+                      # Setting restartPolicy to Always defines this as a native sidecar container
+                      restartPolicy: Always
+                      tty: true
+                      resources:
+                        limits: { cpu: "2", memory: 4Gi, ephemeral-storage: 20Gi }
+                      startupProbe:
+                        exec:
+                          command: ["docker", "-H", "unix:///var/run/docker/docker.sock", "info"]
+                        periodSeconds: 2
+                        failureThreshold: 10
+
                   containers:
                   - name: runner
                     image: ghcr.io/actions/actions-runner:latest
@@ -128,12 +183,16 @@ spec:
                       # - name: RUNNER_TOKEN
                       #   value: "$ACTIONS_RUNNER_INPUT_JITCONFIG"
                       - name: DOCKER_TLS_CERTDIR
-                        value: /certs
+                        value: ""
+                      - name: DOCKER_HOST
+                        value: unix:///var/run/docker/docker.sock
+                      # - name: DOCKER_TLS_VERIFY
+                      #   value: "1"
                     volumeMounts:
                       - name: docker-graph-storage
                         mountPath: /var/lib/docker
-                      - name: docker-certs
-                        mountPath: /certs
+                      # - name: docker-certs
+                      #   mountPath: /certs
                       - name: work
                         mountPath: /home/runner/_work
                       # - name: tmpwork
@@ -141,11 +200,20 @@ spec:
                   volumes:
                     # - name: tmpwork
                     #   emptyDir: {}
-                    # Shared volume to exchange TLS certs and connection sockets
+                    - name: docker-socket
+                      emptyDir: {}
                     - name: docker-graph-storage
                       emptyDir: {}
-                    - name: docker-certs
-                      emptyDir: {}
+                    # Shared volume to exchange TLS certs
+                    # - name: docker-certs
+                    #   emptyDir: {}
+                    # Used on OpenShift for automatic CA certificate injection
+                    - name: ca-certs
+                      configMap:
+                        name: ca-certs
+                        items:
+                          - key: ca-bundle.crt
+                            path: tls-ca-bundle.pem
                     # Work volume for the runner
                     - name: work
                       ephemeral:
