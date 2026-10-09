@@ -35,6 +35,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v7
 
+      # Not needed since the DIND daemon image already has this installed
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v4
 
@@ -69,3 +70,24 @@ jobs:
           context: ${{ env.BUILD_CONTEXT_PATH }}
           file: ${{ env.CONTAINERFILE_PATH }}
           labels: ${{ steps.meta.outputs.labels }}
+          provenance: false
+          #push: true
+          #platforms: linux/amd64, linux/arm64
+          #provenance: mode=max
+          #sbom: true
+          #cache-from: type=gha
+          #cache-to: type=gha,mode=max
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v7
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
