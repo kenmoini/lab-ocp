@@ -31,6 +31,8 @@ jobs:
       - name: Prepare
         run: |
           echo "Hello from a GitHub Actions workflow"
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
 
       - name: Check out code
         uses: actions/checkout@v7
