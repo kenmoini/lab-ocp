@@ -6,6 +6,8 @@ metadata:
   name: ztp-sync
   namespace: openshift-gitops
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
         generators:
@@ -22,7 +24,7 @@ spec:
               - appName: ztp-sync
   template:
     metadata:
-      name: "{{name}}-{{appName}}"
+      name: "{{.name}}-{{.appName}}"
       annotations:
         argocd.argoproj.io/manifest-generate-paths: ".;.."
         argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
@@ -45,11 +47,12 @@ spec:
       sources:
         - repoURL: 'https://github.com/kenmoini/lab-ocp'
           ## Path is the repo directory that containers the cluster(s) configuration and deployment manifests
-          path: ztp-clusters/{{name}}/argo/
+          path: ztp-clusters/{{.name}}/argo/
           directory:
             recurse: false
       destination:
-        name: "{{name}}"
+        name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
+        server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
       syncPolicy:
         automated:
           prune: true

@@ -6,6 +6,8 @@ metadata:
   name: hub-dev-services
   namespace: openshift-gitops
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
         generators:
@@ -27,7 +29,7 @@ spec:
                 namespace: openshift-gitops
   template:
     metadata:
-      name: "{{name}}-{{appName}}"
+      name: "{{.name}}-{{.appName}}"
       annotations:
         argocd.argoproj.io/manifest-generate-paths: ".;.."
         argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
@@ -53,8 +55,10 @@ spec:
           path: tekton/
     
       destination:
-        name: "{{name}}"
-        namespace: "{{namespace}}"
+        #name: "{{name}}"
+        name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
+        server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
+        namespace: "{{.namespace}}"
       syncPolicy:
         automated:
           prune: true

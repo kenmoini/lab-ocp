@@ -6,6 +6,8 @@ metadata:
   name: democratic-csi-nfs
   namespace: openshift-gitops
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
         generators:
@@ -22,24 +24,25 @@ spec:
                 helmRevision: 0.15.0
   template:
     metadata:
-      name: "{{name}}-{{appName}}"
+      name: "{{.name}}-{{.appName}}"
       annotations:
         argocd.argoproj.io/manifest-generate-paths: ".;.."
     spec:
       project: default
       sources:
-        - chart: '{{helmChartName}}'
+        - chart: '{{.helmChartName}}'
           helm:
             valueFiles:
-              - "$values/clusters/{{name}}/helm-values/democratic-csi-nfs.yaml"
-          repoURL: '{{helmRepoURL}}'
-          targetRevision: '{{helmRevision}}'
+              - "$values/clusters/{{.name}}/helm-values/democratic-csi-nfs.yaml"
+          repoURL: '{{.helmRepoURL}}'
+          targetRevision: '{{.helmRevision}}'
         - ref: values
           repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
       destination:
-        name: "{{name}}"
-        namespace: "{{namespace}}"
+        name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
+        server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
+        namespace: "{{.namespace}}"
       syncPolicy:
         automated:
           prune: true
