@@ -232,9 +232,9 @@ spec:
         #  repoURL: 'https://github.com/kenmoini/lab-ocp'
         #  targetRevision: main
       destination:
+        #name: "{{name}}"
         name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
         server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
-        #name: "{{name}}"
         namespace: "{{.namespace}}"
       syncPolicy:
         # managedNamespaceMetadata:

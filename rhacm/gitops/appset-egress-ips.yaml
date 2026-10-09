@@ -6,6 +6,8 @@ metadata:
   name: egress-ips
   namespace: openshift-gitops
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
         generators:
@@ -19,25 +21,27 @@ spec:
                 helmRepoURL: 'https://github.com/kenmoini/helm-things'
                 helmChartPath: 'egressip'
                 valuesRepo: 'https://github.com/kenmoini/lab-ocp'
-                valuesPath: "$values/clusters/{{name}}/helm-values/egressips.yaml"
+                valuesPath: "$values/clusters/{{.name}}/helm-values/egressips.yaml"
   template:
     metadata:
-      name: "{{name}}-{{appName}}"
+      name: "{{.name}}-{{.appName}}"
       annotations:
         argocd.argoproj.io/manifest-generate-paths: ".;.."
     spec:
       project: default
       sources:
-        - repoURL: '{{helmRepoURL}}'
-          path: '{{helmChartPath}}'
+        - repoURL: '{{.helmRepoURL}}'
+          path: '{{.helmChartPath}}'
           helm:
             valueFiles:
-              - "{{valuesPath}}"
+              - "{{.valuesPath}}"
         - ref: values
-          repoURL: '{{valuesRepo}}'
+          repoURL: '{{.valuesRepo}}'
           targetRevision: HEAD
       destination:
-        name: "{{name}}"
+        #name: "{{name}}"
+        name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
+        server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
       syncPolicy:
         automated:
           prune: true

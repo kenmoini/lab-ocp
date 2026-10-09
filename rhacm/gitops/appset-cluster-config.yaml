@@ -6,6 +6,8 @@ metadata:
   name: cluster-config
   namespace: openshift-gitops
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
     - matrix:
         generators:
@@ -25,7 +27,7 @@ spec:
                 namespace: openshift-gitops
   template:
     metadata:
-      name: "{{name}}-{{appName}}"
+      name: "{{.name}}-{{.appName}}"
       annotations:
         argocd.argoproj.io/manifest-generate-paths: ".;.."
         argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
@@ -49,11 +51,13 @@ spec:
         - kustomize: {}
           repoURL: 'https://github.com/kenmoini/lab-ocp'
           ## Path is the repo directory that containers the cluster(s) configuration and deployment manifests
-          path: clusters/{{name}}/gitops-config/
+          path: clusters/{{.name}}/gitops-config/
     
       destination:
-        name: "{{name}}"
-        namespace: "{{namespace}}"
+        #name: "{{name}}"
+        name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
+        server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
+        namespace: "{{.namespace}}"
       syncPolicy:
         automated:
           prune: false
