@@ -37,7 +37,7 @@ metadata:
   namespace: openshift-gitops
 spec:
   argoServer:
-    cluster: local-cluster
+    # cluster: local-cluster
     argoNamespace: openshift-gitops
   placementRef:
     kind: Placement
@@ -45,7 +45,7 @@ spec:
     name: gitops-clusters
     namespace: openshift-gitops
   # idk yet
-  gitopsAddon:
-    enabled: false
-    argoCDAgent:
-      enabled: false
+  # gitopsAddon:
+  #   enabled: false
+  #   argoCDAgent:
+  #     enabled: false
