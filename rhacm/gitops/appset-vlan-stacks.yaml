@@ -21,7 +21,7 @@ spec:
                 helmRepoURL: 'https://github.com/kenmoini/helm-things'
                 helmChartPath: 'ocp-networking'
                 valuesRepo: 'https://github.com/kenmoini/lab-ocp'
-                valuesPath: "$values/clusters/{{name}}/helm-values/vlanstacks.yaml"
+                valuesPath: "$values/clusters/{{.name}}/helm-values/vlanstacks.yaml"
   template:
     metadata:
       name: "{{.name}}-{{.appName}}"
