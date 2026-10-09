@@ -160,6 +160,7 @@ spec:
                       imagePullPolicy: Always
                       securityContext:
                         procMount: Unmasked
+                        privileged: true
                         allowPrivilegeEscalation: true
                         # capabilities:
                         #   drop:
