@@ -39,8 +39,15 @@ spec:
         - chart: '{{.helmChartName}}'
           helm:
             valuesObject:
-              route:
+              controller:
+                route:
+                  enabled: true
+              additionalPlugins:
+                - stackrox-container-image-scanner:1.4.5
+              initializeOnce: false
+              persistence:
                 enabled: true
+                size: "10Gi"
               rbac:
                 useOpenShiftNonRootSCC: true
           repoURL: '{{.helmRepoURL}}'
