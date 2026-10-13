@@ -62,6 +62,8 @@ RUN update-ca-trust && \
     vi vim nano \
     # developer tools
     tar git procps jq && \
+    # container tools
+    skopeo && \
     microdnf -y clean all && \
     pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests boto3
 
