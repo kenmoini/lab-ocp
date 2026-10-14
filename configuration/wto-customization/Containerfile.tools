@@ -50,6 +50,7 @@ COPY root-ca/* /etc/pki/ca-trust/source/anchors/
 # COPY --from=gobuilder /tmp/go/k9s/execs/k9s /usr/local/bin/k9s
 
 # Setup environment and install base packages
+COPY google-cloud.repo /etc/yum.repos.d/google-cloud-sdk.repo
 RUN update-ca-trust && \
     mkdir -p /home/user $INITIAL_CONFIG $WRAPPER_BINARIES $DOWNLOADED_BINARIES && \
     microdnf update -y --disablerepo=* --enablerepo=ubi-10-appstream-rpms --enablerepo=ubi-10-baseos-rpms --enablerepo=ubi-10-codeready-builder-rpms && \
@@ -67,9 +68,8 @@ RUN update-ca-trust && \
     microdnf -y clean all && \
     pip3 install yq ansible kubernetes jmespath jsonpatch openshift PyYAML requests boto3
 
-# Install the Cloud CLIs
-COPY google-cloud.repo /etc/yum.repos.d/google-cloud-sdk.repo
-RUN microdnf install -y google-cloud-cli
+# Install the Google Cloud CLIs
+RUN microdnf install -y --disablerepo=* --enablerepo=google-cloud-cli --enablerepo=ubi-10-appstream-rpms --enablerepo=ubi-10-baseos-rpms --enablerepo=ubi-10-codeready-builder-rpms google-cloud-cli
 
 # Install Azure CLI
 RUN wget https://packages.microsoft.com/keys/microsoft-2025.asc && \
@@ -78,7 +78,7 @@ RUN wget https://packages.microsoft.com/keys/microsoft-2025.asc && \
     wget https://packages.microsoft.com/config/rhel/10/packages-microsoft-prod.rpm && \
     rpm -Uvh packages-microsoft-prod.rpm && \
     rm -f packages-microsoft-prod.rpm && \
-    microdnf install -y azure-cli && \
+    microdnf install -y --disablerepo=rhel-10-for-aarch64-baseos-rpms --disablerepo=rhel-10-for-aarch64-appstream-rpms azure-cli && \
     rm -rf /home/user/.azure
 
 # Install AWS CLI v2
