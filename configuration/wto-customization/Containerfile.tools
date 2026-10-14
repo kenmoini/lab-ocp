@@ -78,7 +78,7 @@ RUN wget https://packages.microsoft.com/keys/microsoft-2025.asc && \
     wget https://packages.microsoft.com/config/rhel/10/packages-microsoft-prod.rpm && \
     rpm -Uvh packages-microsoft-prod.rpm && \
     rm -f packages-microsoft-prod.rpm && \
-    microdnf install -y --disablerepo=rhel-10-for-aarch64-baseos-rpms --disablerepo=rhel-10-for-aarch64-appstream-rpms azure-cli && \
+    microdnf install -y --disablerepo=* --enablerepo=packages-microsoft-com-prod --enablerepo=ubi-10-appstream-rpms --enablerepo=ubi-10-baseos-rpms --enablerepo=ubi-10-codeready-builder-rpms azure-cli && \
     rm -rf /home/user/.azure
 
 # Install AWS CLI v2
