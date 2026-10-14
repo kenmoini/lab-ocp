@@ -25,6 +25,9 @@ spec:
       name: "{{name}}-{{appName}}"
       annotations:
         argocd.argoproj.io/manifest-generate-paths: ".;.."
+      finalizers:
+        # The set foreground cascading deletion
+        - resources-finalizer.argocd.argoproj.io
     spec:
       project: default
       sources:
