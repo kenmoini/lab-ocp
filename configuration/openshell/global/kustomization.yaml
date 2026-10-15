@@ -4,3 +4,5 @@ kind: Kustomization
 
 resources:
   - userns-rbac.yaml
+  - certificate.yaml
+  - gateway.yaml

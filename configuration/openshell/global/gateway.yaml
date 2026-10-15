@@ -1,0 +1,23 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: openshell-gateway
+  namespace: openshift-ingress
+spec:
+  gatewayClassName: openshift-default
+  listeners:
+    - name: grpc
+      hostname: "openshell-gw.lab.kemo.network"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: openshell-gw-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: openshell
