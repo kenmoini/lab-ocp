@@ -38,11 +38,11 @@ spec:
         - repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
           path: configuration/virtualization/templates/
-          kustomize: {}
+          # kustomize: {}
         - repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
           path: configuration/virtualization/migration/
-          kustomize: {}
+          # kustomize: {}
       destination:
         name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
         server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
