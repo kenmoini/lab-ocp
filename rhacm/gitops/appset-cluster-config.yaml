@@ -13,14 +13,13 @@ spec:
         generators:
           - clusters:
               selector:
-                # matchExpressions:
-                # - key: cluster-gitops-config
-                #   operator: In
-                #   values:
-                #   - enabled
-                #   - "true"
-                matchLabels:
-                  cluster-gitops-config: enabled
+                matchExpressions:
+                  - key: cluster-gitops-config
+                    operator: In
+                    values:
+                    - "true"
+                    - "enable"
+                    - "enabled"
           - list:
               elements:
               - appName: cluster-config

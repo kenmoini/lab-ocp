@@ -11,8 +11,13 @@ spec:
         generators:
           - clusters:
               selector:
-                matchLabels:
-                  appset/helm-vault: enabled
+                matchExpressions:
+                  - key: appset/helm-vault
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
           - list:
               elements:
               - appName: vault

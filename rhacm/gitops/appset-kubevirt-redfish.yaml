@@ -14,8 +14,9 @@ spec:
                   - key: virtualization
                     operator: In
                     values:
-                      - enabled
                       - "true"
+                      - "enable"
+                      - "enabled"
           - list:
               elements:
               - appName: kubevirt-redfish

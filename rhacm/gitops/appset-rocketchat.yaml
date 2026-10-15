@@ -10,8 +10,13 @@ spec:
         generators:
           - clusters:
               selector:
-                matchLabels:
-                  appset/helm-rocketchat: enabled
+                matchExpressions:
+                  - key: appset/helm-rocketchat
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
           - list:
               elements:
               - appName: rocketchat

@@ -11,8 +11,13 @@ spec:
         generators:
           - clusters:
               selector:
-                matchLabels:
-                  appset/helm-kagent: enabled
+                matchExpressions:
+                  - key: appset/helm-kagent
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
           - list:
               elements:
               - appName: kagent-crds

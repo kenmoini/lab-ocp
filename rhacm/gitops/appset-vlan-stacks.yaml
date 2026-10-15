@@ -13,8 +13,13 @@ spec:
         generators:
           - clusters:
               selector:
-                matchLabels:
-                  appset/vlan-stacks: enabled
+                matchExpressions:
+                  - key: appset/vlan-stacks
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
           - list:
               elements:
               - appName: vlan-stacks

@@ -11,8 +11,13 @@ spec:
         generators:
           - clusters:
               selector:
-                matchLabels:
-                  appset/ext-xks-argocd: enabled
+                matchExpressions:
+                  - key: appset/ext-xks-argocd
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
           - list:
               elements:
               - appName: argocd

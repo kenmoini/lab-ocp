@@ -14,15 +14,16 @@ spec:
           - clusters:
               selector:
                 matchExpressions:
-                - key: virtualization
-                  operator: In
-                  values:
-                  - enabled
-                  - "true"
+                  - key: virtualization
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
           - list:
               elements:
-              - appName: hydrate-virt
-                namespace: openshift-gitops
+                - appName: hydrate-virt
+                  namespace: openshift-gitops
   template:
     metadata:
       name: "{{.name}}-{{.appName}}"

@@ -17,8 +17,9 @@ spec:
                 - key: policy.kemo.dev/openshift-ai
                   operator: In
                   values:
-                  - enabled
-                  - "true"
+                    - "true"
+                    - "enable"
+                    - "enabled"
           - list:
               elements:
               - appName: hydrate-rhoai

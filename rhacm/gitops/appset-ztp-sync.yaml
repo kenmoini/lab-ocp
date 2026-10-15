@@ -14,14 +14,15 @@ spec:
           - clusters:
               selector:
                 matchExpressions:
-                - key: hcpServices
-                  operator: In
-                  values:
-                  - enabled
-                  - "true"
+                  - key: hcpServices
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
           - list:
               elements:
-              - appName: ztp-sync
+                - appName: ztp-sync
   template:
     metadata:
       name: "{{.name}}-{{.appName}}"
