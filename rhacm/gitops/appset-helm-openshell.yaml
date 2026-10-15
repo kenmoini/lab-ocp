@@ -67,12 +67,15 @@ spec:
         name: "{{.name}}"
         namespace: "{{.namespace}}"
       syncPolicy:
-        # managedNamespaceMetadata:
-        #   labels: # The labels to set on the application namespace
-        #     security.openshift.io/scc.podSecurityLabelSync: 'false'
-        #     pod-security.kubernetes.io/enforce: privileged
-        #     pod-security.kubernetes.io/audit: privileged
-        #     pod-security.kubernetes.io/warn: privileged
+        managedNamespaceMetadata:
+          annotations:
+            openshift.io/sa.scc.supplemental-groups: 1000/165537
+            openshift.io/sa.scc.uid-range: 1000/165537
+          # labels: # The labels to set on the application namespace
+          #   security.openshift.io/scc.podSecurityLabelSync: 'false'
+          #   pod-security.kubernetes.io/enforce: privileged
+          #   pod-security.kubernetes.io/audit: privileged
+          #   pod-security.kubernetes.io/warn: privileged
         automated:
           prune: true
           selfHeal: true
