@@ -63,8 +63,14 @@ spec:
               openshiftRoute:
                 enabled: true
                 # host: openshell.apps.tri-force.lab.kemo.network
+              supervisor:
+                topology: sidecar
+                sidecar:
+                  processBinaryAwareNetworkPolicy: true
               server:
-                enableUserNamespaces: true
+                # Use either Kata or User namespaces, cannot be both
+                defaultRuntimeClassName: kata
+                # enableUserNamespaces: true
                 tls:
                   enableMtls: false
                 credentialDrivers:
