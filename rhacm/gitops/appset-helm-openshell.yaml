@@ -71,6 +71,8 @@ spec:
                 # Use either Kata or User namespaces, cannot be both
                 defaultRuntimeClassName: kata
                 # enableUserNamespaces: true
+                auth:
+                  allowUnauthenticatedUsers: true
                 tls:
                   enableMtls: false
                 credentialDrivers:
