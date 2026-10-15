@@ -31,7 +31,7 @@ spec:
     spec:
       serviceAccountName: kata-install
       nodeSelector:
-        node-role.kubernetes.io/kata-oc: ""
+        node-role.kubernetes.io/worker: ""
       hostPID: true
       restartPolicy: Always
       volumes:
