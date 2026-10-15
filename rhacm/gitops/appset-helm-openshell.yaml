@@ -65,6 +65,8 @@ spec:
                 # host: openshell.apps.tri-force.lab.kemo.network
               server:
                 enableUserNamespaces: true
+                tls:
+                  enableMtls: false
                 credentialDrivers:
                   kubernetesSecrets:
                     enabled: true
