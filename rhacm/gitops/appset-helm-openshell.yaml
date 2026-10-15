@@ -47,7 +47,11 @@ spec:
         - chart: '{{.helmChartName}}'
           helm:
             valuesObject:
+              openshiftRoute:
+                enabled: true
+                # host: openshell.apps.tri-force.lab.kemo.network
               server:
+                enableUserNamespaces: true
                 credentialDrivers:
                   kubernetesSecrets:
                     enabled: true
