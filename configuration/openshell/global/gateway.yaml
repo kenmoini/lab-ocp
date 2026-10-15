@@ -13,7 +13,7 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - name: openshell-gw-tls
+          - name: openshell-gateway-tls
             kind: Secret
       allowedRoutes:
         namespaces:
