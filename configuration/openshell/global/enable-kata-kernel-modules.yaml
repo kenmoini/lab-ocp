@@ -13,6 +13,19 @@
 #   # Clean up after patching:
 #   oc delete -f kata-nftables-patch-job.yaml
 ---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: kata-install-privileged
+subjects:
+  - kind: ServiceAccount
+    name: kata-install
+    namespace: openshift-sandboxed-containers-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: 'system:openshift:scc:privileged'
+---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
