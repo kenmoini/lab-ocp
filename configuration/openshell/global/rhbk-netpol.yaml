@@ -1,0 +1,39 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-from-same-namespace
+  namespace: rhbk
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+        - podSelector: {}
+  policyTypes:
+    - Ingress
+---
+# This network policy allows ingress from the CNPG operator
+# installed in namespace cnpg-system into the pods corresponding
+# to a cluster named cluster-example
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cnpg-operator
+  namespace: rhbk
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg # or for all CNPG Clusters
+      # cnpg.io/cluster: openshell-sso-db # The label value must be the cluster name
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: openshift-certified-operators # Namespace where the operator is deployed
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudnative-pg # Matches the Operator pod
+      ports:
+        - port: 8000
+        - port: 5432
+
+# app.kubernetes.io/instance: openshell-sso-db

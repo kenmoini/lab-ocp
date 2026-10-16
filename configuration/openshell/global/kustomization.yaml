@@ -3,7 +3,31 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - configmap-gateway.yaml
+  - configmap-ca.yaml
   - userns-rbac.yaml
+  - enable-kata-kernel-modules.yaml
   - certificate.yaml
   - gateway.yaml
-  - enable-kata-kernel-modules.yaml
+  - rhbk-db.yaml
+  - rhbk-instance.yaml
+  - rhbk-realm-secrets.yaml
+  - rhbk-realm.yaml
+
+# openshell gateway add https://hub-cluster-openshell-openshell.apps.tri-force.lab.kemo.network --name tri-force \
+#   --oidc-issuer https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell \
+#   --oidc-client-id openshell-cli --oidc-audience openshell-cli
+
+# mkdir -p ~/.config/openshell/gateways/tri-force/mtls
+
+# oc -n openshell get secret openshell-client-tls \
+#   -o jsonpath='{.data.ca\.crt}'  | base64 -d > ~/.config/openshell/gateways/tri-force/mtls/ca.crt
+
+# oc -n openshell get secret openshell-client-tls \
+#   -o jsonpath='{.data.tls\.crt}' | base64 -d > ~/.config/openshell/gateways/tri-force/mtls/tls.crt
+
+# oc -n openshell get secret openshell-client-tls \
+#   -o jsonpath='{.data.tls\.key}' | base64 -d > ~/.config/openshell/gateways/tri-force/mtls/tls.key
+
+# chmod 700 ~/.config/openshell/gateways/tri-force/mtls
+# chmod 600 ~/.config/openshell/gateways/tri-force/mtls/tls.key

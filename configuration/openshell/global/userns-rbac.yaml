@@ -4,6 +4,8 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: openshell-userns-scc
+  annotations:
+    argocd.argoproj.io/sync-wave: "-15"
 subjects:
   - kind: ServiceAccount
     name: hub-cluster-openshell

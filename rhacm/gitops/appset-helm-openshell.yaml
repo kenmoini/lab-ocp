@@ -51,6 +51,11 @@ spec:
         - chart: '{{.helmChartName}}'
           helm:
             valuesObject:
+              certManager:
+                enabled: true
+                serverIssuerRef:
+                  name: letsencrypt-digitalocean
+                  kind: ClusterIssuer
               grpcRoute:
                 enabled: true
                 backendTLSPolicy:
@@ -59,7 +64,7 @@ spec:
                   name: openshell-gateway
                   namespace: openshift-ingress
                 hostnames:
-                  - openshell-gw.lab.kemo.network
+                  - openshell-gw.apps.tri-force.lab.kemo.network
               # gatewayConfig:
               #   openshell:
               #     gateway:

@@ -1,0 +1,298 @@
+---
+# KeycloakRealmImport for NVIDIA OpenShell
+#
+# API reference: https://www.keycloak.org/operator/realm-import
+#   - spec.keycloakCRName : Keycloak CR to import into (must be in the same namespace)
+#   - spec.realm          : a full RealmRepresentation
+#   - spec.placeholders   : map of ENV_KEY -> Secret ref; ${ENV_KEY} inside spec.realm is
+#                           substituted by the import Job. Secrets must live in this namespace.
+#
+# Notes:
+#   - v2beta1 was added upstream in Keycloak 26.6 (schema identical to v2alpha1). If the
+#     RHBK operator on the cluster does not serve v2beta1 for this CRD, change apiVersion
+#     to k8s.keycloak.org/v2alpha1 - nothing else needs to change.
+#   - The import only CREATES the realm. Edits after the first import are not applied;
+#     delete the realm in Keycloak (or change the realm name) to re-import.
+#   - Because this representation defines its own clientScopes, Keycloak would skip creating
+#     the built-in scopes (profile, email, roles, web-origins, acr, basic, offline_access...).
+#     The realm attribute `_create_default_client_scopes: "true"` forces them to be created.
+#
+# OpenShell gateway expectations (https://docs.nvidia.com/openshell/ -> Reference -> Gateway Auth):
+#   - issuer    : https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell
+#   - audience  : openshell-cli   (JWT `aud` must contain this -> audience mapper below)
+#   - roles     : realm_access.roles ; admin role `openshell-admin`, user role `openshell-user`
+#   - CLI login : Authorization Code + PKCE (S256) with a random-port loopback redirect
+#                 http://127.0.0.1:<port>/callback, or Device Authorization Grant when
+#                 OPENSHELL_NO_BROWSER=1, or Client Credentials when OPENSHELL_OIDC_CLIENT_SECRET is set.
+kind: KeycloakRealmImport
+apiVersion: k8s.keycloak.org/v2beta1
+metadata:
+  name: openshell-realm
+  labels:
+    app: openshell
+  namespace: rhbk
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  keycloakCRName: openshell
+  placeholders:
+    OPENSHELL_CI_CLIENT_SECRET:
+      secret:
+        name: openshell-sso-clients
+        key: ciClientSecret
+  realm:
+    id: openshell
+    realm: openshell
+    displayName: OpenShell
+    enabled: true
+    sslRequired: external
+    attributes:
+      _create_default_client_scopes: "true"
+
+    # Login / registration behaviour
+    registrationAllowed: false
+    loginWithEmailAllowed: true
+    duplicateEmailsAllowed: false
+    resetPasswordAllowed: false
+    editUsernameAllowed: false
+    bruteForceProtected: true
+
+    # Token / session lifetimes (seconds)
+    accessTokenLifespan: 300
+    ssoSessionIdleTimeout: 1800
+    ssoSessionMaxLifespan: 36000
+    offlineSessionIdleTimeout: 2592000
+    # Device Authorization Grant (RFC 8628) - used by `OPENSHELL_NO_BROWSER=1`
+    oauth2DeviceCodeLifespan: 600
+    oauth2DevicePollingInterval: 5
+
+    # ------------------------------------------------------------------
+    # Realm roles - the gateway reads these from the realm_access.roles claim
+    # ------------------------------------------------------------------
+    roles:
+      realm:
+        - name: openshell-admin
+          description: Full administrative access to OpenShell (provider CRUD, config, policy approvals)
+          composite: false
+          clientRole: false
+        - name: openshell-user
+          description: Standard user access to OpenShell (sandbox lifecycle, read-only provider/policy)
+          composite: false
+          clientRole: false
+        # Built-in roles referenced by the default role composite
+        - name: offline_access
+          composite: false
+          clientRole: false
+        - name: uma_authorization
+          composite: false
+          clientRole: false
+        # Every user in the realm gets openshell-user by default
+        - name: default-roles-openshell
+          composite: true
+          clientRole: false
+          composites:
+            realm:
+              - offline_access
+              - uma_authorization
+              - openshell-user
+    defaultRole:
+      name: default-roles-openshell
+
+    # ------------------------------------------------------------------
+    # Groups - assign users (or map an IdP) to these to grant roles
+    # ------------------------------------------------------------------
+    groups:
+      - name: openshell-admins
+        path: /openshell-admins
+        realmRoles:
+          - openshell-admin
+          - openshell-user
+      - name: openshell-users
+        path: /openshell-users
+        realmRoles:
+          - openshell-user
+
+    # ------------------------------------------------------------------
+    # Client scopes
+    # ------------------------------------------------------------------
+    clientScopes:
+      # Puts `openshell-cli` into the `aud` claim of every token issued through a client
+      # that has this scope. Keycloak does NOT add the client's own ID to `aud` by default,
+      # and the gateway rejects tokens whose aud does not match OPENSHELL_OIDC_AUDIENCE.
+      - name: openshell-audience
+        description: Adds the OpenShell gateway audience (openshell-cli) to issued tokens
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "false"
+          display.on.consent.screen: "false"
+        protocolMappers:
+          - name: openshell-cli audience
+            protocol: openid-connect
+            protocolMapper: oidc-audience-mapper
+            consentRequired: false
+            config:
+              included.client.audience: openshell-cli
+              id.token.claim: "true"
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+              lightweight.claim: "false"
+
+      # Fine-grained OpenShell scopes. Only enforced by the gateway when
+      # openshell.gateway.oidc.scopes_claim is set (e.g. to `scope`).
+      - name: sandbox:read
+        description: Read sandboxes
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: sandbox:write
+        description: Create, modify, and delete sandboxes
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: provider:read
+        description: Read inference providers
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: provider:write
+        description: Create, modify, and delete inference providers
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: config:read
+        description: Read gateway configuration and policy
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: config:write
+        description: Modify gateway configuration and approve policy
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: inference:read
+        description: Read inference requests
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: inference:write
+        description: Submit inference requests
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: workspace:read
+        description: Read workspaces
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: workspace:write
+        description: Create, modify, and delete workspaces
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+      - name: openshell:all
+        description: Wildcard - grants every OpenShell scope
+        protocol: openid-connect
+        attributes: { include.in.token.scope: "true", display.on.consent.screen: "true" }
+
+    # ------------------------------------------------------------------
+    # Clients
+    # ------------------------------------------------------------------
+    clients:
+      # Interactive CLI client: `openshell gateway add <url> --oidc-issuer ... --oidc-client-id openshell-cli`
+      - clientId: openshell-cli
+        name: OpenShell CLI
+        description: Public client for interactive openshell CLI login (Authorization Code + PKCE, Device Grant)
+        enabled: true
+        protocol: openid-connect
+        publicClient: true
+        standardFlowEnabled: true          # Authorization Code (+PKCE)
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: false   # password grant not used by the CLI
+        serviceAccountsEnabled: false
+        fullScopeAllowed: true             # realm roles end up in realm_access.roles
+        # The CLI binds 127.0.0.1:<random port> and redirects to /callback
+        redirectUris:
+          - "http://127.0.0.1:*"
+          - "http://localhost:*"
+        webOrigins:
+          - "http://127.0.0.1:*"
+          - "http://localhost:*"
+        attributes:
+          pkce.code.challenge.method: S256
+          oauth2.device.authorization.grant.enabled: "true"
+          post.logout.redirect.uris: "+"
+          use.refresh.tokens: "true"
+        defaultClientScopes:
+          - basic
+          - profile
+          - email
+          - roles
+          - web-origins
+          - acr
+          - openshell-audience
+        optionalClientScopes:
+          - offline_access
+          - sandbox:read
+          - sandbox:write
+          - provider:read
+          - provider:write
+          - config:read
+          - config:write
+          - inference:read
+          - inference:write
+          - workspace:read
+          - workspace:write
+          - openshell:all
+
+      # Automation / CI client: `OPENSHELL_OIDC_CLIENT_SECRET=... openshell gateway add ... --oidc-client-id openshell-ci`
+      - clientId: openshell-ci
+        name: OpenShell CI
+        description: Confidential client for CI / unattended agents (Client Credentials grant)
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        secret: "${OPENSHELL_CI_CLIENT_SECRET}"
+        standardFlowEnabled: false
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: true
+        fullScopeAllowed: true
+        attributes:
+          use.refresh.tokens: "false"
+        defaultClientScopes:
+          - basic
+          - profile
+          - email
+          - roles
+          - web-origins
+          - acr
+          - openshell-audience
+          - openshell:all
+
+    # ------------------------------------------------------------------
+    # Users
+    # ------------------------------------------------------------------
+    users:
+      # Service account for the CI client. Grant it admin so automation can manage providers/config;
+      # drop openshell-admin if CI should only drive sandboxes.
+      - username: service-account-openshell-ci
+        enabled: true
+        serviceAccountClientId: openshell-ci
+        realmRoles:
+          - openshell-admin
+          - openshell-user
+      # Example local users - uncomment for a quick smoke test, or federate an IdP instead
+      # - username: admin
+      #   enabled: true
+      #   email: admin@kemo.labs
+      #   emailVerified: true
+      #   firstName: OpenShell
+      #   lastName: Admin
+      #   credentials:
+      #     - type: password
+      #       value: changeme
+      #       temporary: true
+      #   groups:
+      #     - /openshell-admins
+      # - username: user1
+      #   enabled: true
+      #   email: user1@kemo.labs
+      #   emailVerified: true
+      #   firstName: User
+      #   lastName: One
+      #   credentials:
+      #     - type: password
+      #       value: changeme
+      #       temporary: true
+      #   groups:
+      #     - /openshell-users

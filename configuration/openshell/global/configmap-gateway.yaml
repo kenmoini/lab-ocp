@@ -1,0 +1,11 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: openshell-gateway-config
+  namespace: openshift-ingress
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+data:
+  service: |
+    spec:
+      type: ClusterIP

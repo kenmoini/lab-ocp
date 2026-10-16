@@ -17,6 +17,8 @@ kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: kata-install-privileged
+  annotations:
+    argocd.argoproj.io/sync-wave: "-15"
 subjects:
   - kind: ServiceAccount
     name: kata-install
@@ -33,6 +35,8 @@ metadata:
   namespace: openshift-sandboxed-containers-operator
   labels:
     app: kata-nftables-patch
+  annotations:
+    argocd.argoproj.io/sync-wave: "-15"
 spec:
   selector:
     matchLabels:

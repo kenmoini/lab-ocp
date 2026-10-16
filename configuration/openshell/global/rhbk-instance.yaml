@@ -1,0 +1,52 @@
+apiVersion: k8s.keycloak.org/v2beta1
+kind: Keycloak
+metadata:
+  labels:
+    app: openshell
+  name: openshell
+  namespace: rhbk
+  annotations:
+    argocd.argoproj.io/sync-wave: "-4"
+spec:
+  networkPolicy:
+    enabled: true
+    https:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: openshift-ingress
+    management:
+      - namespaceSelector:
+          matchLabels:
+            network.openshift.io/policy-group: monitoring
+  bootstrapAdmin:
+  # This Secret needs to exist with the keys username/password
+    user:
+      secret: keycloak-admin
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+  http:
+    httpEnabled: true
+  proxy:
+    headers: xforwarded
+  hostname:
+    hostname: 'https://openshell-sso.apps.tri-force.lab.kemo.network'
+  ingress:
+    className: openshift-default
+    enabled: true
+  additionalOptions:
+    - name: metrics-enabled
+      value: 'true'
+  db:
+    database: app
+    host: openshell-sso-db-rw.rhbk.svc.cluster.local
+    passwordSecret:
+      key: password
+      name: openshell-sso-db-app
+    port: 5432
+    usernameSecret:
+      key: username
+      name: openshell-sso-db-app
+    vendor: postgres
+  instances: 1

@@ -1,0 +1,17 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: openshell-sso-db
+  namespace: rhbk
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  instances: 1
+  enablePDB: false
+  enableSuperuserAccess: true
+  logLevel: info
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 5Gi
+  walStorage:
+    size: 1Gi

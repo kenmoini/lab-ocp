@@ -3,11 +3,18 @@ kind: Gateway
 metadata:
   name: openshell-gateway
   namespace: openshift-ingress
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
 spec:
   gatewayClassName: openshift-default
+  infrastructure:
+    parametersRef:
+      group: ''
+      kind: ConfigMap
+      name: openshell-gateway-config
   listeners:
     - name: grpc
-      hostname: "openshell-gw.lab.kemo.network"
+      hostname: "openshell-gw.apps.tri-force.lab.kemo.network"
       port: 443
       protocol: HTTPS
       tls:
