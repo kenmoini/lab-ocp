@@ -272,27 +272,27 @@ spec:
           - openshell-admin
           - openshell-user
       # Example local users - uncomment for a quick smoke test, or federate an IdP instead
-      # - username: admin
-      #   enabled: true
-      #   email: admin@kemo.labs
-      #   emailVerified: true
-      #   firstName: OpenShell
-      #   lastName: Admin
-      #   credentials:
-      #     - type: password
-      #       value: changeme
-      #       temporary: true
-      #   groups:
-      #     - /openshell-admins
-      # - username: user1
-      #   enabled: true
-      #   email: user1@kemo.labs
-      #   emailVerified: true
-      #   firstName: User
-      #   lastName: One
-      #   credentials:
-      #     - type: password
-      #       value: changeme
-      #       temporary: true
-      #   groups:
-      #     - /openshell-users
+      - username: admin
+        enabled: true
+        email: admin@kemo.labs
+        emailVerified: true
+        firstName: OpenShell
+        lastName: Admin
+        credentials:
+          - type: password
+            value: changeme
+            temporary: true
+        groups:
+          - /openshell-admins
+      - username: user1
+        enabled: true
+        email: user1@kemo.labs
+        emailVerified: true
+        firstName: User
+        lastName: One
+        credentials:
+          - type: password
+            value: changeme
+            temporary: true
+        groups:
+          - /openshell-users
