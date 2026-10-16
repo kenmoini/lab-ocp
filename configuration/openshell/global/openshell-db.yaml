@@ -1,0 +1,40 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: openshell-db
+  namespace: openshell
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  instances: 1
+  enablePDB: false
+  enableSuperuserAccess: true
+  logLevel: info
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 10Gi
+  walStorage:
+    size: 1Gi
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cnpg-operator
+  namespace: openshell
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg # or for all CNPG Clusters
+      # cnpg.io/cluster: openshell-db # The label value must be the cluster name
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: openshift-certified-operators # Namespace where the operator is deployed
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudnative-pg # Matches the Operator pod
+      ports:
+        - port: 8000
+        - port: 5432

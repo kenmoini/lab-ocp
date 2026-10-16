@@ -51,6 +51,17 @@ spec:
         - chart: '{{.helmChartName}}'
           helm:
             valuesObject:
+              replicaCount: 2
+              workload:
+                kind: deployment
+              affinity:
+                podAntiAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchLabels:
+                          app.kubernetes.io/name: openshell
+                          app.kubernetes.io/instance: openshell
+                      topologyKey: kubernetes.io/hostname
               # securityContext:
               #   runAsUser: 1000
               # podSecurityContext:
@@ -84,6 +95,8 @@ spec:
                   processBinaryAwareNetworkPolicy: true
               server:
                 disableTls: false
+                telemetryEnabled: false
+                externalDbSecret: openshell-db-app
                 # Use either Kata or User namespaces, cannot be both
                 defaultRuntimeClassName: kata
                 # enableUserNamespaces: true
