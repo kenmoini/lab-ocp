@@ -32,3 +32,4 @@ spec:
                   feature_validation: 'true'
                   feature_must_gather_api: 'true'
                   feature_volume_populator: 'true'
+                  feature_ova_appliance_management: 'true'
