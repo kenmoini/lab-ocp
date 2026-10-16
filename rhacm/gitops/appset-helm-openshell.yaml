@@ -56,6 +56,8 @@ spec:
                 serverIssuerRef:
                   name: letsencrypt-digitalocean
                   kind: ClusterIssuer
+                serverDnsNames:
+                  - openshell-gw.apps.tri-force.lab.kemo.network
               grpcRoute:
                 enabled: true
                 backendTLSPolicy:
