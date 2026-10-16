@@ -13,9 +13,13 @@
 #     to k8s.keycloak.org/v2alpha1 - nothing else needs to change.
 #   - The import only CREATES the realm. Edits after the first import are not applied;
 #     delete the realm in Keycloak (or change the realm name) to re-import.
-#   - Because this representation defines its own clientScopes, Keycloak would skip creating
-#     the built-in scopes (profile, email, roles, web-origins, acr, basic, offline_access...).
-#     The realm attribute `_create_default_client_scopes: "true"` forces them to be created.
+#   - Because this representation defines its own clientScopes, Keycloak SKIPS creating the
+#     built-in scopes (basic, profile, email, roles, web-origins, acr). Any client that
+#     references them is silently created without them ("Referenced client scope 'basic'
+#     doesn't exist. Ignoring"), which drops the `sub` and `realm_access.roles` claims from
+#     the access token and the OpenShell gateway rejects it with "missing field `sub`".
+#     So the built-ins are declared explicitly below, same as Keycloak would create them.
+#     (offline_access is the exception: the import always creates that scope/role itself.)
 #
 # OpenShell gateway expectations (https://docs.nvidia.com/openshell/ -> Reference -> Gateway Auth):
 #   - issuer    : https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell
@@ -46,8 +50,6 @@ spec:
     displayName: OpenShell
     enabled: true
     sslRequired: external
-    attributes:
-      _create_default_client_scopes: "true"
 
     # Login / registration behaviour
     registrationAllowed: false
@@ -116,6 +118,172 @@ spec:
     # Client scopes
     # ------------------------------------------------------------------
     clientScopes:
+      # ---- Keycloak built-in scopes (must be declared because clientScopes is set) ----
+      # `basic` carries the `sub` mapper; without it Keycloak 26 access tokens have no `sub`.
+      - name: basic
+        description: OpenID Connect scope for basic claims (sub, auth_time)
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "false"
+          display.on.consent.screen: "false"
+        protocolMappers:
+          - name: sub
+            protocol: openid-connect
+            protocolMapper: oidc-sub-mapper
+            consentRequired: false
+            config:
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+          - name: auth_time
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+            consentRequired: false
+            config:
+              user.session.note: AUTH_TIME
+              claim.name: auth_time
+              jsonType.label: long
+              id.token.claim: "true"
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+      - name: profile
+        description: "OpenID Connect built-in scope: profile"
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "true"
+          display.on.consent.screen: "true"
+        protocolMappers:
+          - name: username
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+            consentRequired: false
+            config:
+              user.attribute: username
+              claim.name: preferred_username
+              jsonType.label: String
+              id.token.claim: "true"
+              access.token.claim: "true"
+              userinfo.token.claim: "true"
+              introspection.token.claim: "true"
+          - name: full name
+            protocol: openid-connect
+            protocolMapper: oidc-full-name-mapper
+            consentRequired: false
+            config:
+              id.token.claim: "true"
+              access.token.claim: "true"
+              userinfo.token.claim: "true"
+              introspection.token.claim: "true"
+          - name: given name
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+            consentRequired: false
+            config:
+              user.attribute: firstName
+              claim.name: given_name
+              jsonType.label: String
+              id.token.claim: "true"
+              access.token.claim: "true"
+              userinfo.token.claim: "true"
+              introspection.token.claim: "true"
+          - name: family name
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+            consentRequired: false
+            config:
+              user.attribute: lastName
+              claim.name: family_name
+              jsonType.label: String
+              id.token.claim: "true"
+              access.token.claim: "true"
+              userinfo.token.claim: "true"
+              introspection.token.claim: "true"
+      - name: email
+        description: "OpenID Connect built-in scope: email"
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "true"
+          display.on.consent.screen: "true"
+        protocolMappers:
+          - name: email
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+            consentRequired: false
+            config:
+              user.attribute: email
+              claim.name: email
+              jsonType.label: String
+              id.token.claim: "true"
+              access.token.claim: "true"
+              userinfo.token.claim: "true"
+              introspection.token.claim: "true"
+          - name: email verified
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-property-mapper
+            consentRequired: false
+            config:
+              user.attribute: emailVerified
+              claim.name: email_verified
+              jsonType.label: boolean
+              id.token.claim: "true"
+              access.token.claim: "true"
+              userinfo.token.claim: "true"
+              introspection.token.claim: "true"
+      # `roles` carries the realm_access.roles claim the gateway uses for RBAC.
+      - name: roles
+        description: OpenID Connect scope for add user roles to the access token
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "false"
+          display.on.consent.screen: "true"
+        protocolMappers:
+          - name: realm roles
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-realm-role-mapper
+            consentRequired: false
+            config:
+              claim.name: realm_access.roles
+              jsonType.label: String
+              multivalued: "true"
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+          - name: audience resolve
+            protocol: openid-connect
+            protocolMapper: oidc-audience-resolve-mapper
+            consentRequired: false
+            config:
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+      - name: web-origins
+        description: OpenID Connect scope for add allowed web origins to the access token
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "false"
+          display.on.consent.screen: "false"
+        protocolMappers:
+          - name: allowed web origins
+            protocol: openid-connect
+            protocolMapper: oidc-allowed-origins-mapper
+            consentRequired: false
+            config:
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+      - name: acr
+        description: OpenID Connect scope for add acr (authentication context class reference) to the token
+        protocol: openid-connect
+        attributes:
+          include.in.token.scope: "false"
+          display.on.consent.screen: "false"
+        protocolMappers:
+          - name: acr loa level
+            protocol: openid-connect
+            protocolMapper: oidc-acr-mapper
+            consentRequired: false
+            config:
+              id.token.claim: "true"
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+
+      # ---- OpenShell scopes ----
       # Puts `openshell-cli` into the `aud` claim of every token issued through a client
       # that has this scope. Keycloak does NOT add the client's own ID to `aud` by default,
       # and the gateway rejects tokens whose aud does not match OPENSHELL_OIDC_AUDIENCE.

@@ -32,3 +32,5 @@ resources:
 
 # chmod 700 ~/.config/openshell/gateways/tri-force/mtls
 # chmod 600 ~/.config/openshell/gateways/tri-force/mtls/tls.key
+
+# openshell gateway login tri-force
