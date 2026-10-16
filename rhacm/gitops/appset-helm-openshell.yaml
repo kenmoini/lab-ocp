@@ -63,9 +63,9 @@ spec:
                 serverDnsNames:
                   - openshell-gw.apps.tri-force.lab.kemo.network
               grpcRoute:
-                enabled: true
+                enabled: false
                 backendTLSPolicy:
-                  enabled: true
+                  enabled: false
                 gateway:
                   name: openshell-gateway
                   namespace: openshift-ingress
@@ -83,6 +83,7 @@ spec:
                 sidecar:
                   processBinaryAwareNetworkPolicy: true
               server:
+                disableTls: false
                 # Use either Kata or User namespaces, cannot be both
                 defaultRuntimeClassName: kata
                 # enableUserNamespaces: true
