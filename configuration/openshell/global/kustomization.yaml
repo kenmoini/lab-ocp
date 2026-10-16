@@ -13,6 +13,7 @@ resources:
   - rhbk-instance.yaml
   - rhbk-realm-secrets.yaml
   - rhbk-realm.yaml
+  - namespace.yaml
 
 # openshell gateway add https://hub-cluster-openshell-openshell.apps.tri-force.lab.kemo.network --name tri-force \
 #   --oidc-issuer https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell \
