@@ -64,8 +64,11 @@ spec:
                 openshell:
                   gateway:
                     oidc:
-                      issuer: "https://oauth-openshift.apps.tri-force.lab.kemo.network/oauth/authorize"
-                      audience: "openshell"
+                      issuer: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell"
+                      audience: "openshell-cli"
+                      roles_claim: "realm_access.roles"
+                      admin_role: "openshell-admin"
+                      user_role: "openshell-user"
               openshiftRoute:
                 enabled: true
                 # host: openshell.apps.tri-force.lab.kemo.network
@@ -78,7 +81,7 @@ spec:
                 defaultRuntimeClassName: kata
                 # enableUserNamespaces: true
                 auth:
-                  allowUnauthenticatedUsers: true
+                  allowUnauthenticatedUsers: false
                 tls:
                   enableMtls: false
                   clientCaSecretName: ""
