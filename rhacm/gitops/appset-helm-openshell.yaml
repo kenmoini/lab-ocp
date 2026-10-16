@@ -51,10 +51,10 @@ spec:
         - chart: '{{.helmChartName}}'
           helm:
             valuesObject:
-              securityContext:
-                runAsUser: 1000
-              podSecurityContext:
-                fsGroup: 1000
+              # securityContext:
+              #   runAsUser: 1000
+              # podSecurityContext:
+              #   fsGroup: 1000
               certManager:
                 enabled: true
                 serverIssuerRef:
@@ -109,10 +109,11 @@ spec:
         name: "{{.name}}"
         namespace: "{{.namespace}}"
       syncPolicy:
-        managedNamespaceMetadata:
-          annotations:
-            openshift.io/sa.scc.supplemental-groups: 1000/165537
-            openshift.io/sa.scc.uid-range: 1000/165537
+        # Needed for User Namespaces
+        # managedNamespaceMetadata:
+        #   annotations:
+        #     openshift.io/sa.scc.supplemental-groups: 1000/165537
+        #     openshift.io/sa.scc.uid-range: 1000/165537
           # labels: # The labels to set on the application namespace
           #   security.openshift.io/scc.podSecurityLabelSync: 'false'
           #   pod-security.kubernetes.io/enforce: privileged
