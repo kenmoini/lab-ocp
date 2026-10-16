@@ -60,15 +60,9 @@ spec:
                   namespace: openshift-ingress
                 hostnames:
                   - openshell-gw.lab.kemo.network
-              gatewayConfig:
-                openshell:
-                  gateway:
-                    oidc:
-                      issuer: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell"
-                      audience: "openshell-cli"
-                      roles_claim: "realm_access.roles"
-                      admin_role: "openshell-admin"
-                      user_role: "openshell-user"
+              # gatewayConfig:
+              #   openshell:
+              #     gateway:
               openshiftRoute:
                 enabled: true
                 # host: openshell.apps.tri-force.lab.kemo.network
@@ -82,6 +76,12 @@ spec:
                 # enableUserNamespaces: true
                 auth:
                   allowUnauthenticatedUsers: false
+                oidc:
+                  issuer: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell"
+                  audience: "openshell-cli"
+                  roles_claim: "realm_access.roles"
+                  admin_role: "openshell-admin"
+                  user_role: "openshell-user"
                 tls:
                   enableMtls: false
                   clientCaSecretName: ""
