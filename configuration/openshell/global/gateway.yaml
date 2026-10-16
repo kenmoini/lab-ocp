@@ -18,10 +18,11 @@ spec:
       port: 443
       protocol: HTTPS
       tls:
-        mode: Terminate
-        certificateRefs:
-          - name: openshell-gateway-tls
-            kind: Secret
+        mode: Passthrough
+        # mode: Terminate
+        # certificateRefs:
+        #   - name: openshell-gateway-tls
+        #     kind: Secret
       allowedRoutes:
         namespaces:
           from: Selector
