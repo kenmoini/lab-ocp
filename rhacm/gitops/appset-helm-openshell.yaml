@@ -63,6 +63,7 @@ spec:
               # gatewayConfig:
               #   openshell:
               #     gateway:
+              #       allowUnauthenticatedUsers: false
               openshiftRoute:
                 enabled: true
                 # host: openshell.apps.tri-force.lab.kemo.network
@@ -82,6 +83,7 @@ spec:
                   roles_claim: "realm_access.roles"
                   admin_role: "openshell-admin"
                   user_role: "openshell-user"
+                  caConfigMapName: "trusted-cabundle"
                 tls:
                   enableMtls: false
                   clientCaSecretName: ""
