@@ -60,6 +60,12 @@ spec:
                   namespace: openshift-ingress
                 hostnames:
                   - openshell-gw.lab.kemo.network
+              gatewayConfig:
+                openshell:
+                  gateway:
+                    oidc:
+                      issuer: "https://oauth-openshift.apps.tri-force.lab.kemo.network/oauth/authorize"
+                      audience: "openshell"
               openshiftRoute:
                 enabled: true
                 # host: openshell.apps.tri-force.lab.kemo.network
@@ -75,6 +81,7 @@ spec:
                   allowUnauthenticatedUsers: true
                 tls:
                   enableMtls: false
+                  clientCaSecretName: ""
                 credentialDrivers:
                   kubernetesSecrets:
                     enabled: true
