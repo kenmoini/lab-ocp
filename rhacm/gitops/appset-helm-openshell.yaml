@@ -51,6 +51,10 @@ spec:
         - chart: '{{.helmChartName}}'
           helm:
             valuesObject:
+              securityContext:
+                runAsUser: 1000
+              podSecurityContext:
+                fsGroup: 1000
               certManager:
                 enabled: true
                 serverIssuerRef:
