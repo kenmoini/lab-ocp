@@ -73,7 +73,7 @@ spec:
               #       allowUnauthenticatedUsers: false
               openshiftRoute:
                 enabled: true
-                # host: openshell.apps.tri-force.lab.kemo.network
+                host: openshell-gw.apps.tri-force.lab.kemo.network
               supervisor:
                 topology: sidecar
                 sidecar:
