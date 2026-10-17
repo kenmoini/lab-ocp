@@ -13,7 +13,7 @@ resources:
   - appset-helm-github-arc.yaml
   - appset-helm-jenkins.yaml
   - appset-helm-openshell.yaml
-  - appset-helm-openshell-workspace.yaml
+  # - appset-helm-openshell-workspace.yaml
   - appset-install-kyverno.yaml
   - appset-kagent-crds.yaml
   - appset-kagent-kmcp.yaml
