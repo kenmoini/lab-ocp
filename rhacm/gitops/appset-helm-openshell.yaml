@@ -26,7 +26,7 @@ spec:
                 namespace: openshell
                 helmRepoURL: 'oci://ghcr.io/nvidia/openshell/helm-chart'
                 helmChartName: openshell
-                helmRevision: 0.1.4
+                helmRevision: 0.1.3
   template:
     metadata:
       name: "{{.name}}-{{.appName}}"
@@ -51,6 +51,22 @@ spec:
         - chart: '{{.helmChartName}}'
           helm:
             valuesObject:
+              global:
+                image:
+                  registry: quay.io/opendatahub
+                  tag: "v{{ .helmRevision }}-rhaiv.3"
+              gateway:
+                image:
+                  repository: odh-openshell-gateway
+              sandboxRuntime:
+                image:
+                  repository: odh-openshell-sandbox
+              supervisor:
+                image:
+                  repository: odh-openshell-supervisor
+                topology: sidecar
+                sidecar:
+                  processBinaryAwareNetworkPolicy: true
               replicaCount: 2
               workload:
                 kind: deployment
@@ -89,10 +105,6 @@ spec:
               openshiftRoute:
                 enabled: true
                 host: openshell-gw.apps.tri-force.lab.kemo.network
-              supervisor:
-                topology: sidecar
-                sidecar:
-                  processBinaryAwareNetworkPolicy: true
               server:
                 disableTls: false
                 telemetryEnabled: false
