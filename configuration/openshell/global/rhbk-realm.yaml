@@ -72,6 +72,14 @@ spec:
     oauth2DeviceCodeLifespan: 600
     oauth2DevicePollingInterval: 5
 
+    identityProviders:
+      - alias: spiffe
+        providerId: spiffe
+        hideOnLogin: true
+        config:
+          bundleEndpoint: https://oidc-discovery.apps.tri-force.lab.kemo.network
+          trustDomain: spiffe://apps.tri-force.lab.kemo.network
+
     # ------------------------------------------------------------------
     # Realm roles - the gateway reads these from the realm_access.roles claim
     # ------------------------------------------------------------------

@@ -16,6 +16,8 @@ resources:
   - rhbk-realm.yaml
   - openshell-db.yaml
 
+  - clusterspiffeid.yaml
+
   - netpol-ingress.yaml
 
   - netpol-monitoring.yaml

@@ -39,6 +39,7 @@ spec:
     enabled:
       - spiffe
       - client-auth-federated
+      - kubernetes-service-accounts
   additionalOptions:
     - name: metrics-enabled
       value: 'true'
@@ -54,3 +55,17 @@ spec:
       name: openshell-sso-db-app
     vendor: postgres
   instances: 1
+  unsupported:
+    podTemplate:
+      spec:
+        volumes:
+          - name: spiffe-workload-api
+            csi:
+              driver: csi.spiffe.io
+              readOnly: true
+        containers:
+          - name: keycloak
+            volumeMounts:
+              - name: spiffe-workload-api
+                readOnly: true
+                mountPath: /run/spire/sockets
