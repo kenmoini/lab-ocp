@@ -28,3 +28,18 @@ spec:
           selector:
             matchLabels:
               kubernetes.io/metadata.name: openshell
+    - name: dashboard
+      hostname: "openshell-dashboard.apps.tri-force.lab.kemo.network"
+      port: 443
+      protocol: HTTPS
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: openshell-gateway-tls
+            kind: Secret
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: openshell
