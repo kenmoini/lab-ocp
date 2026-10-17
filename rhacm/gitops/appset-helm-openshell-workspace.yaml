@@ -54,7 +54,7 @@ spec:
               gateway:
                 # -- Grant PVC metadata reads required when the gateway enables caller driver config.
                 # Keep this aligned with server.drivers.kubernetes.allowDriverConfig in the gateway chart.
-                allowDriverConfig: false
+                allowDriverConfig: true
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:
