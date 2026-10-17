@@ -61,7 +61,7 @@ spec:
                 gateway:
                   name: openshell-gateway
                   namespace: openshift-ingress
-                  sectionName: grpc
+                  sectionName: dashboard
 
               networkPolicy:
                 ingressNamespace: openshell
