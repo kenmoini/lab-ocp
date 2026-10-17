@@ -23,7 +23,7 @@ spec:
           - list:
               elements:
               - appName: openshell-dashboard
-                namespace: openshell-dashboard
+                namespace: openshell
                 helmRepoURL: 'oci://ghcr.io/gkrumbach07/openshell-dashboard/helm-chart/openshell-dashboard'
                 helmChartName: openshell-dashboard
                 helmRevision: 0.1.1
