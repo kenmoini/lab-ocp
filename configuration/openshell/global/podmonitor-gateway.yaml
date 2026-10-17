@@ -7,7 +7,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: openshell
-      app.kubernetes.io/instance: openshell
+      app.kubernetes.io/instance: hub-cluster-openshell
   podMetricsEndpoints:
     - port: metrics
       path: /metrics

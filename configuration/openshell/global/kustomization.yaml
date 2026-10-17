@@ -3,20 +3,23 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
+  - namespace.yaml
   - configmap-gateway.yaml
   - configmap-ca.yaml
   - userns-rbac.yaml
   - enable-kata-kernel-modules.yaml
   - certificate.yaml
   - gateway.yaml
-  - netpol-monitoring.yaml
-  - podmonitor-gateway.yaml
   - rhbk-db.yaml
   - rhbk-instance.yaml
   - rhbk-realm-secrets.yaml
   - rhbk-realm.yaml
-  - namespace.yaml
   - openshell-db.yaml
+
+  - netpol-monitoring.yaml
+  - podmonitor-gateway.yaml
+  - service-metrics.yaml
+  - servicemonitor.yaml
 
 # openshell gateway add https://hub-cluster-openshell-openshell.apps.tri-force.lab.kemo.network --name tri-force \
 #   --oidc-issuer https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell \
