@@ -59,12 +59,12 @@ server:
   # enableUserNamespaces: true
   auth:
     allowUnauthenticatedUsers: false
-  # providerTokenGrants:
-  #   spiffe:
-  #     # -- Mount the SPIFFE Workload API socket into gateway and sandbox pods for dynamic provider token grants.
-  #     enabled: true
-  #     # -- Path to the SPIFFE Workload API socket mounted into gateway and sandbox pods.
-  #     workloadApiSocketPath: /spiffe-workload-api/spire-agent.sock
+  providerTokenGrants:
+    spiffe:
+      # -- Mount the SPIFFE Workload API socket into gateway and sandbox pods for dynamic provider token grants.
+      enabled: true
+      # -- Path to the SPIFFE Workload API socket mounted into gateway and sandbox pods.
+      workloadApiSocketPath: /spiffe-workload-api/spire-agent.sock
   oidc:
     issuer: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell"
     audience: "openshell-cli"
