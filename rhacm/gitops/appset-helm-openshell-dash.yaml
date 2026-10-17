@@ -49,6 +49,7 @@ spec:
               oidc:
                 provider: keycloak-oidc
                 issuer: https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell
+                clientId: openshell-dash
                 codeChallengeMethod: S256
                 adminRole: openshell-admin
                 caConfigMapName: "trusted-cabundle"
