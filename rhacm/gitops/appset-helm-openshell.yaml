@@ -54,7 +54,7 @@ spec:
         - chart: '{{.helmChartName}}'
           helm:
             valueFiles:
-              - "$values/clusters/{{name}}/helm-values/{{appName}}.yaml"
+              - "$values/clusters/{{ .name }}/helm-values/{{ .appName }}.yaml"
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:
