@@ -3,6 +3,7 @@ kind: Namespace
 metadata:
   name: openshell-workspace
   annotations:
+    argocd.argoproj.io/hook: Sync
     argocd.argoproj.io/sync-wave: "10"
     openshift.io/sa.scc.supplemental-groups: 1000/165537
     openshift.io/sa.scc.uid-range: 1000/165537
