@@ -55,6 +55,13 @@ spec:
                   - openshell-admin
                   - openshell-cli:openshell-admin
 
+              gateway:
+                serviceName: "{{ .name }}-openshell"
+
+              # openshiftRoute:
+              #   enabled: true
+              #   host: openshell-dashboard.apps.tri-force.lab.kemo.network
+
               httpRoute:
                 enabled: true
                 hostnames: ["openshell-dashboard.apps.tri-force.lab.kemo.network"]
