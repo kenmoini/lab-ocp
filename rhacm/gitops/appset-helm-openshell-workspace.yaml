@@ -37,6 +37,11 @@ spec:
         # The set foreground cascading deletion
         - resources-finalizer.argocd.argoproj.io
     spec:
+      ignoreDifferences:
+        - group: ""
+          kind: Namespace
+          jsonPointers:
+            - /metadata/annotations/openshift.io~1sa.scc.mcs
       project: default
       sources:
         - kustomize: {}
