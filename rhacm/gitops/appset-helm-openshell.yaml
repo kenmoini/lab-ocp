@@ -121,6 +121,8 @@ spec:
                     createNamespace: true
                 drivers:
                   kubernetes:
+                    workspaceMode: operator
+                    operatorNamespaceLabel: "openshell.ai/sandbox-workspace="
                     allowDriverConfig: true
                     resourceAdmission:
                       enabled: false
