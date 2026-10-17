@@ -79,6 +79,8 @@ spec:
         config:
           bundleEndpoint: https://oidc-discovery.apps.tri-force.lab.kemo.network
           trustDomain: spiffe://apps.tri-force.lab.kemo.network
+      - alias: kubernetes
+        providerId: kubernetes
 
     # ------------------------------------------------------------------
     # Realm roles - the gateway reads these from the realm_access.roles claim
