@@ -23,8 +23,9 @@ spec:
       type: Opaque
       data:
         client-id: aap
+        client-secret: "{{ .clientSecret }}"
   data:
-    - secretKey: client-secret
+    - secretKey: clientSecret
       remoteRef:
         key: kemo.labs/oauth/keycloak/openshell
         property: ciClientSecret
