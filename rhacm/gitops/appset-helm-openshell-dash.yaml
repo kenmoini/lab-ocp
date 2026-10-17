@@ -59,17 +59,17 @@ spec:
               gateway:
                 serviceName: "{{ .name }}-openshell"
 
-              # openshiftRoute:
-              #   enabled: true
-              #   host: openshell-dashboard.apps.tri-force.lab.kemo.network
-
-              httpRoute:
+              openshiftRoute:
                 enabled: true
-                hostnames: ["openshell-dashboard.apps.tri-force.lab.kemo.network"]
-                gateway:
-                  name: openshell-gateway
-                  namespace: openshift-ingress
-                  sectionName: dashboard
+                host: openshell-dashboard.apps.tri-force.lab.kemo.network
+
+              # httpRoute:
+              #   enabled: true
+              #   hostnames: ["openshell-dashboard.apps.tri-force.lab.kemo.network"]
+              #   gateway:
+              #     name: openshell-gateway
+              #     namespace: openshift-ingress
+              #     sectionName: dashboard
 
               networkPolicy:
                 ingressNamespace: openshell
