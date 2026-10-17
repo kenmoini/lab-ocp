@@ -48,6 +48,10 @@ spec:
       secret:
         name: openshell-sso-clients
         key: dashboardClientSecret
+    AAP_CLIENT_SECRET:
+      secret:
+        name: openshell-sso-clients
+        key: aapClientSecret
   realm:
     id: openshell
     realm: openshell
@@ -453,6 +457,34 @@ spec:
         redirectUris:
           - "https://openshell-dashboard.apps.tri-force.lab.kemo.network/oauth2/callback"
         secret: "${OPENSHELL_DASHBOARD_CLIENT_SECRET}"
+        standardFlowEnabled: true
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: true
+        fullScopeAllowed: true
+        attributes:
+          use.refresh.tokens: "false"
+          pkce.code.challenge.method: "S256"
+        defaultClientScopes:
+          - basic
+          - profile
+          - email
+          - roles
+          - web-origins
+          - acr
+          - openshell-audience
+          - openshell:all
+
+      # Ansible Automation Platform
+      - clientId: aap
+        name: Ansible Automation Platform
+        description: Confidential client for the Ansible Automation Platform
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        redirectUris:
+          - "https://hub-aap.apps.tri-force.lab.kemo.network/oauth2/callback"
+        secret: "${AAP_CLIENT_SECRET}"
         standardFlowEnabled: true
         implicitFlowEnabled: false
         directAccessGrantsEnabled: false

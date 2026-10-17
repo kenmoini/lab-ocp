@@ -28,5 +28,5 @@ spec:
     - secretKey: clientSecret
       remoteRef:
         key: kemo.labs/oauth/keycloak/openshell
-        property: ciClientSecret
+        property: aapClientSecret
 
