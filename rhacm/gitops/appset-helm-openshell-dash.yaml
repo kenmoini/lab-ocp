@@ -51,6 +51,7 @@ spec:
                 issuer: https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell
                 codeChallengeMethod: S256
                 adminRole: openshell-admin
+                caConfigMapName: "trusted-cabundle"
                 allowedRoles:
                   - openshell-admin
                   - openshell-cli:openshell-admin
