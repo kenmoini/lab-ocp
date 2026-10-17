@@ -89,3 +89,13 @@ server:
         enabled: false
         # requiredLabels:
         #   app.kubernetes.io/part-of: "openshell"
+  # We can mount the metrics TLS secret, but currently there is no way to use it
+  extraVolumeMounts:
+    - name: metrics-tls
+      mountPath: /etc/pki/metrics-tls
+      readOnly: true
+  extraVolumes:
+    - name: metrics-tls
+      secret:
+        optional: true
+        secretName: openshell-gateway-metrics-tls

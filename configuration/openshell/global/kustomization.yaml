@@ -18,8 +18,8 @@ resources:
 
   - netpol-monitoring.yaml
   - podmonitor-gateway.yaml
-  - service-metrics.yaml
-  - servicemonitor.yaml
+  # - service-metrics.yaml
+  # - servicemonitor.yaml
 
 # openshell gateway add https://hub-cluster-openshell-openshell.apps.tri-force.lab.kemo.network --name tri-force \
 #   --oidc-issuer https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell \
