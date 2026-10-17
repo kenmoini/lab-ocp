@@ -16,8 +16,11 @@ resources:
   - rhbk-realm.yaml
   - openshell-db.yaml
 
+  - netpol-ingress.yaml
+
   - netpol-monitoring.yaml
   - podmonitor-gateway.yaml
+  # Just use PodMonitor for now, ServiceMonitor would be best with TLS which OpenShell does not support yet
   # - service-metrics.yaml
   # - servicemonitor.yaml
 

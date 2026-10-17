@@ -48,6 +48,9 @@ spec:
           targetRevision: main
         - chart: '{{.helmChartName}}'
           helm:
+            valuesObject:
+              gateway:
+                serviceName: "{{ .name }}-openshell"
             valueFiles:
               - "$values/clusters/{{ .name }}/helm-values/{{ .appName }}.yaml"
           repoURL: '{{.helmRepoURL}}'
