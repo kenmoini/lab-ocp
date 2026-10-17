@@ -1,0 +1,83 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: openshell-dashboard
+  namespace: openshift-gitops
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: appset/helm-openshell
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
+          - list:
+              elements:
+              - appName: openshell-dashboard
+                namespace: openshell-dashboard
+                helmRepoURL: 'oci://ghcr.io/gkrumbach07/openshell-dashboard/helm-chart/openshell-dashboard'
+                helmChartName: openshell-dashboard
+                helmRevision: 0.1.1
+  template:
+    metadata:
+      name: "{{.name}}-{{.appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+      finalizers:
+        # The set foreground cascading deletion
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      sources:
+        - kustomize: {}
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          ## Path is the repo directory that containers the cluster(s) configuration and deployment manifests
+          path: configuration/openshell/dashboard/
+        - chart: '{{.helmChartName}}'
+          helm:
+            valuesObject:
+              oidc:
+                provider: keycloak-oidc
+                issuer: https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell
+                codeChallengeMethod: S256
+                adminRole: openshell-admin
+                allowedRoles:
+                  - openshell-admin
+                  - openshell-cli:openshell-admin
+
+              httpRoute:
+                enabled: true
+                hostnames: ["openshell-dashboard.apps.tri-force.lab.kemo.network"]
+                gateway:
+                  name: openshell-gateway
+                  namespace: openshift-ingress
+                  sectionName: grpc
+
+              networkPolicy:
+                ingressNamespace: openshell
+          repoURL: '{{.helmRepoURL}}'
+          targetRevision: '{{.helmRevision}}'
+      destination:
+        name: "{{.name}}"
+        namespace: "{{.namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=false
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+        retry:
+          limit: 5

@@ -44,6 +44,10 @@ spec:
       secret:
         name: openshell-sso-clients
         key: ciClientSecret
+    OPENSHELL_DASHBOARD_CLIENT_SECRET:
+      secret:
+        name: openshell-sso-clients
+        key: dashboardClientSecret
   realm:
     id: openshell
     realm: openshell
@@ -410,6 +414,31 @@ spec:
         protocol: openid-connect
         publicClient: false
         secret: "${OPENSHELL_CI_CLIENT_SECRET}"
+        standardFlowEnabled: false
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: true
+        fullScopeAllowed: true
+        attributes:
+          use.refresh.tokens: "false"
+        defaultClientScopes:
+          - basic
+          - profile
+          - email
+          - roles
+          - web-origins
+          - acr
+          - openshell-audience
+          - openshell:all
+
+      # Dashboard
+      - clientId: openshell-dash
+        name: OpenShell Dashboard
+        description: Confidential client for the OpenShell dashboard
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        secret: "${OPENSHELL_DASHBOARD_CLIENT_SECRET}"
         standardFlowEnabled: false
         implicitFlowEnabled: false
         directAccessGrantsEnabled: false
