@@ -99,6 +99,8 @@ spec:
                 externalDbSecret: openshell-db-app
                 # Use either Kata or User namespaces, cannot be both
                 defaultRuntimeClassName: kata
+                sandboxUid: 1000
+                sandboxGid: 1000
                 # enableUserNamespaces: true
                 auth:
                   allowUnauthenticatedUsers: false
@@ -117,6 +119,13 @@ spec:
                     enabled: true
                     namespace: openshell-credentials
                     createNamespace: true
+                drivers:
+                  kubernetes:
+                    allowDriverConfig: true
+                    resourceAdmission:
+                      enabled: true
+                      requiredLabels:
+                        app.kubernetes.io/part-of: "openshell"
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:
