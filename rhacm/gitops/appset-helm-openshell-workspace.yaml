@@ -1,0 +1,68 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: openshell-workspace
+  namespace: openshift-gitops
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: appset/helm-openshell
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
+          - list:
+              elements:
+              - appName: openshell-workspace
+                namespace: openshell-workspace
+                helmRepoURL: 'oci://ghcr.io/nvidia/openshell/helm-chart'
+                helmChartName: openshell-workspace
+                helmRevision: 0.1.4
+  template:
+    metadata:
+      name: "{{.name}}-{{.appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+      finalizers:
+        # The set foreground cascading deletion
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      sources:
+        - kustomize: {}
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          ## Path is the repo directory that containers the cluster(s) configuration and deployment manifests
+          path: configuration/openshell/workspaces/openshell-workspace/
+        - chart: '{{.helmChartName}}'
+          helm:
+            valuesObject:
+              gateway:
+                # -- Grant PVC metadata reads required when the gateway enables caller driver config.
+                # Keep this aligned with server.drivers.kubernetes.allowDriverConfig in the gateway chart.
+                allowDriverConfig: false
+          repoURL: '{{.helmRepoURL}}'
+          targetRevision: '{{.helmRevision}}'
+      destination:
+        name: "{{.name}}"
+        namespace: "{{.namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+        retry:
+          limit: 5
