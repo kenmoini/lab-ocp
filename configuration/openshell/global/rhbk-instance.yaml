@@ -35,6 +35,10 @@ spec:
   ingress:
     className: openshift-default
     enabled: true
+  features:
+    enabled:
+      - spiffe
+      - client-auth-federated
   additionalOptions:
     - name: metrics-enabled
       value: 'true'
