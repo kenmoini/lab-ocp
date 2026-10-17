@@ -1,0 +1,95 @@
+global:
+  image:
+    registry: quay.io/opendatahub
+    tag: "v{{ .helmRevision }}-rhaiv.3"
+gateway:
+  image:
+    repository: odh-openshell-gateway
+sandboxRuntime:
+  image:
+    repository: odh-openshell-sandbox
+supervisor:
+  image:
+    repository: odh-openshell-supervisor
+  topology: sidecar
+  sidecar:
+    processBinaryAwareNetworkPolicy: true
+replicaCount: 2
+workload:
+  kind: deployment
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: openshell
+            app.kubernetes.io/instance: openshell
+        topologyKey: kubernetes.io/hostname
+# securityContext:
+#   runAsUser: 1000
+# podSecurityContext:
+#   fsGroup: 1000
+certManager:
+  enabled: true
+  serverIssuerRef:
+    name: letsencrypt-digitalocean
+    kind: ClusterIssuer
+  serverDnsNames:
+    - openshell-gw.apps.tri-force.lab.kemo.network
+grpcRoute:
+  enabled: false
+  backendTLSPolicy:
+    enabled: false
+  gateway:
+    name: openshell-gateway
+    namespace: openshift-ingress
+  hostnames:
+    - openshell-gw.apps.tri-force.lab.kemo.network
+# gatewayConfig:
+#   openshell:
+#     gateway:
+#       allowUnauthenticatedUsers: false
+openshiftRoute:
+  enabled: true
+  host: openshell-gw.apps.tri-force.lab.kemo.network
+server:
+  disableTls: false
+  telemetryEnabled: false
+  externalDbSecret: openshell-db-app
+  # Use either Kata or User namespaces, cannot be both
+  defaultRuntimeClassName: kata
+  sandboxUid: 1000
+  sandboxGid: 1000
+  # enableUserNamespaces: true
+  auth:
+    allowUnauthenticatedUsers: false
+  # providerTokenGrants:
+  #   spiffe:
+  #     # -- Mount the SPIFFE Workload API socket into gateway and sandbox pods for dynamic provider token grants.
+  #     enabled: true
+  #     # -- Path to the SPIFFE Workload API socket mounted into gateway and sandbox pods.
+  #     workloadApiSocketPath: /spiffe-workload-api/spire-agent.sock
+  oidc:
+    issuer: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell"
+    audience: "openshell-cli"
+    roles_claim: "realm_access.roles"
+    admin_role: "openshell-admin"
+    user_role: "openshell-user"
+    caConfigMapName: "trusted-cabundle"
+  tls:
+    enableMtls: false
+    clientCaSecretName: ""
+  credentialDrivers:
+    kubernetesSecrets:
+      enabled: true
+      namespace: openshell-credentials
+      createNamespace: true
+  drivers:
+    kubernetes:
+      workspaceMode: operator
+      operatorNamespaceLabel: "openshell.ai/sandbox-workspace="
+      allowDriverConfig: true
+      resourceAdmission:
+        enabled: false
+        # requiredLabels:
+        #   app.kubernetes.io/part-of: "openshell"

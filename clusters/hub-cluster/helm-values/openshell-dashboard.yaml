@@ -1,0 +1,28 @@
+oidc:
+  provider: keycloak-oidc
+  issuer: https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell
+  clientId: openshell-dash
+  codeChallengeMethod: S256
+  adminRole: openshell-admin
+  caConfigMapName: "trusted-cabundle"
+  allowedRoles:
+    - openshell-admin
+    - openshell-cli:openshell-admin
+
+gateway:
+  serviceName: "{{ .name }}-openshell"
+
+openshiftRoute:
+  enabled: true
+  host: openshell-dashboard.apps.tri-force.lab.kemo.network
+
+# httpRoute:
+#   enabled: true
+#   hostnames: ["openshell-dashboard.apps.tri-force.lab.kemo.network"]
+#   gateway:
+#     name: openshell-gateway
+#     namespace: openshift-ingress
+#     sectionName: dashboard
+
+networkPolicy:
+  ingressNamespace: openshell

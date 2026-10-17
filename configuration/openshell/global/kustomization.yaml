@@ -35,3 +35,10 @@ resources:
 # chmod 600 ~/.config/openshell/gateways/tri-force/mtls/tls.key
 
 # openshell gateway login tri-force
+
+# openshell sandbox template create kata \
+#   --image ghcr.io/anomalyco/opencode:latest \
+#   --cpu 2 \
+#   --memory 4Gi \
+#   --label app.kubernetes.io/part-of="openshell-agent" \
+#   --env FEATURE_FLAG=on
