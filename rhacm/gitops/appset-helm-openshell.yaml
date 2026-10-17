@@ -53,6 +53,11 @@ spec:
           targetRevision: main
         - chart: '{{.helmChartName}}'
           helm:
+            valuesObject:
+              global:
+                image:
+                  registry: quay.io/opendatahub
+                  tag: "v{{ .helmRevision }}-rhaiv.3"
             valueFiles:
               - "$values/clusters/{{ .name }}/helm-values/{{ .appName }}.yaml"
           repoURL: '{{.helmRepoURL}}'
