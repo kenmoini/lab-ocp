@@ -5,3 +5,4 @@ metadata:
   annotations:
     openshift.io/sa.scc.supplemental-groups: 1000/165537
     openshift.io/sa.scc.uid-range: 1000/165537
+    openshell.ai/sandbox-workspace: ""
