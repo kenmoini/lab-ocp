@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: openshell-gateway
+  namespace: openshell
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: openshell
+      app.kubernetes.io/instance: openshell
+  podMetricsEndpoints:
+    - port: metrics
+      path: /metrics
+      interval: 30s

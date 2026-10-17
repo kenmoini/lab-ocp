@@ -9,6 +9,8 @@ resources:
   - enable-kata-kernel-modules.yaml
   - certificate.yaml
   - gateway.yaml
+  - netpol-monitoring.yaml
+  - podmonitor-gateway.yaml
   - rhbk-db.yaml
   - rhbk-instance.yaml
   - rhbk-realm-secrets.yaml
