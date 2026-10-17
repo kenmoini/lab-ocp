@@ -6,7 +6,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: vault-openshell-aap-client
-  namespace: openshell
+  namespace: rhbk
   annotations:
     argocd.argoproj.io/sync-wave: "-3"
 spec:
