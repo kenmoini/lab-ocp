@@ -17,6 +17,7 @@ resources:
   - openshell-db.yaml
 
   - clusterspiffeid.yaml
+  - extsec-aap-client.yaml
 
   - netpol-ingress.yaml
 

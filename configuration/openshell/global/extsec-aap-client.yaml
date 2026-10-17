@@ -1,0 +1,31 @@
+---
+# Secret consumed by the KeycloakRealmImport `spec.placeholders` for the openshell-ci client.
+# Pulled from Vault via the kemo-labs-vault ClusterSecretStore (same pattern as the RHDH realm).
+# Vault key `kemo.labs/oauth/keycloak/openshell` needs a `ciClientSecret` property.
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: vault-openshell-aap-client
+  namespace: openshell
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
+spec:
+  refreshInterval: "3600s"
+  secretStoreRef:
+    name: kemo-labs-vault
+    kind: ClusterSecretStore
+  target:
+    name: openshell-aap-client
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    template:
+      engineVersion: v2
+      type: Opaque
+      data:
+        client-id: aap
+  data:
+    - secretKey: client-secret
+      remoteRef:
+        key: kemo.labs/oauth/keycloak/openshell
+        property: ciClientSecret
+
