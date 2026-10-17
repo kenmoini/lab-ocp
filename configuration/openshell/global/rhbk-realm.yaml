@@ -78,6 +78,7 @@ spec:
         hideOnLogin: true
         config:
           bundleEndpoint: https://oidc-discovery.apps.tri-force.lab.kemo.network
+          issuer: https://oidc-discovery.apps.tri-force.lab.kemo.network
           trustDomain: spiffe://apps.tri-force.lab.kemo.network
       - alias: kubernetes
         providerId: kubernetes
