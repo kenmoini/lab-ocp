@@ -266,6 +266,39 @@ spec:
               multivalued: "true"
               access.token.claim: "true"
               introspection.token.claim: "true"
+          - name: top realm roles
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-realm-role-mapper
+            consentRequired: false
+            config:
+              claim.name: realm_roles
+              jsonType.label: String
+              multivalued: "true"
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+          - name: client roles
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-client-role-mapper
+            consentRequired: false
+            config:
+              claim.name: client_roles
+              jsonType.label: String
+              multivalued: "true"
+              access.token.claim: "true"
+              id.token.claim: "true"
+              introspection.token.claim: "true"
+              userinfo.token.claim: "true"
+          - name: groups
+            protocol: openid-connect
+            protocolMapper: oidc-group-membership-mapper
+            consentRequired: false
+            config:
+              claim.name: groups
+              full.path: "true"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+              userinfo.token.claim: "true"
           - name: audience resolve
             protocol: openid-connect
             protocolMapper: oidc-audience-resolve-mapper
@@ -483,7 +516,7 @@ spec:
         protocol: openid-connect
         publicClient: false
         redirectUris:
-          - "https://hub-aap.apps.tri-force.lab.kemo.network/oauth2/callback"
+          - "https://hub-aap.apps.tri-force.lab.kemo.network/*"
         secret: "${AAP_CLIENT_SECRET}"
         standardFlowEnabled: true
         implicitFlowEnabled: false
@@ -492,7 +525,6 @@ spec:
         fullScopeAllowed: true
         attributes:
           use.refresh.tokens: "false"
-          pkce.code.challenge.method: "S256"
         defaultClientScopes:
           - basic
           - profile
