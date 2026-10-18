@@ -97,6 +97,10 @@ spec:
           description: Full administrative access to OpenShell (provider CRUD, config, policy approvals)
           composite: false
           clientRole: false
+        - name: openshell-auditor
+          description: Audit user access to OpenShell (read-only global access)
+          composite: false
+          clientRole: false
         - name: openshell-user
           description: Standard user access to OpenShell (sandbox lifecycle, read-only provider/policy)
           composite: false
@@ -128,7 +132,12 @@ spec:
         path: /openshell-admins
         realmRoles:
           - openshell-admin
+          - openshell-auditor
           - openshell-user
+      - name: openshell-auditors
+        path: /openshell-auditors
+        realmRoles:
+          - openshell-auditor
       - name: openshell-users
         path: /openshell-users
         realmRoles:
@@ -517,6 +526,7 @@ spec:
         publicClient: false
         redirectUris:
           - "https://hub-aap.apps.tri-force.lab.kemo.network/*"
+          - "https://orchestrator.apps.tri-force.lab.kemo.network/*"
         secret: "${AAP_CLIENT_SECRET}"
         standardFlowEnabled: true
         implicitFlowEnabled: false
@@ -560,6 +570,18 @@ spec:
             temporary: true
         groups:
           - /openshell-admins
+      - username: auditor
+        enabled: true
+        email: auditor@kemo.labs
+        emailVerified: true
+        firstName: OpenShell
+        lastName: Auditor
+        credentials:
+          - type: password
+            value: changeme
+            temporary: true
+        groups:
+          - /openshell-auditors
       - username: user1
         enabled: true
         email: user1@kemo.labs
