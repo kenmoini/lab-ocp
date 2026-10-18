@@ -260,6 +260,33 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: auto-orch-backend-status
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: automation-orchestrator-backend
+                  namespace: automation-orchestrator
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: auto-orch-instance
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: auto-orch-ui-status
         spec:
           remediationAction: inform
@@ -306,3 +333,39 @@ spec:
                   href: '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "console-openshift-console" "orchestrator"  }}'
                   location: ApplicationMenu
                   text: Automation Orchestrator
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: auto-orch-backend-status
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: auto-orch-backend-env
+        spec:
+          remediationAction: enforce
+          severity: high
+          # pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: Deployment
+                apiVersion: apps/v1
+                metadata:
+                  namespace: automation-orchestrator
+                  name: automation-orchestrator-backend
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - name: backend
+                          env:
+                            - name: APP_OIDC_ALLOW_PRIVATE_NETWORKS
+                              value: "true"
+                            - name: APP_INTEGRATION_URL_ALLOWED_HOSTS
+                              value: '["0.0.0.0","192.168.60.72","192.168.0.0/16",".kemo.network","hub-aap.apps.tri-force.lab.kemo.network"]'
+                            - name: APP_WORKFLOW_HTTP_REQUEST_ALLOWED_HOSTS
+                              value: '["0.0.0.0","192.168.60.72","192.168.0.0/16",".kemo.network","hub-aap.apps.tri-force.lab.kemo.network"]'
