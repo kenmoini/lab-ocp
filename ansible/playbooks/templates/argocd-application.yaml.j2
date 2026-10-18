@@ -35,7 +35,7 @@ spec:
     - repoURL: '{{ git_pull_url }}'
       targetRevision: {{ git_pull_branch }}
       path: ztp-clusters/{{ hcp_infrastructure_host }}/spokes/{{ hcp_cluster_name }}/
-      kustomize: {}
+      # kustomize: {}
   project: ztp-clusters
   syncPolicy:
     syncOptions:
