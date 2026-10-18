@@ -4,3 +4,7 @@ eda_projects:
     description: Kemo Labs ZTP Project
     organization: "{{ global_organization | default('Default') }}"
     url: "{{ project_scm_url }}"
+  - name: openshell
+    description: OpenShell Project
+    organization: "OpenShell"
+    url: "{{ project_scm_url }}"

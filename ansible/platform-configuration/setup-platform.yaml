@@ -1,0 +1,252 @@
+- name: Configure an AAP2 Platform for use of the included automation
+  hosts: localhost
+  connection: local
+
+  vars:
+    aap_namespace: aap
+    aap_platform_name: hub
+    aap_username: admin
+    aap_validate_certs: false
+    project_scm_url: https://github.com/kenmoini/lab-ocp
+
+    openshell_namespace: openshell
+
+    keycloak_namespace: rhbk
+    keycloak_instance_name: openshell
+    keycloak_realm_name: openshell
+    keycloak_client_secret: openshell-aap-client
+
+  module_defaults:
+    group/kubernetes.core.k8s:
+      validate_certs: false
+    group/ansible.eda.eda:
+      aap_hostname: "{{ aap_route_r.resources[0].spec.host }}"
+      aap_username: "{{ aap_username }}"
+      aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+      aap_validate_certs: "{{ aap_validate_certs }}"
+    # kubernetes.core.k8s_info:
+    #   validate_certs: false
+    # kubernetes.core.helm:
+    #   validate_certs: false
+    ansible.platform.authenticator:
+      aap_validate_certs: "{{ aap_validate_certs | default(false) }}"
+    ansible.platform.organization:
+      aap_validate_certs: "{{ aap_validate_certs | default(false) }}"
+    ansible.platform.team:
+      aap_validate_certs: "{{ aap_validate_certs | default(false) }}"
+    ansible.platform.role_team_assignment:
+      aap_validate_certs: "{{ aap_validate_certs | default(false) }}"
+
+  pre_tasks:
+    - name: Include vars from eda directory
+      ansible.builtin.include_vars:
+        dir: ./vars/eda/
+        extensions: ["yml", "yaml"]
+
+    - name: Get the Admin Secret for the AAP2 Controller
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: "{{ aap_namespace }}"
+        name: "{{ aap_platform_name }}-admin-password"
+      register: admin_secret_r
+
+    - name: Get the AAP Route for the AAP2 Controller
+      kubernetes.core.k8s_info:
+        kind: Route
+        api_version: route.openshift.io/v1
+        namespace: "{{ aap_namespace }}"
+        name: "{{ aap_platform_name }}"
+      register: aap_route_r
+
+    - name: Get the Keycloak Ingress
+      kubernetes.core.k8s_info:
+        kind: Ingress
+        api_version: networking.k8s.io/v1
+        namespace: "{{ keycloak_namespace }}"
+        name: "{{ keycloak_instance_name }}-ingress"
+      register: keycloak_route
+
+    - name: Get the Keycloak Client Secret for the AAP2 Controller
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: "{{ keycloak_namespace }}"
+        name: "{{ keycloak_client_secret }}"
+      register: keycloak_client_secret
+
+    - name: "Create OIDC authentication"
+      ansible.platform.authenticator:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        name: OpenShellOIDCAuth
+        type: ansible_base.authentication.authenticator_plugins.oidc
+        configuration:
+          OIDC_ENDPOINT: "https://{{ keycloak_route.resources[0].spec.rules[0].host }}/realms/{{ keycloak_realm_name }}"
+          KEY: "{{ keycloak_client_secret.resources[0].data['client-id'] | b64decode }}"
+          SECRET: "{{ keycloak_client_secret.resources[0].data['client-secret'] | b64decode }}"
+          USERNAME_KEY: email # preferred_username also works but will suffix overlapping usernames with random strings
+          RESPONSE_TYPE: code
+          GROUPS_CLAIM: realm_roles
+          JWT_ALGORITHMS:
+            - 'RS256'
+            - 'RS512'
+            - 'HS256'
+          SCOPE:
+            - openid
+            - profile
+            - email
+            - roles
+            - basic 
+        order: 3
+        state: present
+        enabled: true
+
+    - name: Create Organizations - OpenShell
+      ansible.platform.organization:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        name: OpenShell
+        description: OpenShell Organization
+        state: present
+
+    - name: Create Organizations - ZTP
+      ansible.platform.organization:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        name: ZTP
+        description: Zero Touch Provisioning Organization
+        state: present
+
+    - name: Create Team - OpenShell Admins
+      ansible.platform.team:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        name: OpenShell Admins
+        description: OpenShell Admins Team
+        organization: OpenShell
+        state: present
+
+    - name: Create Team - OpenShell Users
+      ansible.platform.team:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        name: OpenShell Users
+        description: OpenShell Users Team
+        organization: OpenShell
+        state: present
+
+    - name: Assign Role - OpenShell Admins, EDA Org
+      ansible.platform.role_team_assignment:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        role_definition: "EDA Organization Project Admin"
+        team: "OpenShell Admins"
+        assignment_objects:
+          - name: "OpenShell"
+            type: organizations
+        state: present
+
+    - name: Assign Role - OpenShell Admins, Controller Org but not Org things
+      ansible.platform.role_team_assignment:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        role_definition: "{{ item }}"
+        team: "OpenShell Admins"
+        assignment_objects:
+          - name: "OpenShell"
+            type: organizations
+        state: present
+      loop:
+        - Organization Credential Admin
+        - Organization Inventory Admin
+        - Organization JobTemplate Admin
+        - Organization WorkflowJobTemplate Admin
+        - Organization NotificationTemplate Admin
+        - Organization Project Admin
+
+    - name: Create OIDC authentication map - OpenShell Org Admins
+      ansible.platform.authenticator_map:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        name: "OpenShell Admins"
+        authenticator: "OpenShellOIDCAuth"
+        revoke: true
+        organization: "OpenShell"
+        map_type: organization
+        role: "Organization Admin"
+        team: "OpenShell Admins"
+        triggers:
+          groups:
+            has_or:
+              - "openshell-admin"
+        order: 0
+        state: present
+
+    - name: Create OIDC authentication map - OpenShell Team Admins
+      ansible.platform.authenticator_map:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        name: "OpenShell Team Admins"
+        authenticator: "OpenShellOIDCAuth"
+        revoke: true
+        organization: "OpenShell"
+        map_type: team
+        role: "Team Admin"
+        team: "OpenShell Admins"
+        triggers:
+          groups:
+            has_or:
+              - "openshell-admin"
+        order: 0
+        state: present
+
+    - name: Create OIDC authentication map - OpenShell Users Team Admins
+      ansible.platform.authenticator_map:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        name: "OpenShell Users Team Admins"
+        authenticator: "OpenShellOIDCAuth"
+        revoke: true
+        organization: "OpenShell"
+        map_type: team
+        role: "Team Admin"
+        team: "OpenShell Users"
+        triggers:
+          groups:
+            has_or:
+              - "openshell-admin"
+        order: 0
+        state: present
+
+    - name: Create OIDC authentication map - OpenShell Team Users
+      ansible.platform.authenticator_map:
+        aap_hostname: "https://{{ aap_route_r.resources[0].spec.host }}"
+        aap_username: "{{ aap_username }}"
+        aap_password: "{{ admin_secret_r.resources[0].data.password | b64decode }}"
+        name: "OpenShell Users"
+        authenticator: "OpenShellOIDCAuth"
+        revoke: true
+        organization: "OpenShell"
+        map_type: team
+        role: "Team Member"
+        team: "OpenShell Users"
+        triggers:
+          groups:
+            has_or:
+              - "openshell-user"
+        order: 0
+        state: present
+
+  roles:
+    - {role: infra.aap_configuration.eda_decision_environments, when: eda_decision_environments is defined}
+    - {role: infra.aap_configuration.eda_credentials, when: eda_credentials is defined}
+    - {role: infra.aap_configuration.eda_projects, when: eda_projects is defined}
