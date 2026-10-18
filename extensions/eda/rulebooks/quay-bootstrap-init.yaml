@@ -1,0 +1,31 @@
+---
+- name: Initialize Quay once it is first initialized
+  hosts: all
+  match_multiple_rules: true
+  execution_strategy: sequential
+  sources:
+    - juniper.eda.k8s:
+        validate_certs: false
+        api_version: quay.redhat.com/v1
+        kind: QuayRegistry
+        # label_selectors:
+        #   - quay/initialized=false
+
+  rules:
+    # - name: debug more lol
+    #   condition: true
+    #   action:
+    #     debug:
+
+    - name: QuayRegistry Initialized
+      condition: (event.type == "ADDED" or event.type == "MODIFIED") and event.resource.status.conditions["Available"].status == "True"
+      action:
+        run_workflow_template:
+          name: EDA Workflow - Bootstrap Quay
+          organization: Default
+
+    # - name: debug lol
+    #   condition: true
+    #   action:
+    #     print_event:
+    #       pretty: true
