@@ -3,15 +3,15 @@ kind: NodeNetworkConfigurationPolicy
 metadata:
   name: vlan420
 spec:
-  # nodeSelector:
-  #   kubernetes.io/hostname: raza
+  nodeSelector:
+    kubernetes.io/hostname: raza
   desiredState:
     interfaces:
       - description: VLAN 420 using bond0
         ipv4:
           dhcp: false
           enabled: false
-        # mtu: 9000
+        mtu: 1500
         name: bond0.420
         state: up
         type: vlan
@@ -25,7 +25,7 @@ spec:
           port:
             - name: bond0.420
         description: Linux bridge with bond0 VLAN 420 as a port, used for MetalLB
-        # mtu: 9000
+        mtu: 1500
         name: br420
         state: up
         type: linux-bridge

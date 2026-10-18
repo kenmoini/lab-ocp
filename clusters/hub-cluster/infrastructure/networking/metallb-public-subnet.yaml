@@ -32,3 +32,20 @@ spec:
     - 76.195.90.173/32
     - 76.195.90.174/32
   autoAssign: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.io/address-pool: v420-public-subnet
+  name: test-build-ext
+  labels:
+    app: test-build
+spec:
+  selector:
+    app: test-build
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
