@@ -4,6 +4,8 @@ prometheus:
   install: false
 
 global:
+  ingress:
+    configureCertmanager: false
   image:
     pullPolicy: Always  # You can drop this if you're using release tags.
     tagSuffix: -ubi # -ubi8 for GitLab 17.2 and earlier
@@ -14,3 +16,12 @@ global:
     password:
       secret: gitlab-db-app
       key: password
+
+s3:
+  v4auth: true
+  regionendpoint: "https://s3.openshift-storage.svc.cluster.local"
+  pathstyle: true
+  region: the-moon
+  # bucket: registry
+  accesskey: AWS_ACCESS_KEY_ID
+  secretkey: AWS_SECRET_ACCESS_KEY
