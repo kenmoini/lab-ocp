@@ -1,0 +1,173 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: gitlab-chart-s3
+  annotations:
+    policy.open-cluster-management.io/description: Deploys ODF S3 objects needed to run GitLab on OpenShift via the Helm chart
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: health-check-odf
+      namespace: ""
+      compliance: Compliant
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-s3-registry
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: gitlab-registry
+                  namespace: gitlab-system
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  bucketName: gitlab-registry
+                  objectBucketName: obc-openshift-storage-gitlab-registry
+                  storageClassName: openshift-storage.noobaa.io
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-s3-uploads
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: gitlab-uploads
+                  namespace: gitlab-system
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  bucketName: gitlab-uploads
+                  objectBucketName: obc-openshift-storage-gitlab-uploads
+                  storageClassName: openshift-storage.noobaa.io
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-s3-artifacts
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: gitlab-artifacts
+                  namespace: gitlab-system
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  bucketName: gitlab-artifacts
+                  objectBucketName: obc-openshift-storage-gitlab-artifacts
+                  storageClassName: openshift-storage.noobaa.io
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-s3-packages
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: gitlab-packages
+                  namespace: gitlab-system
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  bucketName: gitlab-packages
+                  objectBucketName: obc-openshift-storage-gitlab-packages
+                  storageClassName: openshift-storage.noobaa.io
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-s3-backups
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: gitlab-backups
+                  namespace: gitlab-system
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  bucketName: gitlab-backups
+                  objectBucketName: obc-openshift-storage-gitlab-backups
+                  storageClassName: openshift-storage.noobaa.io
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-s3-lfs
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: gitlab-lfs
+                  namespace: gitlab-system
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  bucketName: gitlab-lfs
+                  objectBucketName: obc-openshift-storage-gitlab-lfs
+                  storageClassName: openshift-storage.noobaa.io
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-s3-toolbox
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: gitlab-toolbox
+                  namespace: gitlab-system
+                spec:
+                  additionalConfig:
+                    bucketclass: noobaa-default-bucket-class
+                  bucketName: gitlab-toolbox
+                  objectBucketName: obc-openshift-storage-gitlab-toolbox
+                  storageClassName: openshift-storage.noobaa.io

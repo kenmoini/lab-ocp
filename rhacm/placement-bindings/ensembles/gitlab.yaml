@@ -12,3 +12,6 @@ subjects:
   - name: gitlab-chart-db
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: gitlab-chart-s3
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
