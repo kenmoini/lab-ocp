@@ -30,31 +30,32 @@ global:
       key: password
   registry:
     bucket: gitlab-s3-registry
-  lfs:
-    bucket: gitlab-s3-lfs
-    connection:
-      secret: gitlab-s3-lfs-conn
-      key: connection
-  backups:
-    bucket: gitlab-s3-backups
-    connection:
-      secret: gitlab-s3-backups-conn
-      key: connection
-  uploads:
-    bucket: gitlab-s3-uploads
-    connection:
-      secret: gitlab-s3-uploads-conn
-      key: connection
-  artifacts:
-    bucket: gitlab-s3-artifacts
-    connection:
-      secret: gitlab-s3-artifacts-conn
-      key: connection
-  packages:
-    bucket: gitlab-s3-packages
-    connection:
-      secret: gitlab-s3-packages-conn
-      key: connection
+  appConfig:
+    lfs:
+      bucket: gitlab-s3-lfs
+      connection:
+        secret: gitlab-s3-lfs-conn
+        key: connection
+    backups:
+      bucket: gitlab-s3-backups
+      connection:
+        secret: gitlab-s3-backups-conn
+        key: connection
+    uploads:
+      bucket: gitlab-s3-uploads
+      connection:
+        secret: gitlab-s3-uploads-conn
+        key: connection
+    artifacts:
+      bucket: gitlab-s3-artifacts
+      connection:
+        secret: gitlab-s3-artifacts-conn
+        key: connection
+    packages:
+      bucket: gitlab-s3-packages
+      connection:
+        secret: gitlab-s3-packages-conn
+        key: connection
 
 registry:
   storage:
