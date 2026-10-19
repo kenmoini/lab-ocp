@@ -68,12 +68,9 @@ spec:
           targetRevision: '{{.helmRevision}}'
           helm:
             releaseName: '{{.helmReleaseName}}'
-            # valueFiles:
-            #   - "$values/clusters/{{ .name }}/helm-values/{{ .helmReleaseName }}.yaml"
+            valueFiles:
+              - "$values/clusters/{{ .name }}/helm-values/{{ .helmReleaseName }}.yaml"
             valuesObject:
-              installCertmanager: false
-              prometheus:
-                install: false
               gitlab-runner:
                 image:
                   # Replace 'X.Y.Z' with desired GitLab version.
@@ -86,13 +83,6 @@ spec:
                   auth:
                     secret: '{{.redisReleaseName}}'
                     key: redis-password
-                psql:
-                  host: gitlab-db-rw.gitlab-system.svc.cluster.local
-                  database: app
-                  username: app
-                  password:
-                    secret: gitlab-db-app
-                    key: password
 
       destination:
         name: "{{.name}}"
