@@ -6,6 +6,8 @@ prometheus:
   install: false
   rbac:
     create: false
+upgradeCheck:
+  enabled: false
 
 global:
   time_zone: America/New_York
