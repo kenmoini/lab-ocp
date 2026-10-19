@@ -16,12 +16,3 @@ global:
     password:
       secret: gitlab-db-app
       key: password
-
-s3:
-  v4auth: true
-  regionendpoint: "https://s3.openshift-storage.svc.cluster.local"
-  pathstyle: true
-  region: the-moon
-  # bucket: registry
-  accesskey: AWS_ACCESS_KEY_ID
-  secretkey: AWS_SECRET_ACCESS_KEY
