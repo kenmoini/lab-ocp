@@ -3,7 +3,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: gitlab-operator
+  name: gitlab
   namespace: openshift-gitops
 spec:
   goTemplate: true
@@ -14,7 +14,7 @@ spec:
           - clusters:
               selector:
                 matchExpressions:
-                  - key: ensemble/gitlab-operator
+                  - key: ensemble/gitlab
                     operator: In
                     values:
                       - "true"
@@ -22,11 +22,17 @@ spec:
                       - "enabled"
           - list:
               elements:
-              - appName: gitlab-operator
+              - appName: gitlab
                 namespace: gitlab-system
                 helmRepoURL: 'oci://registry.gitlab.com/charts/charts.gitlab.io/release/gitlab-operator'
                 helmChartName: gitlab-operator
                 helmRevision: 3.5.0
+                helmReleaseName: gitlab-operator
+
+                redisRepoURL: 'oci://registry-1.docker.io/bitnamicharts/redis'
+                redisReleaseName: gitlab-redis
+                redisHelmChartName: redis
+                redisHelmRevision: 23.1.3
   template:
     metadata:
       name: "{{.name}}-{{.appName}}"
@@ -39,19 +45,37 @@ spec:
     spec:
       project: default
       sources:
+        - ref: values
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
         # - kustomize: {}
         #   repoURL: 'https://github.com/kenmoini/lab-ocp'
         #   ## Path is the repo directory that containers the cluster(s) configuration and deployment manifests
         #   path: configuration/gitlab-operator/instance/
-        - chart: '{{.helmChartName}}'
+        # Redis Chart
+        - repoURL: '{{.redisRepoURL}}'
+          chart: '{{.redisHelmChartName}}'
+          releaseName: '{{.redisReleaseName}}'
+          targetRevision: '{{.redisHelmRevision}}'
           helm:
-            valuesObject:
-              nginx-ingress:
-                create: false
-              bridge:
-                enabled: true
-          repoURL: '{{.helmRepoURL}}'
-          targetRevision: '{{.helmRevision}}'
+            valueFiles:
+              - "$values/clusters/{{ .name }}/helm-values/{{ .redisReleaseName }}.yaml"
+
+        # - repoURL: '{{.helmRepoURL}}'
+        #   chart: '{{.helmChartName}}'
+        #   releaseName: '{{.helmReleaseName}}'
+        #   targetRevision: '{{.helmRevision}}'
+        #   helm:
+        #     valueFiles:
+        #       - "$values/clusters/{{ .name }}/helm-values/{{ .helmReleaseName }}.yaml"
+        #     valuesObject:
+        #       global:
+        #         redis:
+        #           host: '{{.redisReleaseName}}-headless'
+        #           auth:
+        #             secret: '{{.redisReleaseName}}'
+        #             key: redis-password
+
       destination:
         name: "{{.name}}"
         namespace: "{{.namespace}}"
