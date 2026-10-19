@@ -14,6 +14,10 @@ global:
     enabled: true
   ingress:
     configureCertmanager: false
+  gatewayApi:
+    enabled: false
+    installEnvoy: false
+    configureCertmanager: false
   image:
     pullPolicy: Always  # You can drop this if you're using release tags.
     tagSuffix: -ubi # -ubi8 for GitLab 17.2 and earlier
