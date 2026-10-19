@@ -24,10 +24,12 @@ spec:
               elements:
               - appName: gitlab
                 namespace: gitlab-system
-                helmRepoURL: 'oci://registry.gitlab.com/charts/charts.gitlab.io/release/gitlab-operator'
-                helmChartName: gitlab-operator
-                helmRevision: 3.5.0
-                helmReleaseName: gitlab-operator
+
+                helmRepoURL: 'registry.gitlab.com/charts/charts.gitlab.io/release/gitlab'
+                helmChartName: gitlab
+                helmReleaseName: gitlab
+                helmRevision: 10.5.0 # https://docs.gitlab.com/charts/installation/version_mappings/
+                gitlabVersion: 19.5.0
 
                 redisRepoURL: 'oci://registry-1.docker.io/bitnamicharts/redis'
                 redisReleaseName: gitlab-redis
@@ -61,20 +63,36 @@ spec:
             valueFiles:
               - "$values/clusters/{{ .name }}/helm-values/{{ .redisReleaseName }}.yaml"
 
-        # - repoURL: '{{.helmRepoURL}}'
-        #   chart: '{{.helmChartName}}'
-        #   targetRevision: '{{.helmRevision}}'
-        #   helm:
-        #     releaseName: '{{.helmReleaseName}}'
-        #     valueFiles:
-        #       - "$values/clusters/{{ .name }}/helm-values/{{ .helmReleaseName }}.yaml"
-        #     valuesObject:
-        #       global:
-        #         redis:
-        #           host: '{{.redisReleaseName}}-headless'
-        #           auth:
-        #             secret: '{{.redisReleaseName}}'
-        #             key: redis-password
+        - repoURL: '{{.helmRepoURL}}'
+          chart: '{{.helmChartName}}'
+          targetRevision: '{{.helmRevision}}'
+          helm:
+            releaseName: '{{.helmReleaseName}}'
+            # valueFiles:
+            #   - "$values/clusters/{{ .name }}/helm-values/{{ .helmReleaseName }}.yaml"
+            valuesObject:
+              installCertmanager: false
+              prometheus:
+                install: false
+              gitlab-runner:
+                image:
+                  # Replace 'X.Y.Z' with desired GitLab version.
+                  # `skopeo` can be used to find available tags:
+                  #   skopeo list-tags docker://registry.gitlab.com/gitlab-org/gitlab-runner | jq '.Tags' | grep 'ubi-fips-v'
+                  tag: ubi-fips-v{{ .gitlabVersion }}
+              global:
+                redis:
+                  host: '{{.redisReleaseName}}-headless'
+                  auth:
+                    secret: '{{.redisReleaseName}}'
+                    key: redis-password
+                psql:
+                  host: gitlab-db-rw.gitlab-system.svc.cluster.local
+                  database: app
+                  username: app
+                  password:
+                    secret: gitlab-db-app
+                    key: password
 
       destination:
         name: "{{.name}}"
