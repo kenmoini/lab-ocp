@@ -49,3 +49,29 @@ spec:
                   apiGroup: rbac.authorization.k8s.io
                   kind: ClusterRole
                   name: 'system:openshift:scc:nonroot-v2'
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-rbac-nonroot
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates-raw: |
+            {{- range $key := (list "gitlab-shell" "registry" "sidekiq" "toolbox" "webservice" "geo-logcursor" "gitaly" "gitlab-exporter" "gitlab-runner" "kas" "mailroom" "migrations" "shared-secrets") }}
+            - complianceType: musthave
+              objectDefinition:
+                kind: ClusterRoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: gitlab-{{ $key }}-nonroot
+                subjects:
+                  - kind: ServiceAccount
+                    name: gitlab-{{ $key }}
+                    namespace: gitlab-system
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: 'system:openshift:scc:nonroot-v2'
+            {{- end }}
