@@ -6,6 +6,7 @@ namespace: open-cluster-management-policies
 resources:
   - capabilities/
   - compliance/
+  - ensembles/
 
   - all-clusters.yaml
   - all-openshift-clusters.yaml
