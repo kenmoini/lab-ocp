@@ -8,6 +8,8 @@ prometheus:
     create: false
 
 global:
+  time_zone: America/New_York
+  edition: ce
   serviceAccount:
     enabled: true
     create: true
@@ -16,6 +18,7 @@ global:
     enabled: true
   ingress:
     configureCertmanager: false
+    class: "openshift-default"
   gatewayApi:
     enabled: false
     installEnvoy: false
@@ -33,6 +36,8 @@ global:
   registry:
     bucket: gitlab-s3-registry
   appConfig:
+    enableUsagePing: false
+    usernameChangingEnabled: false
     lfs:
       bucket: gitlab-s3-lfs
       connection:
