@@ -25,7 +25,7 @@ spec:
               - appName: gitlab
                 namespace: gitlab-system
 
-                helmRepoURL: 'registry.gitlab.com/charts/charts.gitlab.io/release/gitlab'
+                helmRepoURL: 'https://charts.gitlab.io'
                 helmChartName: gitlab
                 helmReleaseName: gitlab
                 helmRevision: 10.5.0 # https://docs.gitlab.com/charts/installation/version_mappings/
