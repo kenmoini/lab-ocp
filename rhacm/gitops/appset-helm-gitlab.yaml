@@ -55,17 +55,17 @@ spec:
         # Redis Chart
         - repoURL: '{{.redisRepoURL}}'
           chart: '{{.redisHelmChartName}}'
-          releaseName: '{{.redisReleaseName}}'
           targetRevision: '{{.redisHelmRevision}}'
           helm:
+            releaseName: '{{.redisReleaseName}}'
             valueFiles:
               - "$values/clusters/{{ .name }}/helm-values/{{ .redisReleaseName }}.yaml"
 
         # - repoURL: '{{.helmRepoURL}}'
         #   chart: '{{.helmChartName}}'
-        #   releaseName: '{{.helmReleaseName}}'
         #   targetRevision: '{{.helmRevision}}'
         #   helm:
+        #     releaseName: '{{.helmReleaseName}}'
         #     valueFiles:
         #       - "$values/clusters/{{ .name }}/helm-values/{{ .helmReleaseName }}.yaml"
         #     valuesObject:
