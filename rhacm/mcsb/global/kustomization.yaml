@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - argocd-principal.yaml
   - automation-orchestrator.yaml
+  - gitlab-system.yaml
   - kube-system.yaml
   - open-cluster-management-observability.yaml
   - open-cluster-management-policies.yaml
