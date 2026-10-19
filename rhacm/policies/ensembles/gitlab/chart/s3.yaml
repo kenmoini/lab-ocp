@@ -25,18 +25,19 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: objectbucket.io/v1alpha1
                 kind: ObjectBucketClaim
                 metadata:
-                  name: gitlab-registry
+                  name: gitlab-s3-registry
                   namespace: gitlab-system
                 spec:
                   additionalConfig:
                     bucketclass: noobaa-default-bucket-class
-                  bucketName: gitlab-registry
+                  bucketName: gitlab-s3-registry
                   objectBucketName: obc-openshift-storage-gitlab-registry
                   storageClassName: openshift-storage.noobaa.io
     - objectDefinition:
@@ -47,18 +48,19 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: objectbucket.io/v1alpha1
                 kind: ObjectBucketClaim
                 metadata:
-                  name: gitlab-uploads
+                  name: gitlab-s3-uploads
                   namespace: gitlab-system
                 spec:
                   additionalConfig:
                     bucketclass: noobaa-default-bucket-class
-                  bucketName: gitlab-uploads
+                  bucketName: gitlab-s3-uploads
                   objectBucketName: obc-openshift-storage-gitlab-uploads
                   storageClassName: openshift-storage.noobaa.io
     - objectDefinition:
@@ -69,18 +71,19 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: objectbucket.io/v1alpha1
                 kind: ObjectBucketClaim
                 metadata:
-                  name: gitlab-artifacts
+                  name: gitlab-s3-artifacts
                   namespace: gitlab-system
                 spec:
                   additionalConfig:
                     bucketclass: noobaa-default-bucket-class
-                  bucketName: gitlab-artifacts
+                  bucketName: gitlab-s3-artifacts
                   objectBucketName: obc-openshift-storage-gitlab-artifacts
                   storageClassName: openshift-storage.noobaa.io
     - objectDefinition:
@@ -91,18 +94,19 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: objectbucket.io/v1alpha1
                 kind: ObjectBucketClaim
                 metadata:
-                  name: gitlab-packages
+                  name: gitlab-s3-packages
                   namespace: gitlab-system
                 spec:
                   additionalConfig:
                     bucketclass: noobaa-default-bucket-class
-                  bucketName: gitlab-packages
+                  bucketName: gitlab-s3-packages
                   objectBucketName: obc-openshift-storage-gitlab-packages
                   storageClassName: openshift-storage.noobaa.io
     - objectDefinition:
@@ -113,18 +117,19 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: objectbucket.io/v1alpha1
                 kind: ObjectBucketClaim
                 metadata:
-                  name: gitlab-backups
+                  name: gitlab-s3-backups
                   namespace: gitlab-system
                 spec:
                   additionalConfig:
                     bucketclass: noobaa-default-bucket-class
-                  bucketName: gitlab-backups
+                  bucketName: gitlab-s3-backups
                   objectBucketName: obc-openshift-storage-gitlab-backups
                   storageClassName: openshift-storage.noobaa.io
     - objectDefinition:
@@ -135,18 +140,19 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: objectbucket.io/v1alpha1
                 kind: ObjectBucketClaim
                 metadata:
-                  name: gitlab-lfs
+                  name: gitlab-s3-lfs
                   namespace: gitlab-system
                 spec:
                   additionalConfig:
                     bucketclass: noobaa-default-bucket-class
-                  bucketName: gitlab-lfs
+                  bucketName: gitlab-s3-lfs
                   objectBucketName: obc-openshift-storage-gitlab-lfs
                   storageClassName: openshift-storage.noobaa.io
     - objectDefinition:
@@ -157,17 +163,18 @@ spec:
         spec:
           remediationAction: enforce
           severity: high
+          pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: objectbucket.io/v1alpha1
                 kind: ObjectBucketClaim
                 metadata:
-                  name: gitlab-toolbox
+                  name: gitlab-s3-toolbox
                   namespace: gitlab-system
                 spec:
                   additionalConfig:
                     bucketclass: noobaa-default-bucket-class
-                  bucketName: gitlab-toolbox
+                  bucketName: gitlab-s3-toolbox
                   objectBucketName: obc-openshift-storage-gitlab-toolbox
                   storageClassName: openshift-storage.noobaa.io
