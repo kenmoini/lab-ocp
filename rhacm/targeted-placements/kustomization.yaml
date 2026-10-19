@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - argocd-principal/
   - automation-orchestrator/
+  - gitlab-system/
   - kube-system/
   - netobserv/
   - open-cluster-management-observability/

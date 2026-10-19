@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: ensembles-gitlab
+  #namespace: gitlab-system
+placementRef:
+  name: ensemble-gitlab
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: gitlab-chart-s3-formatter
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
