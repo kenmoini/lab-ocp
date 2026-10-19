@@ -1,9 +1,17 @@
 
 installCertmanager: false
+certmanager:
+  installCRDs: false
 prometheus:
   install: false
+  rbac:
+    create: false
 
 global:
+  serviceAccount:
+    enabled: true
+  monitoring:
+    enabled: true
   ingress:
     configureCertmanager: false
   image:
