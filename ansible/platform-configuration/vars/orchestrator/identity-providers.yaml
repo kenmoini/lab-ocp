@@ -1,0 +1,31 @@
+---
+orchestrator_identity_providers:
+  - name: OpenShellOIDC
+    description: OpenShell OIDC Identity Provider
+    enabled: true
+    configuration:
+      issuer_url: "https://{{ keycloak_route.resources[0].spec.rules[0].host }}/realms/{{ keycloak_realm_name }}"
+      client_id: "{{ keycloak_client_secret.resources[0].data['client-id'] | b64decode }}"
+      client_secret: "{{ keycloak_client_secret.resources[0].data['client-secret'] | b64decode }}"
+      redirect_uri: "https://{{ automation_orchestrator_route.resources[0].spec.host }}/api/v1/auth/oidc/callback"
+      disable_tls_verify: true
+      claim_mapping:
+        subject: sub
+        username: email
+        first_name: given_name
+        last_name: family_name
+        email: email
+      scopes: "openid profile email roles basic"
+      group_jmespath_expression: "realm_roles[*]"
+      group_mapping_entries:
+        - idp_group_value: openshell-admin
+          mapped_group: openshell-admins
+        - idp_group_value: openshell-auditor
+          mapped_group: openshell-auditors
+        - idp_group_value: openshell-user
+          mapped_group: openshell-users
+      allow_all_authenticated: false
+      auto_discovery: true
+      enable_rp_initiated_logout: false
+    update_secrets: false
+    test: true

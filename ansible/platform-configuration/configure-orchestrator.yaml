@@ -1,0 +1,154 @@
+---
+# Configure Automation Orchestrator from a directory of YAML variable files.
+#
+# Usage:
+#   ansible-playbook kenmoini.automation_orchestrator_config.configure_orchestrator \
+#     -e orchestrator_configs_dir=./my_configs
+#
+# Every .yml/.yaml file directly inside the configs directory is loaded as variables (subdirectories such as
+# files/ are skipped so workflow definitions can live beside the variables), then the
+# dispatch role runs every configuration role against the loaded data.
+#
+# orchestrator_configs_dir defaults to ./orchestrator_configs. A relative value is
+# anchored to the current working directory (where ansible-playbook was started),
+# never to the playbook directory inside the installed collection. The roles resolve
+# relative file paths in the configuration (for example a workflow definition_file)
+# against the same directory.
+#
+# Authentication variables (set in the configs directory, inventory or via -e):
+#   orchestrator_hostname, orchestrator_username, orchestrator_password,
+#   orchestrator_token, orchestrator_client_id, orchestrator_client_secret,
+#   orchestrator_validate_certs, orchestrator_request_timeout
+- name: Configure Automation Orchestrator
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    aap_namespace: aap
+    aap_platform_name: hub
+    aap_username: admin
+    aap_validate_certs: false
+
+    automation_orchestrator_namespace: automation-orchestrator
+    automation_orchestrator_instance_name: automation-orchestrator
+
+    keycloak_namespace: rhbk
+    keycloak_instance_name: openshell
+    keycloak_realm_name: openshell
+    keycloak_client_secret: openshell-aap-client
+
+    __configs_dir_raw: "{{ orchestrator_configs_dir | default('vars/orchestrator', true) }}"
+    __configs_dir: "{{ __configs_dir_raw if __configs_dir_raw is abs else lookup('ansible.builtin.env', 'PWD') ~ '/' ~ __configs_dir_raw }}"
+
+  module_defaults:
+    group/kubernetes.core.k8s:
+      validate_certs: false
+
+  pre_tasks:
+
+    - name: Get the Admin Secret for the AAP2 Controller
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: "{{ aap_namespace }}"
+        name: "{{ aap_platform_name }}-admin-password"
+      register: admin_secret_r
+
+    - name: Get the AAP Route for the AAP2 Controller
+      kubernetes.core.k8s_info:
+        kind: Route
+        api_version: route.openshift.io/v1
+        namespace: "{{ aap_namespace }}"
+        name: "{{ aap_platform_name }}"
+      register: aap_route_r
+
+    - name: Get the Keycloak Ingress
+      kubernetes.core.k8s_info:
+        kind: Ingress
+        api_version: networking.k8s.io/v1
+        namespace: "{{ keycloak_namespace }}"
+        name: "{{ keycloak_instance_name }}-ingress"
+      register: keycloak_route
+
+    - name: Get the Keycloak Client Secret for the AAP2 Controller
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: "{{ keycloak_namespace }}"
+        name: "{{ keycloak_client_secret }}"
+      register: keycloak_client_secret
+
+    - name: Get the Automation Orchestrator Admin Secret
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: "{{ automation_orchestrator_namespace }}"
+        name: "{{ automation_orchestrator_instance_name }}-initial-admin-password"
+      register: automation_orchestrator_admin_secret
+
+    - name: Get the Automation Orchestrator Route
+      kubernetes.core.k8s_info:
+        kind: Route
+        api_version: route.openshift.io/v1
+        namespace: "{{ automation_orchestrator_namespace }}"
+        name: "{{ automation_orchestrator_instance_name }}"
+      register: automation_orchestrator_route
+
+    - name: Expose the resolved configs directory to the roles
+      ansible.builtin.set_fact:
+        orchestrator_configs_dir: "{{ __configs_dir }}"
+      tags: always
+
+    - name: Include configuration variables from the configs directory
+      ansible.builtin.include_vars:
+        dir: "{{ __configs_dir }}"
+        depth: 1
+        extensions: [yml, yaml]
+        ignore_files: [auth.yml.example]
+      tags: always
+
+  roles:
+    - role: kenmoini.automation_orchestrator_config.dispatch
+
+  post_tasks:
+    # - name: Display the created Service Account credentials for the CI pipelines
+    #   ansible.builtin.debug:
+    #     var: openshell_test_ci_pipeline_credential
+    # - name: Display the created Service Account credentials for the CI pipelines
+    #   ansible.builtin.debug:
+    #     var: openshell_prod_ci_pipeline_credential
+
+    - name: Save the created Service Account credentials for the Test CI pipelines to a K8s Secret
+      when: openshell_test_ci_pipeline_credential.client_secret is defined
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: openshell-test-ci-sa
+            namespace: "{{ automation_orchestrator_namespace }}"
+          type: Opaque
+          stringData:
+            type: "{{ openshell_test_ci_pipeline_credential.service_account_credential.credential_type }}"
+            client_id: "{{ openshell_test_ci_pipeline_credential.client_id }}"
+            client_secret: "{{ openshell_test_ci_pipeline_credential.client_secret }}"
+            identifier: "{{ openshell_test_ci_pipeline_credential.service_account_credential.identifier }}"
+            expires_at: "{{ openshell_test_ci_pipeline_credential.service_account_credential.expires_at }}"
+
+    - name: Save the created Service Account credentials for the Prod CI pipelines to a K8s Secret
+      when: openshell_prod_ci_pipeline_credential.client_secret is defined
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: openshell-prod-ci-sa
+            namespace: "{{ automation_orchestrator_namespace }}"
+          type: Opaque
+          stringData:
+            type: "{{ openshell_prod_ci_pipeline_credential.service_account_credential.credential_type }}"
+            client_id: "{{ openshell_prod_ci_pipeline_credential.client_id }}"
+            client_secret: "{{ openshell_prod_ci_pipeline_credential.client_secret }}"
+            identifier: "{{ openshell_prod_ci_pipeline_credential.service_account_credential.identifier }}"
+            expires_at: "{{ openshell_prod_ci_pipeline_credential.service_account_credential.expires_at }}"
+...

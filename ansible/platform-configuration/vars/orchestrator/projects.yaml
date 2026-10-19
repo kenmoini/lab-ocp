@@ -1,0 +1,10 @@
+---
+orchestrator_projects:
+  - name: openshell-test
+    description: Test environment for OpenShell
+    labels:
+      env: test
+  - name: openshell-prod
+    description: Production environment for OpenShell
+    labels:
+      env: prod

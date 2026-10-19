@@ -7,3 +7,4 @@ collections:
     version: ">=4.6.0"
   - name: ansible.eda
   - name: infra.aap_configuration
+  - name: kenmoini.automation_orchestrator_config

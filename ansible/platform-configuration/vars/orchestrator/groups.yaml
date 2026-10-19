@@ -1,0 +1,8 @@
+---
+orchestrator_groups:
+  - name: openshell-admins
+    description: Administrators from OpenShell Keycloak realm
+  - name: openshell-auditors
+    description: Auditors from OpenShell Keycloak realm
+  - name: openshell-users
+    description: Users from OpenShell Keycloak realm

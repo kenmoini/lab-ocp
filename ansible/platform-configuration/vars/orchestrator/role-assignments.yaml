@@ -1,0 +1,36 @@
+---
+orchestrator_role_assignments:
+
+  - role: project-admin
+    group: openshell-admins
+    project: openshell-test
+  - role: project-auditor
+    group: openshell-auditors
+    project: openshell-test
+  - role: project-user
+    group: openshell-users
+    project: openshell-test
+
+  - role: project-admin
+    group: openshell-admins
+    project: openshell-prod
+  - role: project-auditor
+    group: openshell-auditors
+    project: openshell-prod
+  - role: project-user
+    group: openshell-users
+    project: openshell-prod
+
+  - role: admin
+    group: openshell-admins
+  - role: auditor
+    group: openshell-auditors
+  - role: user
+    group: openshell-users
+
+  - role: project-user
+    service_account: openshell-test-ci
+    project: openshell-test
+  - role: project-user
+    service_account: openshell-prod-ci
+    project: openshell-prod
