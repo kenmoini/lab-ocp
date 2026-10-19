@@ -7,6 +7,7 @@ namespace: open-cluster-management-policies
 resources:
   - db.yaml
   - s3.yaml
+  - rbac.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
