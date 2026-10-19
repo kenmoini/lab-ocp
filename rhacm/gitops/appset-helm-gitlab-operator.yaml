@@ -48,6 +48,8 @@ spec:
             valuesObject:
               nginx-ingress:
                 create: false
+              bridge:
+                enabled: true
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:
