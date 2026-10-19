@@ -1,0 +1,16 @@
+
+installCertmanager: false
+prometheus:
+  install: false
+
+global:
+  image:
+    pullPolicy: Always  # You can drop this if you're using release tags.
+    tagSuffix: -ubi # -ubi8 for GitLab 17.2 and earlier
+  psql:
+    host: gitlab-db-rw.gitlab-system.svc.cluster.local
+    database: app
+    username: app
+    password:
+      secret: gitlab-db-app
+      key: password
