@@ -65,13 +65,13 @@ spec:
             releaseName: '{{.helmReleaseName}}'
             valueFiles:
               - "$values/clusters/{{ .name }}/helm-values/{{ .helmReleaseName }}.yaml"
-            valuesObject:
-              gitlab-runner:
-                image:
-                  # Replace 'X.Y.Z' with desired GitLab version.
-                  # `skopeo` can be used to find available tags:
-                  #   skopeo list-tags docker://registry.gitlab.com/gitlab-org/gitlab-runner | jq '.Tags' | grep 'ubi-fips-v'
-                  tag: ubi-fips-v{{ .gitlabVersion }}
+            # valuesObject:
+            #   gitlab-runner:
+            #     image:
+            #       # Replace 'X.Y.Z' with desired GitLab version.
+            #       # `skopeo` can be used to find available tags:
+            #       #   skopeo list-tags docker://registry.gitlab.com/gitlab-org/gitlab-runner | jq '.Tags' | grep 'ubi-fips-v'
+            #       tag: ubi-fips-v{{ .gitlabVersion }}
 
       destination:
         name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
