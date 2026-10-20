@@ -175,11 +175,6 @@ gitlab:
       annotations:
         pdns.kemo.dev: "enabled"
         pdns-internal.kemo.dev/hostname: "kas.gitlab.tri-force.lab.kemo.network"
-  registry:
-    gatewayRoute:
-      annotations:
-        pdns.kemo.dev: "enabled"
-        pdns-internal.kemo.dev/hostname: "registry.gitlab.tri-force.lab.kemo.network"
   webservice:
     minReplicas: 1
     maxReplicas: 1
@@ -234,3 +229,12 @@ gitlab-runner:
     - name: ca-certs
       secret:
         secretName: combo-ca
+  runners:
+    config: |
+      [[runners]]
+        name = "my-kubernetes-runner"
+        # Increase this value to prevent long polling deadlocks
+        request_concurrency = 4
+        
+        [runners.kubernetes]
+          image = "ubuntu:22.04"
