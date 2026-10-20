@@ -16,11 +16,9 @@ global:
     domain: apps.tri-force.lab.kemo.network
   certificates:
     customCAs:
-      - secret: trusted-root-ca
+      - secret: combo-ca
         keys:
-          - ca-bundle.crt
-      - secret: service-ca
-        keys:
+          - gitlab.apps.tri-force.lab.kemo.network.crt
           - service-ca.crt
   serviceAccount:
     enabled: true
