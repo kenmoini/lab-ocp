@@ -12,3 +12,17 @@ domainFilters:
 txtOwnerId: external-dns
 provider:
   name: pdns
+extraArgs:
+  - --pdns-server=https://pdns-admin.apps.lab.kemo.dev
+  - --pdns-server-id=localhost
+  - --pdns-api-key=${PDNS_API_KEY}
+extraVolumes:
+  - name: pdns-api-key
+    secret:
+      secretName: pdns-api-key
+env:
+  - name: PDNS_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: pdns-api-key
+        key: api-key
