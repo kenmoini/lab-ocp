@@ -129,11 +129,11 @@ global:
       connection:
         secret: gitlab-s3-backups-conn
         key: connection
-    toolbox:
-      bucket: gitlab-s3-toolbox
-      connection:
-        secret: gitlab-s3-toolbox-conn
-        key: connection
+    # toolbox:
+    #   bucket: gitlab-s3-toolbox
+    #   connection:
+    #     secret: gitlab-s3-toolbox-conn
+    #     key: connection
 
 registry:
   bucket: gitlab-s3-registry
