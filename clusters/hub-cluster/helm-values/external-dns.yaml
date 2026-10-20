@@ -23,6 +23,8 @@ extraVolumes:
   - name: trusted-cabundle
     configMap:
       name: trusted-cabundle
+annotationPrefix: pdns-internal.kemo.dev/
+annotationFilter: pdns.kemo.dev in (true, enable, enabled)
 extraVolumeMounts:
   - name: trusted-cabundle
     mountPath: /etc/ssl/certs/custom-ca.crt
