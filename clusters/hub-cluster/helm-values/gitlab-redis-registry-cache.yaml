@@ -1,0 +1,30 @@
+global:
+  compatibility:
+    openshift:
+      adaptSecurityContext: auto
+networkPolicy:
+  enabled: true
+  ingressNSMatchLabels:
+    kubernetes.io/metadata.name: gitlab-system
+  metrics:
+    ingressNSMatchLabels:
+      network.openshift.io/policy-group: monitoring
+metrics:
+  enabled: true
+  extraVolumes:
+    - name: metrics-client-certs
+      secret:
+        secretName: gitlab-cache-metrics-client-certs
+  extraVolumeMounts:
+    - name: metrics-client-certs
+      mountPath: /etc/prometheus/secrets/metrics-client-certs
+      readOnly: true
+  service:
+    annotations:
+      service.beta.openshift.io/serving-cert-secret-name: gitlab-cache-metrics-client-certs
+  serviceMonitor:
+    enabled: true
+    tlsConfig:
+      certFile: /etc/prometheus/secrets/metrics-client-certs/tls.crt
+      insecureSkipVerify: true
+      keyFile: /etc/prometheus/secrets/metrics-client-certs/tls.key
