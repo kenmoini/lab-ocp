@@ -6,7 +6,7 @@ metadata:
   annotations:
     policy.open-cluster-management.io/description: Deploys PostgreSQL objects needed to run GitLab on OpenShift via the Helm chart
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
-    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
     policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
 spec:
   disabled: false

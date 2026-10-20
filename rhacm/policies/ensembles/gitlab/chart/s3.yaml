@@ -6,7 +6,7 @@ metadata:
   annotations:
     policy.open-cluster-management.io/description: Deploys ODF S3 objects needed to run GitLab on OpenShift via the Helm chart
     policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
-    policy.open-cluster-management.io/standards: Kemo Labs 2025
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
     policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
 spec:
   disabled: false
@@ -27,7 +27,7 @@ spec:
           severity: high
           pruneObjectBehavior: DeleteIfCreated
           object-templates-raw: |
-            {{- range $key := (list "general" "pages" "registry" "uploads" "artifacts" "packages" "backups" "lfs" "toolbox" "secure-ci" "agent-plan" "ci-catalog" "dep-proxy" "ext-diffs") }}
+            {{- range $key := (list "general" "pages" "registry" "uploads" "artifacts" "packages" "backups" "lfs" "toolbox" "secure-ci" "agent-plan" "ci-catalog" "dep-proxy" "ext-diffs" "tmp" "tf-state") }}
             - complianceType: musthave
               objectDefinition:
                 apiVersion: objectbucket.io/v1alpha1
