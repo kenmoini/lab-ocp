@@ -1,3 +1,14 @@
 
 policy: create-only
-provider: {}
+sources:
+  - service
+  - ingress
+  - crd
+  - openshift-route
+domainFilters:
+  - lab.kemo.network
+  - lab.kemo.dev
+  - kemo.labs
+txtOwnerId: external-dns
+provider:
+  name: pdns
