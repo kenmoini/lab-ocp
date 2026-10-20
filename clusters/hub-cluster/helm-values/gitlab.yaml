@@ -168,8 +168,8 @@ gitlab:
     gatewayRoute:
       annotations:
         pdns.kemo.dev: "enabled"
-        pdns-internal.kemo.dev/hostname: "kas.tri-force.lab.kemo.network"
-        pdns-internal.kemo.dev/record-type: "CNAME"
+        pdns-internal.kemo.dev/hostname: "kas.gitlab.tri-force.lab.kemo.network"
+        # pdns-internal.kemo.dev/record-type: "CNAME"
   webservice:
     minReplicas: 1
     maxReplicas: 1
