@@ -14,9 +14,9 @@ networkPolicy:
 metrics:
   enabled: true
   extraArgs:
-    tls-client-key-file: "/etc/prometheus/secrets/metrics-client-certs/tls.key"
-    tls-client-cert-file: "/etc/prometheus/secrets/metrics-client-certs/tls.crt"
-    tls-ca-cert-file: "/etc/prometheus/secrets/metrics-client-ca/service-ca.crt"
+    tls-server-key-file: "/etc/prometheus/secrets/metrics-client-certs/tls.key"
+    tls-server-cert-file: "/etc/prometheus/secrets/metrics-client-certs/tls.crt"
+    tls-server-ca-cert-file: "/etc/prometheus/secrets/metrics-client-ca/service-ca.crt"
   extraVolumes:
     - name: metrics-client-certs
       secret:
