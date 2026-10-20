@@ -40,30 +40,72 @@ global:
   appConfig:
     enableUsagePing: false
     usernameChangingEnabled: false
+    object_store:
+      enabled: true
+      bucket: gitlab-s3-general
+      connection:
+        secret: gitlab-s3-general-conn
+        key: connection
     lfs:
       bucket: gitlab-s3-lfs
       connection:
         secret: gitlab-s3-lfs-conn
-        key: connection
-    backups:
-      bucket: gitlab-s3-backups
-      connection:
-        secret: gitlab-s3-backups-conn
-        key: connection
-    uploads:
-      bucket: gitlab-s3-uploads
-      connection:
-        secret: gitlab-s3-uploads-conn
         key: connection
     artifacts:
       bucket: gitlab-s3-artifacts
       connection:
         secret: gitlab-s3-artifacts-conn
         key: connection
+    uploads:
+      bucket: gitlab-s3-uploads
+      connection:
+        secret: gitlab-s3-uploads-conn
+        key: connection
     packages:
       bucket: gitlab-s3-packages
       connection:
         secret: gitlab-s3-packages-conn
+        key: connection
+    externalDiffs:
+      enabled: true
+      bucket: gitlab-s3-ext-diffs
+      connection:
+        secret: gitlab-s3-ext-diffs-conn
+        key: connection
+    terraformState:
+      enabled: false
+      bucket: gitlab-s3-tf-state
+      connection:
+        secret: gitlab-s3-tf-state-conn
+        key: connection
+    ciSecureFiles:
+      enabled: true
+      bucket: gitlab-s3-secure-ci
+      connection:
+        secret: gitlab-s3-secure-ci-conn
+        key: connection
+    agentPlanContent:
+      enabled: true
+      bucket: gitlab-s3-agent-plan
+      connection:
+        secret: gitlab-s3-agent-plan-conn
+        key: connection
+    ciCatalogBundles:
+      enabled: true
+      bucket: gitlab-s3-ci-catalog
+      connection:
+        secret: gitlab-s3-ci-catalog-conn
+        key: connection
+    dependencyProxy:
+      enabled: true
+      bucket: gitlab-s3-dep-proxy
+      connection:
+        secret: gitlab-s3-dep-proxy-conn
+        key: connection
+    backups:
+      bucket: gitlab-s3-backups
+      connection:
+        secret: gitlab-s3-backups-conn
         key: connection
 
 registry:
