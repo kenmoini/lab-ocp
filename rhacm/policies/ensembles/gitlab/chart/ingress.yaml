@@ -30,8 +30,12 @@ spec:
                   namespace: openshift-ingress
                 data:
                   service: |
+                    metadata:
+                      annotations:
+                        pdns.kemo.dev: "enabled"
+                        pdns-internal.kemo.labs/hostname: "gitlab.apps.tri-force.lab.kemo.network"
                     spec:
-                      type: ClusterIP
+                      type: LoadBalancer
 
             - complianceType: musthave
               objectDefinition:
