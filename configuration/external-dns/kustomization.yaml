@@ -4,3 +4,4 @@ kind: Kustomization
 
 resources:
   - rbac.yaml
+  - ext-secret-pdns.yaml
