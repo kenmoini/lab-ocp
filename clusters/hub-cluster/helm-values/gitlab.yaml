@@ -41,6 +41,7 @@ global:
     database: app
     username: app
     password:
+      useSecret: true
       secret: gitlab-db-app
       key: password
   registry:
