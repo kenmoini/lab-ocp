@@ -8,6 +8,8 @@ prometheus:
     create: false
 upgradeCheck:
   enabled: false
+nginx-ingress:
+  enabled: false
 
 global:
   time_zone: America/New_York
