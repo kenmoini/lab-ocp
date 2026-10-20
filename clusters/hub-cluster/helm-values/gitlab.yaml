@@ -23,6 +23,8 @@ global:
       name: kas.gitlab.tri-force.lab.kemo.network
     registry:
       name: registry.gitlab.tri-force.lab.kemo.network
+    pages:
+      name: pages.gitlab.tri-force.lab.kemo.network
     ssh: ""
   certificates:
     customCAs:
@@ -169,15 +171,18 @@ gitlab:
       annotations:
         pdns.kemo.dev: "enabled"
         pdns-internal.kemo.dev/hostname: "kas.gitlab.tri-force.lab.kemo.network"
-        # pdns-internal.kemo.dev/record-type: "CNAME"
+  registry:
+    gatewayRoute:
+      annotations:
+        pdns.kemo.dev: "enabled"
+        pdns-internal.kemo.dev/hostname: "registry.gitlab.tri-force.lab.kemo.network"
   webservice:
     minReplicas: 1
     maxReplicas: 1
-    # gatewayRoute:
-    #   annotations:
-    #     pdns.kemo.dev: "enabled"
-    #     pdns-internal.kemo.dev/hostname: "gitlab.tri-force.lab.kemo.network"
-    #     pdns-internal.kemo.dev/record-type: "CNAME"
+    gatewayRoute:
+      annotations:
+        pdns.kemo.dev: "enabled"
+        pdns-internal.kemo.dev/hostname: "gitlab.tri-force.lab.kemo.network"
   sidekiq:
     minReplicas: 1
     maxReplicas: 1
