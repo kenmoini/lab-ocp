@@ -160,3 +160,5 @@ gitlab-runner:
     - name: ca-certs
       secret:
         secretName: service-ca
+        items:
+          - key: full-ca-bundle.crt
