@@ -1,0 +1,66 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: gitlab-chart-ingress
+  annotations:
+    policy.open-cluster-management.io/description: Deploys ingress resources needed to run GitLab on OpenShift via the Helm chart
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-gateway
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: ConfigMap
+                apiVersion: v1
+                metadata:
+                  name: gitlab-gateway-config
+                  namespace: openshift-ingress
+                data:
+                  service: |
+                    spec:
+                      type: ClusterIP
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: gateway.networking.k8s.io/v1
+                kind: Gateway
+                metadata:
+                  name: gitlab-gateway
+                  namespace: openshift-ingress
+                spec:
+                  gatewayClassName: openshift-default
+                  infrastructure:
+                    parametersRef:
+                      group: ''
+                      kind: ConfigMap
+                      name: gitlab-gateway-config
+                  listeners:
+                    - allowedRoutes:
+                        namespaces:
+                          from: Selector
+                          selector:
+                            matchLabels:
+                              kubernetes.io/metadata.name: gitlab
+                      hostname: gitlab.apps.tri-force.lab.kemo.network
+                      name: https
+                      port: 443
+                      protocol: HTTPS
+                      tls:
+                        certificateRefs:
+                          - group: ''
+                            kind: Secret
+                            name: ingress-lb-tls
+                        mode: Terminate

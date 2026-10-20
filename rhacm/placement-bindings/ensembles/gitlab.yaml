@@ -21,3 +21,6 @@ subjects:
   - name: gitlab-chart-netpol
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: gitlab-chart-ingress
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
