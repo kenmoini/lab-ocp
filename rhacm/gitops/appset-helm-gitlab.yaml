@@ -93,7 +93,7 @@ spec:
                     key: redis-password
                     enabled: true
                   cache:
-                    host: '{{.redisReleaseName}}-cache'
+                    host: '{{.redisReleaseName}}-cache-master'
                     port: 6379
                     password:
                       enabled: true
