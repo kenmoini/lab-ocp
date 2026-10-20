@@ -20,6 +20,13 @@ extraVolumes:
   - name: pdns-api-key
     secret:
       secretName: pdns-api-key
+  - name: trusted-cabundle
+    configMap:
+      name: trusted-cabundle
+extraVolumeMounts:
+  - name: trusted-cabundle
+    mountPath: /etc/pki/ca-trust/extracted/pem
+    readOnly: true
 env:
   - name: PDNS_API_KEY
     valueFrom:
