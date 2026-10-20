@@ -126,4 +126,4 @@ spec:
                       matches:
                         - path:
                             type: PathPrefix
-                            value: /
+                            value: '/'

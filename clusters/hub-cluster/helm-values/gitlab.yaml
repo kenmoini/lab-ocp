@@ -16,6 +16,7 @@ global:
   edition: ee
   hosts:
     domain: apps.tri-force.lab.kemo.network
+    https: true
   certificates:
     customCAs:
       - secret: combo-ca
