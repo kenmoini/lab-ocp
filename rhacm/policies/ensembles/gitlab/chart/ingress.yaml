@@ -45,8 +45,6 @@ spec:
                 metadata:
                   name: gitlab-gateway
                   namespace: openshift-ingress
-                  annotations:
-                    pdns.kemo.dev: "enabled"
                 spec:
                   gatewayClassName: openshift-default
                   infrastructure:
