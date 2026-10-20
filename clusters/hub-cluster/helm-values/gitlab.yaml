@@ -12,6 +12,14 @@ upgradeCheck:
 global:
   time_zone: America/New_York
   edition: ce
+  certificates:
+    customCAs:
+      - secret: trusted-root-ca
+        keys:
+          - ca-bundle.crt
+      - secret: service-ca
+        keys:
+          - service-ca.crt
   serviceAccount:
     enabled: true
     create: true
