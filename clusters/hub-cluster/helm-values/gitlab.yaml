@@ -23,6 +23,7 @@ global:
       name: kas.gitlab.tri-force.lab.kemo.network
     registry:
       name: registry.gitlab.tri-force.lab.kemo.network
+    ssh: ""
   certificates:
     customCAs:
       - secret: combo-ca
