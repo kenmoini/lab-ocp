@@ -38,5 +38,5 @@ metrics:
     enabled: true
     tlsConfig:
       certFile: /etc/prometheus/secrets/metrics-client-certs/tls.crt
-      caCertFile: /etc/prometheus/secrets/metrics-client-ca/service-ca.crt
+      caFile: /etc/prometheus/secrets/metrics-client-ca/service-ca.crt
       keyFile: /etc/prometheus/secrets/metrics-client-certs/tls.key
