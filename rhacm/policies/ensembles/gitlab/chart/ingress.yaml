@@ -93,6 +93,8 @@ spec:
                     name: gitlab-gateway
                     namespace: openshift-ingress
                     sectionName: "http"
+                  hostnames:
+                    - gitlab.apps.tri-force.lab.kemo.network
                   rules:
                   - filters:
                     - type: RequestRedirect
