@@ -1,2 +1,3 @@
 
 policy: create-only
+provider: {}
