@@ -152,3 +152,11 @@ gitlab-runner:
     enabled: true
     podMonitor:
       enabled: true
+  volumeMounts:
+    - name: ca-certs
+      mountPath: /etc/ssl/certs/ca-certificates.crt
+      subPath: full-ca-bundle.crt
+  volumes:
+    - name: ca-certs
+      secret:
+        secretName: service-ca
