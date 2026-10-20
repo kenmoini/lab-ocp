@@ -45,6 +45,14 @@ global:
       useSecret: true
       secret: gitlab-db-app
       key: password
+  redis:
+    host: 'gitlab-redis-master'
+    port: 6379
+    username: default
+    auth:
+      secret: 'gitlab-redis'
+      key: redis-password
+      enabled: true
   registry:
     bucket: gitlab-s3-registry
   appConfig:
