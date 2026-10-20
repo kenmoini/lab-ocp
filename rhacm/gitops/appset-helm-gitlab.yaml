@@ -45,6 +45,11 @@ spec:
         # The set foreground cascading deletion
         - resources-finalizer.argocd.argoproj.io
     spec:
+      ignoreDifferences:
+        - group: apps/v1
+          kind: StatefulSet
+          jsonPointers:
+            - /metadata/generation
       project: default
       sources:
         - ref: values
