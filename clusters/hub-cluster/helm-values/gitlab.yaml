@@ -116,3 +116,33 @@ registry:
   storage:
     secret: gitlab-s3-registry-conn
     key: connection
+  hpa:
+    minReplicas: 1
+    maxReplicas: 1
+
+gitlab:
+  webservice:
+    minReplicas: 1
+    maxReplicas: 1
+  sidekiq:
+    minReplicas: 1
+    maxReplicas: 1
+  gitlab-shell:
+    minReplicas: 1
+    maxReplicas: 1
+  # gitaly:
+  #   resources:
+  #     requests:
+  #         cpu: 50m
+  # shared-secrets:
+  #   resources:
+  #       requests:
+  #         cpu: 10m
+  # migrations:
+  #   resources:
+  #     requests:
+  #       cpu: 10m
+  # toolbox:
+  #   resources:
+  #     requests:
+  #       cpu: 10m
