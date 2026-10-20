@@ -6,6 +6,7 @@ namespace: gitlab-system
 
 resources:
   - s3-secret-formatter.yaml
+  - service-ca-secret.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

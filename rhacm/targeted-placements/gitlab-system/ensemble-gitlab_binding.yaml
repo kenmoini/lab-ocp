@@ -12,3 +12,6 @@ subjects:
   - name: gitlab-chart-s3-formatter
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: gitlab-svc-ca-secret
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
