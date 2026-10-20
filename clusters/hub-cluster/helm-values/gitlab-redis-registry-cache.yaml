@@ -6,6 +6,7 @@ auth:
   existingSecret: gitlab-redis-registry-cache
 tls:
   enabled: true
+  authClients: false
 networkPolicy:
   enabled: true
   ingressNSMatchLabels:
@@ -13,29 +14,33 @@ networkPolicy:
   metrics:
     ingressNSMatchLabels:
       network.openshift.io/policy-group: monitoring
+master:
+  service:
+    annotations:
+      service.beta.openshift.io/serving-cert-secret-name: gitlab-redis-cache-serving-certs
 metrics:
   enabled: true
   extraArgs:
-    tls-server-key-file: "/etc/prometheus/secrets/metrics-client-certs/tls.key"
-    tls-server-cert-file: "/etc/prometheus/secrets/metrics-client-certs/tls.crt"
-    tls-server-ca-cert-file: "/etc/prometheus/configmaps/metrics-client-ca/service-ca.crt"
+    tls-server-key-file: "/etc/prometheus/secrets/metrics-server-certs/tls.key"
+    tls-server-cert-file: "/etc/prometheus/secrets/metrics-server-certs/tls.crt"
+    tls-server-ca-cert-file: "/etc/prometheus/configmaps/service-ca/service-ca.crt"
   extraVolumes:
-    - name: metrics-client-certs
+    - name: metrics-server-certs
       secret:
-        secretName: gitlab-cache-metrics-client-certs
-    - name: metrics-client-ca
+        secretName: gitlab-cache-metrics-serving-certs
+    - name: service-ca
       configMap:
         name: openshift-service-ca.crt
   extraVolumeMounts:
-    - name: metrics-client-certs
-      mountPath: /etc/prometheus/secrets/metrics-client-certs
+    - name: metrics-server-certs
+      mountPath: /etc/prometheus/secrets/metrics-server-certs
       readOnly: true
-    - name: metrics-client-ca
-      mountPath: /etc/prometheus/configmaps/metrics-client-ca
+    - name: service-ca
+      mountPath: /etc/prometheus/configmaps/service-ca
       readOnly: true
   service:
     annotations:
-      service.beta.openshift.io/serving-cert-secret-name: gitlab-cache-metrics-client-certs
+      service.beta.openshift.io/serving-cert-secret-name: gitlab-cache-metrics-serving-certs
   serviceMonitor:
     enabled: true
     tlsConfig:
@@ -43,6 +48,6 @@ metrics:
         configMap:
           name: openshift-service-ca.crt
           key: service-ca.crt
-      caFile: /etc/prometheus/configmaps/metrics-client-ca/service-ca.crt
-      certFile: /etc/prometheus/secrets/metrics-client-certs/tls.crt
-      keyFile: /etc/prometheus/secrets/metrics-client-certs/tls.key
+      caFile: /etc/prometheus/configmaps/service-ca/service-ca.crt
+      certFile: /etc/prometheus/secrets/metrics-server-certs/tls.crt
+      keyFile: /etc/prometheus/secrets/metrics-server-certs/tls.key
