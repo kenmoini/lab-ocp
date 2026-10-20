@@ -33,9 +33,12 @@ global:
     configureCertmanager: false
     class: "openshift-default"
   gatewayApi:
-    enabled: false
+    enabled: true
     installEnvoy: false
     configureCertmanager: false
+    gatewayRef:
+      name: gitlab-gateway
+      namespace: openshift-ingress
   image:
     pullPolicy: Always  # You can drop this if you're using release tags.
     tagSuffix: -ubi # -ubi8 for GitLab 17.2 and earlier
