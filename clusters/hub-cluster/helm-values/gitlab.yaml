@@ -144,3 +144,11 @@ gitlab:
   #   resources:
   #     requests:
   #       cpu: 10m
+
+gitlab-runner:
+  serviceAccount:
+    create: true
+  metrics:
+    enabled: true
+    podMonitor:
+      enabled: true
