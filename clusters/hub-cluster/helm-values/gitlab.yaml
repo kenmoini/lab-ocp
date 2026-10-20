@@ -126,6 +126,7 @@ global:
         key: connection
 
 registry:
+  bucket: gitlab-s3-registry
   storage:
     secret: gitlab-s3-registry-conn
     key: connection
