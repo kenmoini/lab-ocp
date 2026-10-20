@@ -15,14 +15,14 @@ global:
   time_zone: America/New_York
   edition: ee
   hosts:
-    domain: apps.tri-force.lab.kemo.network
+    domain: gitlab.tri-force.lab.kemo.network
     https: true
     gitlab:
-      name: gitlab.apps.tri-force.lab.kemo.network
+      name: gitlab.tri-force.lab.kemo.network
     kas:
-      name: kas-gitlab.apps.tri-force.lab.kemo.network
+      name: kas.gitlab.tri-force.lab.kemo.network
     registry:
-      name: registry-gitlab.apps.tri-force.lab.kemo.network
+      name: registry.gitlab.tri-force.lab.kemo.network
   certificates:
     customCAs:
       - secret: combo-ca

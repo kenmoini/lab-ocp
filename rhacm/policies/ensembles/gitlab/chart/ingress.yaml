@@ -59,6 +59,17 @@ spec:
                             matchLabels:
                               kubernetes.io/metadata.name: gitlab-system
                       hostname: gitlab.tri-force.lab.kemo.network
+                      name: gitlab-ssh
+                      port: 22
+                      protocol: TCP
+
+                    - allowedRoutes:
+                        namespaces:
+                          from: Selector
+                          selector:
+                            matchLabels:
+                              kubernetes.io/metadata.name: gitlab-system
+                      hostname: gitlab.tri-force.lab.kemo.network
                       name: http-default
                       port: 80
                       protocol: HTTP
@@ -130,17 +141,6 @@ spec:
                             kind: Secret
                             name: ingress-lb-tls
                         mode: Terminate
-
-                    - allowedRoutes:
-                        namespaces:
-                          from: Selector
-                          selector:
-                            matchLabels:
-                              kubernetes.io/metadata.name: gitlab-system
-                      hostname: kas.gitlab.tri-force.lab.kemo.network
-                      name: gitlab-ssh
-                      port: 22
-                      protocol: TCP
 
             # - complianceType: musthave
             #   objectDefinition:
