@@ -89,16 +89,16 @@ spec:
                   host: '{{.redisReleaseName}}-master'
                   port: 6379
                   auth:
-                    secret: '{{.redisReleaseName}}'
-                    key: redis-password
+                    existingSecret: '{{.redisReleaseName}}-pw'
+                    existingSecretPasswordKey: redis-password
                     enabled: true
                   cache:
                     host: '{{.redisReleaseName}}-cache-master'
                     port: 6379
                     password:
                       enabled: true
-                      secret: '{{.redisReleaseName}}-cache'
-                      key: redis-password
+                      existingSecret: '{{.redisReleaseName}}-cache-pw'
+                      existingSecretPasswordKey: redis-password
 
       destination:
         name: "{{.name}}"
