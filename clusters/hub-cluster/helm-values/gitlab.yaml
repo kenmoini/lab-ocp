@@ -17,6 +17,12 @@ global:
   hosts:
     domain: apps.tri-force.lab.kemo.network
     https: true
+    gitlab:
+      name: gitlab.apps.tri-force.lab.kemo.network
+    kas:
+      name: kas-gitlab.apps.tri-force.lab.kemo.network
+    registry:
+      name: registry-gitlab.apps.tri-force.lab.kemo.network
   certificates:
     customCAs:
       - secret: combo-ca
@@ -36,6 +42,7 @@ global:
     enabled: true
     installEnvoy: false
     configureCertmanager: false
+    httpToHttpsRedirect: true
     gatewayRef:
       name: gitlab-gateway
       namespace: openshift-ingress
