@@ -164,6 +164,10 @@ registry:
   hpa:
     minReplicas: 1
     maxReplicas: 1
+  gatewayRoute:
+    annotations:
+      pdns.kemo.dev: "enabled"
+      pdns-internal.kemo.dev/hostname: "registry.gitlab.tri-force.lab.kemo.network"
 
 gitlab:
   kas:
