@@ -2,6 +2,8 @@ global:
   compatibility:
     openshift:
       adaptSecurityContext: auto
+auth:
+  existingSecret: gitlab-redis
 networkPolicy:
   enabled: true
   ingressNSMatchLabels:
