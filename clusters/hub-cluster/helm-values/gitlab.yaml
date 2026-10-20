@@ -127,6 +127,11 @@ global:
 
 registry:
   bucket: gitlab-s3-registry
+  cache:
+    username: default
+    password:
+      secret: gitlab-redis-cache
+      key: redis-password
   storage:
     secret: gitlab-s3-registry-conn
     key: connection
