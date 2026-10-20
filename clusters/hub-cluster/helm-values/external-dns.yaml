@@ -13,7 +13,7 @@ txtOwnerId: external-dns
 provider:
   name: pdns
 extraArgs:
-  - --pdns-server=https://pdns-admin.apps.lab.kemo.dev
+  - --pdns-server=https://pdns-auth.apps.lab.kemo.dev
   - --pdns-server-id=localhost
   - --pdns-api-key=${PDNS_API_KEY}
 extraVolumes:
