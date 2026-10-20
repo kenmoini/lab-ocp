@@ -53,7 +53,7 @@ spec:
                           from: Selector
                           selector:
                             matchLabels:
-                              kubernetes.io/metadata.name: gitlab
+                              kubernetes.io/metadata.name: gitlab-system
                       hostname: gitlab.apps.tri-force.lab.kemo.network
                       name: https
                       port: 443
