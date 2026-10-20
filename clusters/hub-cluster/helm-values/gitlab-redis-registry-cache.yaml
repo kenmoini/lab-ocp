@@ -26,7 +26,7 @@ metrics:
   extraArgs:
     tls-server-key-file: "/etc/prometheus/secrets/metrics-server-certs/tls.key"
     tls-server-cert-file: "/etc/prometheus/secrets/metrics-server-certs/tls.crt"
-    tls-server-ca-cert-file: "/etc/prometheus/configmaps/service-ca/service-ca.crt"
+    # tls-server-ca-cert-file: "/etc/prometheus/configmaps/service-ca/service-ca.crt"
   extraVolumes:
     - name: metrics-server-certs
       secret:
