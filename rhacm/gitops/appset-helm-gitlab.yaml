@@ -62,13 +62,6 @@ spec:
             releaseName: '{{.redisReleaseName}}'
             valueFiles:
               - "$values/clusters/{{ .name }}/helm-values/{{ .redisReleaseName }}.yaml"
-        - repoURL: '{{.redisRepoURL}}'
-          chart: '{{.redisHelmChartName}}'
-          targetRevision: '{{.redisHelmRevision}}'
-          helm:
-            releaseName: '{{.redisReleaseName}}-cache'
-            valueFiles:
-              - "$values/clusters/{{ .name }}/helm-values/{{ .redisReleaseName }}.yaml"
 
         - repoURL: '{{.helmRepoURL}}'
           chart: '{{.helmChartName}}'
@@ -88,17 +81,11 @@ spec:
                 redis:
                   host: '{{.redisReleaseName}}-master'
                   port: 6379
+                  username: default
                   auth:
                     existingSecret: '{{.redisReleaseName}}-pw'
                     existingSecretPasswordKey: redis-password
                     enabled: true
-                  cache:
-                    host: '{{.redisReleaseName}}-cache-master'
-                    port: 6379
-                    password:
-                      enabled: true
-                      existingSecret: '{{.redisReleaseName}}-cache-pw'
-                      existingSecretPasswordKey: redis-password
 
       destination:
         name: "{{.name}}"
