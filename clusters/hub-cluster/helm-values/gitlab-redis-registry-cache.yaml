@@ -13,6 +13,10 @@ networkPolicy:
       network.openshift.io/policy-group: monitoring
 metrics:
   enabled: true
+  extraArgs:
+    tls-client-key-file: "/etc/prometheus/secrets/metrics-client-certs/tls.key"
+    tls-client-cert-file: "/etc/prometheus/secrets/metrics-client-certs/tls.crt"
+    tls-ca-cert-file: "/etc/prometheus/secrets/metrics-client-certs/ca.crt"
   extraVolumes:
     - name: metrics-client-certs
       secret:
