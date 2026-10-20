@@ -55,11 +55,14 @@ global:
       enabled: true
   registry:
     bucket: gitlab-s3-registry
-    cache:
-      username: default
-      password:
-        secret: gitlab-redis-cache
-        key: redis-password
+    redis:
+      cache:
+        host: gitlab-redis-registry-cache.gitlab-infra.svc.cluster.local
+        port: 6379
+        username: default
+        password:
+          secret: gitlab-redis-cache
+          key: redis-password
   appConfig:
     enableUsagePing: false
     usernameChangingEnabled: false
