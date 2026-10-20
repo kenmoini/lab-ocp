@@ -59,6 +59,16 @@ spec:
                             matchLabels:
                               kubernetes.io/metadata.name: gitlab-system
                       hostname: gitlab.apps.tri-force.lab.kemo.network
+                      name: http
+                      port: 80
+                      protocol: HTTP
+                    - allowedRoutes:
+                        namespaces:
+                          from: Selector
+                          selector:
+                            matchLabels:
+                              kubernetes.io/metadata.name: gitlab-system
+                      hostname: gitlab.apps.tri-force.lab.kemo.network
                       name: https
                       port: 443
                       protocol: HTTPS
@@ -69,25 +79,49 @@ spec:
                             name: ingress-lb-tls
                         mode: Terminate
 
-#             - complianceType: musthave
-#               objectDefinition:
-# apiVersion: gateway.networking.k8s.io/v1
-# kind: HTTPRoute
-# metadata:
-#   name: gitlab-httproute
-#   namespace: gitlab-system
-# spec:
-#   parentRefs:
-#     - name: gitlab-gateway
-#       namespace: openshift-ingress
-#       kind: Gateway
-#   hostnames:
-#     - gitlab.apps.tri-force.lab.kemo.network
-#   rules:
-#     - backendRefs:
-#         - name: gitlab-webservice-default
-#           port: 8181
-#       matches:
-#         - path:
-#             type: PathPrefix
-#             value: /
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: gateway.networking.k8s.io/v1
+                kind: HTTPRoute
+                metadata:
+                  name: gitlab-httproute
+                  namespace: gitlab-system
+                spec:
+                  parentRefs:
+                  - group: gateway.networking.k8s.io
+                    kind: Gateway
+                    name: gitlab-gateway
+                    namespace: openshift-ingress
+                    sectionName: "http"
+                  rules:
+                  - filters:
+                    - type: RequestRedirect
+                      requestRedirect:
+                        scheme: https
+                        statusCode: 301
+
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: gateway.networking.k8s.io/v1
+                kind: HTTPRoute
+                metadata:
+                  name: gitlab-httpsroute
+                  namespace: gitlab-system
+                spec:
+                  parentRefs:
+                    - name: gitlab-gateway
+                      namespace: openshift-ingress
+                      kind: Gateway
+                      group: gateway.networking.k8s.io
+                  hostnames:
+                    - gitlab.apps.tri-force.lab.kemo.network
+                  rules:
+                    - backendRefs:
+                        - name: gitlab-webservice-default
+                          namespace: gitlab-system
+                          kind: Service
+                          port: 8080
+                      matches:
+                        - path:
+                            type: PathPrefix
+                            value: /
