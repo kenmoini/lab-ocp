@@ -45,9 +45,15 @@ spec:
           kind: CustomResourceDefinition
       project: default
       sources:
+        - ref: values
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
+
         - chart: '{{.helmChartName}}'
           helm:
             releaseName: '{{.helmReleaseName}}'
+            valueFiles:
+              - "$values/clusters/{{ .name }}/helm-values/{{ .helmReleaseName }}.yaml"
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:
