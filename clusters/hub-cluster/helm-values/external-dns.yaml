@@ -25,8 +25,9 @@ extraVolumes:
       name: trusted-cabundle
 extraVolumeMounts:
   - name: trusted-cabundle
-    mountPath: /etc/pki/ca-trust/extracted/pem
+    mountPath: /etc/ssl/certs/custom-ca.crt
     readOnly: true
+    subPath: ca-bundle.crt
 env:
   - name: PDNS_API_KEY
     valueFrom:
