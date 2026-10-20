@@ -9,7 +9,7 @@ domainFilters:
   - lab.kemo.network
   - lab.kemo.dev
   - kemo.labs
-txtOwnerId: external-dns
+txtOwnerId: ocp-tri-force
 provider:
   name: pdns
 extraArgs:
