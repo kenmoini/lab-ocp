@@ -59,7 +59,6 @@ spec:
                           selector:
                             matchLabels:
                               kubernetes.io/metadata.name: gitlab-system
-                      hostname: gitlab.tri-force.lab.kemo.network
                       name: gitlab-ssh
                       port: 22
                       protocol: TCP
