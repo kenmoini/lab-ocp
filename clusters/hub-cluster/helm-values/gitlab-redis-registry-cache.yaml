@@ -4,6 +4,8 @@ global:
       adaptSecurityContext: auto
 auth:
   existingSecret: gitlab-redis-registry-cache
+tls:
+  enabled: true
 networkPolicy:
   enabled: true
   ingressNSMatchLabels:
@@ -41,6 +43,6 @@ metrics:
         configMap:
           name: openshift-service-ca.crt
           key: service-ca.crt
-      # caFile: /etc/prometheus/configmaps/metrics-client-ca/service-ca.crt
+      caFile: /etc/prometheus/configmaps/metrics-client-ca/service-ca.crt
       certFile: /etc/prometheus/secrets/metrics-client-certs/tls.crt
       keyFile: /etc/prometheus/secrets/metrics-client-certs/tls.key
