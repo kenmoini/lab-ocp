@@ -6,6 +6,7 @@ namespace: open-cluster-management-policies
 
 resources:
   - db.yaml
+  - ext-secret-redis.yaml
   - ingress.yaml
   - netpol.yaml
   - rbac.yaml

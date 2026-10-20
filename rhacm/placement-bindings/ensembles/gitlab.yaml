@@ -24,3 +24,6 @@ subjects:
   - name: gitlab-chart-ingress
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: gitlab-chart-redis-secrets
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
