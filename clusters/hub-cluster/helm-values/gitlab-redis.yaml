@@ -4,6 +4,8 @@ global:
       adaptSecurityContext: auto
 networkPolicy:
   enabled: true
+  ingressNSMatchLabels:
+    kubernetes.io/metadata.name: gitlab-system
   metrics:
     ingressNSMatchLabels:
       network.openshift.io/policy-group: monitoring

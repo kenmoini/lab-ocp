@@ -37,7 +37,7 @@ global:
     pullPolicy: Always  # You can drop this if you're using release tags.
     tagSuffix: -ubi # -ubi8 for GitLab 17.2 and earlier
   psql:
-    host: gitlab-db-rw.gitlab-system.svc.cluster.local
+    host: gitlab-db-rw.gitlab-infra.svc.cluster.local
     database: app
     username: app
     port: 5432
@@ -46,7 +46,7 @@ global:
       secret: gitlab-db-app
       key: password
   redis:
-    host: 'gitlab-redis-master'
+    host: gitlab-redis-master.gitlab-infra.svc.cluster.local
     port: 6379
     username: default
     auth:
