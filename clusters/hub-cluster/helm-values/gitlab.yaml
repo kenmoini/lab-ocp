@@ -48,12 +48,6 @@ global:
   appConfig:
     enableUsagePing: false
     usernameChangingEnabled: false
-    object_store:
-      enabled: true
-      bucket: gitlab-s3-general
-      connection:
-        secret: gitlab-s3-general-conn
-        key: connection
     lfs:
       bucket: gitlab-s3-lfs
       connection:
