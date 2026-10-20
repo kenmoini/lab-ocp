@@ -7,6 +7,7 @@ namespace: gitlab-infra
 resources:
   - db-secret-copy.yaml
   - redis-secret-copy.yaml
+  - redis-registry-cache-secret-copy.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

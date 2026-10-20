@@ -15,3 +15,6 @@ subjects:
   - name: gitlab-chart-redis-copy
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: gitlab-chart-cache-copy
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
