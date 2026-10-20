@@ -78,6 +78,9 @@ spec:
         server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
         namespace: "{{.namespace}}"
       syncPolicy:
+        managedNamespaceMetadata:
+          labels: # The labels to set on the application namespace
+            openshift.io/cluster-monitoring: 'true'
         automated:
           prune: true
           selfHeal: true
