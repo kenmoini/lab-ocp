@@ -39,7 +39,7 @@ spec:
                 kind: Cluster
                 metadata:
                   name: gitlab-db
-                  namespace: gitlab-system
+                  namespace: gitlab-infra
                 spec:
                   instances: 1
                   enablePDB: false
@@ -56,7 +56,7 @@ spec:
                 kind: NetworkPolicy
                 metadata:
                   name: allow-cnpg-operator
-                  namespace: gitlab-system
+                  namespace: gitlab-infra
                 spec:
                   podSelector:
                     matchLabels:
@@ -70,6 +70,26 @@ spec:
                           podSelector:
                             matchLabels:
                               app.kubernetes.io/name: cloudnative-pg # Matches the Operator pod
+                      ports:
+                        - port: 8000
+                        - port: 5432
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.k8s.io/v1
+                kind: NetworkPolicy
+                metadata:
+                  name: allow-gitlab-system
+                  namespace: gitlab-infra
+                spec:
+                  podSelector:
+                    matchLabels:
+                      app.kubernetes.io/managed-by: cloudnative-pg # or for all CNPG Clusters
+                      # cnpg.io/cluster: gitlab-db # The label value must be the cluster name
+                  ingress:
+                    - from:
+                        - namespaceSelector:
+                            matchLabels:
+                              kubernetes.io/metadata.name: gitlab-system
                       ports:
                         - port: 8000
                         - port: 5432

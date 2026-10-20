@@ -13,6 +13,7 @@ resources:
   - appset-helm-external-dns.yaml
   - appset-helm-github-arc.yaml
   - appset-helm-gitlab.yaml
+  - appset-helm-gitlab-redis.yaml
   - appset-helm-jenkins.yaml
   - appset-helm-openshell.yaml
   - appset-helm-openshell-dash.yaml

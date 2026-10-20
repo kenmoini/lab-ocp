@@ -23,7 +23,7 @@ spec:
           - list:
               elements:
               - appName: gitlab-redis
-                namespace: gitlab-system
+                namespace: gitlab-infra
 
                 helmRepoURL: 'oci://registry-1.docker.io/bitnamicharts/redis'
                 helmChartName: redis
