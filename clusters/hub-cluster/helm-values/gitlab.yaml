@@ -12,6 +12,8 @@ upgradeCheck:
 global:
   time_zone: America/New_York
   edition: ce
+  hosts:
+    domain: gitlab.apps.tri-force.lab.kemo.network
   certificates:
     customCAs:
       - secret: trusted-root-ca
