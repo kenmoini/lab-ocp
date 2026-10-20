@@ -24,6 +24,8 @@ master:
   service:
     annotations:
       service.beta.openshift.io/serving-cert-secret-name: gitlab-redis-cache-serving-certs
+  containerPorts:
+    redis: 6380
 metrics:
   enabled: true
   # extraArgs:
