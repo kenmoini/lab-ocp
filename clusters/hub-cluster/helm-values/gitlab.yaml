@@ -55,6 +55,11 @@ global:
       enabled: true
   registry:
     bucket: gitlab-s3-registry
+    cache:
+      username: default
+      password:
+        secret: gitlab-redis-cache
+        key: redis-password
   appConfig:
     enableUsagePing: false
     usernameChangingEnabled: false
