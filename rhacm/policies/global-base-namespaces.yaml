@@ -90,6 +90,12 @@ spec:
                 apiVersion: v1
                 kind: Namespace
                 metadata:
+                  name: gitlab-infra
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
                   name: gitlab-system
 
     - objectDefinition:
