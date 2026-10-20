@@ -5,6 +5,8 @@ sources:
   - ingress
   - crd
   - openshift-route
+  - gateway-httproute
+  - gateway-grpcroute
 domainFilters:
   - lab.kemo.network
   - lab.kemo.dev
