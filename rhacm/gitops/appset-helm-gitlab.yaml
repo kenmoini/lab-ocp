@@ -79,7 +79,7 @@ spec:
                   tag: ubi-fips-v{{ .gitlabVersion }}
               global:
                 redis:
-                  host: '{{.redisReleaseName}}-headless'
+                  host: '{{.redisReleaseName}}-master'
                   auth:
                     secret: '{{.redisReleaseName}}'
                     key: redis-password
