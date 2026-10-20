@@ -171,7 +171,15 @@ gitlab:
   #   resources:
   #     requests:
   #       cpu: 10m
-  # toolbox:
+  toolbox:
+    backups:
+      objectStorage:
+        config:
+          secret: gitlab-s3-toolbox-conn
+          key: connection
+        backend: s3
+        bucket: gitlab-s3-toolbox
+
   #   resources:
   #     requests:
   #       cpu: 10m
