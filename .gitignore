@@ -1,5 +1,9 @@
 ansible/venv/
-ansible/vent/**
+ansible/venv/**
 .vscode/
 .vscode/**
 .DS_Store
+auth-creds.yaml
+auth-creds.yml
+auth.yaml
+auth.yml
