@@ -11,7 +11,7 @@ upgradeCheck:
 
 global:
   time_zone: America/New_York
-  edition: ce
+  edition: ee
   hosts:
     domain: apps.tri-force.lab.kemo.network
   certificates:
@@ -179,7 +179,6 @@ gitlab:
           key: connection
         backend: s3
         bucket: gitlab-s3-toolbox
-
   #   resources:
   #     requests:
   #       cpu: 10m
