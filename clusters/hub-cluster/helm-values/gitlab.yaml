@@ -40,6 +40,7 @@ global:
     host: gitlab-db-rw.gitlab-system.svc.cluster.local
     database: app
     username: app
+    port: 5432
     password:
       useSecret: true
       secret: gitlab-db-app
