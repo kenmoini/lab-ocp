@@ -159,6 +159,4 @@ gitlab-runner:
   volumes:
     - name: ca-certs
       secret:
-        secretName: service-ca
-        items:
-          - key: full-ca-bundle.crt
+        secretName: combo-ca
