@@ -16,7 +16,7 @@ metrics:
   extraArgs:
     tls-server-key-file: "/etc/prometheus/secrets/metrics-client-certs/tls.key"
     tls-server-cert-file: "/etc/prometheus/secrets/metrics-client-certs/tls.crt"
-    tls-server-ca-cert-file: "/etc/prometheus/secrets/metrics-client-ca/service-ca.crt"
+    tls-server-ca-cert-file: "/etc/prometheus/configmaps/metrics-client-ca/service-ca.crt"
   extraVolumes:
     - name: metrics-client-certs
       secret:
@@ -29,7 +29,7 @@ metrics:
       mountPath: /etc/prometheus/secrets/metrics-client-certs
       readOnly: true
     - name: metrics-client-ca
-      mountPath: /etc/prometheus/secrets/metrics-client-ca
+      mountPath: /etc/prometheus/configmaps/metrics-client-ca
       readOnly: true
   service:
     annotations:
@@ -37,6 +37,10 @@ metrics:
   serviceMonitor:
     enabled: true
     tlsConfig:
+      ca:
+        configMap:
+          name: openshift-service-ca.crt
+          key: service-ca.crt
+      # caFile: /etc/prometheus/configmaps/metrics-client-ca/service-ca.crt
       certFile: /etc/prometheus/secrets/metrics-client-certs/tls.crt
-      caFile: /etc/prometheus/secrets/metrics-client-ca/service-ca.crt
       keyFile: /etc/prometheus/secrets/metrics-client-certs/tls.key
