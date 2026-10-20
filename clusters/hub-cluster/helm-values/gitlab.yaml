@@ -173,6 +173,8 @@ gitlab:
   gitlab-shell:
     minReplicas: 1
     maxReplicas: 1
+    gatewayRoute:
+      enabled: false
   # gitaly:
   #   resources:
   #     requests:
