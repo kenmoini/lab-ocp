@@ -33,7 +33,7 @@ spec:
                     metadata:
                       annotations:
                         pdns.kemo.dev: "enabled"
-                        pdns-internal.kemo.dev/hostname: "*.gitlab.tri-force.lab.kemo.network"
+                        pdns-internal.kemo.dev/hostname: "gitlab.tri-force.lab.kemo.network"
                     spec:
                       type: LoadBalancer
 
@@ -45,6 +45,8 @@ spec:
                 metadata:
                   name: gitlab-gateway
                   namespace: openshift-ingress
+                  annotations:
+                    pdns.kemo.dev: "enabled"
                 spec:
                   gatewayClassName: openshift-default
                   infrastructure:
