@@ -8,6 +8,8 @@ tls:
   enabled: true
   authClients: false
   existingSecret: gitlab-redis-cache-serving-certs
+  certFilename: tls.crt
+  certKeyFilename: tls.key
 networkPolicy:
   enabled: true
   ingressNSMatchLabels:
