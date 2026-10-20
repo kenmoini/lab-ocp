@@ -83,7 +83,7 @@ spec:
                   port: 6379
                   username: default
                   auth:
-                    existingSecret: '{{.redisReleaseName}}-pw'
+                    existingSecret: '{{.redisReleaseName}}'
                     existingSecretPasswordKey: redis-password
                     enabled: true
 
