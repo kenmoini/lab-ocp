@@ -1,0 +1,12 @@
+---
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+  name: openshell-sso
+spec:
+  applicationMenu:
+    imageURL: 'https://dt-cdn.net/hub/Keycloak_Logo.png'
+    section: OpenShell
+  href: 'https://{{ (index (lookup "networking.k8s.io/v1" "Ingress" "rhbk" "openshell-ingress").spec.rules 0).host }}'
+  location: ApplicationMenu
+  text: SSO
