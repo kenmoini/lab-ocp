@@ -1,0 +1,12 @@
+---
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+  name: openshell-dashboard
+spec:
+  applicationMenu:
+    imageURL: 'https://raw.githubusercontent.com/NVIDIA/OpenShell/main/docs/brand/assets/openshell-mark.svg'
+    section: OpenShell
+  href: 'https://{{ (lookup "route.openshift.io/v1" "Route" "openshell" "hub-cluster-openshell-dashboard").spec.host }}'
+  location: ApplicationMenu
+  text: Dashboard

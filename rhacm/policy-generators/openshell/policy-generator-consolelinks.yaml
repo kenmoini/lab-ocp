@@ -1,0 +1,30 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: openshell-consolelinks
+  #annotations:
+  #  argocd.argoproj.io/compare-options: IgnoreExtraneous
+#placementBindingDefaults:
+#  name: machineconfiguration
+policySetDefaults:
+  generatePolicySetPlacement: false
+policyDefaults:
+  generatePolicyPlacement: false
+  namespace: open-cluster-management-policies
+  categories: 
+  - OCPOM - OpenShift Operator Management
+  controls:
+  - OLM-INST - Operator Instance
+  standards:
+  - Kemo Labs 2026
+  # remediationAction: enforce
+  severity: low
+  pruneObjectBehavior: DeleteIfCreated
+  consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
+policies:
+  - name: openshell-consolelinks
+    manifests:
+      - name: "openshell-consolelinks"
+        path: manifests/consolelinks
+        complianceType: "musthave"
+        remediationAction: enforce

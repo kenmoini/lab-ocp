@@ -22,6 +22,9 @@ spec:
       targetRevision: main
       path: rhacm/policy-generators/containerruntimeconfig/
       # kustomize: {}
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: rhacm/policy-generators/openshell/
 
   project: default
   syncPolicy:
