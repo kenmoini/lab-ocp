@@ -52,6 +52,10 @@ spec:
       secret:
         name: openshell-sso-clients
         key: aapClientSecret
+    GITLAB_CLIENT_SECRET:
+      secret:
+        name: openshell-sso-clients
+        key: gitlabClientSecret
   realm:
     id: openshell
     realm: openshell
@@ -517,6 +521,34 @@ spec:
           - openshell-audience
           - openshell:all
 
+      # GitLab
+      - clientId: gitlab
+        name: GitLab
+        description: Confidential client for GitLab
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        redirectUris:
+          - "https://gitlab.tri-force.lab.kemo.network/users/auth/openid_connect/callback"
+        secret: "${GITLAB_CLIENT_SECRET}"
+        standardFlowEnabled: true
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: true
+        fullScopeAllowed: true
+        attributes:
+          use.refresh.tokens: "false"
+          pkce.code.challenge.method: "S256"
+        defaultClientScopes:
+          - basic
+          - profile
+          - email
+          - roles
+          - web-origins
+          - acr
+          - openshell-audience
+          - openshell:all
+
       # Ansible Automation Platform
       - clientId: aap
         name: Ansible Automation Platform
@@ -558,36 +590,36 @@ spec:
           - openshell-admin
           - openshell-user
       # Example local users - uncomment for a quick smoke test, or federate an IdP instead
-      - username: admin
+      - username: openshell-admin
         enabled: true
         email: admin@kemo.labs
         emailVerified: true
-        firstName: OpenShell
-        lastName: Admin
+        firstName: Admin
+        lastName: OpenShell
         credentials:
           - type: password
             value: changeme
             temporary: true
         groups:
           - /openshell-admins
-      - username: auditor
+      - username: openshell-auditor
         enabled: true
         email: auditor@kemo.labs
         emailVerified: true
-        firstName: OpenShell
-        lastName: Auditor
+        firstName: Auditor
+        lastName: OpenShell
         credentials:
           - type: password
             value: changeme
             temporary: true
         groups:
           - /openshell-auditors
-      - username: user1
+      - username: openshell-user
         enabled: true
         email: user1@kemo.labs
         emailVerified: true
         firstName: User
-        lastName: One
+        lastName: OpenShell
         credentials:
           - type: password
             value: changeme
