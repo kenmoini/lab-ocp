@@ -592,7 +592,7 @@ spec:
       # Example local users - uncomment for a quick smoke test, or federate an IdP instead
       - username: openshell-admin
         enabled: true
-        email: admin@kemo.labs
+        email: admin@openshell.kemo.labs
         emailVerified: true
         firstName: Admin
         lastName: OpenShell
@@ -604,7 +604,7 @@ spec:
           - /openshell-admins
       - username: openshell-auditor
         enabled: true
-        email: auditor@kemo.labs
+        email: auditor@openshell.kemo.labs
         emailVerified: true
         firstName: Auditor
         lastName: OpenShell
@@ -616,7 +616,7 @@ spec:
           - /openshell-auditors
       - username: openshell-user
         enabled: true
-        email: user1@kemo.labs
+        email: user@openshell.kemo.labs
         emailVerified: true
         firstName: User
         lastName: OpenShell
