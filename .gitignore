@@ -1,5 +1,7 @@
 ansible/venv/
 ansible/venv/**
+ansible/.venv/
+ansible/.venv/**
 .vscode/
 .vscode/**
 .DS_Store
