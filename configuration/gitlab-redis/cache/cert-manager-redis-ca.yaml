@@ -16,4 +16,4 @@ spec:
   privateKey:
     algorithm: ECDSA
     size: 256
-  secretName: redis-cache-tls-ca
+  secretName: redis-registry-cache-tls-ca
