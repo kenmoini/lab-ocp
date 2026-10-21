@@ -1,0 +1,19 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: redis-registry-cache-tls-ca
+  namespace: gitlab-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-4"
+spec:
+  commonName: gitlab-redis-registry-cache-ca
+  isCA: true
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: redis-registry-cache-selfsigned
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  secretName: redis-cache-tls-ca

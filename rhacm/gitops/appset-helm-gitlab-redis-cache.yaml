@@ -49,6 +49,10 @@ spec:
         - ref: values
           repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
+        - kustomize: {}
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          ## Path is the repo directory that containers the cluster(s) configuration and deployment manifests
+          path: configuration/gitlab-redis/cache/
         # Redis Chart
         - repoURL: '{{.helmRepoURL}}'
           chart: '{{.helmChartName}}'

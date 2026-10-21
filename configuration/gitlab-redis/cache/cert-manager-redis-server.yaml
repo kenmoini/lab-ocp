@@ -1,0 +1,47 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gitlab-redis-registry-cache-server
+  namespace: gitlab-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  renewBefore: 720h
+  usages:
+    - server auth
+    - digital signature
+    - key encipherment
+  duration: 8760h
+  commonName: gitlab-redis-registry-cache
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: redis-registry-cache-selfsigned-ca
+  secretName: gitlab-redis-registry-cache-server-tls
+  ipAddresses:
+    - 127.0.0.1
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  dnsNames:
+    - gitlab-redis-registry-cache-master
+    - gitlab-redis-registry-cache-master.gitlab-infra
+    - gitlab-redis-registry-cache-master.gitlab-infra.svc
+    - gitlab-redis-registry-cache-master.gitlab-infra.svc.cluster
+    - gitlab-redis-registry-cache-master.gitlab-infra.svc.cluster.local
+    - gitlab-redis-registry-cache-replicas
+    - gitlab-redis-registry-cache-replicas.gitlab-infra
+    - gitlab-redis-registry-cache-replicas.gitlab-infra.svc
+    - gitlab-redis-registry-cache-replicas.gitlab-infra.svc.cluster
+    - gitlab-redis-registry-cache-replicas.gitlab-infra.svc.cluster.local
+    - gitlab-redis-registry-cache-headless
+    - gitlab-redis-registry-cache-headless.gitlab-infra
+    - gitlab-redis-registry-cache-headless.gitlab-infra.svc
+    - gitlab-redis-registry-cache-headless.gitlab-infra.svc.cluster
+    - gitlab-redis-registry-cache-headless.gitlab-infra.svc.cluster.local
+    - localhost
+    - gitlab-redis-registry-cache-master.localhost
+    - gitlab-redis-registry-cache-replicas.localhost
+    - gitlab-redis-registry-cache-headless.localhost
+    - host.docker.internal
+    - host.containers.internal
