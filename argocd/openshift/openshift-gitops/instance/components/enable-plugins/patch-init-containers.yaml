@@ -10,16 +10,16 @@ spec:
     initContainers:
     - args:
       - -c
-      - rm -rf /policy-generator/* && cp -vf /etc/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator/PolicyGenerator
-        /policy-generator/PolicyGenerator
+      - rm -rf /shared-policy-generator/* && cp -vf /etc/kustomize/plugin/policy.open-cluster-management.io/v1/policygenerator/PolicyGenerator
+        /shared-policy-generator/PolicyGenerator
       command:
       - /bin/bash
-      #image: registry.redhat.io/rhacm2/multicluster-operators-subscription-rhel8:v<version>
-      image: registry.redhat.io/rhacm2/multicluster-operators-subscription-rhel8:v2.8
+      #image: registry.redhat.io/rhacm2/multicluster-operators-subscription-rhel8:v2.9.9 # latest
+      image: registry.redhat.io/rhacm2/multicluster-operators-subscription-rhel9:v2.17
       name: policy-generator-install
       resources: {}
       volumeMounts:
-      - mountPath: /policy-generator
+      - mountPath: /shared-policy-generator
         name: policy-generator
 # kind: ArgoCD
 # apiVersion: argoproj.io/v1beta1
