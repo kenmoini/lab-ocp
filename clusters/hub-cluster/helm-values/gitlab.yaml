@@ -79,6 +79,7 @@ global:
       cache:
         host: gitlab-redis-registry-cache.gitlab-infra.svc.cluster.local
         port: 6379
+        scheme: rediss
         username: default
         user: default
         password:
