@@ -6,6 +6,7 @@ namespace: gitlab-infra
 
 resources:
   - db-secret-copy.yaml
+  - redis-certs-copy.yaml
   - redis-secret-copy.yaml
   - redis-registry-cache-secret-copy.yaml
 

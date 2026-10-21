@@ -1,0 +1,44 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: gitlab-chart-redis-certs
+  # namespace: gitlab-infra
+  annotations:
+    policy.open-cluster-management.io/description: Copies the Redis Certs into gitlab-system to be used by the GitLab instances
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: gitlab-redis-cert-copy
+        spec:
+          remediationAction: enforce
+          severity: critical
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: redis-tls-ca
+                  namespace: gitlab-system
+                type: Opaque
+                data:
+                  ca.crt: '{{ fromSecret "gitlab-infra" "redis-tls-ca" "ca.crt" }}'
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: redis-registry-cache-tls-ca
+                  namespace: gitlab-system
+                type: Opaque
+                data:
+                  ca.crt: '{{ fromSecret "gitlab-infra" "redis-registry-cache-tls-ca" "ca.crt" }}'
