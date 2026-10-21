@@ -27,3 +27,6 @@ subjects:
   - name: gitlab-chart-redis-secrets
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: gitlab-chart-keycloak-secrets
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
