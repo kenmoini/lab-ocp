@@ -11,7 +11,7 @@ orchestrator_identity_providers:
       disable_tls_verify: true
       claim_mapping:
         subject: sub
-        username: email
+        username: preferred_username
         first_name: given_name
         last_name: family_name
         email: email

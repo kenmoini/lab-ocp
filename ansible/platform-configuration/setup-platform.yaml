@@ -84,7 +84,7 @@
           OIDC_ENDPOINT: "https://{{ keycloak_route.resources[0].spec.rules[0].host }}/realms/{{ keycloak_realm_name }}"
           KEY: "{{ keycloak_client_secret.resources[0].data['client-id'] | b64decode }}"
           SECRET: "{{ keycloak_client_secret.resources[0].data['client-secret'] | b64decode }}"
-          USERNAME_KEY: email # preferred_username also works but will suffix overlapping usernames with random strings
+          USERNAME_KEY: preferred_username # default to email - preferred_username also works but will suffix overlapping usernames with random strings
           RESPONSE_TYPE: code
           GROUPS_CLAIM: realm_roles
           JWT_ALGORITHMS:
