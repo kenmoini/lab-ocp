@@ -32,6 +32,8 @@ global:
         keys:
           - gitlab.apps.tri-force.lab.kemo.network.crt
           - service-ca.crt
+          - redis-tls-ca.crt
+          - redis-registry-cache-tls-ca.crt
   serviceAccount:
     enabled: true
     create: true
