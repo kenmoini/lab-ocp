@@ -1,0 +1,146 @@
+- name: Configure a GitLab instance
+  hosts: localhost
+  connection: local
+
+  vars:
+    gitlab_namespace: gitlab-system
+    gitlab_release_name: gitlab
+    ansible_python_interpreter: /Users/kenmoini/Development/lab-ocp/ansible/.venv/bin/python
+
+    initial_platform_setup: false
+  module_defaults:
+    group/kubernetes.core.k8s:
+      validate_certs: false
+
+  pre_tasks:
+    - name: Include vars from Gitlab directory
+      ansible.builtin.include_vars:
+        dir: ./vars/gitlab/
+        extensions: ["yml", "yaml"]
+
+    - name: Get the Initial Root Secret for the GitLab Instance
+      kubernetes.core.k8s_info:
+        kind: Secret
+        namespace: "{{ gitlab_namespace }}"
+        name: "{{ gitlab_release_name }}-gitlab-initial-root-password"
+      register: admin_secret_r
+
+    - name: Get the GitLab HTTPRoute
+      kubernetes.core.k8s_info:
+        kind: HTTPRoute
+        api_version: gateway.networking.k8s.io/v1
+        namespace: "{{ gitlab_namespace }}"
+        name: "{{ gitlab_release_name }}-gitlab"
+      register: gitlab_route_r
+
+    - name: Get the Pod for the Toolbox Deployment
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Pod
+        namespace: "{{ gitlab_namespace }}"
+        label_selectors:
+          - "app=toolbox"
+          - "release=gitlab"
+      register: toolbox_pod_r
+
+    - name: Initial Root Access Token Generation
+      block:
+        - name: Check to see if the access token already exists
+          kubernetes.core.k8s_info:
+            api_version: v1
+            kind: Secret
+            namespace: "{{ gitlab_namespace }}"
+            name: "{{ gitlab_release_name }}-root-access-token"
+          register: access_token_r
+
+        - name: Create the access token if it does not exist
+          when: access_token_r.resources | length == 0
+          block:
+
+            - name: Exec into the Toolbox Pod and create the token
+              kubernetes.core.k8s_exec:
+                namespace: "{{ gitlab_namespace }}"
+                pod: "{{ toolbox_pod_r.resources[0].metadata.name }}"
+                command: >
+                  /bin/sh -c "
+                  TOKEN=$(openssl rand -hex 32) &&
+                  gitlab-rails runner 'user = User.find_by_username(\"root\"); token = user.personal_access_tokens.create(scopes: [\"api\"], name: \"Initial setup token\", expires_at: 365.days.from_now); token.set_token(\"'$TOKEN'\"); token.save!' &&
+                  echo $TOKEN
+                  "
+              register: access_token_create_r
+
+            - name: Create the Secret for the Access Token
+              kubernetes.core.k8s:
+                state: present
+                definition:
+                  apiVersion: v1
+                  kind: Secret
+                  metadata:
+                    name: "{{ gitlab_release_name }}-root-access-token"
+                    namespace: "{{ gitlab_namespace }}"
+                  type: Opaque
+                  stringData:
+                    token: "{{ access_token_create_r.stdout_lines[0] }}"
+
+        - name: Get the access token
+          kubernetes.core.k8s_info:
+            api_version: v1
+            kind: Secret
+            namespace: "{{ gitlab_namespace }}"
+            name: "{{ gitlab_release_name }}-root-access-token"
+          register: access_token_r
+
+    - name: Disable public registration for GitLab
+      when: initial_platform_setup
+      kubernetes.core.k8s_exec:
+        namespace: "{{ gitlab_namespace }}"
+        pod: "{{ toolbox_pod_r.resources[0].metadata.name }}"
+        command: >
+          /bin/sh -c "
+          gitlab-rails runner \"ApplicationSetting.last.update(signup_enabled: false)\"
+          "
+
+    - name: "Create GitLab Users"
+      when: gitlab_users is defined
+      community.general.gitlab_user:
+        api_url: "https://{{ gitlab_route_r.resources[0].spec.hostnames[0] }}"
+        api_token: "{{ access_token_r.resources[0].data.token | b64decode }}"
+        validate_certs: false
+        name: "{{ item.name }}"
+        username: "{{ item.username }}"
+        password: "{{ item.password | default('N0tchangeme') }}"
+        email: "{{ item.email }}"
+        sshkey_name: "{{ item.sshkey_name | default(omit) }}"
+        sshkey_file: "{{ item.sshkey_file | default(omit) }}"
+        group: "{{ item.group | default(omit) }}"
+        access_level: "{{ item.access_level | default(omit) }}"
+        state: "{{ item.state | default('present') }}"
+      loop: "{{ gitlab_users }}"
+
+    - name: Create Groups
+      when: gitlab_groups is defined
+      community.general.gitlab_group:
+        api_url: "https://{{ gitlab_route_r.resources[0].spec.hostnames[0] }}"
+        api_token: "{{ access_token_r.resources[0].data.token | b64decode }}"
+        # api_username: root
+        validate_certs: false
+        name: "{{ item.name }}"
+        path: "{{ item.path }}"
+        state: "{{ item.state | default('present') }}"
+        description: "{{ item.description | default(omit) }}"
+        visibility: "{{ item.visibility | default('private') }}"
+        parent: "{{ item.parent | default(omit) }}"
+        auto_devops_enabled: "{{ item.auto_devops_enabled | default(omit) }}"
+        enabled_git_access_protocol: "{{ item.enabled_git_access_protocol | default('all') }}"
+        lfs_enabled: "{{ item.lfs_enabled | default(true) }}"
+      loop: "{{ gitlab_groups }}"
+
+    - name: Add Users to Groups
+      when: gitlab_group_members is defined
+      community.general.gitlab_group_members:
+        api_url: "https://{{ gitlab_route_r.resources[0].spec.hostnames[0] }}"
+        api_token: "{{ access_token_r.resources[0].data.token | b64decode }}"
+        gitlab_group: "{{ item.group }}"
+        gitlab_users_access: "{{ item.access }}"
+        state: "{{ item.state | default('present') }}"
+      loop: "{{ gitlab_group_members }}"

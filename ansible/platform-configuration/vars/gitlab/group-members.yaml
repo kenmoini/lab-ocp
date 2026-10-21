@@ -1,0 +1,10 @@
+gitlab_group_members:
+  - group: openshell
+    state: present
+    access:
+      - name: openshell-admin
+        access_level: maintainer
+      - name: openshell-auditor
+        access_level: reporter
+      - name: openshell-user
+        access_level: developer

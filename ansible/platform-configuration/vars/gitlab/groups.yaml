@@ -1,0 +1,5 @@
+gitlab_groups:
+  - name: openshell
+    path: "openshell"
+    state: present
+    auto_devops_enabled: false

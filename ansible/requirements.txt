@@ -4,3 +4,4 @@ jsonpatch
 openshift
 pyvmomi
 PyYAML
+python-gitlab

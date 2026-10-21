@@ -1,0 +1,13 @@
+gitlab_users:
+  - username: openshell-admin
+    name: Admin OpenShell
+    email: admin@openshell.kemo.labs
+    access_level: owner
+  - username: openshell-user
+    name: User OpenShell
+    email: user@openshell.kemo.labs
+    access_level: developer
+  - username: openshell-auditor
+    name: Auditor OpenShell
+    email: auditor@openshell.kemo.labs
+    access_level: reporter
