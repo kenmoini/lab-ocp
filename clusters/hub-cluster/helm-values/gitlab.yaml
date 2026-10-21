@@ -64,6 +64,7 @@ global:
   redis:
     host: gitlab-redis-master.gitlab-infra.svc.cluster.local
     port: 6379
+    scheme: rediss
     username: default
     user: default
     auth:
