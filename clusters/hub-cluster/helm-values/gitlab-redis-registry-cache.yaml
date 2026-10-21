@@ -25,9 +25,13 @@ master:
     annotations:
       service.beta.openshift.io/serving-cert-secret-name: gitlab-redis-cache-serving-certs
   containerPorts:
-    redis: 6380
+    redis: 6379
+    rediss: 6380
 metrics:
   enabled: true
+  containerPorts:
+    http: 9121
+    https: 9122
   # extraArgs:
   #   tls-server-key-file: "/etc/prometheus/secrets/metrics-server-certs/tls.key"
   #   tls-server-cert-file: "/etc/prometheus/secrets/metrics-server-certs/tls.crt"
