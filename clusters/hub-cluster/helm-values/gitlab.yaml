@@ -153,7 +153,14 @@ global:
       connection:
         secret: gitlab-s3-backups-conn
         key: connection
-
+    omniauth:
+      enabled: true
+      allowSingleSignOn:
+        - oauth2_generic
+      blockAutoCreatedUsers: false
+      providers:
+        - secret: gitlab-keycloak
+          key: provider
 registry:
   bucket: gitlab-s3-registry
   cache:
