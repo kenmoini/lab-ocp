@@ -157,6 +157,7 @@ global:
       enabled: true
       allowSingleSignOn:
         - oauth2_generic
+        - openid_connect
       blockAutoCreatedUsers: false
       providers:
         - secret: gitlab-keycloak
