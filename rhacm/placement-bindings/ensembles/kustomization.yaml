@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - gitlab.yaml
+  - openshell.yaml
 
 commonAnnotations:
   argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

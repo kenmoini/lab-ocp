@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: ensembles-openshell
+  #namespace: open-cluster-management-policies
+placementRef:
+  name: ensemble-openshell
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: openshell-consolelinks
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
