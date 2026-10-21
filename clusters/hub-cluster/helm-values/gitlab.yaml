@@ -153,6 +153,8 @@ registry:
   bucket: gitlab-s3-registry
   cache:
     username: default
+    user: default
+    scheme: rediss
     password:
       secret: gitlab-redis-cache
       key: redis-password
