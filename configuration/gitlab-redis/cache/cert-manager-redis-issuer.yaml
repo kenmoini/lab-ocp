@@ -19,4 +19,4 @@ metadata:
     argocd.argoproj.io/sync-wave: "-3"
 spec:
   ca:
-    secretName: redis-registry-cache-tls-ca
+    secretName: redis-registry-cache-selfsigned-tls-ca
