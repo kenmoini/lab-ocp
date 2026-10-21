@@ -69,6 +69,10 @@ global:
     scheme: rediss
     username: default
     user: default
+    redisTLS:
+      caFile:
+        secret: redis-tls-ca
+        key: ca.crt
     auth:
       secret: 'gitlab-redis'
       key: redis-password
