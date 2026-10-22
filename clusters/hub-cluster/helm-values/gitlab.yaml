@@ -254,7 +254,7 @@ gitlab-runner:
         builds_dir = "/repo"
         
         [runners.kubernetes]
-          image = "ubuntu:22.04"
+          image = "ubuntu:24.04"
           automount_service_account_token = true
           host_users = false
           privileged = true
