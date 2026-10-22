@@ -284,3 +284,9 @@ gitlab-runner:
         [runners.kubernetes.build_container_security_context]
           [runners.kubernetes.build_container_security_context.capabilities]
             add = ["NET_ADMIN", "SETUID", "SETGID", "SYS_ADMIN", "MKNOD", "CHOWN"]
+
+        [[runners.kubernetes.volumes.secret]]
+          name = "combo-ca"
+          mount_path = "/etc/ssl/certs/ca-certificates.crt"
+          sub_path = "full-ca-bundle.crt"
+          read_only = true
