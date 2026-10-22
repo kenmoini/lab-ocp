@@ -9,6 +9,7 @@ spec:
   owner: ocemigration
   cluster:
     name: openclaw-db
+  allowConnections: true
   # extensions:
   #   - name: bloom
   #     ensure: present
