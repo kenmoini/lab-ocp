@@ -247,7 +247,7 @@ gitlab-runner:
     config: |
       [[runners]]
         name = "my-kubernetes-runner"
-        environment = ["FF_USE_ADVANCED_POD_SPEC_CONFIGURATION=true", "HOME=/repo", "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt", "REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt"]
+        environment = ["FF_USE_ADVANCED_POD_SPEC_CONFIGURATION=true", "HOME=/repo", "ROX_INSECURE_CLIENT_SKIP_TLS_VERIFY=true", "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt", "REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt"]
         # Increase this value to prevent long polling deadlocks
         request_concurrency = 4
         # Ensure builds take place in a writeable space
