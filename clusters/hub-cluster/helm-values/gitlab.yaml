@@ -247,12 +247,30 @@ gitlab-runner:
     config: |
       [[runners]]
         name = "my-kubernetes-runner"
+        environment = ["FF_USE_ADVANCED_POD_SPEC_CONFIGURATION=true"]
         # Increase this value to prevent long polling deadlocks
         request_concurrency = 4
         # Override HOME to a globally writeable directory
-        environment = ["HOME=/tmp"]
+        environment = ["HOME=/repo"]
         # Ensure builds take place in a writeable space
-        builds_dir = "/tmp"
+        builds_dir = "/repo"
         
         [runners.kubernetes]
           image = "ubuntu:22.04"
+          automount_service_account_token = true
+          host_users = false
+          privileged = true
+          allowPrivilegeEscalation = true
+        [[runners.kubernetes.volumes.empty_dir]]
+          name = "repo"
+          mount_path = "/repo"
+
+        [[runners.kubernetes.pod_spec]]
+          name = "procmount"
+          patch = '''
+            containers:
+            - name: build
+              securityContext:
+                procMount: Unmasked
+          '''
+          patch_type = "merge"
