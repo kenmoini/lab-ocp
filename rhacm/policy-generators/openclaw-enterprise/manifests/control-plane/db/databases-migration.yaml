@@ -3,6 +3,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
   name: openclaw-db-migration
+  namespace: openclaw-infra
 spec:
   name: ocemigration
   owner: ocemigration
