@@ -11,6 +11,68 @@ metadata:
 spec:
   disabled: false
   policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: stackrox-ext-cert
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: cert-manager.io/v1
+                kind: Certificate
+                metadata:
+                  name: stackrox-ext-cert
+                  namespace: stackrox
+                spec:
+                  commonName: acs.apps.tri-force.lab.kemo.network
+                  dnsNames:
+                    - acs.apps.tri-force.lab.kemo.network
+                  issuerRef:
+                    kind: ClusterIssuer
+                    name: letsencrypt-digitalocean
+                  secretName: acs-ext-tls
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: stackrox-ext-cert
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: stackrox-ext-route
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: route.openshift.io/v1
+                kind: Route
+                metadata:
+                  name: acs-ext-route
+                  namespace: stackrox
+                spec:
+                  host: acs.apps.tri-force.lab.kemo.network
+                  to:
+                    kind: Service
+                    name: central
+                  port:
+                    targetPort: https
+                  tls:
+                    termination: reencrypt
+                    insecureEdgeTerminationPolicy: Redirect
+                    externalCertificate:
+                      name: acs-ext-tls
+                    destinationCACertificate: |
+                      {{ fromConfigMap "stackrox" "tls-ca-bundle" "ca-bundle.pem" | autoindent }}
+
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
           kind: ConfigurationPolicy
