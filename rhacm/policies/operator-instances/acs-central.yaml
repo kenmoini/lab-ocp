@@ -22,11 +22,44 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: RoleBinding
+                metadata:
+                  name: secret-reader-binding
+                  namespace: stackrox
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: Role
+                  name: tls-secret-reader
+                subjects:
+                - kind: ServiceAccount
+                  name: router
+                  namespace: openshift-ingress
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: Role
+                metadata:
+                  name: tls-secret-reader
+                  namespace: stackrox
+                rules:
+                  - apiGroups:
+                      - ""
+                    resourceNames:
+                      - acs-ext-tls
+                    resources:
+                      - secrets
+                    verbs:
+                      - get
+                      - list
+                      - watch
+            - complianceType: musthave
+              objectDefinition:
                 apiVersion: cert-manager.io/v1
                 kind: Certificate
                 metadata:
                   name: stackrox-ext-cert
-                  namespace: openshift-ingress
+                  namespace: stackrox
                 spec:
                   commonName: acs.apps.tri-force.lab.kemo.network
                   dnsNames:
