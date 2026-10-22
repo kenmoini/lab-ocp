@@ -30,11 +30,3 @@ policies:
         path: manifests/control-plane/db/
         complianceType: "musthave"
         remediationAction: enforce
-
-  - name: oce-targeted-oce-infra
-    namespace: openclaw-infra
-    manifests:
-      - name: "oce-db-ca-copy"
-        path: manifests/targeted/openclaw-infra/
-        complianceType: "musthave"
-        remediationAction: enforce
