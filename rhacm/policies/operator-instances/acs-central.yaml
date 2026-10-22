@@ -26,7 +26,7 @@ spec:
                 kind: Certificate
                 metadata:
                   name: stackrox-ext-cert
-                  namespace: stackrox
+                  namespace: openshift-ingress
                 spec:
                   commonName: acs.apps.tri-force.lab.kemo.network
                   dnsNames:
