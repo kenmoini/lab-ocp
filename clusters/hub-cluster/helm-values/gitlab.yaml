@@ -259,6 +259,7 @@ gitlab-runner:
           host_users = false
           privileged = true
           allowPrivilegeEscalation = true
+          service_account = "gitlab-gitlab-runner"
         [[runners.kubernetes.volumes.empty_dir]]
           name = "repo"
           mount_path = "/repo"
