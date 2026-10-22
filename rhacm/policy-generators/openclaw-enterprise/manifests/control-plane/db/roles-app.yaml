@@ -16,4 +16,4 @@ spec:
   inRoles:
     - pg_monitor
   passwordSecret:
-    name: openclaw-db-app
+    name: openclaw-db-openclaw
