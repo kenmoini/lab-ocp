@@ -28,8 +28,8 @@ spec:
                 helmRepoURL: 'https://charts.gitlab.io'
                 helmChartName: gitlab
                 helmReleaseName: gitlab
-                helmRevision: 10.5.0 # https://docs.gitlab.com/charts/installation/version_mappings/
-                gitlabVersion: 19.5.0
+                helmRevision: 10.5.1 # https://docs.gitlab.com/charts/installation/version_mappings/
+                gitlabVersion: 19.5.1
 
                 redisReleaseName: gitlab-redis
                 redisHelmChartName: redis

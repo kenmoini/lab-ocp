@@ -7,7 +7,7 @@ prometheus:
   rbac:
     create: false
 upgradeCheck:
-  enabled: false
+  enabled: true
 nginx-ingress:
   enabled: false
 
