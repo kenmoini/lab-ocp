@@ -6,6 +6,7 @@ namespace: open-cluster-management-policies
 
 resources:
   - argocd-agent/
+  - ingress-http2/
   - platform-monitoring/enable-prometheus.yaml
   - platform-monitoring/disable-prometheus.yaml
   - openshift-console/enable.yaml
