@@ -13,16 +13,72 @@ runtime:
 
 auth:
   baseUrl: https://console.oce.tri-force.lab.kemo.network
+  # Optional generic OpenID Connect sign-in (Keycloak, Okta, Entra ID, Auth0) for
+  # existing password accounts (API Pod only). Same requirements as auth.github; its
+  # Secret must differ from auth.github's and auth.google's. Copy issuer and the three URLs
+  # from the IdP's discovery document: each must be https on port 443 on the issuer's
+  # host, with no query or fragment. The API never runs discovery.
+  oidc:
+    enabled: true
+    # The exact "iss" value, trailing slash included where the IdP uses one.
+    issuer: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell"
+    authorizationUrl: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell/protocol/openid-connect/auth"
+    tokenUrl: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell/protocol/openid-connect/token"
+    jwksUrl: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell/protocol/openid-connect/certs"
+    secretName: occ-oidc-login
+    clientIdKey: clientID
+    clientSecretKey: clientSecret
+    # Optional CA certificate bundle for the IdP (no private keys). Both or neither.
+    # API-only process-wide Node trust, combined with Gateway roots. Replace API Pods on rotation.
+    # Requires a separate database.caSecretName and an application URL with a DNS host
+    # (not an IP), sslmode=verify-full and sslrootcert=database.caMountPath/database.caKey.
+    # May share a public CA bundle Secret with gatewayRouting.caSecretName.
+    caSecretName: ""
+    caSecretKey: ""
+    # client_secret_post (default) or client_secret_basic.
+    tokenAuth: client_secret_post
+    # Console button label ("Continue with <displayName>"); empty means "single sign-on".
+    displayName: "OpenShell SSO"
+    # API Pod HTTPS egress for the token and JWKS URLs. Empty allows TCP 443 to any
+    # address except link-local 169.254.0.0/16; list the IdP's IPv4 ranges to narrow it.
+    egressCidrs: []
 
 agentNativeAdmin:
   enabled: true
   domain: agents.oce.tri-force.lab.kemo.network
   sharedCookieDomain: oce.tri-force.lab.kemo.network
 
+# Console and API runtime status and container log reads (Agent administer for text).
+# Grants pods/log get and events get,list to the tenant API and Gateway observer roles
+# and sets OCC_AGENT_RUNTIME_LOGS_ENABLED. false removes both and the routes answer 501.
+agentRuntimeLogs:
+  enabled: true
+
 database:
+  secretName: occ-database
+  appUrlKey: application-url
+  migrationUrlKey: migration-url
   caSecretName: occ-db-ca
   caKey: ca.crt
   caMountPath: /etc/openclaw/database-ca
-  cidrs:
-    - 10.45.0.12/32
-    - 10.45.0.13/32
+  cidrs: []
+
+# Metrics listeners are enabled privately. Set both selectors to admit your scraper.
+metrics:
+  enabled: true
+  port: 9464
+  scraperNamespaceLabels: {}
+  scraperPodLabels: {}
+logging:
+  collector:
+    # Keep disabled when an existing cluster Collector already owns CRI log files.
+    enabled: false
+
+bootstrap:
+  adminEmail: "ken@kenmoini.com"
+  password:
+    claimName: ""
+    mountPath: /var/lib/openclaw/bootstrap
+    fileName: initial-admin-password
+  serviceKey:
+    fileName: initial-admin-service-key.json
