@@ -1,0 +1,19 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: DatabaseRole
+metadata:
+  name: openclaw-app
+  namespace: openclaw-infra
+spec:
+  cluster:
+    name: openclaw-db
+  name: openclaw
+  comment: "OpenClaw App Role"
+  login: true
+  superuser: false
+  createdb: false
+  databaseRoleReclaimPolicy: delete
+  inRoles:
+    - pg_monitor
+  passwordSecret:
+    name: openclaw-db-app

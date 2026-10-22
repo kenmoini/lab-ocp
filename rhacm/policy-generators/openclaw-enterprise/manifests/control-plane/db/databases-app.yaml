@@ -1,0 +1,13 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: openclaw-db-app
+spec:
+  name: oceapp
+  owner: openclaw
+  cluster:
+    name: openclaw-db
+  # extensions:
+  #   - name: bloom
+  #     ensure: present
