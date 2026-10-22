@@ -272,3 +272,14 @@ gitlab-runner:
                 procMount: Unmasked
           '''
           patch_type = "merge"
+
+        [[runners.kubernetes.pod_spec]]
+          name = "hostUsers"
+          patch = '''
+            [{"op": "add", "path": "/hostUsers", "value": false}]
+          '''
+          patch_type = "json"
+
+        [runners.kubernetes.build_container_security_context]
+          [runners.kubernetes.build_container_security_context.capabilities]
+            add = ["NET_ADMIN", "SETUID", "SETGID", "SYS_ADMIN", "MKNOD", "CHOWN"]
