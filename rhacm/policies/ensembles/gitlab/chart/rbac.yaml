@@ -15,6 +15,26 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: gitlab-root-ca
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: trusted-root-ca
+                  namespace: gitlab-system
+                  labels:
+                    config.openshift.io/inject-trusted-cabundle: 'true'
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: gitlab-rbac
         spec:
           remediationAction: enforce
