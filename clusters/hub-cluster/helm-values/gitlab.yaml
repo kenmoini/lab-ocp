@@ -249,6 +249,10 @@ gitlab-runner:
         name = "my-kubernetes-runner"
         # Increase this value to prevent long polling deadlocks
         request_concurrency = 4
+        # Override HOME to a globally writeable directory
+        environment = ["HOME=/tmp"]
+        # Ensure builds take place in a writeable space
+        builds_dir = "/tmp"
         
         [runners.kubernetes]
           image = "ubuntu:22.04"
