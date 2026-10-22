@@ -56,6 +56,14 @@ spec:
       secret:
         name: openshell-sso-clients
         key: gitlabClientSecret
+    OPENCLAW_CLIENT_SECRET:
+      secret:
+        name: openshell-sso-clients
+        key: openclawClientSecret
+    PATIENT_PORTAL_CLIENT_SECRET:
+      secret:
+        name: openshell-sso-clients
+        key: patientPortalClientSecret
   realm:
     id: openshell
     realm: openshell
@@ -576,6 +584,58 @@ spec:
           - acr
           - openshell-audience
           - openshell:all
+
+      # OpenClaw Enterprise
+      - clientId: openclaw
+        name: OpenClaw Enterprise
+        description: Confidential client for OpenClaw Enterprise
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        redirectUris:
+          - "https://openclaw.tri-force.lab.kemo.network/users/auth/openid_connect/callback"
+        secret: "${OPENCLAW_CLIENT_SECRET}"
+        standardFlowEnabled: true
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: true
+        fullScopeAllowed: true
+        attributes:
+          use.refresh.tokens: "false"
+          pkce.code.challenge.method: "S256"
+        defaultClientScopes:
+          - basic
+          - profile
+          - email
+          - roles
+          - web-origins
+          - acr
+          - openshell-audience
+          - openshell:all
+
+      # Patient Portal
+      - clientId: patient-portal
+        name: Patient Portal
+        description: Confidential client for the Patient Portal
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        redirectUris:
+          - "https://patient-portal.apps.tri-force.lab.kemo.network/auth/callback"
+        secret: "${PATIENT_PORTAL_CLIENT_SECRET}"
+        standardFlowEnabled: true
+        implicitFlowEnabled: false
+        directAccessGrantsEnabled: false
+        serviceAccountsEnabled: true
+        fullScopeAllowed: true
+        attributes:
+          use.refresh.tokens: "false"
+          pkce.code.challenge.method: "S256"
+        defaultClientScopes:
+          - basic
+          - profile
+          - email
+          - roles
 
     # ------------------------------------------------------------------
     # Users
