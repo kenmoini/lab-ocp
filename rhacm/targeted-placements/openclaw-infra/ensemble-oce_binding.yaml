@@ -1,0 +1,14 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: ensembles-oce
+  #namespace: openclaw-infra
+placementRef:
+  name: ensemble-oce
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: oce-targeted-oce-infra
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy

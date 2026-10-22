@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - gitlab.yaml
+  - openclaw-enterprise.yaml
   - openshell.yaml
 
 commonAnnotations:
