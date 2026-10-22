@@ -1,0 +1,28 @@
+controlPlane:
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
+drivers:
+  compute:
+    configuration:
+      runtime:
+        gatewayNodeSelector:
+          node-role.kubernetes.io/master: ""
+runtime:
+  nodeSelector:
+    node-role.kubernetes.io/master: ""
+
+auth:
+  baseUrl: https://console.oce.tri-force.lab.kemo.network
+
+agentNativeAdmin:
+  enabled: true
+  domain: agents.oce.tri-force.lab.kemo.network
+  sharedCookieDomain: oce.tri-force.lab.kemo.network
+
+database:
+  caSecretName: occ-db-ca
+  caKey: ca.crt
+  caMountPath: /etc/openclaw/database-ca
+  cidrs:
+    - 10.45.0.12/32
+    - 10.45.0.13/32

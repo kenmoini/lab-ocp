@@ -1,0 +1,22 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: cnpgsql-selfsigned
+  namespace: openclaw-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  selfSigned: {}
+
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: cnpgsql-selfsigned-ca
+  namespace: openclaw-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
+spec:
+  ca:
+    secretName: cnpgsql-tls-ca

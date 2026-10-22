@@ -1,0 +1,25 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: openclaw-db
+  namespace: openclaw-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  instances: 3
+  enablePDB: false
+  enableSuperuserAccess: true
+  logLevel: info
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 25Gi
+  walStorage:
+    size: 2Gi
+  postgresql:
+    pg_ident:
+    - cnpg_streaming_replica streaming-replica.cnpg.svc.cluster.local streaming_replica
+  certificates:
+    serverTLSSecret: openclaw-db-server-tls
+    serverCASecret: openclaw-db-server-tls
+    clientCASecret: openclaw-db-client-tls
+    replicationTLSSecret: openclaw-db-client-tls

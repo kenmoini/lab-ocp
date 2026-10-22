@@ -1,0 +1,37 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: openclaw-db-server
+  namespace: openclaw-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  renewBefore: 720h
+  usages:
+    - server auth
+    # - digital signature
+    # - key encipherment
+  duration: 8760h
+  commonName: openclaw-db
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: cnpgsql-selfsigned-ca
+  secretName: openclaw-db-server-tls
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  dnsNames:
+    - openclaw-db-lb.internal.mydomain.net
+    - openclaw-db-rw
+    - openclaw-db-rw.default
+    - openclaw-db-rw.default.svc
+    - openclaw-db-r
+    - openclaw-db-r.default
+    - openclaw-db-r.default.svc
+    - openclaw-db-ro
+    - openclaw-db-ro.default
+    - openclaw-db-ro.default.svc
+  secretTemplate:
+    labels:
+      cnpg.io/reload: ""

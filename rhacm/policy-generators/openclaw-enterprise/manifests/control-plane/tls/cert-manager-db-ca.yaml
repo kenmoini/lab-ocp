@@ -1,0 +1,19 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cnpgsql-tls-ca
+  namespace: openclaw-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-4"
+spec:
+  commonName: openclaw-db-ca
+  isCA: true
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: cnpgsql-selfsigned
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  secretName: cnpgsql-tls-ca

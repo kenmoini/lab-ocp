@@ -1,0 +1,40 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: openclaw-enterprise
+policySetDefaults:
+  generatePolicySetPlacement: false
+policyDefaults:
+  generatePolicyPlacement: false
+  namespace: open-cluster-management-policies
+  categories: 
+  - OCE - OpenClaw Enterprise
+  controls:
+  - APP - Application
+  standards:
+  - Kemo Labs 2026
+  # remediationAction: enforce
+  severity: low
+  pruneObjectBehavior: DeleteIfCreated
+  consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
+policies:
+  - name: oce-tls
+    manifests:
+      - name: "oce-tls"
+        path: manifests/control-plane/tls/
+        complianceType: "musthave"
+        remediationAction: enforce
+  - name: oce-db
+    manifests:
+      - name: "oce-db"
+        path: manifests/control-plane/db/
+        complianceType: "musthave"
+        remediationAction: enforce
+
+  - name: oce-targeted-oce-infra
+    namespace: openclaw-infra
+    manifests:
+      - name: "oce-db-ca-copy"
+        path: manifests/targeted/openclaw-infra/
+        complianceType: "musthave"
+        remediationAction: enforce

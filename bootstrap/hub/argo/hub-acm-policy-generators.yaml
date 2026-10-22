@@ -25,6 +25,9 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: rhacm/policy-generators/openshell/
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: rhacm/policy-generators/openclaw-enterprise/
 
   project: default
   syncPolicy:

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: occ-db-ca
+  namespace: openclaw-system
+type: Opaque
+data:
+  ca.crt: '{{ fromSecret "openclaw-infra" "cnpgsql-tls-ca" "password" }}'
