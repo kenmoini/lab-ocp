@@ -15,6 +15,25 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: gitlab-ns-anno
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: gitlab-system
+                  annotations:
+                    openshift.io/sa.scc.supplemental-groups: 0/165537
+                    openshift.io/sa.scc.uid-range: 0/165537
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: gitlab-root-ca
         spec:
           remediationAction: enforce
@@ -55,6 +74,22 @@ spec:
                   apiGroup: rbac.authorization.k8s.io
                   kind: ClusterRole
                   name: 'system:openshift:scc:nonroot-v2'
+
+            - complianceType: musthave
+              objectDefinition:
+                kind: ClusterRoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
+                  name: gitlab-gitlab-runner-userns
+                subjects:
+                  - kind: ServiceAccount
+                    name: gitlab-gitlab-runner
+                    namespace: gitlab-system
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: 'system:openshift:scc:nested-container'
+
             - complianceType: musthave
               objectDefinition:
                 kind: ClusterRoleBinding
