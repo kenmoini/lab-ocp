@@ -95,6 +95,21 @@ spec:
                 kind: ClusterRoleBinding
                 apiVersion: rbac.authorization.k8s.io/v1
                 metadata:
+                  name: gitlab-gitlab-runner-arc
+                subjects:
+                  - kind: ServiceAccount
+                    name: gitlab-gitlab-runner
+                    namespace: gitlab-system
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: ClusterRole
+                  name: 'system:openshift:scc:nested-container-arc'
+
+            - complianceType: musthave
+              objectDefinition:
+                kind: ClusterRoleBinding
+                apiVersion: rbac.authorization.k8s.io/v1
+                metadata:
                   name: gitlab-shared-secrets-nonroot
                 subjects:
                   - kind: ServiceAccount
