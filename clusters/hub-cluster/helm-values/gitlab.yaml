@@ -272,7 +272,7 @@ gitlab-runner:
               securityContext:
                 procMount: Unmasked
           '''
-          patch_type = "merge"
+          patch_type = "strategic"
 
         [[runners.kubernetes.pod_spec]]
           name = "hostUsers"
