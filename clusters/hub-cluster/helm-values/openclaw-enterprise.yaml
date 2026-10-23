@@ -74,7 +74,6 @@ bootstrap:
 cluster:
   cidrs:
     - 10.43.0.1/32
-    - 10.43.0.2/32
 
 controlPlane:
   nodeSelector:
