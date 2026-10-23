@@ -1,0 +1,68 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: openclaw
+  namespace: openshift-gitops
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: ensemble/openclaw-enterprise
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
+          - list:
+              elements:
+              - appName: openclaw-enterprise
+                namespace: openclaw-system
+                helmRepoURL: https://github.com/openclaw/openclaw-enterprise
+                helmChartName: openclaw-enterprise
+                helmRevision: main
+  template:
+    metadata:
+      name: "{{.name}}-{{.appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+      finalizers:
+        # The set foreground cascading deletion
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      sources:
+        - ref: values
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
+        - chart: '{{.helmChartName}}'
+          helm:
+            releaseName: '{{.appName}}'
+            valueFiles:
+              - "$values/clusters/{{ .name }}/helm-values/{{ .appName }}.yaml"
+          repoURL: '{{.helmRepoURL}}'
+          path: deploy/helm
+          targetRevision: '{{.helmRevision}}'
+      destination:
+        name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
+        server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
+        namespace: "{{.namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=false
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+          - ApplyOutOfSyncOnly=true
+        retry:
+          limit: 5
