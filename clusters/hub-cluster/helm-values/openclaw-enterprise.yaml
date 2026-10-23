@@ -87,7 +87,7 @@ database:
   caKey: ca.crt
   caMountPath: /etc/openclaw/database-ca
   cidrs:
-    - 10.128.0.0/14
+    - 10.43.0.10/32
 
 drivers:
   compute:
