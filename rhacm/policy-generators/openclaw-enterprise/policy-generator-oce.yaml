@@ -30,3 +30,9 @@ policies:
         path: manifests/control-plane/db/
         complianceType: "musthave"
         remediationAction: enforce
+  - name: oce-instance
+    manifests:
+      - name: "oce-instance"
+        path: manifests/control-plane/instance/
+        complianceType: "musthave"
+        remediationAction: enforce
