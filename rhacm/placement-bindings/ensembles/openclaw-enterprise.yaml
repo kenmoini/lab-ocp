@@ -15,3 +15,6 @@ subjects:
   - name: oce-tls
     apiGroup: policy.open-cluster-management.io
     kind: Policy
+  - name: oce-instance
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
