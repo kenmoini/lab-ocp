@@ -72,8 +72,7 @@ bootstrap:
     fileName: initial-admin-service-key.json
 
 cluster:
-  cidrs:
-    - 10.128.0.0/14
+  cidrs: []
 
 controlPlane:
   nodeSelector:
