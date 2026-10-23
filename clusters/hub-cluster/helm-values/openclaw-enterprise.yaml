@@ -20,30 +20,30 @@ auth:
   # Secret must differ from auth.github's and auth.google's. Copy issuer and the three URLs
   # from the IdP's discovery document: each must be https on port 443 on the issuer's
   # host, with no query or fragment. The API never runs discovery.
-  oidc:
-    enabled: true
-    # The exact "iss" value, trailing slash included where the IdP uses one.
-    issuer: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell"
-    authorizationUrl: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell/protocol/openid-connect/auth"
-    tokenUrl: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell/protocol/openid-connect/token"
-    jwksUrl: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell/protocol/openid-connect/certs"
-    secretName: occ-oidc-login
-    clientIdKey: clientID
-    clientSecretKey: clientSecret
-    # Optional CA certificate bundle for the IdP (no private keys). Both or neither.
-    # API-only process-wide Node trust, combined with Gateway roots. Replace API Pods on rotation.
-    # Requires a separate database.caSecretName and an application URL with a DNS host
-    # (not an IP), sslmode=verify-full and sslrootcert=database.caMountPath/database.caKey.
-    # May share a public CA bundle Secret with gatewayRouting.caSecretName.
-    caSecretName: ""
-    caSecretKey: ""
-    # client_secret_post (default) or client_secret_basic.
-    tokenAuth: client_secret_post
-    # Console button label ("Continue with <displayName>"); empty means "single sign-on".
-    displayName: "OpenShell SSO"
-    # API Pod HTTPS egress for the token and JWKS URLs. Empty allows TCP 443 to any
-    # address except link-local 169.254.0.0/16; list the IdP's IPv4 ranges to narrow it.
-    egressCidrs: []
+  # oidc:
+  #   enabled: true
+  #   # The exact "iss" value, trailing slash included where the IdP uses one.
+  #   issuer: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell"
+  #   authorizationUrl: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell/protocol/openid-connect/auth"
+  #   tokenUrl: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell/protocol/openid-connect/token"
+  #   jwksUrl: "https://openshell-sso.apps.tri-force.lab.kemo.network/realms/openshell/protocol/openid-connect/certs"
+  #   secretName: occ-oidc-login
+  #   clientIdKey: clientID
+  #   clientSecretKey: clientSecret
+  #   # Optional CA certificate bundle for the IdP (no private keys). Both or neither.
+  #   # API-only process-wide Node trust, combined with Gateway roots. Replace API Pods on rotation.
+  #   # Requires a separate database.caSecretName and an application URL with a DNS host
+  #   # (not an IP), sslmode=verify-full and sslrootcert=database.caMountPath/database.caKey.
+  #   # May share a public CA bundle Secret with gatewayRouting.caSecretName.
+  #   caSecretName: ""
+  #   caSecretKey: ""
+  #   # client_secret_post (default) or client_secret_basic.
+  #   tokenAuth: client_secret_post
+  #   # Console button label ("Continue with <displayName>"); empty means "single sign-on".
+  #   displayName: "OpenShell SSO"
+  #   # API Pod HTTPS egress for the token and JWKS URLs. Empty allows TCP 443 to any
+  #   # address except link-local 169.254.0.0/16; list the IdP's IPv4 ranges to narrow it.
+  #   egressCidrs: []
 
 bootstrap:
   adminEmail: "ken@kenmoini.com"
