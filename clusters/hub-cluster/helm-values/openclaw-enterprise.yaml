@@ -55,7 +55,8 @@ bootstrap:
     fileName: initial-admin-service-key.json
 
 cluster:
-  cidrs: []
+  cidrs:
+    - 10.128.0.0/14
 
 controlPlane:
   nodeSelector:
@@ -68,7 +69,8 @@ database:
   caSecretName: occ-db-ca
   caKey: ca.crt
   caMountPath: /etc/openclaw/database-ca
-  cidrs: []
+  cidrs:
+    - 10.128.0.0/14
 
 drivers:
   compute:
