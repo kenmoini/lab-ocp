@@ -25,6 +25,7 @@ spec:
               - appName: openclaw-enterprise
                 namespace: openclaw-system
                 helmRepoURL: https://github.com/openclaw/openclaw-enterprise
+                helmPath: deploy/helm/openclaw-enterprise
                 helmChartName: openclaw-enterprise
                 helmRevision: main
   template:
@@ -42,13 +43,12 @@ spec:
         - ref: values
           repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
-        - chart: '{{.helmChartName}}'
-          helm:
+        - helm:
             releaseName: '{{.appName}}'
             valueFiles:
               - "$values/clusters/{{ .name }}/helm-values/{{ .appName }}.yaml"
           repoURL: '{{.helmRepoURL}}'
-          path: deploy/helm
+          path: '{{.helmPath}}'
           targetRevision: '{{.helmRevision}}'
       destination:
         name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
