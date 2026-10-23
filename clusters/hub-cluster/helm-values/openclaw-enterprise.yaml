@@ -99,7 +99,7 @@ drivers:
 gatewayRouting:
   enabled: true
   gatewayClassName: oce-agent-gateway
-  apiKeySecretName: occ-auth
+  apiKeySecretName: occ-auth-two
 
 logging:
   collector:
