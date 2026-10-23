@@ -89,6 +89,11 @@ database:
   cidrs:
     - 10.43.0.10/32
 
+dns:
+  namespace: openshift-dns
+  podLabels:
+    dns.operator.openshift.io/daemonset-dns: default
+
 drivers:
   compute:
     configuration:
