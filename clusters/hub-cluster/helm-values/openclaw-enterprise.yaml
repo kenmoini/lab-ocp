@@ -77,6 +77,9 @@ drivers:
         gatewayNodeSelector:
           node-role.kubernetes.io/master: ""
 
+gatewayRouting:
+  enabled: true
+
 logging:
   collector:
     # Keep disabled when an existing cluster Collector already owns CRI log files.
