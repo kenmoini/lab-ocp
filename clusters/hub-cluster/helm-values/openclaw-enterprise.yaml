@@ -13,6 +13,23 @@ agentNativeAdmin:
 agentRuntimeLogs:
   enabled: true
 
+api:
+  # For Slack directory lookup, set the approved proxy independently of the
+  # gateway proxy in installation.yaml, or enable slackProxy below.
+  # See docs/guides/integrations/slack.md.
+  # channelDirectoryProxyUrl: http://198.51.100.25:3128
+  # Optional; see model discovery in docs/reference/console/create-and-deploy.md.
+  modelDiscoveryCidrs: []
+  # Optional: trust client-address headers from ingress-nginx, an AWS ALB, or a
+  # generic proxy. See docs/reference/settings/production.md.
+  # trustedProxy:
+  #   preset: ingress-nginx
+  #   cidrs: [10.42.0.0/16]
+  clients:
+    - namespace: openclaw-system
+      podLabels:
+        app: occ-operator
+
 auth:
   baseUrl: https://console.oce.tri-force.lab.kemo.network
   # Optional generic OpenID Connect sign-in (Keycloak, Okta, Entra ID, Auth0) for
