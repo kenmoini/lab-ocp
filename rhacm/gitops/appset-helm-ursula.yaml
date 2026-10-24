@@ -59,10 +59,10 @@ spec:
           prune: true
           selfHeal: true
         syncOptions:
-          - CreateNamespace=false
+          - CreateNamespace=true
           - SkipDryRunOnMissingResource=true
           - ServerSideApply=true
           - RespectIgnoreDifferences=true
-          - ApplyOutOfSyncOnly=true
+          # - ApplyOutOfSyncOnly=true
         retry:
           limit: 5
