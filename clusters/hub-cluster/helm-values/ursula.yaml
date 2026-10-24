@@ -54,7 +54,7 @@ image:
 # human approval gate); dev-bypass disables it (demo fallback only).
 # --------------------------------------------------------------------------
 auth:
-  mode: dev-bypass              # oidc | dev-bypass
+  mode: oidc              # oidc | dev-bypass
   oidcAudience: "openshell"        # REPLACE: OIDC client audience
 
 # Keycloak (OIDC issuer). OIDC_ISSUER / OIDC_JWKS_URL are derived from these.
