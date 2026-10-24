@@ -54,7 +54,7 @@ image:
 # human approval gate); dev-bypass disables it (demo fallback only).
 # --------------------------------------------------------------------------
 auth:
-  mode: oidc              # oidc | dev-bypass
+  mode: dev-bypass              # oidc | dev-bypass
   oidcAudience: "openshell"        # REPLACE: OIDC client audience
 
 # Keycloak (OIDC issuer). OIDC_ISSUER / OIDC_JWKS_URL are derived from these.
@@ -87,21 +87,21 @@ networkPolicies:
   enabled: true
 
 mesh:
-  enabled: true                 # Istio AuthorizationPolicy + REGISTRY_ONLY Sidecar egress
+  enabled: false                 # Istio AuthorizationPolicy + REGISTRY_ONLY Sidecar egress
   revision: "default"                  # REPLACE: istio.io/rev value for the namespace label
   controlNamespace: istio-system  # istiod namespace (mesh-control-plane egress)
   # Gateway data-plane ServiceAccount (controller-generated, e.g. <gw>-<class>).
   gatewayServiceAccount: "default"     # REPLACE: used in the orchestrator-from-gateway authz principal
 
 spire:
-  mtls: true                    # PeerAuthentication STRICT + mTLS DestinationRules
+  mtls: false                    # PeerAuthentication STRICT + mTLS DestinationRules
   # SPIFFE trust domain. Used by the ServiceAccount SPIFFE-ID annotations, the
   # Istio AuthorizationPolicy principals AND the ClusterSPIFFEIDs — i.e. it is
   # NOT cluster-scoped-only, so it lives here, not under clusterScoped.
   trustDomain: "apps.tri-force.lab.kemo.network"               # REPLACE, e.g. example.org
   # mTLS to OGX only works if OGX runs in the mesh with a sidecar. If OGX is
   # outside the mesh, set false (ISTIO_MUTUAL to a non-mesh peer fails).
-  ogxInMesh: true
+  ogxInMesh: false
 
 # Cluster-scoped resources. In the kustomize tree these were a separate ArgoCD
 # Application (to dodge the namespace transformer); Helm emits cluster-scoped
