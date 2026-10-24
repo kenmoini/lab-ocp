@@ -32,7 +32,7 @@ spec:
     metadata:
       name: "{{.name}}-{{.appName}}"
       annotations:
-        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        # argocd.argoproj.io/manifest-generate-paths: ".;.."
         argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
       finalizers:
         # The set foreground cascading deletion
