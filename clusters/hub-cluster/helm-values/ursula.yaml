@@ -122,7 +122,7 @@ clusterScoped:
 # LIVE overlay. Names the RuntimeClass to request on those two pods.
 # --------------------------------------------------------------------------
 sandbox:
-  enabled: true
+  enabled: false
   runtimeClassName: kata
 
 # --------------------------------------------------------------------------
