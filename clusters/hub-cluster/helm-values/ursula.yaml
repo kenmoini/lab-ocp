@@ -84,7 +84,7 @@ ogx:
 # defaults ON; turning one off narrows what structurally confines the agent.
 # --------------------------------------------------------------------------
 networkPolicies:
-  enabled: true
+  enabled: false
 
 mesh:
   enabled: false                 # Istio AuthorizationPolicy + REGISTRY_ONLY Sidecar egress
