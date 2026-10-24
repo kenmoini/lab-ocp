@@ -72,7 +72,7 @@ spec:
                       trustDomain: "apps.tri-force.lab.kemo.network"
                       defaultConfig:
                         proxyMetadata:
-                          WORKLOAD_IDENTITY_SOCKET_FILE: "/run/secrets/workload-spiffe-uds/spire-agent.sock"
+                          WORKLOAD_IDENTITY_SOCKET_FILE: "spire-agent.sock"
                     pilot:
                       env:
                         PILOT_JWT_ENABLE_REMOTE_JWKS: "true"
