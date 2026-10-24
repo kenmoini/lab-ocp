@@ -81,9 +81,9 @@ networkPolicies:
 mesh:
   enabled: true                 # Istio AuthorizationPolicy + REGISTRY_ONLY Sidecar egress
   revision: ""                  # REPLACE: istio.io/rev value for the namespace label
-  controlNamespace: istio-system  # istiod namespace (mesh-control-plane egress)
+  controlNamespace: openshift-ingress  # istiod namespace (mesh-control-plane egress)
   # Gateway data-plane ServiceAccount (controller-generated, e.g. <gw>-<class>).
-  gatewayServiceAccount: ""     # REPLACE: used in the orchestrator-from-gateway authz principal
+  gatewayServiceAccount: "istiod-openshift-gateway"     # REPLACE: used in the orchestrator-from-gateway authz principal
 
 spire:
   mtls: true                    # PeerAuthentication STRICT + mTLS DestinationRules
