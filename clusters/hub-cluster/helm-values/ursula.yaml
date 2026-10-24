@@ -41,7 +41,7 @@ image:
   registry: ghcr.io
   repository: kenmoini/ursula   # chart appends -orchestrator / -ai-sidecar / -mcp-tools
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # imagePullSecrets added to every workload (ghcr private images need one).
   pullSecrets: []
   # Optional per-component full overrides. Empty => derive from the fields above.
