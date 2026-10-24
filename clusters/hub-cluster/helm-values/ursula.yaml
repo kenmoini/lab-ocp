@@ -30,7 +30,7 @@ createNamespace: true
 
 # Deployment mode for the orchestrator/sidecar (LIVE talks to real OGX/GitLab;
 # REPLAY serves recorded traces). The on-cluster engagement is LIVE.
-mode: REPLAY
+mode: LIVE
 
 # --------------------------------------------------------------------------
 # Container images. GitHub Actions publishes to ghcr.io as
