@@ -14,6 +14,14 @@
 # FQDN, SPIFFE ID and Istio principal, so change it in exactly one place.
 # ArgoCD usually sets the Application destination namespace to the same value.
 namespace: ursula-engagement
+overrides:
+  namespace:
+    labels:
+      istio-discovery/default: enabled
+  httproute:
+    annotations:
+      pdns-internal.kemo.dev/hostname: gitlab.tri-force.lab.kemo.network
+      pdns.kemo.dev: enabled
 
 # Create the Namespace object (with the Istio injection label). Set false if
 # your ApplicationSet uses syncOptions CreateNamespace=true, or the namespace
