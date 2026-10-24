@@ -1,0 +1,118 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-svcmesh
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Red Hat OpenShift Service Mesh 3 default instance
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: operators-servicemesh-3
+      namespace: ""
+      compliance: Compliant
+  policy-templates:
+    - ignorePending: true
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: svcmesh3-ns
+        spec:
+          remediationAction: enforce
+          severity: low
+          pruneObjectBehavior: None
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: istio-system
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: istio-cni
+    - ignorePending: true
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: svcmesh3-instance
+        spec:
+          remediationAction: enforce
+          severity: low
+          pruneObjectBehavior: None
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: sailoperator.io/v1
+                kind: Istio
+                metadata:
+                  name: default
+                  namespace: istio-system
+                spec:
+                  namespace: istio-system
+                  updateStrategy:
+                    type: InPlace
+                  values:
+                    global:
+                      nativeNftables: true
+                    meshConfig:
+                      discoverySelectors:
+                        - matchLabels:
+                            istio-discovery/default: enabled
+                      trustDomain: "apps.tri-force.lab.kemo.network"
+                      defaultConfig:
+                        proxyMetadata:
+                          WORKLOAD_IDENTITY_SOCKET_FILE: "spire-agent.sock"
+                    pilot:
+                      env:
+                        PILOT_JWT_ENABLE_REMOTE_JWKS: "true"
+                    sidecarInjectorWebhook:
+                      templates:
+                        spire: |
+                          spec:
+                            initContainers:
+                            - name: istio-proxy
+                              volumeMounts:
+                              - name: workload-socket
+                                mountPath: /run/secrets/workload-spiffe-uds
+                                readOnly: true
+                            volumes:
+                              - name: workload-socket
+                                csi:
+                                  driver: "csi.spiffe.io"
+                                  readOnly: true
+                        spireGateway: |
+                          spec:
+                            containers:
+                            - name: istio-proxy
+                              volumeMounts:
+                              - name: workload-socket
+                                mountPath: /run/secrets/workload-spiffe-uds
+                                readOnly: true
+                            volumes:
+                              - name: workload-socket
+                                csi:
+                                  driver: "csi.spiffe.io"
+                                  readOnly: true
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: sailoperator.io/v1
+                kind: IstioCNI
+                metadata:
+                  name: default
+                  namespace: istio-cni
+                spec:
+                  namespace: istio-cni
+                  values:
+                    global:
+                      nativeNftables: true

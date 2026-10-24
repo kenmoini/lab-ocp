@@ -33,3 +33,4 @@ spec:
     - instance-jobset
     - instance-rhoai3
     - instance-auto-orch
+    - instance-svcmesh
