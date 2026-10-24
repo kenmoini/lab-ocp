@@ -80,10 +80,10 @@ networkPolicies:
 
 mesh:
   enabled: true                 # Istio AuthorizationPolicy + REGISTRY_ONLY Sidecar egress
-  revision: ""                  # REPLACE: istio.io/rev value for the namespace label
-  controlNamespace: openshift-ingress  # istiod namespace (mesh-control-plane egress)
+  revision: "default"                  # REPLACE: istio.io/rev value for the namespace label
+  controlNamespace: istio-system  # istiod namespace (mesh-control-plane egress)
   # Gateway data-plane ServiceAccount (controller-generated, e.g. <gw>-<class>).
-  gatewayServiceAccount: "istiod-openshift-gateway"     # REPLACE: used in the orchestrator-from-gateway authz principal
+  gatewayServiceAccount: "default"     # REPLACE: used in the orchestrator-from-gateway authz principal
 
 spire:
   mtls: true                    # PeerAuthentication STRICT + mTLS DestinationRules
@@ -122,10 +122,10 @@ sandbox:
 # --------------------------------------------------------------------------
 ingress:
   enabled: true
-  dashboardHost: ""       # REPLACE: FQDN for the dashboard
-  gatewayClass: ""        # REPLACE: GatewayClass name (e.g. istio)
-  metallbPool: ""         # REPLACE: MetalLB address pool / VIP
-  certIssuer: ""          # REPLACE: cert-manager ClusterIssuer name
+  dashboardHost: "ursula-dashboard.apps.tri-force.lab.kemo.network"       # REPLACE: FQDN for the dashboard
+  gatewayClass: "istio"        # REPLACE: GatewayClass name (e.g. istio)
+  metallbPool: "v60-auto-pool"         # REPLACE: MetalLB address pool / VIP
+  certIssuer: "letsencrypt-digitalocean"          # REPLACE: cert-manager ClusterIssuer name
 
 # --------------------------------------------------------------------------
 # Cross-namespace dependencies. `namespace` feeds the orchestrator egress
@@ -168,14 +168,14 @@ meshProbe:
 # ClusterSecretStore itself is cluster infra, not authored by this chart.
 # --------------------------------------------------------------------------
 externalSecrets:
-  enabled: true
+  enabled: false
   secretStore: "kemo-labs-vault"         # REPLACE: ClusterSecretStore name
   vaultPaths:
-    gitlab: ""            # REPLACE: Vault path w/ property `token`
-    eda: ""               # REPLACE: Vault path w/ property `token`
-    openshell: ""         # REPLACE: Vault path w/ property `token`
-    obc: ""               # REPLACE: Vault path w/ `access_key_id` + `secret_access_key`
-    ogx: ""               # REPLACE: Vault path w/ property `api_key`
+    gitlab: "ursula/tokens/gitlab"            # REPLACE: Vault path w/ property `token`
+    eda: "ursula/tokens/aap"               # REPLACE: Vault path w/ property `token`
+    openshell: "ursula/tokens/openshell"         # REPLACE: Vault path w/ property `token`
+    obc: "ursula/tokens/obc"               # REPLACE: Vault path w/ `access_key_id` + `secret_access_key`
+    ogx: "ursula/tokens/ogx"               # REPLACE: Vault path w/ property `api_key`
 
 # --------------------------------------------------------------------------
 # Per-component workload knobs. Resource defaults match the kustomize LIVE
