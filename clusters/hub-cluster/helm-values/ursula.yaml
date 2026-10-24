@@ -59,10 +59,10 @@ keycloak:
 # OGX (in-cluster, OpenAI-compatible). The ai-sidecar's only model endpoint.
 # --------------------------------------------------------------------------
 ogx:
-  namespace: ""           # REPLACE: namespace OGX runs in (sidecar egress target)
+  namespace: "models-as-a-service"           # REPLACE: namespace OGX runs in (sidecar egress target)
   # Port-less Service FQDN, e.g. ogx.ogx.svc.cluster.local. Used by the Istio
   # Sidecar egress host and the mTLS DestinationRule (neither may carry a port).
-  fqdn: ""                # REPLACE
+  fqdn: "lsd-genai-playground-service.models-as-a-service.svc.cluster.local"                # REPLACE
   # host:port (or host) for the OpenAI base URL. Used only to build OGX_BASE_URL.
   host: ""                # REPLACE, e.g. ogx.ogx.svc.cluster.local:8321
   # Full base URL override; empty => https://<ogx.host>/v1
