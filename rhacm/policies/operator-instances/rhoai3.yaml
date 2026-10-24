@@ -982,3 +982,26 @@ spec:
                               cpu: 10m
                               memory: 64Mi
                           name: manager
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-destrule-tls
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates-raw: |
+            {{- range $hc := (lookup "networking.istio.io/v1" "DestinationRule" "models-as-a-service" "" "app.kubernetes.io/managed-by=ipp-external-provider-reconciler").items }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: networking.istio.io/v1
+                kind: DestinationRule
+                metadata:
+                  name: {{ $hc.metadata.name }}
+                  namespace: {{ $hc.metadata.namespace }}
+                spec:
+                  trafficPolicy:
+                    tls:
+                      insecureSkipVerify: true
+            {{- end }}
