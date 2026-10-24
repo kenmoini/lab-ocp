@@ -1,0 +1,202 @@
+# ==========================================================================
+# Ursula Helm values.
+#
+# Consumed as a Helm source by an ArgoCD ApplicationSet (App-of-AppSets). Fill
+# the empty strings below (or override them from the ApplicationSet generator).
+# NO SECRETS go here: credentials are materialised by ExternalSecrets from Vault
+# (see `externalSecrets` + `.Values.*` references). Only placeholders/config.
+#
+# Every value with `""` MUST be set before the governed boundary holds. The
+# README lists them under "Required values".
+# ==========================================================================
+
+# Target namespace for all namespaced resources. Threaded into every service
+# FQDN, SPIFFE ID and Istio principal, so change it in exactly one place.
+# ArgoCD usually sets the Application destination namespace to the same value.
+namespace: ursula-engagement
+
+# Create the Namespace object (with the Istio injection label). Set false if
+# your ApplicationSet uses syncOptions CreateNamespace=true, or the namespace
+# is managed elsewhere.
+createNamespace: true
+
+# Deployment mode for the orchestrator/sidecar (LIVE talks to real OGX/GitLab;
+# REPLAY serves recorded traces). The on-cluster engagement is LIVE.
+mode: REPLAY
+
+# --------------------------------------------------------------------------
+# Container images. GitHub Actions publishes to ghcr.io as
+# <registry>/<repository>-<component> (e.g. ghcr.io/kenmoini/ursula-orchestrator).
+# Pin `tag` to an immutable sha tag in GitOps; `latest` is a convenience default.
+# --------------------------------------------------------------------------
+image:
+  registry: ghcr.io
+  repository: kenmoini/ursula   # chart appends -orchestrator / -ai-sidecar / -mcp-tools
+  tag: latest
+  pullPolicy: IfNotPresent
+  # imagePullSecrets added to every workload (ghcr private images need one).
+  pullSecrets: []
+  # Optional per-component full overrides. Empty => derive from the fields above.
+  orchestrator: {repository: "", tag: ""}
+  aiSidecar: {repository: "", tag: ""}
+  mcpTools: {repository: "", tag: ""}
+
+# --------------------------------------------------------------------------
+# Authn at the dashboard/API. oidc validates Keycloak bearer tokens (the §7/D3
+# human approval gate); dev-bypass disables it (demo fallback only).
+# --------------------------------------------------------------------------
+auth:
+  mode: oidc              # oidc | dev-bypass
+  oidcAudience: "openshell"        # REPLACE: OIDC client audience
+
+# Keycloak (OIDC issuer). OIDC_ISSUER / OIDC_JWKS_URL are derived from these.
+keycloak:
+  host: "openshell-sso.apps.tri-force.lab.kemo.network"                # REPLACE: keycloak hostname (no scheme)
+  realm: "openshell"               # REPLACE: realm name
+  namespace: "rhbk"           # REPLACE: namespace Keycloak runs in (orchestrator egress)
+
+# --------------------------------------------------------------------------
+# OGX (in-cluster, OpenAI-compatible). The ai-sidecar's only model endpoint.
+# --------------------------------------------------------------------------
+ogx:
+  namespace: ""           # REPLACE: namespace OGX runs in (sidecar egress target)
+  # Port-less Service FQDN, e.g. ogx.ogx.svc.cluster.local. Used by the Istio
+  # Sidecar egress host and the mTLS DestinationRule (neither may carry a port).
+  fqdn: ""                # REPLACE
+  # host:port (or host) for the OpenAI base URL. Used only to build OGX_BASE_URL.
+  host: ""                # REPLACE, e.g. ogx.ogx.svc.cluster.local:8321
+  # Full base URL override; empty => https://<ogx.host>/v1
+  baseUrl: ""
+  model: ""               # REPLACE: served model id
+  # L4 egress port the sidecar NetworkPolicy opens to the OGX namespace.
+  port: 8321
+
+# --------------------------------------------------------------------------
+# Governed boundary — THE THESIS. Each layer is independently toggleable but
+# defaults ON; turning one off narrows what structurally confines the agent.
+# --------------------------------------------------------------------------
+networkPolicies:
+  enabled: true
+
+mesh:
+  enabled: true                 # Istio AuthorizationPolicy + REGISTRY_ONLY Sidecar egress
+  revision: ""                  # REPLACE: istio.io/rev value for the namespace label
+  controlNamespace: istio-system  # istiod namespace (mesh-control-plane egress)
+  # Gateway data-plane ServiceAccount (controller-generated, e.g. <gw>-<class>).
+  gatewayServiceAccount: ""     # REPLACE: used in the orchestrator-from-gateway authz principal
+
+spire:
+  mtls: true                    # PeerAuthentication STRICT + mTLS DestinationRules
+  # SPIFFE trust domain. Used by the ServiceAccount SPIFFE-ID annotations, the
+  # Istio AuthorizationPolicy principals AND the ClusterSPIFFEIDs — i.e. it is
+  # NOT cluster-scoped-only, so it lives here, not under clusterScoped.
+  trustDomain: "apps.tri-force.lab.kemo.network"               # REPLACE, e.g. example.org
+  # mTLS to OGX only works if OGX runs in the mesh with a sidecar. If OGX is
+  # outside the mesh, set false (ISTIO_MUTUAL to a non-mesh peer fails).
+  ogxInMesh: true
+
+# Cluster-scoped resources. In the kustomize tree these were a separate ArgoCD
+# Application (to dodge the namespace transformer); Helm emits cluster-scoped
+# kinds without a namespace, so they live in this one chart, gated here.
+clusterScoped:
+  enabled: true
+  createClusterSPIFFEIDs: true
+  # Kata RuntimeClass is cluster-shared. OpenShift sandboxed-containers usually
+  # creates `kata` from a KataConfig; leave false unless you want Helm to own it.
+  # If true under an ArgoCD app with prune+selfHeal, deleting the app deletes a
+  # cluster-shared object — keep that app non-pruning (see README).
+  createRuntimeClass: false
+  runtimeClassName: kata
+
+# --------------------------------------------------------------------------
+# Kata sandbox for the agent-reachable workloads (ai-sidecar, mcp-tools). The
+# orchestrator (trusted controller) is not sandboxed, matching the kustomize
+# LIVE overlay. Names the RuntimeClass to request on those two pods.
+# --------------------------------------------------------------------------
+sandbox:
+  enabled: true
+  runtimeClassName: kata
+
+# --------------------------------------------------------------------------
+# Dashboard ingress: Gateway API Gateway (MetalLB VIP) + HTTPRoute + cert-manager.
+# --------------------------------------------------------------------------
+ingress:
+  enabled: true
+  dashboardHost: ""       # REPLACE: FQDN for the dashboard
+  gatewayClass: ""        # REPLACE: GatewayClass name (e.g. istio)
+  metallbPool: ""         # REPLACE: MetalLB address pool / VIP
+  certIssuer: ""          # REPLACE: cert-manager ClusterIssuer name
+
+# --------------------------------------------------------------------------
+# Cross-namespace dependencies. `namespace` feeds the orchestrator egress
+# NetworkPolicies; `host`/ids feed the ursula-params ConfigMap.
+# --------------------------------------------------------------------------
+dependencies:
+  redis:
+    namespace: "ursula-infra"         # REPLACE
+  cnpg:
+    namespace: "ursula-infra"         # REPLACE (CloudNativePG)
+  s3:
+    namespace: "ursula-infra"         # REPLACE (ODF / OBC)
+    host: ""              # REPLACE: S3 endpoint host (BUCKET_HOST)
+    bucket: ""            # REPLACE: bucket name (BUCKET_NAME)
+    port: 443
+    useSSL: true
+  gitlab:
+    namespace: "gitlab-system"         # REPLACE
+    host: ""              # REPLACE: GitLab host (GITLAB_BASE_URL = https://<host>)
+    projectId: ""         # REPLACE: numeric project id
+    targetBranch: main
+  openshell:
+    namespace: "openshell-system"         # REPLACE
+    host: ""              # REPLACE: OpenShell host (OPENSHELL_BASE_URL)
+  eda:
+    namespace: "aap"         # REPLACE (AAP EDA)
+    host: ""              # REPLACE: EDA host
+    webhookPath: /endpoint
+    webhookPort: 443
+
+# Scoped out-of-scope egress probe (the Beat-2 mesh_denied demo call). Default
+# target is the orchestrator: in-namespace but NOT in the sidecar's egress
+# registry, so REGISTRY_ONLY BlackHoles it — a genuine mesh denial.
+meshProbe:
+  url: "http://orchestrator:8080/"
+  timeoutSeconds: 3
+
+# --------------------------------------------------------------------------
+# ExternalSecrets: Vault path REFERENCES only, never secret values. The
+# ClusterSecretStore itself is cluster infra, not authored by this chart.
+# --------------------------------------------------------------------------
+externalSecrets:
+  enabled: true
+  secretStore: "kemo-labs-vault"         # REPLACE: ClusterSecretStore name
+  vaultPaths:
+    gitlab: ""            # REPLACE: Vault path w/ property `token`
+    eda: ""               # REPLACE: Vault path w/ property `token`
+    openshell: ""         # REPLACE: Vault path w/ property `token`
+    obc: ""               # REPLACE: Vault path w/ `access_key_id` + `secret_access_key`
+    ogx: ""               # REPLACE: Vault path w/ property `api_key`
+
+# --------------------------------------------------------------------------
+# Per-component workload knobs. Resource defaults match the kustomize LIVE
+# overlay. The orchestrator holds in-memory SSE/run state — keep replicas 1.
+# --------------------------------------------------------------------------
+orchestrator:
+  replicas: 1
+  resources:
+    requests: {cpu: 250m, memory: 256Mi}
+    limits: {cpu: "1", memory: 1Gi}
+aiSidecar:
+  replicas: 1
+  resources:
+    requests: {cpu: 250m, memory: 512Mi}
+    limits: {cpu: "1", memory: 2Gi}
+mcpTools:
+  replicas: 2
+  resources:
+    requests: {cpu: 100m, memory: 128Mi}
+    limits: {cpu: 500m, memory: 512Mi}
+  # Read-side data volume (findings.json, source/, results/), mounted read-only.
+  dataVolume:
+    storageClass: "ocs-storagecluster-cephfs"      # REPLACE: RWX storage class
+    size: 1Gi

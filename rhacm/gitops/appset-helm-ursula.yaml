@@ -1,0 +1,68 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: ursula
+  namespace: openshift-gitops
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: ensemble/ursula
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
+          - list:
+              elements:
+              - appName: ursula
+                namespace: ursula-engagement
+                helmRepoURL: https://github.com/kenmoini/ursula
+                helmPath: deploy/helm/ursula
+                helmChartName: ursula
+                helmRevision: main
+  template:
+    metadata:
+      name: "{{.name}}-{{.appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+      finalizers:
+        # The set foreground cascading deletion
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      sources:
+        - ref: values
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
+        - helm:
+            releaseName: '{{.appName}}'
+            valueFiles:
+              - "$values/clusters/{{ .name }}/helm-values/{{ .appName }}.yaml"
+          repoURL: '{{.helmRepoURL}}'
+          path: '{{.helmPath}}'
+          targetRevision: '{{.helmRevision}}'
+      destination:
+        name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
+        server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
+        namespace: "{{.namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=false
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+          - ApplyOutOfSyncOnly=true
+        retry:
+          limit: 5
