@@ -432,6 +432,226 @@ spec:
                     bucketclass: "noobaa-default-bucket-class"
                   storageClassName: "openshift-storage.noobaa.io"
                   objectBucketName: obc-models-as-a-service-pipeline
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-tenant-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-maas-pipeline-db
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: k8s.mariadb.com/v1alpha1
+                kind: MariaDB
+                metadata:
+                  name: mlpipeline
+                  namespace: models-as-a-service
+                spec:
+                  rootPasswordSecretKeyRef:
+                    name: mariadb
+                    key: password
+                    generate: true
+                  username: mariadb
+                  passwordSecretKeyRef:
+                    name: mariadb-password
+                    key: password
+                    generate: true
+                  database: mariadb
+                  port: 3306
+                  storage:
+                    size: 2Gi
+                    # storageClassName: csi-hostpath-sc
+                    # volumeClaimTemplate:
+                    #   volumeAttributesClassName: high-performance
+                  service:
+                    type: ClusterIP
+                    # metadata:
+                    #   annotations:
+                    #     metallb.io/loadBalancerIPs: 172.18.0.20
+                  myCnf: |
+                    [mariadb]
+                    bind-address=*
+                    default_storage_engine=InnoDB
+                    binlog_format=row
+                    innodb_autoinc_lock_mode=2
+                    innodb_buffer_pool_size=1600M
+                    max_allowed_packet=256M
+                  resources:
+                    requests:
+                      cpu: 300m
+                      memory: 128Mi
+                    limits:
+                      memory: 2Gi
+                  metrics:
+                    enabled: true
+                  tls:
+                    enabled: true
+                    # Enforce TLS in all connections.
+                    # required: true
+                    # Issue certificates with an existing cert-manager ClusterIssuer.
+                    # serverCertIssuerRef:
+                    #   name: root-ca
+                    #   kind: ClusterIssuer
+                    # clientCertIssuerRef:
+                    #   name: root-ca
+                    #   kind: ClusterIssuer
+                    # Bring your own Certificate Authority.
+                    # serverCASecretRef:
+                    #   name: mariadb-server-ca
+                    # clientCASecretRef:
+                    #   name: mariadb-client-ca
+                    # Configure existing certificates available in a Secret.
+                    # serverCASecretRef:
+                    #   name: mariadb-server-ca
+                    # serverCertSecretRef:
+                    #   name: mariadb-server-tls
+                    # clientCASecretRef:
+                    #   name: mariadb-client-ca
+                    # clientCertSecretRef:
+                    #   name: mariadb-client-tls
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: k8s.mariadb.com/v1alpha1
+                kind: Database
+                metadata:
+                  name: mlpipeline
+                  namespace: models-as-a-service
+                spec:
+                  # If you want the database to be created with a different name than the resource name
+                  # name: my-logical-database
+                  mariaDbRef:
+                    name: mlpipeline
+                  characterSet: utf8
+                  collate: utf8_general_ci
+                  # Delete the resource in the database whenever the CR gets deleted.
+                  # Alternatively, you can specify Skip in order to omit deletion.
+                  cleanupPolicy: Delete
+                  requeueInterval: 10h
+                  retryInterval: 30s
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: k8s.mariadb.com/v1alpha1
+                kind: User
+                metadata:
+                  name: mlpipeline
+                spec:
+                  # If you want the user to be created with a different name than the resource name
+                  # name: user-custom
+                  mariaDbRef:
+                    name: mlpipeline
+                  passwordSecretKeyRef:
+                    name: mlpipeline-db
+                    key: password
+                    generate: true
+                  # This field defaults to 10
+                  maxUserConnections: 20
+                  host: "%"
+                  # Delete the resource in the database whenever the CR gets deleted.
+                  # Alternatively, you can specify Skip in order to omit deletion.
+                  cleanupPolicy: Delete
+                  # Require TLS when connecting with this user.
+                  # See: https://mariadb.com/kb/en/securing-connections-for-client-and-server/#requiring-tls
+                  # require:
+                  #   issuer: "/CN=mariadb-ca"
+                  #   subject: "/CN=mariadb-client"
+                  requeueInterval: 10h
+                  retryInterval: 30s
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: k8s.mariadb.com/v1alpha1
+                kind: Grant
+                metadata:
+                  name: mlpipeline-grant
+                spec:
+                  mariaDbRef:
+                    name: mlpipeline
+                  privileges:
+                    - "ALL PRIVILEGES"
+                  database: "mlpipeline"
+                  table: "*"
+                  username: mlpipeline
+                  grantOption: true
+                  host: "%"
+                  # Delete the resource in the database whenever the CR gets deleted.
+                  # Alternatively, you can specify Skip in order to omit deletion.
+                  cleanupPolicy: Delete
+                  requeueInterval: 10h
+                  retryInterval: 30s
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-maas-pipeline-init
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-maas-dspa
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: datasciencepipelinesapplications.opendatahub.io/v1
+                kind: DataSciencePipelinesApplication
+                metadata:
+                  name: dspa
+                  namespace: models-as-a-service
+                spec:
+                  apiServer:
+                    caBundleFileMountPath: ''
+                    caBundleFileName: ''
+                    deploy: true
+                    artifactSignedURLExpirySeconds: 60
+                    enableSamplePipeline: false
+                    managedPipelines: {}
+                    enableOauth: true
+                    cacheEnabled: true
+                    pipelineStore: kubernetes
+                  database:
+                    disableHealthCheck: false
+                    # externalDB:
+                    #   host: 
+                    mariaDB:
+                      deploy: true
+                      pipelineDBName: mlpipeline
+                      pvcSize: 10Gi
+                      username: mlpipeline
+                  dspVersion: v2
+                  objectStorage:
+                    disableHealthCheck: false
+                    enableExternalRoute: false
+                    externalStorage:
+                      basePath: ''
+                      bucket: maas-pipeline
+                      host: s3.openshift-storage.svc.cluster.local
+                      port: ''
+                      region: us-east-1
+                      s3CredentialsSecret:
+                        accessKey: AWS_ACCESS_KEY_ID
+                        secretKey: AWS_SECRET_ACCESS_KEY
+                        secretName: pipeline
+                      scheme: https
+                  persistenceAgent:
+                    deploy: true
+                    numWorkers: 2
+                  podToPodTLS: true
+                  scheduledWorkflow:
+                    cronScheduleTimezone: UTC
+                    deploy: true
 
     # Configure the Tenant instance for Telemetry
     - extraDependencies:
