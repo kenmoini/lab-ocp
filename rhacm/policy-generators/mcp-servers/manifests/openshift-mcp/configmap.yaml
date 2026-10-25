@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openshift-mcp-server-config
+  namespace: models-as-a-service
+data:
+  config.toml: |
+    # Server settings
+    log_level = 2
+    log_file = "/tmp/kubernetes-mcp-server.log"
+    port = "8080"
+    bind_address = "0.0.0.0"
+    list_output = "table"
+    stateless = false
+
+    # HTTP server security
+    [http]
+    read_header_timeout = "10s"  # Slowloris protection
+    max_body_bytes = 16777216    # 16 MB for large K8s manifests
+    rate_limit_rps = 5           # Per-session rate limiting
+    rate_limit_burst = 10
+
+    # Kubernetes connection
+    # kubeconfig = "/home/user/.kube/config"
+    cluster_provider_strategy = "in-cluster"
+
+    # Access control
+    read_only = true
+    disable_destructive = true
+
+    # Toolsets
+    toolsets = ["core", "config", "helm", "kubevirt", "openshift", "olm"]
+
+    # Tool filtering
+    disabled_tools = ["resources_create_or_update", "resources_delete"]
+
+    # Tool overrides
+    [tool_overrides.pods_list]
+    description = "List pods in the cluster. Prefer using label selectors over listing all pods when the namespace has many workloads."
+
+    # Denied resources
+    [[denied_resources]]
+    group = ""
+    version = "v1"
+    kind = "Secret"
+
+    # Server instructions for MCP clients
+    server_instructions = """
+    Use this server for Kubernetes cluster management including pods, deployments,
+    services, and Helm releases. This server is configured with read-only access
+    to Secrets.
+    """
+
+    # Custom prompts
+    [[prompts]]
+    name = "debug-pod"
+    description = "Debug a failing pod"
+
+    [[prompts.arguments]]
+    name = "pod_name"
+    required = true
+
+    [[prompts.messages]]
+    role = "user"
+    content = "Help me debug the pod {{pod_name}}"
+
+    # Telemetry (OpenTelemetry)
+    # [telemetry]
+    # endpoint = "http://localhost:4317"
+    # traces_sampler = "traceidratio"
+    # traces_sampler_arg = 0.1
+
+    # Toolset-specific configuration
+    # [toolset_configs.kiali]
+    # url = "https://kiali.example.com"
+
+    # Observability toolsets — see docs/observability/{metrics,logs,tracing,otelcol}.md
+    # [toolset_configs."observability/metrics"]
+    # [toolset_configs."observability/logs"]
+    # [toolset_configs."observability/traces"]
+    # [toolset_configs."observability/otelcol"]
+
+    # [toolset_configs.helm]
+    # allowed_registries = ["oci://ghcr.io/myorg", "https://charts.example.com"]

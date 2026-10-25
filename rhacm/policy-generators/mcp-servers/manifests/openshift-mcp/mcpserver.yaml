@@ -1,0 +1,42 @@
+apiVersion: mcp.x-k8s.io/v1alpha1
+kind: MCPServer
+metadata:
+  annotations:
+    mcp.opendatahub.io/catalog-server: openshift-mcp-server
+    mcp.opendatahub.io/display-name: openshift-mcp
+  name: openshift-mcp
+  namespace: models-as-a-service
+spec:
+  config:
+    arguments:
+      - '--config'
+      - /etc/mcp-config/config.toml
+    path: /mcp
+    port: 8080
+    storage:
+      - path: /etc/mcp-config
+        permissions: ReadOnly
+        source:
+          configMap:
+            name: openshift-mcp-server-config
+          type: ConfigMap
+      - path: /etc/pki/tls/certs
+        permissions: ReadOnly
+        source:
+          configMap:
+            name: trusted-root-ca
+          type: ConfigMap
+      - path: /tmp
+        permissions: ReadWrite
+        source:
+          emptyDir:
+            medium: ''
+            sizeLimit: 100Mi
+          type: EmptyDir
+  runtime:
+    security:
+      serviceAccountName: mcp-viewer
+  source:
+    containerImage:
+      ref: 'registry.redhat.io/openshift-mcp-tech-preview/openshift-mcp-server-rhel9:0.4'
+    type: ContainerImage
