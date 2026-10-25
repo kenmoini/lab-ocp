@@ -4,10 +4,11 @@ metadata:
   name: mcp-openshift-mcp
   namespace: mcp-servers
 spec:
-  httpRouteManagement: "true"
+  httpRouteManagement: "Enabled"
   publicHost: mcp-openshift-mcp.apps.tri-force.lab.kemo.network
   targetRef:
     group: gateway.networking.k8s.io
     kind: Gateway
     namespace: openshift-ingress
     name: mcp-gateway
+    sectionName: https
