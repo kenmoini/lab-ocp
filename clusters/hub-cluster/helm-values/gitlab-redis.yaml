@@ -55,10 +55,10 @@ metrics:
   serviceMonitor:
     enabled: true
     tlsConfig:
-      ca:
-        configMap:
-          name: openshift-service-ca.crt
-          key: service-ca.crt
+      # ca:
+      #   configMap:
+      #     name: openshift-service-ca.crt
+      #     key: service-ca.crt
       certFile: /etc/prometheus/secrets/metrics-server-certs/tls.crt
       caFile: /etc/prometheus/secrets/service-ca/service-ca.crt
       keyFile: /etc/prometheus/secrets/metrics-server-certs/tls.key
