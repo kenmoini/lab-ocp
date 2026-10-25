@@ -62,7 +62,7 @@ data:
 
     [[prompts.messages]]
     role = "user"
-    content = "Help me debug the pod {{pod_name}}"
+    content = "Help me debug the pod {{ `{{pod_name}}` }}"
 
     # Telemetry (OpenTelemetry)
     # [telemetry]
