@@ -73,7 +73,8 @@ spec:
                   namespace: redhat-ods-operator
                 spec:
                   name: rhods-operator
-                  channel: stable-3.x
+                  channel: beta
+                  # channel: stable-3.x
                   installPlanApproval: Automatic
                   source: redhat-operators
                   sourceNamespace: openshift-marketplace
