@@ -404,23 +404,6 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
-                kind: Cluster
-                apiVersion: postgresql.cnpg.io/v1
-                metadata:
-                  name: pipeline-db
-                  namespace: models-as-a-service
-                spec:
-                  instances: 1
-                  enablePDB: false
-                  enableSuperuserAccess: true
-                  logLevel: info
-                  primaryUpdateStrategy: unsupervised
-                  storage:
-                    size: 5Gi
-                  walStorage:
-                    size: 1Gi
-            - complianceType: musthave
-              objectDefinition:
                 apiVersion: objectbucket.io/v1alpha1
                 kind: ObjectBucketClaim
                 metadata:
@@ -462,7 +445,7 @@ spec:
                     generate: true
                   username: mariadb
                   passwordSecretKeyRef:
-                    name: mariadb-password
+                    name: mlpipeline-db-creds
                     key: password
                     generate: true
                   database: mariadb
