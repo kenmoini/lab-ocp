@@ -50,3 +50,162 @@ spec:
                         cpu: 200m
                       limits:
                         memory: 512Mi
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: mariadb-operator-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: mariadb-operator-helm-controller-manager
+                  namespace: openshift-operators
+                status:
+                  conditions:
+                    - status: 'True'
+                      type: Available
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: mariadb-operator-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: mariadb-operator-config
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: helm.mariadb.mmontes.io/v1alpha1
+                kind: MariadbOperator
+                metadata:
+                  name: mariadb-operator
+                  namespace: mariadb-system
+                spec:
+                  affinity: {}
+                  certController:
+                    affinity: {}
+                    caValidity: 35064h
+                    certValidity: 8766h
+                    enabled: true
+                    extrArgs: []
+                    extraVolumeMounts: []
+                    extraVolumes: []
+                    ha:
+                      enabled: false
+                      replicas: 3
+                    image:
+                      pullPolicy: IfNotPresent
+                      repository: ghcr.io/mariadb-operator/mariadb-operator
+                      tag: ''
+                    imagePullSecrets: []
+                    lookaheadValidity: 2160h
+                    nodeSelector: {}
+                    podAnnotations: {}
+                    podSecurityContext: {}
+                    requeueDuration: 5m
+                    resources: {}
+                    securityContext: {}
+                    serviceAccount:
+                      annotations: {}
+                      automount: true
+                      enabled: true
+                      extraLabels: {}
+                      name: ''
+                    serviceMonitor:
+                      additionalLabels: {}
+                      enabled: true
+                      interval: 30s
+                      scrapeTimeout: 25s
+                    tolerations: []
+                  clusterName: tri-force.lab.kemo.network
+                  extrArgs: []
+                  extraVolumeMounts: []
+                  extraVolumes: []
+                  fullnameOverride: ''
+                  ha:
+                    enabled: false
+                    replicas: 3
+                  image:
+                    pullPolicy: IfNotPresent
+                    repository: ghcr.io/mariadb-operator/mariadb-operator
+                    tag: ''
+                  imagePullSecrets: []
+                  logLevel: INFO
+                  metrics:
+                    enabled: true
+                    serviceMonitor:
+                      additionalLabels: {}
+                      enabled: true
+                      interval: 30s
+                      scrapeTimeout: 25s
+                  nameOverride: ''
+                  nodeSelector: {}
+                  podAnnotations: {}
+                  podSecurityContext: {}
+                  rbac:
+                    enabled: true
+                  resources: {}
+                  securityContext: {}
+                  serviceAccount:
+                    annotations: {}
+                    automount: true
+                    enabled: true
+                    extraLabels: {}
+                    name: ''
+                  tolerations: []
+                  webhook:
+                    affinity: {}
+                    annotations: {}
+                    cert:
+                      caPath: /tmp/k8s-webhook-server/certificate-authority
+                      certManager:
+                        duration: ''
+                        enabled: false
+                        issuerRef: {}
+                        renewBefore: ''
+                      path: /tmp/k8s-webhook-server/serving-certs
+                      secretAnnotations: {}
+                    extrArgs: []
+                    extraVolumeMounts: []
+                    extraVolumes: []
+                    ha:
+                      enabled: false
+                      replicas: 3
+                    hostNetwork: false
+                    image:
+                      pullPolicy: IfNotPresent
+                      repository: ghcr.io/mariadb-operator/mariadb-operator
+                      tag: ''
+                    imagePullSecrets: []
+                    nodeSelector: {}
+                    podAnnotations: {}
+                    podSecurityContext: {}
+                    port: 10250
+                    resources: {}
+                    securityContext: {}
+                    serviceAccount:
+                      annotations: {}
+                      automount: true
+                      enabled: true
+                      extraLabels: {}
+                      name: ''
+                    serviceMonitor:
+                      additionalLabels: {}
+                      enabled: true
+                      interval: 30s
+                      scrapeTimeout: 25s
+                    tolerations: []
