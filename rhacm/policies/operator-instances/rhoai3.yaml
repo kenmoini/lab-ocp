@@ -926,6 +926,47 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
+                apiVersion: config.opendatahub.io/v1alpha1
+                kind: Platform
+                metadata:
+                  name: default
+                  labels:
+                    platform.opendatahub.io/part-of: datasciencecluster
+                spec:
+                  modules:
+                    ogx:
+                      managementState: Managed
+                    sparkoperator:
+                      managementState: Managed
+                    kserve:
+                      managementState: Managed
+                    modelregistry:
+                      managementState: Managed
+                    feastoperator:
+                      managementState: Managed
+                    monitoring:
+                      managementState: Managed
+                    trustyai:
+                      managementState: Managed
+                    aipipelines:
+                      managementState: Managed
+                    ray:
+                      managementState: Managed
+                    workbenches:
+                      managementState: Managed
+                    mlflowoperator:
+                      managementState: Managed
+                    dashboard:
+                      managementState: Managed
+                    mcplifecycleoperator:
+                      managementState: Managed
+                    trainer:
+                      managementState: Managed
+                    aigateway:
+                      managementState: Managed
+
+            - complianceType: musthave
+              objectDefinition:
                 kind: DataScienceCluster
                 apiVersion: datasciencecluster.opendatahub.io/v2
                 metadata:
@@ -1246,42 +1287,6 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: rhoai-feast-maas
-        spec:
-          remediationAction: enforce
-          severity: high
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: feast.dev/v1
-                kind: FeatureStore
-                metadata:
-                  labels:
-                    feature-store-ui: enabled
-                  name: maas
-                  namespace: models-as-a-service
-                spec:
-                  feastProject: maas
-                  replicas: 1
-                  services:
-                    offlineStore:
-                      persistence:
-                        file: {}
-                    registry:
-                      local:
-                        server:
-                          restAPI: true
-
-    - extraDependencies:
-        - apiVersion: policy.open-cluster-management.io/v1
-          kind: ConfigurationPolicy
-          name: rhoai-feast-check
-          namespace: ""
-          compliance: Compliant
-      objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
           name: rhoai-feast-limits
         spec:
           remediationAction: enforce
@@ -1302,6 +1307,189 @@ spec:
                             limits:
                               # cpu: 500m
                               memory: 1Gi
+                            requests:
+                              cpu: 10m
+                              memory: 64Mi
+                          name: manager
+
+    # =================================================================================
+    # Dashboard Operator Controller OOMKill Protection
+    # =================================================================================
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-mlflow
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-dashboard-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: dashboard-operator
+                  namespace: redhat-ods-applications
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-dashboard-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-dashboard-limits
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: dashboard-operator
+                  namespace: redhat-ods-applications
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - resources:
+                            limits:
+                              # cpu: 500m
+                              memory: 512Mi
+                            requests:
+                              cpu: 10m
+                              memory: 64Mi
+                          name: manager
+
+    # =================================================================================
+    # Spark Operator Controller OOMKill Protection
+    # =================================================================================
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-mlflow
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-spark-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: spark-operator-module-controller-manager
+                  namespace: redhat-ods-applications
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-spark-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-spark-limits
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: spark-operator-module-controller-manager
+                  namespace: redhat-ods-applications
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - resources:
+                            limits:
+                              # cpu: 500m
+                              memory: 1024Mi
+                            requests:
+                              cpu: 10m
+                              memory: 64Mi
+                          name: manager
+
+    # =================================================================================
+    # Observability Operator Controller OOMKill Protection
+    # =================================================================================
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-mlflow
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-observability-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: odh-observability
+                  namespace: redhat-ods-applications
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-observability-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-observability-limits
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: odh-observability
+                  namespace: redhat-ods-applications
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - resources:
+                            limits:
+                              # cpu: 500m
+                              memory: 1024Mi
                             requests:
                               cpu: 10m
                               memory: 64Mi
@@ -1329,3 +1517,39 @@ spec:
                     tls:
                       insecureSkipVerify: true
             {{- end }}
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-feast-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-feast-maas
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: feast.dev/v1
+                kind: FeatureStore
+                metadata:
+                  labels:
+                    feature-store-ui: enabled
+                  name: maas
+                  namespace: models-as-a-service
+                spec:
+                  feastProject: maas
+                  replicas: 1
+                  services:
+                    offlineStore:
+                      persistence:
+                        file: {}
+                    registry:
+                      local:
+                        server:
+                          restAPI: true
