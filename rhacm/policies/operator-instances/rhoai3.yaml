@@ -608,6 +608,7 @@ spec:
                     pipelineStore: kubernetes
                   database:
                     disableHealthCheck: false
+                    customExtraParams: '{"tls":"false"}'
                     externalDB:
                       host: mlpipeline.models-as-a-service.svc.cluster.local
                       port: "3306"
