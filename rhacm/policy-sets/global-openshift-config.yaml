@@ -15,7 +15,7 @@ spec:
     - configure-project-template
     - audit-logging-config
     - encrypt-etcd
-    - image-vuln-scanning
+    # - image-vuln-scanning
     - enable-multinetworkpolicy
     # - compliance-cis-scan
     # - compliance-e8-scan
