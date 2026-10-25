@@ -131,7 +131,7 @@ spec:
                       interval: 30s
                       scrapeTimeout: 25s
                     tolerations: []
-                  clusterName: tri-force.lab.kemo.network
+                  clusterName: cluster.local
                   extrArgs: []
                   extraVolumeMounts: []
                   extraVolumes: []
