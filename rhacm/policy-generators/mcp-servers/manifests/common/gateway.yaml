@@ -3,7 +3,7 @@ kind: Gateway
 metadata:
   annotations:
     security.opendatahub.io/authorino-tls-bootstrap: 'true'
-  name: mcp-openshift-mcp
+  name: mcp-gateway
   namespace: openshift-ingress
   labels:
     istio.io/rev: openshift-gateway
@@ -18,14 +18,14 @@ spec:
     - allowedRoutes:
         namespaces:
           from: All
-      hostname: mcp-openshift-mcp.apps.tri-force.lab.kemo.network
+      hostname: '*.apps.tri-force.lab.kemo.network'
       name: http
       port: 80
       protocol: HTTP
     - allowedRoutes:
         namespaces:
           from: All
-      hostname: mcp-openshift-mcp.apps.tri-force.lab.kemo.network
+      hostname: '*.apps.tri-force.lab.kemo.network'
       name: https
       port: 443
       protocol: HTTPS

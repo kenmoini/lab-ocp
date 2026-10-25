@@ -1,0 +1,13 @@
+apiVersion: mcp.kuadrant.io/v1alpha1
+kind: MCPGatewayExtension
+metadata:
+  name: mcp-openshift-mcp
+  namespace: mcp-servers
+spec:
+  httpRouteManagement: true
+  publicHost: mcp-openshift-mcp.apps.tri-force.lab.kemo.network
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: Gateway
+    namespace: openshift-ingress
+    name: mcp-gateway
