@@ -2,9 +2,13 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+commonAnnotations:
+  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+
 namespace: open-cluster-management-policies
 
 resources:
+  - community/
   - observability/
   - workload-availability/
 
@@ -56,7 +60,3 @@ resources:
   - virtualization.yaml
   - web-terminal.yaml
   - zero-trust-wim.yaml
-
-
-commonAnnotations:
-  argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true

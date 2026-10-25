@@ -28,6 +28,7 @@ spec:
     - operators-cnpgsql
     - operators-auto-orch
     - operators-mcp-gateway
+    - operators-mariadb
     - default-gatewayclass
     - instance-serverless
     - instance-leaderworkerset
