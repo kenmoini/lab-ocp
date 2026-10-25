@@ -1556,6 +1556,67 @@ spec:
                               memory: 64Mi
                           name: manager
 
+    # =================================================================================
+    # Ray Module Operator Controller OOMKill Protection
+    # =================================================================================
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-mlflow
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-ray-op-check
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: ray-module-operator-controller-manager
+                  namespace: redhat-ods-applications
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-ray-op-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-ray-op-limits
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: apps/v1
+                kind: Deployment
+                metadata:
+                  name: ray-module-operator-controller-manager
+                  namespace: redhat-ods-applications
+                spec:
+                  template:
+                    spec:
+                      containers:
+                        - resources:
+                            limits:
+                              # cpu: 500m
+                              memory: 4Gi
+                            requests:
+                              cpu: 10m
+                              memory: 64Mi
+                          name: manager
+
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
