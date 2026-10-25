@@ -18,6 +18,12 @@ policyDefaults:
   pruneObjectBehavior: DeleteIfCreated
   consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
 policies:
+  - name: mcp-common
+    manifests:
+      - name: "mcp-common"
+        path: manifests/common/
+        complianceType: "musthave"
+        remediationAction: enforce
   - name: mcp-openshift-mcp
     manifests:
       - name: "mcp-openshift-mcp"

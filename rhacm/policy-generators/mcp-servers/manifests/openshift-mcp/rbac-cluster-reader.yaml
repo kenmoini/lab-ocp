@@ -5,7 +5,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: mcp-viewer
-    namespace: models-as-a-service
+    namespace: mcp-servers
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

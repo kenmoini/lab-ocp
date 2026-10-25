@@ -5,7 +5,7 @@ metadata:
     mcp.opendatahub.io/catalog-server: openshift-mcp-server
     mcp.opendatahub.io/display-name: openshift-mcp
   name: openshift-mcp
-  namespace: models-as-a-service
+  namespace: mcp-servers
 spec:
   config:
     arguments:

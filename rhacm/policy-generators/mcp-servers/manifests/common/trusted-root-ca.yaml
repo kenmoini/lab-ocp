@@ -2,6 +2,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: trusted-root-ca
-  namespace: models-as-a-service
+  namespace: mcp-servers
   labels:
     config.openshift.io/inject-trusted-cabundle: 'true'
