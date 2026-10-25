@@ -8,4 +8,4 @@ spec:
     group: gateway.networking.k8s.io
     kind: HTTPRoute
     namespace: mcp-servers
-    name: mcp-openshift-mcp
+    name: mcp-gateway-route
