@@ -597,8 +597,8 @@ spec:
                   namespace: models-as-a-service
                 spec:
                   apiServer:
-                    caBundleFileMountPath: '/etc/pki/ca-trust/extracted/pem'
-                    caBundleFileName: 'ca-bundle.crt'
+                    caBundleFileMountPath: ''
+                    caBundleFileName: ''
                     deploy: true
                     artifactSignedURLExpirySeconds: 60
                     enableSamplePipeline: false
