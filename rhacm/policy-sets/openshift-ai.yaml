@@ -35,4 +35,5 @@ spec:
     - instance-rhoai3
     - instance-auto-orch
     - instance-svcmesh
+    - mcp-common
     - mcp-openshift-mcp
