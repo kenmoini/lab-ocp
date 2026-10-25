@@ -555,6 +555,7 @@ spec:
                 kind: Grant
                 metadata:
                   name: mlpipeline-grant
+                  namespace: models-as-a-service
                 spec:
                   mariaDbRef:
                     name: mlpipeline
