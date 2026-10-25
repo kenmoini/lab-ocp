@@ -784,6 +784,18 @@ spec:
                     disableLMEval: false
                     disableModelCatalog: false
                     disableModelRegistry: false
+                    agentConfigManagement: true
+                    agentOps: true
+                    agentsCatalog: true
+                    aiAssetCustomEndpoints: true
+                    connectionTest: true
+                    deploymentWizardYAMLViewer: true
+                    externalModels: true
+                    externalVectorStores: true
+                    mcpCatalog: true
+                    mcpRegistry: true
+                    promptManagement: true
+                    toolCalling: true
                     # Deprecated in 3.5
                     #maasAuthPolicies: true
                   notebookController:
