@@ -117,6 +117,17 @@ clusterScoped:
   runtimeClassName: kata
 
 # --------------------------------------------------------------------------
+# ObjectBucketClaim creation options
+# --------------------------------------------------------------------------
+objectBucketClaim:
+  enabled: true  # true => OBC, false => S3 (ODF)
+  namespace: ""                # If empty, defaults to .Values.namespace.
+  prefix: ""                   # OBC bucket name prefix (e.g. "ursula-").
+  bucketClass: "noobaa-default-bucket-class"  # OBC bucket class (ODF default).
+  storageClass: "openshift-storage.noobaa.io"  # OBC storage class (ODF default).
+  useInClusterServiceEndpoint: true  # true => use the in-cluster OBC service endpoint; false => use the external S3 endpoint.
+
+# --------------------------------------------------------------------------
 # Kata sandbox for the agent-reachable workloads (ai-sidecar, mcp-tools). The
 # orchestrator (trusted controller) is not sandboxed, matching the kustomize
 # LIVE overlay. Names the RuntimeClass to request on those two pods.
