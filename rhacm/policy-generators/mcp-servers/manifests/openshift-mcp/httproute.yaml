@@ -9,7 +9,8 @@ spec:
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: openshift-ingress
+      name: mcp-openshift-mcp
+      namespace: openshift-ingress
       sectionName: https
   rules:
     - backendRefs:
