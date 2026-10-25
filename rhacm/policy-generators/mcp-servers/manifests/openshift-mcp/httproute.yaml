@@ -5,7 +5,7 @@ metadata:
   namespace: mcp-servers
 spec:
   hostnames:
-    - openshift-mcp.apps.tri-force.lab.kemo.network
+    - mcp-openshift-mcp.apps.tri-force.lab.kemo.network
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
