@@ -34,3 +34,10 @@ spec:
                   name: mariadb-operator
                   source: community-operators 
                   sourceNamespace: openshift-marketplace
+                  config:
+                    resources:
+                      requests:
+                        memory: 256Mi
+                        cpu: 200m
+                      limits:
+                        memory: 512Mi
