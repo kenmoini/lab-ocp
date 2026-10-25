@@ -13,6 +13,7 @@ resources:
   - agent-sandbox.yaml
   - sandbox-containers.yaml
   - rhoai.yaml
+  - mcp-gateway.yaml
 
   # Developer Things
   - authorino.yaml
