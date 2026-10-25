@@ -611,6 +611,7 @@ spec:
                     externalDB:
                       host: mlpipeline.models-as-a-service.svc.cluster.local
                       port: "3306"
+                      pipelineDBName: mlpipeline
                       username: mlpipeline
                       passwordSecret:
                         name: mlpipeline-db-creds
