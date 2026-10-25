@@ -7,7 +7,7 @@ data:
   config.toml: |
     # Server settings
     log_level = 2
-    log_file = "/tmp/kubernetes-mcp-server.log"
+    log_file = "/dev/stdout"
     port = "8080"
     bind_address = "0.0.0.0"
     list_output = "table"
