@@ -163,15 +163,15 @@ dependencies:
     useSSL: true
   gitlab:
     namespace: "gitlab-system"         # REPLACE
-    host: ""              # REPLACE: GitLab host (GITLAB_BASE_URL = https://<host>)
-    projectId: ""         # REPLACE: numeric project id
+    host: "https://gitlab.tri-force.lab.kemo.network"              # REPLACE: GitLab host (GITLAB_BASE_URL = https://<host>)
+    projectId: "1"         # REPLACE: numeric project id
     targetBranch: main
   openshell:
     namespace: "openshell-system"         # REPLACE
-    host: ""              # REPLACE: OpenShell host (OPENSHELL_BASE_URL)
+    host: "https://openshell-gw.apps.tri-force.lab.kemo.network"              # REPLACE: OpenShell host (OPENSHELL_BASE_URL)
   eda:
     namespace: "aap"         # REPLACE (AAP EDA)
-    host: ""              # REPLACE: EDA host
+    host: "https://hub-aap.apps.tri-force.lab.kemo.network"              # REPLACE: EDA host
     webhookPath: /endpoint
     webhookPort: 443
 
