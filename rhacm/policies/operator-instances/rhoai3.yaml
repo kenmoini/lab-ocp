@@ -610,7 +610,7 @@ spec:
                     disableHealthCheck: false
                     externalDB:
                       host: mlpipeline-db.models-as-a-service.svc.cluster.local
-                      port: 3306
+                      port: "3306"
                       username: mlpipeline
                       passwordSecret:
                         name: mlpipeline-db-creds
