@@ -385,6 +385,54 @@ spec:
                   name: default-tenant
                   namespace: models-as-a-service
 
+    # Create a Pipelines DB and OBC
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-tenant-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: rhoai-maas-pipeline-init
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: Cluster
+                apiVersion: postgresql.cnpg.io/v1
+                metadata:
+                  name: pipeline-db
+                  namespace: models-as-a-service
+                spec:
+                  instances: 1
+                  enablePDB: false
+                  enableSuperuserAccess: true
+                  logLevel: info
+                  primaryUpdateStrategy: unsupervised
+                  storage:
+                    size: 5Gi
+                  walStorage:
+                    size: 1Gi
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: pipeline
+                  namespace: models-as-a-service
+                spec:
+                  bucketName: maas-pipeline
+                  additionalConfig:
+                    bucketclass: "noobaa-default-bucket-class"
+                  storageClassName: "openshift-storage.noobaa.io"
+                  objectBucketName: obc-models-as-a-service-pipeline
+
     # Configure the Tenant instance for Telemetry
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
