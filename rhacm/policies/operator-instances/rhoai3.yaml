@@ -533,9 +533,8 @@ spec:
                   mariaDbRef:
                     name: mlpipeline
                   passwordSecretKeyRef:
-                    name: mlpipeline-db
+                    name: mlpipeline-db-creds
                     key: password
-                    generate: true
                   # This field defaults to 10
                   maxUserConnections: 20
                   host: "%"
@@ -589,6 +588,7 @@ spec:
           pruneObjectBehavior: DeleteIfCreated
           object-templates:
             - complianceType: musthave
+              recreateOption: IfRequired
               objectDefinition:
                 apiVersion: datasciencepipelinesapplications.opendatahub.io/v1
                 kind: DataSciencePipelinesApplication
