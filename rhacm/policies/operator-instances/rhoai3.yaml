@@ -796,12 +796,25 @@ spec:
                     mcpRegistry: true
                     promptManagement: true
                     toolCalling: true
+                    automl: true
+                    autorag: true
+                    disableDistributedWorkloads: false
+                    disableLLMd: false
+                    enablement: true
+                    featureStoreAdmin: true
+                    genAiTracing: true
+                    gpuaas: true
+                    guardrails: true
                     # Deprecated in 3.5
                     #maasAuthPolicies: true
                   notebookController:
                     enabled: true
                     notebookNamespace: rhods-notebooks
                     pvcSize: 30Gi
+                  genAiStudioConfig:
+                    aiAssetCustomEndpoints:
+                      externalProviders: true
+                      clusterDomains: []
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
