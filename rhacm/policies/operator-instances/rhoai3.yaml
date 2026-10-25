@@ -796,15 +796,15 @@ spec:
                     mcpRegistry: true
                     promptManagement: true
                     toolCalling: true
-                    automl: true
-                    autorag: true
                     disableDistributedWorkloads: false
                     disableLLMd: false
-                    enablement: true
                     featureStoreAdmin: true
-                    genAiTracing: true
                     gpuaas: true
-                    guardrails: true
+                    # genAiTracing: true
+                    # automl: true
+                    # autorag: true
+                    # enablement: true
+                    # guardrails: true
                     # Deprecated in 3.5
                     #maasAuthPolicies: true
                   notebookController:
@@ -814,7 +814,10 @@ spec:
                   genAiStudioConfig:
                     aiAssetCustomEndpoints:
                       externalProviders: true
-                      clusterDomains: []
+                      clusterDomains:
+                        - cluster.local
+                        - svc.cluster.local
+                        - svc
 
     - extraDependencies:
         - apiVersion: policy.open-cluster-management.io/v1
