@@ -5,6 +5,8 @@ metadata:
   namespace: openshift-ingress
 spec:
   to:
+    - group: ''
+      kind: Service
     - group: gateway.networking.k8s.io
       kind: Gateway
       name: mcp-gateway
