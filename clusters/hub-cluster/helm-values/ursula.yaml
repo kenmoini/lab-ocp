@@ -74,7 +74,7 @@ ogx:
   # host:port (or host) for the OpenAI base URL. Used only to build OGX_BASE_URL.
   host: ""                # REPLACE, e.g. ogx.ogx.svc.cluster.local:8321
   # Full base URL override; empty => https://<ogx.host>/v1
-  baseUrl: ""
+  baseUrl: "https://maas.apps.tri-force.lab.kemo.network/v1"
   model: ""               # REPLACE: served model id
   # L4 egress port the sidecar NetworkPolicy opens to the OGX namespace.
   port: 8321
