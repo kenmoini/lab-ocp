@@ -1246,6 +1246,42 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: rhoai-feast-maas
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: feast.dev/v1
+                kind: FeatureStore
+                metadata:
+                  labels:
+                    feature-store-ui: enabled
+                  name: maas
+                  namespace: models-as-a-service
+                spec:
+                  feastProject: maas
+                  replicas: 1
+                  services:
+                    offlineStore:
+                      persistence:
+                        file: {}
+                    registry:
+                      local:
+                        server:
+                          restAPI: true
+
+    - extraDependencies:
+        - apiVersion: policy.open-cluster-management.io/v1
+          kind: ConfigurationPolicy
+          name: rhoai-feast-check
+          namespace: ""
+          compliance: Compliant
+      objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: rhoai-feast-limits
         spec:
           remediationAction: enforce
