@@ -1,25 +1,25 @@
-# apiVersion: gateway.networking.k8s.io/v1
-# kind: HTTPRoute
-# metadata:
-#   name: mcp-openshift-mcp
-#   namespace: mcp-servers
-# spec:
-#   hostnames:
-#     - mcp-openshift-mcp.apps.tri-force.lab.kemo.network
-#   parentRefs:
-#     - group: gateway.networking.k8s.io
-#       kind: Gateway
-#       name: mcp-openshift-mcp
-#       namespace: openshift-ingress
-#       sectionName: https
-#   rules:
-#     - backendRefs:
-#         - group: ''
-#           kind: Service
-#           name: openshift-mcp
-#           port: 8080
-#           weight: 1
-#       matches:
-#         - path:
-#             type: PathPrefix
-#             value: /
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: mcp-openshift-mcp
+  namespace: mcp-servers
+spec:
+  hostnames:
+    - openshift-mcp-mcp-servers.apps.tri-force.lab.kemo.network
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: mcp-gateway
+      namespace: openshift-ingress
+      sectionName: https
+  rules:
+    - backendRefs:
+        - group: ''
+          kind: Service
+          name: openshift-mcp
+          port: 8080
+          weight: 1
+      matches:
+        - path:
+            type: PathPrefix
+            value: /
