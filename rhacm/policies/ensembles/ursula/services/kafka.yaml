@@ -123,6 +123,16 @@ spec:
                 metadata:
                   name: ursula-odf
                   namespace: openshift-storage
+                  annotations:
+                    strimzi.io/internal-cluster-security: |
+                            {
+                              "encryption": {
+                                "type": "none"
+                              },
+                              "authentication": {
+                                "type": "none"
+                              }
+                            }
                 spec:
                   kafka:
                     version: 4.2.0
