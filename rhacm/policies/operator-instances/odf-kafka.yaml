@@ -1,0 +1,71 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: instance-kafka-odf
+  annotations:
+    policy.open-cluster-management.io/description: Deploys the Kafka/Strimzi cluster for use with ODF Notifications
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  dependencies:
+    - apiVersion: policy.open-cluster-management.io/v1
+      kind: Policy
+      name: operators-amq-streams
+      namespace: ""
+      compliance: Compliant
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-noobaa-patch
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: kafka-odf
+                  namespace: openshift-storage
+                type: Opaque
+                stringData:
+                  connect.json: |
+                    {
+                      "name": "kafka_odf_connection",
+                      "notification_protocol": "kafka",
+                      "metadata.broker.list": "kafka-odf-bn.openshift-storage.svc.cluster.local:9092",
+                      "topic": "kafka-odf",
+                    }
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: noobaa.io/v1alpha1
+                kind: NooBaa
+                metadata:
+                  name: noobaa
+                  namespace: openshift-storage
+                spec:
+                  bucketNotifications:
+                    enabled: true
+                    connections:
+                      - name: kafka-odf
+                        namespace: openshift-storage
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: odf-kafka-instance
+        spec:
+          remediationAction: enforce
+          severity: critical
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                
+                

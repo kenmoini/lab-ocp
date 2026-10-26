@@ -55,6 +55,7 @@ resources:
   - servicemesh.yaml
   - truenas-csi.yaml
   - virtualization.yaml
+  - ursula.yaml
   - ztwim.yaml
 
 commonAnnotations:

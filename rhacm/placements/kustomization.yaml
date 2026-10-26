@@ -61,6 +61,7 @@ resources:
   - sandboxed-containers.yaml
   - openshift-ai.yaml
   - truenas-csi.yaml
+  - ursula.yaml
   - ztwim.yaml
 
 commonAnnotations:

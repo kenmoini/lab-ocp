@@ -1,0 +1,10 @@
+---
+apiVersion: policy.open-cluster-management.io/v1beta1
+kind: PolicySet
+metadata:
+  name: ursula
+  #namespace: open-cluster-management-policies
+spec:
+  description: "Set of policies that help deploy and manage the Ursula ensemble on OpenShift clusters."
+  policies:
+    - ursula-kafka-instance

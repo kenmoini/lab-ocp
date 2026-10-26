@@ -31,6 +31,7 @@ resources:
   - openshift-ai-azure.yaml
   - sandboxed-containers.yaml
   - workload-availability.yaml
+  - ursula.yaml
 
 
 commonAnnotations:

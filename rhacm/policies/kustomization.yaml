@@ -23,6 +23,7 @@ resources:
   - composition/
   - reloaders/
   - ensembles/gitlab/
+  - ensembles/ursula/
   # - best-practices/
 
   - audit-logging-config.yaml

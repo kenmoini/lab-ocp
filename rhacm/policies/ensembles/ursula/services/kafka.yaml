@@ -1,0 +1,112 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: ursula-kafka-instance
+  annotations:
+    policy.open-cluster-management.io/description: Deploys Kafka resources needed to run Ursula on OpenShift
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ursula-kafka-odf-patch
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: ursula-kafka-odf
+                  namespace: openshift-storage
+                type: Opaque
+                stringData:
+                  connect.json: |
+                    {
+                      "name": "ursula_kafka_odf_connection",
+                      "notification_protocol": "kafka",
+                      "metadata.broker.list": "kafka-odf-bn.openshift-storage.svc.cluster.local:9092",
+                      "topic": "ursula-kafka-odf",
+                    }
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: noobaa.io/v1alpha1
+                kind: NooBaa
+                metadata:
+                  name: noobaa
+                  namespace: openshift-storage
+                spec:
+                  bucketNotifications:
+                    enabled: true
+                    connections:
+                      - name: ursula-kafka-odf
+                        namespace: openshift-storage
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ursula-kafka-instance
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: Kafka
+                apiVersion: kafka.strimzi.io/v1beta2
+                metadata:
+                  name: ursula-odf
+                  namespace: openshift-storage
+                spec:
+                  kafka:
+                    version: 4.2.0
+                    metadataVersion: 4.2-IV1
+                    # replicas: 3
+                    #authorization:
+                    #  type: simple
+                    #  superUsers:
+                    #    - CN=my-user
+                    #    - my-user
+                    listeners:
+                      - name: plain
+                        port: 9092
+                        type: internal
+                        tls: false
+                      - name: tls
+                        port: 9093
+                        type: internal
+                        tls: true
+                      - name: broker
+                        port: 9094
+                        type: route
+                        tls: true
+                    config:
+                      offsets.topic.replication.factor: 3
+                      transaction.state.log.replication.factor: 3
+                      transaction.state.log.min.isr: 2
+                      default.replication.factor: 3
+                      min.insync.replicas: 2
+                      # inter.broker.protocol.version: '4.2'
+                  #   storage:
+                  #     type: ephemeral
+                  # zookeeper:
+                  #   replicas: 3
+                  #   storage:
+                  #     type: ephemeral
+                  entityOperator:
+                    topicOperator: {}
+                    userOperator: {}
+                  # kafkaExporter:
+                  #   topicRegex: ".*"
+                  #   groupRegex: ".*"
