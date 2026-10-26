@@ -86,7 +86,7 @@ spec:
                 spec:
                   version: 4.2.0
                   replicas: 1
-                  bootstrapServers: 'ursula-odf-kafka-brokers.openshift-storage.svc.cluster.local:9092'
+                  bootstrapServers: 'ursula-odf-kafka-broker-bootstrap.openshift-storage.svc.cluster.local:9094'
                   groupId: ursula-odf-connect-group
                   configStorageTopic: ursula-odf-connect-configs
                   statusStorageTopic: ursula-odf-connect-status
@@ -179,16 +179,16 @@ spec:
                 metadata:
                   name: ursula-odf
                   namespace: openshift-storage
-                  annotations:
-                    strimzi.io/internal-cluster-security: |
-                            {
-                              "encryption": {
-                                "type": "none"
-                              },
-                              "authentication": {
-                                "type": "none"
-                              }
-                            }
+                  # annotations:
+                  #   strimzi.io/internal-cluster-security: |
+                  #           {
+                  #             "encryption": {
+                  #               "type": "none"
+                  #             },
+                  #             "authentication": {
+                  #               "type": "none"
+                  #             }
+                  #           }
                 spec:
                   kafka:
                     version: 4.2.0
