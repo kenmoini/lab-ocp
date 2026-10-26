@@ -127,7 +127,7 @@ spec:
                   authentication:
                     type: tls
                     certificateAndKey:
-                      secretName: connect-user
+                      secretName: connect
                       key: user.key
                       certificate: user.crt
                   tls:
