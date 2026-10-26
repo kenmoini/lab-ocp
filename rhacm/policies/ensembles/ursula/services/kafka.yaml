@@ -93,7 +93,7 @@ spec:
                     acls:
                       - resource:
                           type: topic
-                          name: '*'
+                          name: 'ursula'
                           patternType: prefix
                         operations:
                           - Read
@@ -103,7 +103,7 @@ spec:
                         host: '*'
                       - resource:
                           type: group
-                          name: '*'
+                          name: 'ursula'
                           patternType: prefix
                         operations:
                           - Read
