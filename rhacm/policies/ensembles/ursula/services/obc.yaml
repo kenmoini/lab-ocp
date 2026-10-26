@@ -1,0 +1,43 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: ursula-obc
+  annotations:
+    policy.open-cluster-management.io/description: Deploys Object Bucket Claim (OBC) resources needed to run Ursula on OpenShift
+    policy.open-cluster-management.io/categories: OCPOM - OpenShift Operator Management
+    policy.open-cluster-management.io/standards: Kemo Labs 2026
+    policy.open-cluster-management.io/controls: OLM-INST - Operator Instance
+spec:
+  disabled: false
+  policy-templates:
+    # Create a Pipelines DB and OBC
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ursula-obc
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Namespace
+                metadata:
+                  name: ursula-infra
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: ursula
+                  namespace: ursula-infra
+                spec:
+                  bucketName: ursula
+                  additionalConfig:
+                    bucketclass: "noobaa-default-bucket-class"
+                  storageClassName: "openshift-storage.noobaa.io"
+                  objectBucketName: obc-ursula-infra-ursula
