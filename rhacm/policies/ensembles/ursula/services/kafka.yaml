@@ -48,6 +48,62 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
+          name: ursula-kafka-dash
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: Console
+                apiVersion: console.streamshub.github.com/v1alpha1
+                metadata:
+                  name: kafka-console
+                  namespace: openshift-storage
+                spec:
+                  hostname: kafka-console-openshift-storage.apps.tri-force.lab.kemo.network
+                  kafkaClusters:
+                    - name: ursula-odf
+                      namespace: openshift-storage
+                      listener: plain
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ursula-kafka-connect
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: kafka.strimzi.io/v1
+                kind: KafkaConnect
+                metadata:
+                  name: ursula-odf-connect
+                  namespace: openshift-storage
+                spec:
+                  version: 4.2.0
+                  replicas: 1
+                  bootstrapServers: 'ursula-odf-kafka-bootstrap.openshift-storage.svc.cluster.local:9092'
+                  groupId: ursula-odf-connect-group
+                  configStorageTopic: ursula-odf-connect-configs
+                  statusStorageTopic: ursula-odf-connect-status
+                  offsetStorageTopic: ursula-odf-connect-offsets
+                  tls:
+                    trustedCertificates:
+                      - secretName: ursula-odf-trustbundle
+                        pattern: '*.crt'
+                  config:
+                    config.storage.replication.factor: -1
+                    offset.storage.replication.factor: -1
+                    status.storage.replication.factor: -1
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
           name: ursula-kafka-noobaa-patch
         spec:
           remediationAction: enforce
