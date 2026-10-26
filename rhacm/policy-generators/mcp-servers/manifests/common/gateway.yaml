@@ -18,14 +18,14 @@ spec:
     - allowedRoutes:
         namespaces:
           from: All
-      hostname: '*.apps.tri-force.lab.kemo.network'
+      hostname: 'openshift-mcp-mcp-servers.apps.tri-force.lab.kemo.network'
       name: http
       port: 80
       protocol: HTTP
     - allowedRoutes:
         namespaces:
           from: All
-      hostname: '*.apps.tri-force.lab.kemo.network'
+      hostname: 'openshift-mcp-mcp-servers.apps.tri-force.lab.kemo.network'
       name: https
       port: 443
       protocol: HTTPS
