@@ -37,19 +37,19 @@ spec:
                       "metadata.broker.list": "kafka-odf-bn.openshift-storage.svc.cluster.local:9092",
                       "topic": "ursula-kafka-odf",
                     }
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: noobaa.io/v1alpha1
-                kind: NooBaa
-                metadata:
-                  name: noobaa
-                  namespace: openshift-storage
-                spec:
-                  bucketNotifications:
-                    enabled: true
-                    connections:
-                      - name: ursula-kafka-odf
-                        namespace: openshift-storage
+            # - complianceType: musthave
+            #   objectDefinition:
+            #     apiVersion: noobaa.io/v1alpha1
+            #     kind: NooBaa
+            #     metadata:
+            #       name: noobaa
+            #       namespace: openshift-storage
+            #     spec:
+            #       bucketNotifications:
+            #         enabled: true
+            #         connections:
+            #           - name: ursula-kafka-odf
+            #             namespace: openshift-storage
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
