@@ -63,6 +63,29 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
+                kind: KafkaNodePool
+                apiVersion: kafka.strimzi.io/v1
+                metadata:
+                  name: ursula-odf
+                  labels:
+                    strimzi.io/cluster: ursula-odf
+                  namespace: openshift-storage
+                spec:
+                  replicas: 3
+                  roles:
+                    - broker
+                    - controller
+                  storage:
+                    type: jbod
+                    volumes:
+                      - id: 0
+                        type: persistent-claim
+                        size: 10Gi
+                        deleteClaim: true
+                        kraftMetadata: shared
+
+            - complianceType: musthave
+              objectDefinition:
                 kind: Kafka
                 apiVersion: kafka.strimzi.io/v1beta2
                 metadata:
