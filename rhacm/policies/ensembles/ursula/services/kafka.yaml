@@ -125,6 +125,7 @@ spec:
                   statusStorageTopic: ursula-odf-connect-status
                   offsetStorageTopic: ursula-odf-connect-offsets
                   authentication:
+                    type: tls
                     certificateAndKey:
                       secretName: connect-user
                       key: user.key
