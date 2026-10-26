@@ -41,6 +41,7 @@ spec:
                       "name": "ursula_kafka_odf_connection",
                       "notification_protocol": "kafka",
                       "metadata.broker.list": "ursula-odf-kafka-bootstrap.openshift-storage.svc.cluster.local:9092",
+                      "dr_cb": true,
                       "topic": "ursula-kafka-odf"
                     }
 
