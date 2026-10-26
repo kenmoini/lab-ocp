@@ -18,6 +18,7 @@ resources:
   - sandbox-containers.yaml
   - rhoai.yaml
   - mcp-gateway.yaml
+  - amq-streams.yaml
 
   # Developer Things
   - authorino.yaml

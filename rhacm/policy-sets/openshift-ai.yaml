@@ -29,6 +29,7 @@ spec:
     - operators-auto-orch
     - operators-mcp-gateway
     - operators-mariadb
+    - operators-amq-streams
     - default-gatewayclass
     - instance-serverless
     - instance-leaderworkerset
