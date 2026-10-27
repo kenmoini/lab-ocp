@@ -46,6 +46,10 @@ spec:
               model:
                 mode: uri
                 uri: oci://registry.redhat.io/rhai/modelcar-granite-embedding-english-r2
+              endpoint:
+                externalRoute:
+                  # -- Creates an externally accessible route for the model endpoint
+                  enabled: false
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:
