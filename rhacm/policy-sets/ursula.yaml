@@ -9,3 +9,4 @@ spec:
   policies:
     - ursula-kafka-instance
     - ursula-obc
+    - ursula-db
