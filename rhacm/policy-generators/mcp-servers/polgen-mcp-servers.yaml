@@ -30,9 +30,9 @@ policies:
         path: manifests/openshift-mcp/
         complianceType: "musthave"
         remediationAction: enforce
-  - name: mcp-s3
-    manifests:
-      - name: "mcp-s3"
-        path: manifests/s3/
-        complianceType: "musthave"
-        remediationAction: enforce
+  # - name: mcp-s3
+  #   manifests:
+  #     - name: "mcp-s3"
+  #       path: manifests/s3/
+  #       complianceType: "musthave"
+  #       remediationAction: enforce
