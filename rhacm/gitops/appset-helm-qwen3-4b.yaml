@@ -24,9 +24,11 @@ spec:
               elements:
               - appName: qwen3-4b
                 namespace: models-as-a-service
-                helmRepoURL: 'https://redhat-ai-services.github.io/helm-charts/'
+                #helmRepoURL: 'https://redhat-ai-services.github.io/helm-charts/'
+                helmRepoURL: 'https://github.com/kenmoini/rh-ai-svcs-helm-charts/'
                 helmChartName: vllm-kserve
-                helmRevision: 0.7.1
+                helmRevision: main
+                #helmRevision: 0.7.1
   template:
     metadata:
       name: "{{.name}}-{{.appName}}"
@@ -42,8 +44,7 @@ spec:
         - ref: values
           repoURL: 'https://github.com/redhat-ai-services/modelcar-catalog'
           targetRevision: main
-        - chart: '{{.helmChartName}}'
-          helm:
+        - helm:
             releaseName: '{{.appName}}'
             valueFiles:
               - "$values/modelcar-images/qwen/qwen3-4b/values.yaml"
@@ -53,6 +54,7 @@ spec:
               - name: endpoint.auth.enabled
                 value: 'false'
           repoURL: '{{.helmRepoURL}}'
+          path: "charts/{{.helmChartName}}"
           targetRevision: '{{.helmRevision}}'
       destination:
         name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
