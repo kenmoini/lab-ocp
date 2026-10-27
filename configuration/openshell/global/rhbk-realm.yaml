@@ -64,6 +64,10 @@ spec:
       secret:
         name: openshell-sso-clients
         key: patientPortalClientSecret
+    URSULA_CLIENT_SECRET:
+      secret:
+        name: openshell-sso-clients
+        key: ursulaClientSecret
   realm:
     id: openshell
     realm: openshell
@@ -499,6 +503,29 @@ spec:
           - web-origins
           - acr
           - openshell-audience
+          - openshell:all
+
+      - clientId: ursula
+        name: Ursula
+        description: Confidential client for Ursula (Client Credentials grant)
+        enabled: true
+        protocol: openid-connect
+        publicClient: false
+        secret: "${URSULA_CLIENT_SECRET}"
+        serviceAccountsEnabled: true      # client-credentials grant
+        standardFlowEnabled: false
+        directAccessGrantsEnabled: false
+        fullScopeAllowed: true
+        attributes:
+          use.refresh.tokens: "false"
+        defaultClientScopes:
+          - basic
+          - profile
+          - email
+          - roles
+          - web-origins
+          - acr
+          - openshell-audience            # REQUIRED: injects aud=openshell-cli
           - openshell:all
 
       # Dashboard
