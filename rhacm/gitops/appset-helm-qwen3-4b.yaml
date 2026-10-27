@@ -46,6 +46,11 @@ spec:
           helm:
             valueFiles:
               - "$values/modelcar-images/qwen/qwen3-4b/values.yaml"
+            valuesObject:
+              endpoint:
+                externalRoute:
+                  # -- Creates an externally accessible route for the model endpoint
+                  enabled: false
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:
