@@ -9,6 +9,15 @@ metadata:
 spec:
   config:
     env:
+      - name: S3_USE_PATH_STYLE
+        value: "true"
+      - name: S3_ENDPOINT
+        value: "https://s3.openshift-storage.svc.cluster.local"
+      - name: AWS_REGION
+        value: the-moon
+      - name: MCP_S3_EXT_READONLY
+        value: "false"
+
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
           secretKeyRef:
