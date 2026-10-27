@@ -1,0 +1,66 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: whisper-lg-v2
+  namespace: openshift-gitops
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: policy.kemo.dev/openshift-ai
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
+          - list:
+              elements:
+              - appName: whisper-lg-v2
+                namespace: models-as-a-service
+                helmRepoURL: 'https://redhat-ai-services.github.io/helm-charts/'
+                helmChartName: vllm-kserve
+                helmRevision: 0.7.1
+  template:
+    metadata:
+      name: "{{.name}}-{{.appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+      finalizers:
+        # The set foreground cascading deletion
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      sources:
+        - ref: values
+          repoURL: 'https://github.com/redhat-ai-services/modelcar-catalog'
+          targetRevision: main
+        - chart: '{{.helmChartName}}'
+          helm:
+            valueFiles:
+              - "$values/modelcar-images/redhatai/whisper-large-v2-w4a16-g128/values.yaml"
+          repoURL: '{{.helmRepoURL}}'
+          targetRevision: '{{.helmRevision}}'
+      destination:
+        name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
+        server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
+        namespace: "{{.namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=false
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+          - ApplyOutOfSyncOnly=true
+        retry:
+          limit: 10

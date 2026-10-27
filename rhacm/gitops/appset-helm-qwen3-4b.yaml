@@ -44,9 +44,6 @@ spec:
           targetRevision: main
         - chart: '{{.helmChartName}}'
           helm:
-            valuesObject:
-              gateway:
-                serviceName: "{{ .name }}-openshell"
             valueFiles:
               - "$values/modelcar-images/qwen/qwen3-4b/values.yaml"
           repoURL: '{{.helmRepoURL}}'

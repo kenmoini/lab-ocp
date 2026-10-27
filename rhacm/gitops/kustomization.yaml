@@ -20,6 +20,7 @@ resources:
   - appset-helm-openshell.yaml
   - appset-helm-openshell-dash.yaml
   - appset-helm-qwen3-4b.yaml
+  - appset-helm-whisper-large-v2-w4a16-g128.yaml
   - appset-openshell-proxy.yaml
   # - appset-helm-openshell-workspace.yaml
   - appset-helm-ursula.yaml
