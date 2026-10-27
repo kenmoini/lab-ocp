@@ -15,6 +15,7 @@ resources:
   - appset-helm-gitlab.yaml
   - appset-helm-gitlab-redis.yaml
   - appset-helm-gitlab-redis-cache.yaml
+  - appset-helm-granite-embedding.yaml
   - appset-helm-jenkins.yaml
   - appset-helm-openclaw-enterprise.yaml
   - appset-helm-openshell.yaml
