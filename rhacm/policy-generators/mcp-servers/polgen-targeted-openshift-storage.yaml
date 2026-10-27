@@ -1,12 +1,12 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PolicyGenerator
 metadata:
-  name: mcp-servers
+  name: tgtd-mcp-openshift-storage
 policySetDefaults:
   generatePolicySetPlacement: false
 policyDefaults:
   generatePolicyPlacement: false
-  namespace: open-cluster-management-policies
+  namespace: openshift-storage
   categories: 
   - AI - Artificial Intelligence
   controls:
@@ -18,15 +18,9 @@ policyDefaults:
   pruneObjectBehavior: DeleteIfCreated
   consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
 policies:
-  - name: mcp-common
+  - name: tgtd-mcp-ocp-storage
     manifests:
-      - name: "mcp-common"
-        path: manifests/common/
-        complianceType: "musthave"
-        remediationAction: enforce
-  - name: mcp-openshift-mcp
-    manifests:
-      - name: "mcp-openshift-mcp"
-        path: manifests/openshift-mcp/
+      - name: "tgtd-mcp-ocp-storage"
+        path: manifests/targeted/openshift-storage/
         complianceType: "musthave"
         remediationAction: enforce

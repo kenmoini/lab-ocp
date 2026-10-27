@@ -1,0 +1,47 @@
+apiVersion: mcp.x-k8s.io/v1alpha1
+kind: MCPServer
+metadata:
+  annotations:
+    mcp.opendatahub.io/catalog-server: s3-mcp-server
+    mcp.opendatahub.io/display-name: s3-mcp
+  name: s3-mcp
+  namespace: mcp-servers
+spec:
+  config:
+    env:
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            key: accesskey
+            name: s3-mcp-credentials
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            key: secretkey
+            name: s3-mcp-credentials
+    path: /mcp
+    port: 8080
+    storage:
+      - path: /etc/ssl/certs
+        permissions: ReadOnly
+        source:
+          configMap:
+            items:
+              - key: ca-bundle.crt
+                path: ca-certificates.crt
+            name: trusted-root-ca
+          type: ConfigMap
+      - path: /tmp
+        permissions: ReadWrite
+        source:
+          emptyDir:
+            medium: ''
+            sizeLimit: 100Mi
+          type: EmptyDir
+  runtime:
+    security:
+      serviceAccountName: s3-mcp
+  source:
+    containerImage:
+      ref: 'ghcr.io/txn2/mcp-s3:latest'
+    type: ContainerImage

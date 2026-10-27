@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3-mcp-credentials
+  namespace: mcp-servers
+type: Opaque
+stringData:
+  accesskey: {{ fromSecret "openshift-storage" "noobaa-admin" "AWS_ACCESS_KEY_ID" }}
+  secretkey: {{ fromSecret "openshift-storage" "noobaa-admin" "AWS_SECRET_ACCESS_KEY" }}

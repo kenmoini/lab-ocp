@@ -1,0 +1,11 @@
+apiVersion: mcp.kuadrant.io/v1alpha1
+kind: MCPServerRegistration
+metadata:
+  name: s3-mcp
+  namespace: mcp-servers
+spec:
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    namespace: mcp-servers
+    name: s3-mcp

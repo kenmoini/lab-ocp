@@ -1,0 +1,38 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: mcp-servers
+policySetDefaults:
+  generatePolicySetPlacement: false
+policyDefaults:
+  generatePolicyPlacement: false
+  namespace: open-cluster-management-policies
+  categories: 
+  - AI - Artificial Intelligence
+  controls:
+  - MCP - Model Context Protocol
+  standards:
+  - Kemo Labs 2026
+  # remediationAction: enforce
+  severity: low
+  pruneObjectBehavior: DeleteIfCreated
+  consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
+policies:
+  - name: mcp-common
+    manifests:
+      - name: "mcp-common"
+        path: manifests/common/
+        complianceType: "musthave"
+        remediationAction: enforce
+  - name: mcp-openshift-mcp
+    manifests:
+      - name: "mcp-openshift-mcp"
+        path: manifests/openshift-mcp/
+        complianceType: "musthave"
+        remediationAction: enforce
+  - name: mcp-s3
+    manifests:
+      - name: "mcp-s3"
+        path: manifests/s3/
+        complianceType: "musthave"
+        remediationAction: enforce

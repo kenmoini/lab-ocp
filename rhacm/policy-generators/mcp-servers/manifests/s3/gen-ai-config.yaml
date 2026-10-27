@@ -1,0 +1,16 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: gen-ai-aa-mcp-servers
+  namespace: redhat-ods-applications
+data:
+  S3-Internal: |
+    {
+      "url": "http://s3-mcp.mcp-servers.svc.cluster.local:8080/mcp",
+      "description": "The S3 MCP server enables exploration and interaction with object storage."
+    }
+  S3-External: |
+    {
+      "url": "https://s3-mcp.apps.tri-force.lab.kemo.network/mcp",
+      "description": "The S3 MCP server enables exploration and interaction with object storage."
+    }

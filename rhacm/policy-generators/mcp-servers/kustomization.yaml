@@ -1,5 +1,6 @@
 generators:
-  - polgen-openshift-mcp.yaml
+  - polgen-mcp-servers.yaml
+  - polgen-targeted-openshift-storage.yaml
 
 commonAnnotations:
   argocd.argoproj.io/compare-options: IgnoreExtraneous
