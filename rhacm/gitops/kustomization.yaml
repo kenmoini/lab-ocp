@@ -19,6 +19,7 @@ resources:
   - appset-helm-openclaw-enterprise.yaml
   - appset-helm-openshell.yaml
   - appset-helm-openshell-dash.yaml
+  - appset-helm-qwen3-4b.yaml
   - appset-openshell-proxy.yaml
   # - appset-helm-openshell-workspace.yaml
   - appset-helm-ursula.yaml
