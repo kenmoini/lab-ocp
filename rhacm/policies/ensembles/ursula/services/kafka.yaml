@@ -261,6 +261,12 @@ spec:
                       default.replication.factor: 3
                       min.insync.replicas: 2
                       # inter.broker.protocol.version: '4.2'
+                    metricsConfig:
+                      type: jmxPrometheusExporter
+                      valueFrom:
+                        configMapKeyRef:
+                          name: console-kafka-metrics
+                          key: kafka-metrics-config.yml
                   #   storage:
                   #     type: ephemeral
                   # zookeeper:
@@ -273,12 +279,6 @@ spec:
                   # kafkaExporter:
                   #   topicRegex: ".*"
                   #   groupRegex: ".*"
-                  metricsConfig:
-                    type: jmxPrometheusExporter
-                    valueFrom:
-                      configMapKeyRef:
-                        name: console-kafka-metrics
-                        key: kafka-metrics-config.yml
 
             - complianceType: musthave
               objectDefinition:
