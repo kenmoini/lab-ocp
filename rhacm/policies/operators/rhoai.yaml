@@ -36,6 +36,14 @@ spec:
                   name: redhat-ods-applications
                   labels:
                     openshift.io/cluster-monitoring: 'true'
+            - complianceType: musthave
+              objectDefinition:
+                kind: Namespace
+                apiVersion: v1
+                metadata:
+                  name: redhat-ai-gateway-infra
+                  labels:
+                    openshift.io/cluster-monitoring: 'true'
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
