@@ -21,196 +21,6 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: ursula-kafka-odf-patch
-        spec:
-          remediationAction: enforce
-          severity: high
-          pruneObjectBehavior: DeleteIfCreated
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: v1
-                kind: Secret
-                metadata:
-                  name: ursula-kafka-odf
-                  namespace: openshift-storage
-                type: Opaque
-                stringData:
-                  connect.json: |
-                    {
-                      "name": "ursula_kafka_odf_connection",
-                      "notification_protocol": "kafka",
-                      "metadata.broker.list": "ursula-odf-kafka-brokers.openshift-storage.svc.cluster.local:9092",
-                      "topic": "ursula-kafka-odf"
-                    }
-
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: ursula-kafka-dash
-        spec:
-          remediationAction: enforce
-          severity: high
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                kind: Console
-                apiVersion: console.streamshub.github.com/v1alpha1
-                metadata:
-                  name: kafka-console
-                  namespace: openshift-storage
-                spec:
-                  hostname: kafka-console-openshift-storage.apps.tri-force.lab.kemo.network
-                  kafkaClusters:
-                    - name: ursula-odf
-                      namespace: openshift-storage
-                      listener: plain
-
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: ursula-kafka-connect
-        spec:
-          remediationAction: enforce
-          severity: high
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                kind: KafkaUser
-                apiVersion: kafka.strimzi.io/v1
-                metadata:
-                  name: connect
-                  labels:
-                    strimzi.io/cluster: ursula-odf
-                  namespace: openshift-storage
-                spec:
-                  authentication:
-                    type: tls
-                  authorization:
-                    type: simple
-                    acls:
-                      - resource:
-                          type: topic
-                          name: 'ursula'
-                          patternType: prefix
-                        operations:
-                          - Read
-                          - Describe
-                          - Write
-                          - Create
-                        host: '*'
-                      - resource:
-                          type: group
-                          name: 'ursula'
-                          patternType: prefix
-                        operations:
-                          - Read
-                        host: '*'
-
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: kafka.strimzi.io/v1
-                kind: KafkaConnect
-                metadata:
-                  name: ursula-odf-connect
-                  namespace: openshift-storage
-                spec:
-                  version: 4.2.0
-                  replicas: 1
-                  bootstrapServers: 'ursula-odf-kafka-bootstrap.openshift-storage.svc.cluster.local:9093'
-                  groupId: ursula-odf-connect-group
-                  configStorageTopic: ursula-odf-connect-configs
-                  statusStorageTopic: ursula-odf-connect-status
-                  offsetStorageTopic: ursula-odf-connect-offsets
-                  authentication:
-                    type: tls
-                    certificateAndKey:
-                      secretName: connect
-                      key: user.key
-                      certificate: user.crt
-                  tls:
-                    trustedCertificates:
-                      - secretName: ursula-odf-trustbundle
-                        pattern: '*.crt'
-                  config:
-                    config.storage.replication.factor: -1
-                    offset.storage.replication.factor: -1
-                    status.storage.replication.factor: -1
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: kafka.strimzi.io/v1
-                kind: KafkaTopic
-                metadata:
-                  name: ursula-odf-connect-configs
-                  labels:
-                    strimzi.io/cluster: ursula-odf
-                  namespace: openshift-storage
-                spec:
-                  partitions: 10
-                  replicas: 3
-                  config:
-                    retention.ms: 604800000
-                    segment.bytes: 1073741824
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: kafka.strimzi.io/v1
-                kind: KafkaTopic
-                metadata:
-                  name: ursula-odf-connect-status
-                  labels:
-                    strimzi.io/cluster: ursula-odf
-                  namespace: openshift-storage
-                spec:
-                  partitions: 10
-                  replicas: 3
-                  config:
-                    retention.ms: 604800000
-                    segment.bytes: 1073741824
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: kafka.strimzi.io/v1
-                kind: KafkaTopic
-                metadata:
-                  name: ursula-odf-connect-offsets
-                  labels:
-                    strimzi.io/cluster: ursula-odf
-                  namespace: openshift-storage
-                spec:
-                  partitions: 10
-                  replicas: 3
-                  config:
-                    retention.ms: 604800000
-                    segment.bytes: 1073741824
-
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
-          name: ursula-kafka-noobaa-patch
-        spec:
-          remediationAction: enforce
-          severity: high
-          object-templates:
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: noobaa.io/v1alpha1
-                kind: NooBaa
-                metadata:
-                  name: noobaa
-                  namespace: openshift-storage
-                spec:
-                  bucketNotifications:
-                    enabled: true
-                    connections:
-                      - name: ursula-kafka-odf
-                        namespace: openshift-storage
-
-    - objectDefinition:
-        apiVersion: policy.open-cluster-management.io/v1
-        kind: ConfigurationPolicy
-        metadata:
           name: ursula-kafka-instance
         spec:
           remediationAction: enforce
@@ -219,67 +29,28 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
-                kind: KafkaNodePool
-                apiVersion: kafka.strimzi.io/v1
-                metadata:
-                  name: ursula-odf
-                  labels:
-                    strimzi.io/cluster: ursula-odf
-                  namespace: openshift-storage
-                spec:
-                  replicas: 3
-                  roles:
-                    - broker
-                    - controller
-                  storage:
-                    type: jbod
-                    volumes:
-                      - id: 0
-                        type: persistent-claim
-                        size: 10Gi
-                        deleteClaim: true
-                        kraftMetadata: shared
-
-            - complianceType: musthave
-              objectDefinition:
-                apiVersion: kafka.strimzi.io/v1
-                kind: KafkaTopic
-                metadata:
-                  name: ursula-kafka-odf
-                  labels:
-                    strimzi.io/cluster: ursula-odf
-                  namespace: openshift-storage
-                spec:
-                  partitions: 10
-                  replicas: 3
-                  config:
-                    retention.ms: 604800000
-                    segment.bytes: 1073741824
-
-            - complianceType: musthave
-              objectDefinition:
                 kind: Kafka
                 apiVersion: kafka.strimzi.io/v1beta2
                 metadata:
                   name: ursula-odf
                   namespace: openshift-storage
-                  # annotations:
-                  #   strimzi.io/internal-cluster-security: |
-                  #           {
-                  #             "encryption": {
-                  #               "type": "none"
-                  #             },
-                  #             "authentication": {
-                  #               "type": "none"
-                  #             }
-                  #           }
+                  annotations:
+                    strimzi.io/internal-cluster-security: |
+                            {
+                              "encryption": {
+                                "type": "none"
+                              },
+                              "authentication": {
+                                "type": "none"
+                              }
+                            }
                 spec:
                   kafka:
                     version: 4.2.0
                     metadataVersion: 4.2-IV1
                     # replicas: 3
-                    authorization:
-                      type: simple
+                    # authorization:
+                    #   type: simple
                     #  superUsers:
                     #    - CN=my-user
                     #    - my-user
@@ -315,3 +86,412 @@ spec:
                   # kafkaExporter:
                   #   topicRegex: ".*"
                   #   groupRegex: ".*"
+            - complianceType: musthave
+              objectDefinition:
+                kind: KafkaNodePool
+                apiVersion: kafka.strimzi.io/v1
+                metadata:
+                  name: ursula-odf
+                  labels:
+                    strimzi.io/cluster: ursula-odf
+                  namespace: openshift-storage
+                spec:
+                  replicas: 3
+                  roles:
+                    - broker
+                    - controller
+                  storage:
+                    type: jbod
+                    volumes:
+                      - id: 0
+                        type: persistent-claim
+                        size: 10Gi
+                        deleteClaim: true
+                        kraftMetadata: shared
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: kafka.strimzi.io/v1
+                kind: KafkaTopic
+                metadata:
+                  name: ursula-kafka-odf
+                  labels:
+                    strimzi.io/cluster: ursula-odf
+                  namespace: openshift-storage
+                spec:
+                  partitions: 10
+                  replicas: 3
+                  config:
+                    retention.ms: 604800000
+                    segment.bytes: 1073741824
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ursula-kafka-dash
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                kind: Console
+                apiVersion: console.streamshub.github.com/v1alpha1
+                metadata:
+                  name: kafka-console
+                  namespace: openshift-storage
+                spec:
+                  hostname: kafka-console-openshift-storage.apps.tri-force.lab.kemo.network
+                  kafkaClusters:
+                    - name: ursula-odf
+                      namespace: openshift-storage
+                      listener: plain
+            #           credentials:
+            #             kafkaUser:
+            #               name: kafka-console
+            #               namespace: openshift-storage
+
+            # - complianceType: musthave
+            #   objectDefinition:
+            #     apiVersion: rbac.authorization.k8s.io/v1
+            #     kind: RoleBinding
+            #     metadata:
+            #       name: secret-reader-binding
+            #       namespace: openshift-storage
+            #     roleRef:
+            #       apiGroup: rbac.authorization.k8s.io
+            #       kind: Role
+            #       name: console-kafkauser-secret-reader
+            #     subjects:
+            #     - kind: ServiceAccount
+            #       name: kafka-console-console-serviceaccount
+            #       namespace: openshift-storage
+            # - complianceType: musthave
+            #   objectDefinition:
+            #     apiVersion: rbac.authorization.k8s.io/v1
+            #     kind: Role
+            #     metadata:
+            #       name: console-kafkauser-secret-reader
+            #       namespace: openshift-storage
+            #     rules:
+            #       - apiGroups:
+            #           - ""
+            #         resourceNames:
+            #           - kafka-console
+            #         resources:
+            #           - secrets
+            #         verbs:
+            #           - get
+
+            # - complianceType: musthave
+            #   objectDefinition:
+            #     kind: KafkaUser
+            #     apiVersion: kafka.strimzi.io/v1
+            #     metadata:
+            #       name: kafka-console
+            #       labels:
+            #         strimzi.io/cluster: ursula-odf
+            #       namespace: openshift-storage
+            #     spec:
+            #       authentication:
+            #         type: tls
+            #       authorization:
+            #         type: simple
+            #         acls:
+            #           - resource:
+            #               type: topic
+            #               name: '*'
+            #               patternType: prefix
+            #             operations:
+            #               - All
+            #             host: '*'
+            #           - resource:
+            #               type: group
+            #               name: '*'
+            #               patternType: prefix
+            #             operations:
+            #               - All
+            #             host: '*'
+            #           - resource:
+            #               type: cluster
+            #             operations:
+            #               - All
+            #             host: '*'
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ursula-kafka-odf-patch
+        spec:
+          remediationAction: enforce
+          severity: high
+          pruneObjectBehavior: DeleteIfCreated
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: ursula-kafka-odf
+                  namespace: openshift-storage
+                type: Opaque
+                stringData:
+                  connect.json: |
+                    {
+                      "name": "ursula_kafka_odf_connection",
+                      "notification_protocol": "kafka",
+                      "metadata.broker.list": "ursula-odf-kafka-bootstrap.openshift-storage.svc.cluster.local:9092",
+                      "topic": "ursula-kafka-odf"
+                    }
+
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: ursula-kafka-noobaa-patch
+        spec:
+          remediationAction: enforce
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: noobaa.io/v1alpha1
+                kind: NooBaa
+                metadata:
+                  name: noobaa
+                  namespace: openshift-storage
+                spec:
+                  bucketNotifications:
+                    enabled: true
+                    connections:
+                      - name: ursula-kafka-odf
+                        namespace: openshift-storage
+
+    # - objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: ursula-kafka-dash-dex
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: high
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: rbac.authorization.k8s.io/v1
+    #             kind: ClusterRole
+    #             metadata:
+    #               name: kafka-console-dex
+    #             rules:
+    #             - apiGroups: ["dex.coreos.com"] # API group created by dex
+    #               resources: ["*"]
+    #               verbs: ["*"]
+    #             - apiGroups: ["apiextensions.k8s.io"]
+    #               resources: ["customresourcedefinitions"]
+    #               verbs: ["create"] # To manage its own resources, dex must be able to create customresourcedefinitions
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: rbac.authorization.k8s.io/v1
+    #             kind: ClusterRoleBinding
+    #             metadata:
+    #               name: kafka-console-dex
+    #             roleRef:
+    #               apiGroup: rbac.authorization.k8s.io
+    #               kind: ClusterRole
+    #               name: kafka-console-dex
+    #             subjects:
+    #             - kind: ServiceAccount
+    #               name: kafka-console-dex       # Service account assigned to the dex pod
+    #               namespace: openshift-storage # The namespace dex is running in
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             kind: Secret
+    #             apiVersion: v1
+    #             metadata:
+    #               name: console-dex
+    #               namespace: openshift-storage
+    #             type: Opaque
+    #             stringData:
+    #               config.yaml: |
+    #                 issuer: {{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "console-openshift-console" "console-dex" }}
+
+    #                 storage:
+    #                   type: kubernetes
+    #                   config:
+    #                     inCluster: true
+
+    #                 web:
+    #                   http: 0.0.0.0:5556
+    #                   allowedOrigins: [ '*' ]
+
+    #                 oauth2:
+    #                   responseTypes: [ 'code' ]
+    #                   skipApprovalScreen: true
+
+    #                 staticClients:
+    #                 - id: streamshub-console
+    #                   name: 'StreamsHub Console'
+    #                   secret: ${STATIC_CLIENT_SECRET}
+    #                   ## public client may instead be used and `secret` above omitted
+    #                   # public: true
+    #                   redirectURIs:
+    #                   - '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "console-openshift-console" "kafka-console-openshift-storage" }}/api/auth/callback/oidc'
+    #                   - 'http://localhost:3000/api/auth/callback/oidc'
+
+    #                 connectors:
+    #                 - type: openshift
+    #                   id: openshift
+    #                   name: OpenShift
+    #                   config:
+    #                     # OpenShift API, e.g. `https://api.example.com:6443`
+    #                     # Get from kubectl via `kubectl config view --minify=true --flatten=false -o json | jq -r .clusters[0].cluster.server`
+    #                     issuer: {{ (fromClusterClaim "apiserverurl.openshift.io") }}
+
+    #                     # OpenShift root CA
+    #                     rootCA: /etc/ssl/openshift.pem
+
+    #                     # Communicate to OpenShift without validating SSL certificates
+    #                     insecureCA: true
+
+    #                     # Credentials can be string literals or pulled from the environment.
+    #                     clientID: ${${X}OPENSHIFT_OAUTH_CLIENT_ID}
+    #                     clientSecret: ${${X}OPENSHIFT_OAUTH_CLIENT_SECRET}
+
+    #                     # Optional list of required groups a user must be a member of
+    #                     groups: []
+
+    #                     # Redirect to the console's callback following authentication
+    #                     redirectURI: {{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "console-openshift-console" "console-dex" }}/callback
+
+    # - objectDefinition:
+    #     apiVersion: policy.open-cluster-management.io/v1
+    #     kind: ConfigurationPolicy
+    #     metadata:
+    #       name: ursula-kafka-connect
+    #     spec:
+    #       remediationAction: enforce
+    #       severity: high
+    #       object-templates:
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             kind: KafkaUser
+    #             apiVersion: kafka.strimzi.io/v1
+    #             metadata:
+    #               name: connect
+    #               labels:
+    #                 strimzi.io/cluster: ursula-odf
+    #               namespace: openshift-storage
+    #             spec:
+    #               authentication:
+    #                 type: tls
+    #               authorization:
+    #                 type: simple
+    #                 acls:
+    #                   - resource:
+    #                       type: topic
+    #                       name: 'ursula-odf-connect-offsets'
+    #                     operations:
+    #                       - Read
+    #                       - Describe
+    #                       - Write
+    #                       - Create
+    #                     host: '*'
+    #                   - resource:
+    #                       type: topic
+    #                       name: 'ursula-odf-connect-configs'
+    #                     operations:
+    #                       - Read
+    #                       - Describe
+    #                       - Write
+    #                       - Create
+    #                     host: '*'
+    #                   - resource:
+    #                       type: topic
+    #                       name: 'ursula-odf-connect-status'
+    #                     operations:
+    #                       - Read
+    #                       - Describe
+    #                       - Write
+    #                       - Create
+    #                     host: '*'
+    #                   - resource:
+    #                       type: group
+    #                       name: ursula-odf-connect-group
+    #                     operations:
+    #                       - Read
+
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: kafka.strimzi.io/v1
+    #             kind: KafkaConnect
+    #             metadata:
+    #               name: ursula-odf-connect
+    #               namespace: openshift-storage
+    #             spec:
+    #               version: 4.2.0
+    #               replicas: 1
+    #               bootstrapServers: 'ursula-odf-kafka-bootstrap.openshift-storage.svc.cluster.local:9093'
+    #               groupId: ursula-odf-connect-group
+    #               configStorageTopic: ursula-odf-connect-configs
+    #               statusStorageTopic: ursula-odf-connect-status
+    #               offsetStorageTopic: ursula-odf-connect-offsets
+    #               authentication:
+    #                 type: tls
+    #                 certificateAndKey:
+    #                   secretName: connect
+    #                   key: user.key
+    #                   certificate: user.crt
+    #               tls:
+    #                 trustedCertificates:
+    #                   - secretName: ursula-odf-trustbundle
+    #                     pattern: '*.crt'
+    #               config:
+    #                 config.storage.replication.factor: -1
+    #                 offset.storage.replication.factor: -1
+    #                 status.storage.replication.factor: -1
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: kafka.strimzi.io/v1
+    #             kind: KafkaTopic
+    #             metadata:
+    #               name: ursula-odf-connect-configs
+    #               labels:
+    #                 strimzi.io/cluster: ursula-odf
+    #               namespace: openshift-storage
+    #             spec:
+    #               partitions: 10
+    #               replicas: 3
+    #               config:
+    #                 retention.ms: 604800000
+    #                 segment.bytes: 1073741824
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: kafka.strimzi.io/v1
+    #             kind: KafkaTopic
+    #             metadata:
+    #               name: ursula-odf-connect-status
+    #               labels:
+    #                 strimzi.io/cluster: ursula-odf
+    #               namespace: openshift-storage
+    #             spec:
+    #               partitions: 10
+    #               replicas: 3
+    #               config:
+    #                 retention.ms: 604800000
+    #                 segment.bytes: 1073741824
+    #         - complianceType: musthave
+    #           objectDefinition:
+    #             apiVersion: kafka.strimzi.io/v1
+    #             kind: KafkaTopic
+    #             metadata:
+    #               name: ursula-odf-connect-offsets
+    #               labels:
+    #                 strimzi.io/cluster: ursula-odf
+    #               namespace: openshift-storage
+    #             spec:
+    #               partitions: 10
+    #               replicas: 3
+    #               config:
+    #                 retention.ms: 604800000
+    #                 segment.bytes: 1073741824
