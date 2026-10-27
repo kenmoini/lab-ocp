@@ -41,7 +41,7 @@ spec:
       sources:
         - chart: '{{.helmChartName}}'
           helm:
-            valueObject:
+            valuesObject:
               model:
                 mode: uri
                 uri: oci://registry.redhat.io/rhai/modelcar-granite-embedding-english-r2
