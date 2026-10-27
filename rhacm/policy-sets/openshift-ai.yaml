@@ -39,3 +39,4 @@ spec:
     - instance-svcmesh
     - mcp-common
     - mcp-openshift-mcp
+    - mcp-s3

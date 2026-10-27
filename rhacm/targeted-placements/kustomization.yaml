@@ -13,6 +13,7 @@ resources:
   - openclaw-infra/
   - openshift-logging/
   - openshift-gitops/
+  - openshift-storage/
   - quay/
   - redhat-ods-applications/
   - redhat-ods-monitoring/

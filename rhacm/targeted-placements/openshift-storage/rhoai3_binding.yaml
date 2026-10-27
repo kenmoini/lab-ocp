@@ -1,0 +1,16 @@
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: openshift-ai
+  # namespace: openshift-storage
+placementRef:
+  name: openshift-ai
+  apiGroup: cluster.open-cluster-management.io
+  kind: Placement
+subjects:
+  - name: tgtd-mcp-ocp-storage
+    apiGroup: policy.open-cluster-management.io
+    kind: Policy
+
+

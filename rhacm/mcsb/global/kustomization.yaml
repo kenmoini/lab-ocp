@@ -12,6 +12,7 @@ resources:
   - open-cluster-management-policies.yaml
   - openclaw-infra.yaml
   - openshift-monitoring.yaml
+  - openshift-storage.yaml
   - quay.yaml
   # the stackrox namespace must exist for the stackrox policies to work - we make this with a policy
   #- stackrox.yaml
