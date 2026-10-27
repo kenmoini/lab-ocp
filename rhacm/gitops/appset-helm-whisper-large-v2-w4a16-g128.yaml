@@ -22,7 +22,7 @@ spec:
                       - "enabled"
           - list:
               elements:
-              - appName: whisper-lg-v2
+              - appName: wsprlgv2
                 namespace: models-as-a-service
                 helmRepoURL: 'https://redhat-ai-services.github.io/helm-charts/'
                 helmChartName: vllm-kserve
