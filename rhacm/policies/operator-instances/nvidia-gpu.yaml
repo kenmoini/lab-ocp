@@ -55,6 +55,21 @@ spec:
           object-templates:
             - complianceType: musthave
               objectDefinition:
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: device-plugin-config
+                  namespace: nvidia-gpu-operator
+                data:
+                  NVIDIA-RTX-A4000: |-
+                    version: v1
+                    sharing:
+                      timeSlicing:
+                        resources:
+                          - name: nvidia.com/gpu
+                            replicas: 8
+            - complianceType: musthave
+              objectDefinition:
                 apiVersion: nvidia.com/v1
                 kind: ClusterPolicy
                 metadata:
@@ -103,7 +118,7 @@ spec:
                   devicePlugin:
                     config:
                       default: ''
-                      name: ''
+                      name: 'device-plugin-config'
                     mps:
                       root: /run/nvidia/mps
                     enabled: true
