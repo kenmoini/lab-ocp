@@ -24,7 +24,7 @@ resources:
   - appset-helm-whisper-large-v2-w4a16-g128.yaml
   - appset-openshell-proxy.yaml
   # - appset-helm-openshell-workspace.yaml
-  - appset-helm-ursula.yaml
+  # - appset-helm-ursula.yaml
   - appset-install-kyverno.yaml
   - appset-kagent-crds.yaml
   - appset-kagent-kmcp.yaml
