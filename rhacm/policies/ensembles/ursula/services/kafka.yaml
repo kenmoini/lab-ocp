@@ -216,7 +216,7 @@ spec:
             - complianceType: musthave
               objectDefinition:
                 kind: Kafka
-                apiVersion: kafka.strimzi.io/v1beta2
+                apiVersion: kafka.strimzi.io/v1
                 metadata:
                   name: ursula-odf
                   namespace: openshift-storage
