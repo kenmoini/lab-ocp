@@ -41,6 +41,7 @@ spec:
       sources:
         - chart: '{{.helmChartName}}'
           helm:
+            releaseName: '{{.appName}}'
             valuesObject:
               model:
                 mode: uri
