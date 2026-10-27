@@ -44,6 +44,7 @@ spec:
           targetRevision: main
         - chart: '{{.helmChartName}}'
           helm:
+            releaseName: '{{.appName}}'
             valueFiles:
               - "$values/modelcar-images/redhatai/whisper-large-v2-w4a16-g128/values.yaml"
           repoURL: '{{.helmRepoURL}}'
