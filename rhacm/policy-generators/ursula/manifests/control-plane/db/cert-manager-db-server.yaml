@@ -1,0 +1,37 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ursula-db-server
+  namespace: ursula-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  renewBefore: 720h
+  usages:
+    - server auth
+    # - digital signature
+    # - key encipherment
+  duration: 8760h
+  commonName: ursula-db
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: ursula-db-selfsigned-ca
+  secretName: ursula-db-server-tls
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  dnsNames:
+    - ursula-db-lb.internal.mydomain.net
+    - ursula-db-rw
+    - ursula-db-rw.default
+    - ursula-db-rw.default.svc
+    - ursula-db-r
+    - ursula-db-r.default
+    - ursula-db-r.default.svc
+    - ursula-db-ro
+    - ursula-db-ro.default
+    - ursula-db-ro.default.svc
+  secretTemplate:
+    labels:
+      cnpg.io/reload: ""

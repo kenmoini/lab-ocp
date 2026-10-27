@@ -1,0 +1,38 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: ursula-db
+policySetDefaults:
+  generatePolicySetPlacement: false
+policyDefaults:
+  generatePolicyPlacement: false
+  namespace: open-cluster-management-policies
+  categories: 
+  - URS - Ursula
+  controls:
+  - APP - Application
+  standards:
+  - Kemo Labs 2026
+  # remediationAction: enforce
+  severity: low
+  pruneObjectBehavior: DeleteIfCreated
+  consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
+policies:
+  - name: ursula-db
+    manifests:
+      - name: "ursula-db"
+        path: manifests/control-plane/db/
+        complianceType: "musthave"
+        remediationAction: enforce
+  # - name: oce-db
+  #   manifests:
+  #     - name: "oce-db"
+  #       path: manifests/control-plane/db/
+  #       complianceType: "musthave"
+  #       remediationAction: enforce
+  # - name: oce-instance
+  #   manifests:
+  #     - name: "oce-instance"
+  #       path: manifests/control-plane/instance/
+  #       complianceType: "musthave"
+  #       remediationAction: enforce

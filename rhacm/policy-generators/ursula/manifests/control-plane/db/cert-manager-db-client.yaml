@@ -1,0 +1,27 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ursula-db-client
+  namespace: ursula-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  commonName: streaming_replica
+  duration: 8760h
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: ursula-db-selfsigned-ca
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  renewBefore: 720h
+  secretName: ursula-db-client-tls
+  usages:
+    - client auth
+    # - digital signature
+    # - key encipherment
+  secretTemplate:
+    labels:
+      cnpg.io/reload: ""

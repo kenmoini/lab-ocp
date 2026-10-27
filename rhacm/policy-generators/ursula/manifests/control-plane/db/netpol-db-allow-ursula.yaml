@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ursula-system
+  namespace: ursula-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg # or for all CNPG Clusters
+      # cnpg.io/cluster: ursula-db # The label value must be the cluster name
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ursula
+      ports:
+        - port: 8000
+        - port: 5432

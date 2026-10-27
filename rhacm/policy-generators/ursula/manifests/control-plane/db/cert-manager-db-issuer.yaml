@@ -1,0 +1,22 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: ursula-db-selfsigned
+  namespace: ursula-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  selfSigned: {}
+
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: ursula-db-selfsigned-ca
+  namespace: ursula-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
+spec:
+  ca:
+    secretName: ursula-db-tls-ca

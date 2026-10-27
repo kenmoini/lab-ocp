@@ -31,6 +31,9 @@ spec:
     - repoURL: 'https://github.com/kenmoini/lab-ocp'
       targetRevision: main
       path: rhacm/policy-generators/mcp-servers/
+    - repoURL: 'https://github.com/kenmoini/lab-ocp'
+      targetRevision: main
+      path: rhacm/policy-generators/ursula/
 
   project: default
   syncPolicy:

@@ -1,0 +1,30 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: ursula-db
+  namespace: ursula-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  instances: 3
+  enablePDB: false
+  enableSuperuserAccess: true
+  logLevel: info
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 25Gi
+  walStorage:
+    size: 2Gi
+  postgresql:
+    pg_ident:
+    - cnpg_streaming_replica streaming-replica.cnpg.svc.cluster.local streaming_replica
+    extensions:
+    - name: pgvector
+      image:
+        # renovate: suite=trixie-pgdg depName=postgresql-18-pgvector
+        reference: ghcr.io/cloudnative-pg/pgvector:0.8.7-18-trixie
+  certificates:
+    serverTLSSecret: ursula-db-server-tls
+    serverCASecret: ursula-db-server-tls
+    clientCASecret: ursula-db-client-tls
+    replicationTLSSecret: ursula-db-client-tls

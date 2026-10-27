@@ -1,0 +1,19 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: DatabaseRole
+metadata:
+  name: ursula-db-user
+  namespace: ursula-infra
+spec:
+  cluster:
+    name: ursula-db
+  name: ursula
+  comment: "Ursula App Role"
+  login: true
+  superuser: false
+  createdb: false
+  databaseRoleReclaimPolicy: delete
+  inRoles:
+    - pg_monitor
+  passwordSecret:
+    name: ursula-db-ursula

@@ -1,0 +1,15 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: ursula-db-app
+  namespace: ursula-infra
+spec:
+  name: ursula
+  owner: ursula
+  cluster:
+    name: ursula-db
+  allowConnections: true
+  extensions:
+    - name: pgvector
+      ensure: present
