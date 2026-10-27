@@ -44,11 +44,12 @@ spec:
           targetRevision: main
         - chart: '{{.helmChartName}}'
           helm:
+            values: |
+              endpoint:
+                externalRoute:
+                  enabled: false
             valueFiles:
               - "$values/modelcar-images/qwen/qwen3-4b/values.yaml"
-            parameters:
-              - name: endpoint.externalRoute.enabled
-                value: "false"
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:
