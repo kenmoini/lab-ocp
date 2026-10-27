@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-cnpg-replicas
+  namespace: ursula-infra
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/managed-by: cloudnative-pg # or for all CNPG Clusters
+      cnpg.io/cluster: ursula-db # The label value must be the cluster name
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ursula-infra # Namespace where the operator is deployed
+          podSelector:
+            matchLabels:
+              cnpg.io/cluster: ursula-db
+      ports:
+        - port: 8000
+        - port: 5432

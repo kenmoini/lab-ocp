@@ -14,7 +14,6 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              app.kubernetes.io/managed-by: cloudnative-pg
               kubernetes.io/metadata.name: openclaw-infra # Namespace where the operator is deployed
           podSelector:
             matchLabels:
