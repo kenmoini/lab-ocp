@@ -14,6 +14,7 @@ resources:
   - openshift-monitoring.yaml
   - openshift-storage.yaml
   - quay.yaml
+  - ursula-infra.yaml
   # the stackrox namespace must exist for the stackrox policies to work - we make this with a policy
   #- stackrox.yaml
 
