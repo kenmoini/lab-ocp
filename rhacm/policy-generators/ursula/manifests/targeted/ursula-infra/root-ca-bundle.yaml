@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: root-ca-bundle
+  namespace: ursula-system
+data:
+  db-ca.crt: |
+    {{ fromSecret "ursula-infra" "ursula-db-tls-ca" "ca.crt" | autoindent }}
+  kafka-cluster-ca.crt: |
+    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "cluster-ca.crt" | autoindent }}
+  kafka-clients-ca.crt: |
+    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "clients-ca.crt" | autoindent }}
+  cluster-trusted-ca-bundle.crt: |
+    {{ fromConfigMap "ursula-infra" "cluster-trusted-ca-bundle" "ca-bundle.crt" | autoindent }}
+  service-ca.crt: |
+    {{ fromConfigMap "openshift-service-ca" "signing-cabundle" "ca-bundle.crt" | autoindent }}
+  ca-bundle.crt: |
+    {{ fromConfigMap "openshift-service-ca" "signing-cabundle" "ca-bundle.crt" | autoindent }}
+
+    {{ fromConfigMap "ursula-infra" "cluster-trusted-ca-bundle" "ca-bundle.crt" | autoindent }}
+
+    {{ fromSecret "ursula-infra" "ursula-db-tls-ca" "ca.crt" | autoindent }}
+
+    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "clients-ca.crt" | autoindent }}
+    
+    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "cluster-ca.crt" | autoindent }}

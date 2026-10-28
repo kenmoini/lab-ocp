@@ -1,0 +1,8 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-trusted-ca-bundle
+  namespace: ursula-infra
+  labels:
+    config.openshift.io/inject-trusted-cabundle: 'true'

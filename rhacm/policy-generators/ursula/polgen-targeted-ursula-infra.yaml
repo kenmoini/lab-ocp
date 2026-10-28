@@ -1,0 +1,25 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: PolicyGenerator
+metadata:
+  name: targeted-ursula-infra
+policySetDefaults:
+  generatePolicySetPlacement: false
+policyDefaults:
+  generatePolicyPlacement: false
+  namespace: ursula-infra
+  categories: 
+  - URS - Ursula
+  controls:
+  - APP - Application
+  standards:
+  - Kemo Labs 2026
+  severity: low
+  pruneObjectBehavior: DeleteIfCreated
+  consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
+policies:
+  - name: targeted-ursula-infra
+    manifests:
+      - name: "targeted-ursula-infra"
+        path: manifests/targeted/ursula-infra/
+        complianceType: "musthave"
+        remediationAction: enforce

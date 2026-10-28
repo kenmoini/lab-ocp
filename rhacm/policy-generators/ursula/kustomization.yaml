@@ -1,5 +1,6 @@
 generators:
   - policy-generator.yaml
+  - polgen-targeted-ursula-infra.yaml
 
 commonAnnotations:
   argocd.argoproj.io/compare-options: IgnoreExtraneous
