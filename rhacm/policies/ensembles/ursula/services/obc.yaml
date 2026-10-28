@@ -43,3 +43,16 @@ spec:
                     bucketclass: "noobaa-default-bucket-class"
                   storageClassName: "openshift-storage.noobaa.io"
                   objectBucketName: obc-ursula-infra-ursula
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: objectbucket.io/v1alpha1
+                kind: ObjectBucketClaim
+                metadata:
+                  name: s3-ursula-artifacts
+                  namespace: ursula-infra
+                spec:
+                  bucketName: s3-ursula-artifacts
+                  additionalConfig:
+                    bucketclass: "noobaa-default-bucket-class"
+                  storageClassName: "openshift-storage.noobaa.io"
+                  objectBucketName: obc-ursula-infra-s3-ursula-artifacts
