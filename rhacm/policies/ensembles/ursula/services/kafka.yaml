@@ -545,9 +545,9 @@ spec:
                         - name: prometheus
                           resources:
                             limits:
-                              memory: 8Gi
+                              memory: 16Gi
                             requests:
-                              memory: 8Gi
+                              memory: 16Gi
                           env:
                             - name: GOMEMLIMIT
                               value: 8GiB
