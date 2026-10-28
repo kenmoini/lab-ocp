@@ -30,6 +30,12 @@ policies:
         path: manifests/control-plane/db/
         complianceType: "musthave"
         remediationAction: enforce
+  - name: ursula-kafka
+    manifests:
+      - name: "ursula-kafka"
+        path: manifests/control-plane/kafka/
+        complianceType: "musthave"
+        remediationAction: enforce
   # - name: oce-db
   #   manifests:
   #     - name: "oce-db"

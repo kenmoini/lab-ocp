@@ -1,0 +1,15 @@
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaTopic
+metadata:
+  name: ursula-engagement-events
+  labels:
+    strimzi.io/cluster: ursula-odf
+  namespace: ursula-infra
+spec:
+  name: ursula.engagement-events
+  partitions: 10
+  replicas: 3
+  config:
+    retention.ms: 604800000
+    segment.bytes: 1073741824

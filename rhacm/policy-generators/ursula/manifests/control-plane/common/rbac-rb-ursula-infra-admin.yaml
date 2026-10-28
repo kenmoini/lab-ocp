@@ -1,0 +1,15 @@
+# This is also not needed, just for testing during CI
+# ---
+# apiVersion: rbac.authorization.k8s.io/v1
+# kind: RoleBinding
+# metadata:
+#   name: ursula-admin
+#   namespace: ursula-infra
+# roleRef:
+#   apiGroup: rbac.authorization.k8s.io
+#   kind: ClusterRole
+#   name: admin
+# subjects:
+#   - kind: ServiceAccount
+#     name: ursula
+#     namespace: ursula
