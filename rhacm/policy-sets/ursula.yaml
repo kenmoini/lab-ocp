@@ -11,4 +11,5 @@ spec:
     - ursula-obc
     - ursula-db
     - ursula-kafka-instance
+    - ursula-kafka
     - targeted-ursula-infra
