@@ -429,7 +429,7 @@ spec:
                 kind: Secret
                 metadata:
                   name: ursula-kafka-odf
-                  namespace: ursula-infra
+                  namespace: openshift-storage
                 type: Opaque
                 stringData:
                   connect.json: |
@@ -455,7 +455,7 @@ spec:
                 kind: NooBaa
                 metadata:
                   name: noobaa
-                  namespace: ursula-infra
+                  namespace: openshift-storage
                 spec:
                   bucketNotifications:
                     enabled: true
