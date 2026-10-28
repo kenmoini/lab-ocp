@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: root-ca-bundle
-  namespace: ursula-system
+  namespace: ursula
 data:
   db-ca.crt: |
     {{ fromSecret "ursula-infra" "ursula-db-tls-ca" "ca.crt" | autoindent }}
