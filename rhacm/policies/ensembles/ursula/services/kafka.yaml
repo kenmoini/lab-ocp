@@ -33,7 +33,7 @@ spec:
                 kind: ConfigMap
                 metadata:
                   name: console-kafka-metrics
-                  namespace: openshift-storage
+                  namespace: ursula-infra
                   labels:
                     app: console
                 data:
@@ -219,7 +219,7 @@ spec:
                 apiVersion: kafka.strimzi.io/v1
                 metadata:
                   name: ursula-odf
-                  namespace: openshift-storage
+                  namespace: ursula-infra
                   annotations:
                     strimzi.io/internal-cluster-security: |
                             {
@@ -288,7 +288,7 @@ spec:
                   name: ursula-odf
                   labels:
                     strimzi.io/cluster: ursula-odf
-                  namespace: openshift-storage
+                  namespace: ursula-infra
                 spec:
                   replicas: 3
                   roles:
@@ -310,7 +310,7 @@ spec:
                   name: ursula-kafka-odf
                   labels:
                     strimzi.io/cluster: ursula-odf
-                  namespace: openshift-storage
+                  namespace: ursula-infra
                 spec:
                   partitions: 10
                   replicas: 3
@@ -334,17 +334,17 @@ spec:
                 apiVersion: console.streamshub.github.com/v1alpha1
                 metadata:
                   name: kafka-console
-                  namespace: openshift-storage
+                  namespace: ursula-infra
                 spec:
-                  hostname: kafka-console-openshift-storage.apps.tri-force.lab.kemo.network
+                  hostname: kafka-console-ursula-infra.apps.tri-force.lab.kemo.network
                   kafkaClusters:
                     - name: ursula-odf
-                      namespace: openshift-storage
+                      namespace: ursula-infra
                       listener: plain
             #           credentials:
             #             kafkaUser:
             #               name: kafka-console
-            #               namespace: openshift-storage
+            #               namespace: ursula-infra
 
             # - complianceType: musthave
             #   objectDefinition:
@@ -352,7 +352,7 @@ spec:
             #     kind: RoleBinding
             #     metadata:
             #       name: secret-reader-binding
-            #       namespace: openshift-storage
+            #       namespace: ursula-infra
             #     roleRef:
             #       apiGroup: rbac.authorization.k8s.io
             #       kind: Role
@@ -360,14 +360,14 @@ spec:
             #     subjects:
             #     - kind: ServiceAccount
             #       name: kafka-console-console-serviceaccount
-            #       namespace: openshift-storage
+            #       namespace: ursula-infra
             # - complianceType: musthave
             #   objectDefinition:
             #     apiVersion: rbac.authorization.k8s.io/v1
             #     kind: Role
             #     metadata:
             #       name: console-kafkauser-secret-reader
-            #       namespace: openshift-storage
+            #       namespace: ursula-infra
             #     rules:
             #       - apiGroups:
             #           - ""
@@ -386,7 +386,7 @@ spec:
             #       name: kafka-console
             #       labels:
             #         strimzi.io/cluster: ursula-odf
-            #       namespace: openshift-storage
+            #       namespace: ursula-infra
             #     spec:
             #       authentication:
             #         type: tls
@@ -429,14 +429,14 @@ spec:
                 kind: Secret
                 metadata:
                   name: ursula-kafka-odf
-                  namespace: openshift-storage
+                  namespace: ursula-infra
                 type: Opaque
                 stringData:
                   connect.json: |
                     {
                       "name": "ursula_kafka_odf_connection",
                       "notification_protocol": "kafka",
-                      "metadata.broker.list": "ursula-odf-kafka-bootstrap.openshift-storage.svc.cluster.local:9092",
+                      "metadata.broker.list": "ursula-odf-kafka-bootstrap.ursula-infra.svc.cluster.local:9092",
                       "topic": "ursula-kafka-odf"
                     }
 
@@ -455,13 +455,13 @@ spec:
                 kind: NooBaa
                 metadata:
                   name: noobaa
-                  namespace: openshift-storage
+                  namespace: ursula-infra
                 spec:
                   bucketNotifications:
                     enabled: true
                     connections:
                       - name: ursula-kafka-odf
-                        namespace: openshift-storage
+                        namespace: ursula-infra
 
     # - objectDefinition:
     #     apiVersion: policy.open-cluster-management.io/v1
@@ -498,14 +498,14 @@ spec:
     #             subjects:
     #             - kind: ServiceAccount
     #               name: kafka-console-dex       # Service account assigned to the dex pod
-    #               namespace: openshift-storage # The namespace dex is running in
+    #               namespace: ursula-infra # The namespace dex is running in
     #         - complianceType: musthave
     #           objectDefinition:
     #             kind: Secret
     #             apiVersion: v1
     #             metadata:
     #               name: console-dex
-    #               namespace: openshift-storage
+    #               namespace: ursula-infra
     #             type: Opaque
     #             stringData:
     #               config.yaml: |
@@ -531,7 +531,7 @@ spec:
     #                   ## public client may instead be used and `secret` above omitted
     #                   # public: true
     #                   redirectURIs:
-    #                   - '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "console-openshift-console" "kafka-console-openshift-storage" }}/api/auth/callback/oidc'
+    #                   - '{{ (fromClusterClaim "consoleurl.cluster.open-cluster-management.io") | replace "console-openshift-console" "kafka-console-ursula-infra" }}/api/auth/callback/oidc'
     #                   - 'http://localhost:3000/api/auth/callback/oidc'
 
     #                 connectors:
@@ -576,7 +576,7 @@ spec:
     #               name: connect
     #               labels:
     #                 strimzi.io/cluster: ursula-odf
-    #               namespace: openshift-storage
+    #               namespace: ursula-infra
     #             spec:
     #               authentication:
     #                 type: tls
@@ -622,11 +622,11 @@ spec:
     #             kind: KafkaConnect
     #             metadata:
     #               name: ursula-odf-connect
-    #               namespace: openshift-storage
+    #               namespace: ursula-infra
     #             spec:
     #               version: 4.2.0
     #               replicas: 1
-    #               bootstrapServers: 'ursula-odf-kafka-bootstrap.openshift-storage.svc.cluster.local:9093'
+    #               bootstrapServers: 'ursula-odf-kafka-bootstrap.ursula-infra.svc.cluster.local:9093'
     #               groupId: ursula-odf-connect-group
     #               configStorageTopic: ursula-odf-connect-configs
     #               statusStorageTopic: ursula-odf-connect-status
@@ -653,7 +653,7 @@ spec:
     #               name: ursula-odf-connect-configs
     #               labels:
     #                 strimzi.io/cluster: ursula-odf
-    #               namespace: openshift-storage
+    #               namespace: ursula-infra
     #             spec:
     #               partitions: 10
     #               replicas: 3
@@ -668,7 +668,7 @@ spec:
     #               name: ursula-odf-connect-status
     #               labels:
     #                 strimzi.io/cluster: ursula-odf
-    #               namespace: openshift-storage
+    #               namespace: ursula-infra
     #             spec:
     #               partitions: 10
     #               replicas: 3
@@ -683,7 +683,7 @@ spec:
     #               name: ursula-odf-connect-offsets
     #               labels:
     #                 strimzi.io/cluster: ursula-odf
-    #               namespace: openshift-storage
+    #               namespace: ursula-infra
     #             spec:
     #               partitions: 10
     #               replicas: 3
