@@ -7,7 +7,8 @@ metadata:
 spec:
   description: "Set of policies that help deploy and manage the Ursula ensemble on OpenShift clusters."
   policies:
-    - ursula-kafka-instance
+    - ursula-common
     - ursula-obc
     - ursula-db
-    - ursula-common
+    - ursula-kafka-instance
+    - targeted-ursula-infra
