@@ -9,8 +9,8 @@ metadata:
     bucket-provisioner: openshift-storage.noobaa.io-obc
     noobaa-domain: openshift-storage.noobaa.io
 data:
-  BUCKET_HOST: '{{ fromSecret "ursula-infra" "s3-ursula-artifacts" "BUCKET_HOST" | base64dec }}'
-  BUCKET_NAME: '{{ fromSecret "ursula-infra" "s3-ursula-artifacts" "BUCKET_NAME" | base64dec }}'
-  BUCKET_PORT: '{{ fromSecret "ursula-infra" "s3-ursula-artifacts" "BUCKET_PORT" | base64dec }}'
-  BUCKET_REGION: '{{ fromSecret "ursula-infra" "s3-ursula-artifacts" "BUCKET_REGION" | base64dec }}'
-  BUCKET_SUBREGION: '{{ fromSecret "ursula-infra" "s3-ursula-artifacts" "BUCKET_SUBREGION" | base64dec }}'
+  BUCKET_HOST: '{{ fromConfigMap "ursula-infra" "s3-ursula-artifacts" "BUCKET_HOST" }}'
+  BUCKET_NAME: '{{ fromConfigMap "ursula-infra" "s3-ursula-artifacts" "BUCKET_NAME" }}'
+  BUCKET_PORT: '{{ fromConfigMap "ursula-infra" "s3-ursula-artifacts" "BUCKET_PORT" }}'
+  BUCKET_REGION: '{{ fromConfigMap "ursula-infra" "s3-ursula-artifacts" "BUCKET_REGION" }}'
+  BUCKET_SUBREGION: '{{ fromConfigMap "ursula-infra" "s3-ursula-artifacts" "BUCKET_SUBREGION" }}'
