@@ -51,6 +51,11 @@ spec:
               resources:
                 requests:
                   nvidia.com/gpu: 2
+                  memory: 8Gi
+                  cpu: 4
+                limits:
+                  nvidia.com/gpu: 2
+                  memory: 8Gi
               scaling:
                 rawDeployment:
                   # -- The deployment strategy to use to replace existing pods with new ones.
