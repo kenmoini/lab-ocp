@@ -43,6 +43,15 @@ spec:
           helm:
             releaseName: '{{.appName}}'
             valuesObject:
+              resources:
+                requests:
+                  nvidia.com/gpu: 1
+              scaling:
+                rawDeployment:
+                  # -- The deployment strategy to use to replace existing pods with new ones.
+                  deploymentStrategy:
+                    # Can be type of RollingUpdate or Recreate
+                    type: RollingUpdate
               model:
                 mode: uri
                 uri: oci://registry.redhat.io/rhai/modelcar-granite-embedding-english-r2

@@ -47,6 +47,16 @@ spec:
             releaseName: '{{.appName}}'
             valueFiles:
               - "$values/modelcar-images/redhatai/whisper-large-v2-w4a16-g128/values.yaml"
+            valuesObject:
+              resources:
+                requests:
+                  nvidia.com/gpu: 2
+              scaling:
+                rawDeployment:
+                  # -- The deployment strategy to use to replace existing pods with new ones.
+                  deploymentStrategy:
+                    # Can be type of RollingUpdate or Recreate
+                    type: RollingUpdate
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:

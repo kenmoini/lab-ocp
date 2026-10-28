@@ -53,6 +53,18 @@ spec:
                 value: 'false'
               - name: endpoint.auth.enabled
                 value: 'false'
+            valuesObject:
+              nodeSelector:
+                kubernetes.io/hostname: endurance
+              resources:
+                requests:
+                  nvidia.com/gpu: 8
+              scaling:
+                rawDeployment:
+                  # -- The deployment strategy to use to replace existing pods with new ones.
+                  deploymentStrategy:
+                    # Can be type of RollingUpdate or Recreate
+                    type: RollingUpdate
           repoURL: '{{.helmRepoURL}}'
           path: "charts/{{.helmChartName}}"
           targetRevision: '{{.helmRevision}}'
