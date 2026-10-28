@@ -6,11 +6,11 @@ metadata:
   namespace: ursula
 data:
   db-ca.crt: |
-    {{ fromSecret "ursula-infra" "ursula-db-tls-ca" "ca.crt" | autoindent }}
+    {{ fromSecret "ursula-infra" "ursula-db-tls-ca" "ca.crt" | base64dec | autoindent }}
   kafka-cluster-ca.crt: |
-    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "cluster-ca.crt" | autoindent }}
+    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "cluster-ca.crt" | base64dec | autoindent }}
   kafka-clients-ca.crt: |
-    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "clients-ca.crt" | autoindent }}
+    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "clients-ca.crt" | base64dec | autoindent }}
   cluster-trusted-ca-bundle.crt: |
     {{ fromConfigMap "ursula-infra" "cluster-trusted-ca-bundle" "ca-bundle.crt" | autoindent }}
   service-ca.crt: |
@@ -20,8 +20,8 @@ data:
 
     {{ fromConfigMap "ursula-infra" "cluster-trusted-ca-bundle" "ca-bundle.crt" | autoindent }}
 
-    {{ fromSecret "ursula-infra" "ursula-db-tls-ca" "ca.crt" | autoindent }}
+    {{ fromSecret "ursula-infra" "ursula-db-tls-ca" "ca.crt" | base64dec | autoindent }}
 
-    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "clients-ca.crt" | autoindent }}
+    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "clients-ca.crt" | base64dec | autoindent }}
     
-    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "cluster-ca.crt" | autoindent }}
+    {{ fromSecret "ursula-infra" "ursula-odf-trustbundle" "cluster-ca.crt" | base64dec | autoindent }}
