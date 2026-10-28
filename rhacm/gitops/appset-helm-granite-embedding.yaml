@@ -24,9 +24,11 @@ spec:
               elements:
               - appName: granite-embed
                 namespace: models-as-a-service
-                helmRepoURL: 'https://redhat-ai-services.github.io/helm-charts/'
+                #helmRepoURL: 'https://redhat-ai-services.github.io/helm-charts/'
+                helmRepoURL: 'https://github.com/kenmoini/rh-ai-svcs-helm-charts/'
                 helmChartName: vllm-kserve
-                helmRevision: 0.7.1
+                helmRevision: main
+                #helmRevision: 0.7.1
   template:
     metadata:
       name: "{{.name}}-{{.appName}}"
@@ -39,8 +41,7 @@ spec:
     spec:
       project: default
       sources:
-        - chart: '{{.helmChartName}}'
-          helm:
+        - helm:
             releaseName: '{{.appName}}'
             valuesObject:
               resources:
@@ -61,6 +62,7 @@ spec:
                 mode: uri
                 uri: oci://registry.redhat.io/rhai/modelcar-granite-embedding-english-r2
           repoURL: '{{.helmRepoURL}}'
+          path: "charts/{{.helmChartName}}"
           targetRevision: '{{.helmRevision}}'
       destination:
         name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'

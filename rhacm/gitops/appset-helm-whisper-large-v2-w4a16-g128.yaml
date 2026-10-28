@@ -24,9 +24,11 @@ spec:
               elements:
               - appName: wsprlgv2
                 namespace: models-as-a-service
-                helmRepoURL: 'https://redhat-ai-services.github.io/helm-charts/'
+                #helmRepoURL: 'https://redhat-ai-services.github.io/helm-charts/'
+                helmRepoURL: 'https://github.com/kenmoini/rh-ai-svcs-helm-charts/'
                 helmChartName: vllm-kserve
-                helmRevision: 0.7.1
+                helmRevision: main
+                #helmRevision: 0.7.1
   template:
     metadata:
       name: "{{.name}}-{{.appName}}"
@@ -42,8 +44,7 @@ spec:
         - ref: values
           repoURL: 'https://github.com/redhat-ai-services/modelcar-catalog'
           targetRevision: main
-        - chart: '{{.helmChartName}}'
-          helm:
+        - helm:
             releaseName: '{{.appName}}'
             valueFiles:
               - "$values/modelcar-images/redhatai/whisper-large-v2-w4a16-g128/values.yaml"
@@ -63,6 +64,7 @@ spec:
                     # Can be type of RollingUpdate or Recreate
                     type: RollingUpdate
           repoURL: '{{.helmRepoURL}}'
+          path: "charts/{{.helmChartName}}"
           targetRevision: '{{.helmRevision}}'
       destination:
         name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
