@@ -343,7 +343,7 @@ spec:
                         - protocol: TCP
                           port: 9094
                       from:
-                          namespaceSelector:
+                        - namespaceSelector:
                             matchLabels:
                               kubernetes.io/metadata.name: openshift-storage
                     - ports:
