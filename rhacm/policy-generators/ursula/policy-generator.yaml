@@ -1,7 +1,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: PolicyGenerator
 metadata:
-  name: ursula-db
+  name: ursula
 policySetDefaults:
   generatePolicySetPlacement: false
 policyDefaults:
@@ -18,6 +18,12 @@ policyDefaults:
   pruneObjectBehavior: DeleteIfCreated
   consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
 policies:
+  - name: ursula-common
+    manifests:
+      - name: "ursula-common"
+        path: manifests/control-plane/common/
+        complianceType: "musthave"
+        remediationAction: enforce
   - name: ursula-db
     manifests:
       - name: "ursula-db"

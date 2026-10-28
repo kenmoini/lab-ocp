@@ -10,3 +10,4 @@ spec:
     - ursula-kafka-instance
     - ursula-obc
     - ursula-db
+    - ursula-common

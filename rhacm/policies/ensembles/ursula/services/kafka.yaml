@@ -317,6 +317,48 @@ spec:
                   config:
                     retention.ms: 604800000
                     segment.bytes: 1073741824
+            - complianceType: musthave
+              objectDefinition:
+                kind: NetworkPolicy
+                apiVersion: networking.k8s.io/v1
+                metadata:
+                  name: ursula-odf-allow-kafka-access
+                  namespace: ursula-infra
+                spec:
+                  podSelector:
+                    matchLabels:
+                      strimzi.io/cluster: ursula-odf
+                      strimzi.io/kind: Kafka
+                      strimzi.io/name: ursula-odf-kafka
+                  ingress:
+                    - ports:
+                        - protocol: TCP
+                          port: 9090
+                        - protocol: TCP
+                          port: 9091
+                        - protocol: TCP
+                          port: 9092
+                        - protocol: TCP
+                          port: 9093
+                        - protocol: TCP
+                          port: 9094
+                      from:
+                          namespaceSelector:
+                            matchLabels:
+                              kubernetes.io/metadata.name: openshift-storage
+                    - ports:
+                        - protocol: TCP
+                          port: 8443
+                      from:
+                        - podSelector:
+                            matchLabels:
+                              strimzi.io/kind: cluster-operator
+                          namespaceSelector:
+                            matchLabels:
+                              kubernetes.io/metadata.name: openshift-operators
+                  policyTypes:
+                    - Ingress
+
 
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1

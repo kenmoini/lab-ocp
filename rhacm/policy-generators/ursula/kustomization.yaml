@@ -1,5 +1,5 @@
 generators:
-  - policy-generator-db.yaml
+  - policy-generator.yaml
 
 commonAnnotations:
   argocd.argoproj.io/compare-options: IgnoreExtraneous
