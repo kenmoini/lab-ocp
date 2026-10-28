@@ -17,9 +17,9 @@ policyDefaults:
   pruneObjectBehavior: DeleteIfCreated
   consolidateManifests: false # Put each object in its own ConfigurationPolicy in the Policy
 policies:
-  - name: targeted-ursula-infra
+  - name: tgt-ursula-ursula-infra
     manifests:
-      - name: "targeted-ursula-infra"
+      - name: "tgt-ursula-infra"
         path: manifests/targeted/ursula-infra/
         complianceType: "musthave"
         remediationAction: enforce
