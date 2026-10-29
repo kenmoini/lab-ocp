@@ -1,0 +1,73 @@
+---
+# https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: rustfs
+  namespace: openshift-gitops
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - clusters:
+              selector:
+                matchExpressions:
+                  - key: appset/helm-rustfs
+                    operator: In
+                    values:
+                      - "true"
+                      - "enable"
+                      - "enabled"
+          - list:
+              elements:
+              - appName: rustfs
+                namespace: rustfs
+                helmRepoURL: 'https://charts.rustfs.com'
+                helmChartName: rustfs
+                helmRevision: 1.0.4
+  template:
+    metadata:
+      name: "{{.name}}-{{.appName}}"
+      annotations:
+        argocd.argoproj.io/manifest-generate-paths: ".;.."
+        argocd.argoproj.io/compare-options: ServerSideDiff=true,IncludeMutationWebhook=true
+      finalizers:
+        # The set foreground cascading deletion
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      ignoreDifferences:
+        - group: apiextensions.k8s.io
+          jsonPointers:
+            - /status
+          kind: CustomResourceDefinition
+      project: default
+      sources:
+        - chart: '{{.helmChartName}}'
+          helm:
+            valuesObject:
+              ingress:
+                className: openshift-default
+                hosts:
+                - host: rustfs.apps.tri-force.lab.kemo.network
+                  paths: /
+              tls:
+                enabled: false
+          repoURL: '{{.helmRepoURL}}'
+          targetRevision: '{{.helmRevision}}'
+      destination:
+        name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
+        server: '{{if eq .name "hub-cluster"}}https://kubernetes.default.svc{{end}}'
+        namespace: "{{.namespace}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - SkipDryRunOnMissingResource=true
+          - ServerSideApply=true
+          - RespectIgnoreDifferences=true
+        retry:
+          limit: 5
