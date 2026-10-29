@@ -6,7 +6,7 @@ metadata:
 spec:
   acme:
     email: ken@kenmoini.com
-    server: https://acme.apps.lab.kemo.dev/acme/acme/directory
+    server: https://step-ca.apps.lab.kemo.dev/acme/acme/directory
     privateKeySecretRef:
       name: internal-stepca-acct-key
     solvers:
