@@ -1,0 +1,75 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: internal-stepca
+spec:
+  acme:
+    email: ken@kenmoini.com
+    server: https://acme.apps.lab.kemo.dev/acme/acme/directory
+    privateKeySecretRef:
+      name: internal-stepca-acct-key
+    solvers:
+      - dns01:
+          webhook:
+            groupName: acme.pdns.kemo.labs
+            solverName: pdns
+            config:
+              # Base URL of the PowerDNS server.
+              host: https://pdns-auth.apps.lab.kemo.dev
+
+              # Reference to the Kubernetes secret containing the API key.
+              apiKeySecretRef:
+                name: pdns-api-key
+                key: api-key
+
+              ###
+              ### OPTIONAL
+              ###
+
+              # API Key scheme https://www.iana.org/assignments/http-authschemes/http-authschemes.xhtml
+              # default: no scheme ""
+              apiKeyScheme: ""
+
+              # Header name for API key
+              #
+              # This defaults to X-API-Key when unset but supports customizations
+              # e.g. Authorization 
+              apiKeyHeaderName: ""
+
+              # Server ID for the PowerDNS API.
+              # When unset, defaults to "localhost".
+              #
+              # This should generally be left unset, and used
+              # only if you have a proxy in front of the PowerDNS API
+              # that requires a different value.
+              serverID: localhost
+
+              # Request headers when connecting to the PowerDNS API.
+              # The following headers are set by default, but can be overriden:
+              #   X-API-Key
+              #   Content-Type
+              # headers:
+              #   key: value
+
+              # # CA bundle for TLS connections
+              # # When unset, the default system certificate store is used.
+              # caBundle: BASE64_ENCODED_CA_BUNDLE
+
+              # TTL for DNS records
+              # (in seconds)
+              ttl: 120
+
+              # Timeout for requests to the PDNS api server
+              # (in seconds)
+              timeout: 30
+
+              # If the server is only allowed to edit certain zones; the
+              # default is an empty list, allowing everything.
+              # *IMPORTANT*: Remember the trailing dot to make the zone-name
+              # fully qualified.
+              allowed-zones:
+                - kemo.dev.
+                - kemo.labs.
+                - kemo.network.
+                - moini.mannor.
