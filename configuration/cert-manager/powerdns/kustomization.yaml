@@ -5,3 +5,4 @@ kind: Kustomization
 resources:
   - clusterissuer.yaml
   - rbac-nonroot.yaml
+  - trusted-ca.yaml
