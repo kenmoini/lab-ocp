@@ -676,6 +676,14 @@ spec:
         realmRoles:
           - openshell-admin
           - openshell-user
+      # Service account for the Ursula client. Grant it admin so automation can manage providers/config;
+      # drop openshell-admin if CI should only drive sandboxes.
+      - username: service-account-ursula
+        enabled: true
+        serviceAccountClientId: ursula
+        realmRoles:
+          - openshell-admin
+          - openshell-user
       # Example local users - uncomment for a quick smoke test, or federate an IdP instead
       - username: openshell-admin
         enabled: true
