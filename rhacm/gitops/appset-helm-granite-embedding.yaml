@@ -85,6 +85,8 @@ spec:
               model:
                 mode: uri
                 uri: oci://registry.redhat.io/rhai/modelcar-granite-embedding-english-r2
+                args:
+                  - "--gpu-memory-utilization=0.50"
           repoURL: '{{.helmRepoURL}}'
           path: "charts/{{.helmChartName}}"
           targetRevision: '{{.helmRevision}}'

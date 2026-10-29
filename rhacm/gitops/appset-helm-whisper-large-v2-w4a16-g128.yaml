@@ -49,6 +49,9 @@ spec:
             valueFiles:
               - "$values/modelcar-images/redhatai/whisper-large-v2-w4a16-g128/values.yaml"
             valuesObject:
+              model:
+                args:
+                  - "--gpu-memory-utilization=0.50"
               inferenceService:
                 extraLabels:
                   models.kemo.ai/size: small
