@@ -4,3 +4,4 @@ kind: Kustomization
 
 resources:
   - clusterissuer.yaml
+  - rbac-nonroot.yaml
