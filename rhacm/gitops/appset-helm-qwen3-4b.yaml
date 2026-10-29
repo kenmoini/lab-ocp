@@ -54,6 +54,23 @@ spec:
               - name: endpoint.auth.enabled
                 value: 'false'
             valuesObject:
+              inferenceService:
+                extraLabels:
+                  models.kemo.ai/size: small
+                affinity:
+                  podAntiAffinity:
+                    preferredDuringSchedulingIgnoredDuringExecution:
+                      - weight: 100
+                        podAffinityTerm:
+                          labelSelector:
+                            matchExpressions:
+                              - key: models.kemo.ai/size
+                                operator: NotIn
+                                values:
+                                  - "medium"
+                                  - "small"
+                                  - "xsmall"
+                          topologyKey: kubernetes.io/hostname
               nodeSelector:
                 kubernetes.io/hostname: endurance
               resources:

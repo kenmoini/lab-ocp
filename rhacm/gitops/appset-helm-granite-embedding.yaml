@@ -70,11 +70,11 @@ spec:
                           topologyKey: kubernetes.io/hostname
               resources:
                 requests:
-                  nvidia.com/gpu: 1
+                  nvidia.com/gpu: 2
                   memory: 8Gi
                   cpu: 4
                 limits:
-                  nvidia.com/gpu: 1
+                  nvidia.com/gpu: 2
                   memory: 8Gi
               scaling:
                 rawDeployment:
