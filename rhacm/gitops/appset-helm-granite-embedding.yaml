@@ -44,6 +44,30 @@ spec:
         - helm:
             releaseName: '{{.appName}}'
             valuesObject:
+              inferenceService:
+                extraLabels:
+                  models.kemo.ai/size: xsmall
+                affinity:
+                  podAffinity:
+                    preferredDuringSchedulingIgnoredDuringExecution:
+                      - weight: 100
+                        podAffinityTerm:
+                          labelSelector:
+                            matchExpressions:
+                              - key: models.kemo.ai/size
+                                operator: In
+                                values:
+                                  - "xsmall"
+                          topologyKey: kubernetes.io/hostname
+                      - weight: 50
+                        podAffinityTerm:
+                          labelSelector:
+                            matchExpressions:
+                              - key: models.kemo.ai/size
+                                operator: In
+                                values:
+                                  - "small"
+                          topologyKey: kubernetes.io/hostname
               resources:
                 requests:
                   nvidia.com/gpu: 1

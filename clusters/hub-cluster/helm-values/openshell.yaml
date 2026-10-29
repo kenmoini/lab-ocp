@@ -82,8 +82,8 @@ server:
       createNamespace: true
   drivers:
     kubernetes:
-      workspaceMode: operator
-      operatorNamespaceLabel: "openshell.ai/sandbox-workspace="
+      workspaceMode: shared
+      #operatorNamespaceLabel: "openshell.ai/sandbox-workspace="
       allowDriverConfig: true
       resourceAdmission:
         enabled: false

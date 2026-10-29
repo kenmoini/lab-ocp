@@ -49,6 +49,30 @@ spec:
             valueFiles:
               - "$values/modelcar-images/redhatai/whisper-large-v2-w4a16-g128/values.yaml"
             valuesObject:
+              inferenceService:
+                extraLabels:
+                  models.kemo.ai/size: small
+                affinity:
+                  podAffinity:
+                    preferredDuringSchedulingIgnoredDuringExecution:
+                      - weight: 100
+                        podAffinityTerm:
+                          labelSelector:
+                            matchExpressions:
+                              - key: models.kemo.ai/size
+                                operator: In
+                                values:
+                                  - "small"
+                          topologyKey: kubernetes.io/hostname
+                      - weight: 50
+                        podAffinityTerm:
+                          labelSelector:
+                            matchExpressions:
+                              - key: models.kemo.ai/size
+                                operator: In
+                                values:
+                                  - "xsmall"
+                          topologyKey: kubernetes.io/hostname
               resources:
                 requests:
                   nvidia.com/gpu: 2
