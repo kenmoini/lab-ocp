@@ -85,6 +85,8 @@ server:
       workspaceMode: shared
       #operatorNamespaceLabel: "openshell.ai/sandbox-workspace="
       allowDriverConfig: true
+      image_pull_secrets:
+        - ursula-image-pull-secret
       resourceAdmission:
         enabled: false
         # requiredLabels:
