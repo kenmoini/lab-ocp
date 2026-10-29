@@ -49,6 +49,16 @@ image:
   aiSidecar: {repository: "", tag: ""}
   mcpTools: {repository: "", tag: ""}
 
+# RBAC. The in-namespace pods-reader (backing the k8s preflight) is always granted
+# when serviceAccount.enabled. The credentials block grants the API ServiceAccount
+# Secret CRUD in a SEPARATE namespace where Ursula manages per-engagement credential
+# Secrets (the OpenShell credential driver reads these). NOTE: that namespace must
+# already exist, or install fails — set rbac.enabled=false to skip.
+credentials:
+  rbac:
+    enabled: true
+    namespace: ursula-credentials
+
 # --------------------------------------------------------------------------
 # Authn at the dashboard/API. oidc validates Keycloak bearer tokens (the §7/D3
 # human approval gate); dev-bypass disables it (demo fallback only).

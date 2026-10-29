@@ -18,6 +18,7 @@ extraArgs:
   - --pdns-server=https://pdns-auth.apps.lab.kemo.dev
   - --pdns-server-id=localhost
   - --pdns-api-key=$(PDNS_API_KEY)
+  - --txt-wildcard-replacement=wc
 extraVolumes:
   - name: pdns-api-key
     secret:
