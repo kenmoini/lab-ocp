@@ -56,7 +56,7 @@ spec:
             valuesObject:
               inferenceService:
                 extraLabels:
-                  models.kemo.ai/size: small
+                  models.kemo.ai/size: large
                 affinity:
                   podAntiAffinity:
                     preferredDuringSchedulingIgnoredDuringExecution:
@@ -71,8 +71,8 @@ spec:
                                   - "small"
                                   - "xsmall"
                           topologyKey: kubernetes.io/hostname
-              nodeSelector:
-                kubernetes.io/hostname: endurance
+              # nodeSelector:
+              #   kubernetes.io/hostname: endurance
               resources:
                 requests:
                   nvidia.com/gpu: 8
