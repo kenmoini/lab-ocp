@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rustfs-rc
+  namespace: rustfs
+  labels:
+    app: rustfs-rc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rustfs-rc
+  template:
+    metadata:
+      labels:
+        app: rustfs-rc
+    spec:
+      serviceAccountName: hub-cluster-rustfs
+      containers:
+        - name: rustfs-rc
+          image: docker.io/rustfs/rc:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          command: ["/bin/sh", "-c"]
+          args:
+            - sleep infinity
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          env:
+            - name: HOME
+              value: /tmp
+          envFrom:
+            - secretRef:
+                name: rustfs-root-key

@@ -1,0 +1,18 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: s3
+  namespace: rustfs
+spec:
+  host: s3.apps.tri-force.lab.kemo.network
+  to:
+    kind: Service
+    name: hub-cluster-rustfs-svc
+    weight: 100
+  port:
+    targetPort: endpoint
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

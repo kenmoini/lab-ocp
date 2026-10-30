@@ -5,3 +5,5 @@ kind: Kustomization
 resources:
   - ext-sec-root-key.yaml
   - rbac-nonroot.yaml
+  - route-console.yaml
+  - route-s3.yaml

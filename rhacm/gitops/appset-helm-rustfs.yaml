@@ -47,30 +47,13 @@ spec:
         - repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
           path: configuration/rustfs
+        - ref: values
+          repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
         - chart: '{{.helmChartName}}'
           helm:
-            valuesObject:
-              mode:
-                standalone:
-                  enabled: true
-                distributed:
-                  enabled: false
-              metrics:
-                enabled: true
-              storageclass:
-                name: ocs-storagecluster-cephfs
-                dataStorageSize: 20Gi
-              secret:
-                existingSecret: rustfs-root-key 
-              ingress:
-                className: openshift-default
-                hosts:
-                - host: rustfs.apps.tri-force.lab.kemo.network
-                  paths:
-                    - path: /
-                      pathType: ImplementationSpecific
-              tls:
-                enabled: false
+            valueFiles:
+              - "$values/clusters/{{ .name }}/helm-values/{{ .appName }}.yaml"
           repoURL: '{{.helmRepoURL}}'
           targetRevision: '{{.helmRevision}}'
       destination:

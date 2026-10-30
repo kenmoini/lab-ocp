@@ -1,0 +1,33 @@
+# A simple dev deployment of RustFS with enablement of sending bucket notifications
+mode:
+  standalone:
+    enabled: true
+  distributed:
+    enabled: false
+
+secret:
+  existingSecret: rustfs-root-key
+
+tls:
+  enabled: false
+
+metrics:
+  enabled: true
+
+extraEnv:
+  - name: RUSTFS_NOTIFY_ENABLE
+    value: "true"
+  - name: RUSTFS_OUTBOUND_ALLOW_ORIGINS
+    value: "*"
+
+storageclass:
+  name: ocs-storagecluster-cephfs
+  dataStorageSize: 20Gi
+
+ingress:
+  className: openshift-default
+  hosts:
+  - host: rustfs.apps.tri-force.lab.kemo.network
+    paths:
+      - path: /
+        pathType: ImplementationSpecific
