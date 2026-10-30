@@ -56,3 +56,18 @@ spec:
                     bucketclass: "noobaa-default-bucket-class"
                   storageClassName: "openshift-storage.noobaa.io"
                   objectBucketName: obc-ursula-infra-s3-ursula-artifacts
+            - complianceType: musthave
+              objectDefinition:
+                kind: PersistentVolumeClaim
+                apiVersion: v1
+                metadata:
+                  name: bn-pvc
+                  namespace: openshift-storage
+                spec:
+                  accessModes:
+                    - ReadWriteMany
+                  resources:
+                    requests:
+                      storage: 25Gi
+                  storageClassName: ocs-storagecluster-cephfs
+                  volumeMode: Filesystem
