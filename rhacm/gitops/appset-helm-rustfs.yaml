@@ -56,6 +56,9 @@ spec:
                 className: openshift-default
                 hosts:
                 - host: rustfs.apps.tri-force.lab.kemo.network
+                  paths:
+                    - path: /
+                      pathType: Prefix
               tls:
                 enabled: false
           repoURL: '{{.helmRepoURL}}'
