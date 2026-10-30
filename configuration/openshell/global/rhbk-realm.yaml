@@ -68,6 +68,10 @@ spec:
       secret:
         name: openshell-sso-clients
         key: ursulaClientSecret
+    URSULA_WEB_CLIENT_SECRET:
+      secret:
+        name: openshell-sso-clients
+        key: ursulaWebClientSecret
   realm:
     id: openshell
     realm: openshell
@@ -663,6 +667,45 @@ spec:
           - profile
           - email
           - roles
+
+      - name: Ursula Web
+        description: Confidential BFF client for the Ursula web UI (OIDC Authorization Code)
+        enabled: true
+        clientId: ursula-web
+        protocol: openid-connect
+        publicClient: false              # confidential: the API holds the client secret
+        standardFlowEnabled: true        # Authorization Code flow (the BFF login)
+        serviceAccountsEnabled: false
+        directAccessGrantsEnabled: false # no password grant; login is via the browser flow
+        implicitFlowEnabled: false
+        fullScopeAllowed: true
+        redirectUris:
+          - https://ursula.apps.tri-force.lab.kemo.network/api/v1/auth/oidc/callback
+        webOrigins:
+          - https://ursula.apps.tri-force.lab.kemo.network
+        attributes:
+          # The app does NOT send PKCE (confidential client + secret), so do not require it.
+          post.logout.redirect.uris: "https://ursula.apps.tri-force.lab.kemo.network/*"
+        defaultClientScopes:
+          - basic
+          - profile
+          - email
+          - roles
+          - web-origins
+          - acr
+        protocolMappers:
+          # Emit the realm group memberships as a `groups` claim the API maps to roles.
+          - name: groups
+            protocol: openid-connect
+            protocolMapper: oidc-group-membership-mapper
+            config:
+              claim.name: groups
+              full.path: "false"
+              multivalued: "true"
+              id.token.claim: "true"
+              access.token.claim: "true"
+              userinfo.token.claim: "true"
+        secret: "${URSULA_WEB_CLIENT_SECRET}"
 
     # ------------------------------------------------------------------
     # Users
