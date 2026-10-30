@@ -50,6 +50,15 @@ spec:
         - chart: '{{.helmChartName}}'
           helm:
             valuesObject:
+              mode:
+                standalone:
+                  enabled: true
+                distributed:
+                  enabled: false
+              metrics:
+                enabled: true
+              storageClass:
+                name: openshift-storage.noobaa.io
               secret:
                 existingSecret: rustfs-root-key 
               ingress:
