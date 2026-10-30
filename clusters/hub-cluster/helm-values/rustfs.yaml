@@ -27,13 +27,13 @@ extraEnvFrom:
       name: kafka-notification-config
       optional: true
 
-extraVolumes:
-  - name: event-tmp-dir
-    emptyDir: {}
+# extraVolumes:
+#   - name: event-tmp-dir
+#     emptyDir: {}
 
-extraVolumeMounts:
-  - name: event-tmp-dir
-    mountPath: /opt/rustfs/events
+# extraVolumeMounts:
+#   - name: event-tmp-dir
+#     mountPath: /opt/rustfs/events
 
 storageclass:
   name: ocs-storagecluster-cephfs
@@ -58,7 +58,7 @@ extraManifests:
       RUSTFS_NOTIFY_KAFKA_TOPIC_URSULA: "ursula.engagement-events"
       RUSTFS_NOTIFY_KAFKA_TLS_ENABLE_URSULA: "false"
       RUSTFS_NOTIFY_KAFKA_SASL_ENABLE_URSULA: "false"
-      RUSTFS_NOTIFY_KAFKA_BROKERS: "ursula-odf-kafka-bootstrap.ursula-infra.svc.cluster.local:9092"
-      RUSTFS_NOTIFY_KAFKA_TOPIC: "ursula.engagement-events"
-      RUSTFS_NOTIFY_KAFKA_TLS_ENABLE: "false"
-      RUSTFS_NOTIFY_KAFKA_SASL_ENABLE: "false"
+      # RUSTFS_NOTIFY_KAFKA_BROKERS: "ursula-odf-kafka-bootstrap.ursula-infra.svc.cluster.local:9092"
+      # RUSTFS_NOTIFY_KAFKA_TOPIC: "ursula.engagement-events"
+      # RUSTFS_NOTIFY_KAFKA_TLS_ENABLE: "false"
+      # RUSTFS_NOTIFY_KAFKA_SASL_ENABLE: "false"
