@@ -15,7 +15,7 @@ spec:
     deletionPolicy: Retain
     template:
       engineVersion: v2
-      type: kubernetes.io/basic-auth
+      type: Opaque
   data:
     - secretKey: AWS_ACCESS_KEY_ID
       remoteRef:
