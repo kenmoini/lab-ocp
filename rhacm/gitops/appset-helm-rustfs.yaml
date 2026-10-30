@@ -24,9 +24,11 @@ spec:
               elements:
               - appName: rustfs
                 namespace: rustfs
-                helmRepoURL: 'https://charts.rustfs.com'
+                # helmRepoURL: 'https://charts.rustfs.com'
+                helmRepoURL: 'https://github.com/kenmoini/rustfs/'
                 helmChartName: rustfs
-                helmRevision: 1.0.4
+                # helmRevision: 1.0.4
+                helmRevision: add-extra-envfrom
   template:
     metadata:
       name: "{{.name}}-{{.appName}}"
@@ -50,11 +52,11 @@ spec:
         - ref: values
           repoURL: 'https://github.com/kenmoini/lab-ocp'
           targetRevision: main
-        - chart: '{{.helmChartName}}'
-          helm:
+        - helm:
             valueFiles:
               - "$values/clusters/{{ .name }}/helm-values/{{ .appName }}.yaml"
           repoURL: '{{.helmRepoURL}}'
+          path: "helm/{{.helmChartName}}"
           targetRevision: '{{.helmRevision}}'
       destination:
         name: '{{if ne .name "hub-cluster"}}{{.name}}{{end}}'
