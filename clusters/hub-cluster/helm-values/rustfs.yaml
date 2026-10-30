@@ -27,13 +27,13 @@ extraEnvFrom:
       name: kafka-notification-config
       optional: true
 
-extraVolumes:
-  - name: event-tmp-dir
-    emptyDir: {}
+# extraVolumes:
+#   - name: event-tmp-dir
+#     emptyDir: {}
 
-extraVolumeMounts:
-  - name: event-tmp-dir
-    mountPath: /opt/rustfs/events/rustfs-kafka-ursula
+# extraVolumeMounts:
+#   - name: event-tmp-dir
+#     mountPath: /opt/rustfs/events/rustfs-kafka-ursula
 
 storageclass:
   name: ocs-storagecluster-cephfs
