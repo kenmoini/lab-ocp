@@ -17,11 +17,11 @@ spec:
       engineVersion: v2
       type: Opaque
   data:
-    - secretKey: AWS_ACCESS_KEY_ID
+    - secretKey: RUSTFS_ACCESS_KEY
       remoteRef:
         key: ursula/services/rustfs
         property: AWS_ACCESS_KEY_ID
-    - secretKey: AWS_SECRET_ACCESS_KEY
+    - secretKey: RUSTFS_SECRET_KEY
       remoteRef:
         key: ursula/services/rustfs
         property: AWS_SECRET_ACCESS_KEY
