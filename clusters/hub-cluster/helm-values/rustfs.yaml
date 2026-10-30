@@ -27,6 +27,14 @@ extraEnvFrom:
       name: kafka-notification-config
       optional: true
 
+extraVolumes:
+  - name: event-tmp-dir
+    emptyDir: {}
+
+extraVolumeMounts:
+  - name: event-tmp-dir
+    mountPath: /opt/rustfs/events
+
 storageclass:
   name: ocs-storagecluster-cephfs
   dataStorageSize: 20Gi
