@@ -68,7 +68,7 @@ spec:
                 - host: rustfs.apps.tri-force.lab.kemo.network
                   paths:
                     - path: /
-                      pathType: Prefix
+                      pathType: ImplementationSpecific
               tls:
                 enabled: false
           repoURL: '{{.helmRepoURL}}'
