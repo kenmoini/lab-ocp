@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-rustfs
+  namespace: ursula-infra
+spec:
+  podSelector: {}
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: rustfs
+      ports:
+        - port: 9000
+        - port: 9091
+        - port: 9092
+        - port: 9093
+        - port: 9094
+        - port: 5432
+  policyTypes:
+    - Ingress
