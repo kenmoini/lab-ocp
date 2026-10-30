@@ -10,6 +10,6 @@ spec:
   cluster:
     name: ursula-db
   allowConnections: true
-  extensions:
-    - name: pgvector
-      ensure: present
+  # extensions:
+  #   - name: pgvector
+  #     ensure: present
