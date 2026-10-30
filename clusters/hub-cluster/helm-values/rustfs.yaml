@@ -48,3 +48,5 @@ extraManifests:
     data:
       RUSTFS_NOTIFY_KAFKA_BROKERS_URSULA: "ursula-odf-kafka-bootstrap.ursula-infra.svc.cluster.local:9092"
       RUSTFS_NOTIFY_KAFKA_TOPIC_URSULA: "ursula.engagement-events"
+      RUSTFS_NOTIFY_KAFKA_TLS_ENABLE_URSULA: "false"
+      RUSTFS_NOTIFY_KAFKA_SASL_ENABLE_URSULA: "false"
