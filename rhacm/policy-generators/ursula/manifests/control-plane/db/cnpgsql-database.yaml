@@ -10,6 +10,7 @@ spec:
   cluster:
     name: ursula-db
   allowConnections: true
+  databaseReclaimPolicy: delete
   # extensions:
   #   - name: pgvector
   #     ensure: present
