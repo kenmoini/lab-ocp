@@ -1,0 +1,27 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: vault-rustfs-root-key
+  namespace: rustfs
+spec:
+  refreshInterval: "3600s"
+  secretStoreRef:
+    name: kemo-labs-vault
+    kind: ClusterSecretStore
+  target:
+    name: rustfs-root-key
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    template:
+      engineVersion: v2
+      type: kubernetes.io/basic-auth
+  data:
+    - secretKey: AWS_ACCESS_KEY_ID
+      remoteRef:
+        key: ursula/services/rustfs
+        property: AWS_ACCESS_KEY_ID
+    - secretKey: AWS_SECRET_ACCESS_KEY
+      remoteRef:
+        key: ursula/services/rustfs
+        property: AWS_SECRET_ACCESS_KEY

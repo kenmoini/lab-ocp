@@ -44,9 +44,14 @@ spec:
           kind: CustomResourceDefinition
       project: default
       sources:
+        - repoURL: 'https://github.com/kenmoini/lab-ocp'
+          targetRevision: main
+          path: configuration/rustfs
         - chart: '{{.helmChartName}}'
           helm:
             valuesObject:
+              secret:
+                existingSecret: rustfs-root-key 
               ingress:
                 className: openshift-default
                 hosts:
