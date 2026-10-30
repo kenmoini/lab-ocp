@@ -57,8 +57,9 @@ spec:
                   enabled: false
               metrics:
                 enabled: true
-              storageClass:
+              storageclass:
                 name: openshift-storage.noobaa.io
+                dataStorageSize: 20Gi
               secret:
                 existingSecret: rustfs-root-key 
               ingress:
