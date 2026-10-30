@@ -58,7 +58,7 @@ spec:
               metrics:
                 enabled: true
               storageclass:
-                name: openshift-storage.noobaa.io
+                name: ocs-storagecluster-cephfs
                 dataStorageSize: 20Gi
               secret:
                 existingSecret: rustfs-root-key 
