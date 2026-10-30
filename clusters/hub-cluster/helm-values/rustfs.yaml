@@ -17,8 +17,15 @@ metrics:
 extraEnv:
   - name: RUSTFS_NOTIFY_ENABLE
     value: "true"
+  - name: RUSTFS_NOTIFY_KAFKA_ENABLE_URSULA
+    value: "true"
   - name: RUSTFS_OUTBOUND_ALLOW_ORIGINS
     value: "*"
+
+extraEnvFrom:
+  - configMapRef:
+      name: kafka-notification-config
+      optional: true
 
 storageclass:
   name: ocs-storagecluster-cephfs
@@ -31,3 +38,13 @@ ingress:
     paths:
       - path: /
         pathType: ImplementationSpecific
+
+extraManifests:
+  - apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: kafka-notification-config
+      namespace: rustfs
+    data:
+      RUSTFS_NOTIFY_KAFKA_BROKERS_URSULA: "ursula-odf-kafka-bootstrap.ursula-infra.svc.cluster.local:9092"
+      RUSTFS_NOTIFY_KAFKA_TOPIC_URSULA: "ursula.engagement-events"
