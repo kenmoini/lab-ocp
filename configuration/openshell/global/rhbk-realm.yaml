@@ -113,6 +113,19 @@ spec:
     # ------------------------------------------------------------------
     roles:
       realm:
+        - name: ursula-admin
+          description: Full administrative access to Ursula
+          composite: false
+          clientRole: false
+        - name: ursula-auditor
+          description: Audit user access to Ursula (read-only global access)
+          composite: false
+          clientRole: false
+        - name: ursula-user
+          description: Standard user access to Ursula (create Engagements mostly)
+          composite: false
+          clientRole: false
+
         - name: openshell-admin
           description: Full administrative access to OpenShell (provider CRUD, config, policy approvals)
           composite: false
@@ -141,6 +154,7 @@ spec:
               - offline_access
               - uma_authorization
               - openshell-user
+              - ursula-user
     defaultRole:
       name: default-roles-openshell
 
@@ -148,6 +162,26 @@ spec:
     # Groups - assign users (or map an IdP) to these to grant roles
     # ------------------------------------------------------------------
     groups:
+      - name: ursula-admins
+        path: /ursula-admins
+        realmRoles:
+          - ursula-admin
+          - ursula-auditor
+          - ursula-user
+          - openshell-admin
+          - openshell-auditor
+          - openshell-user
+      - name: ursula-auditors
+        path: /ursula-auditors
+        realmRoles:
+          - ursula-auditor
+          - openshell-auditor
+      - name: ursula-users
+        path: /ursula-users
+        realmRoles:
+          - ursula-user
+          - openshell-user
+
       - name: openshell-admins
         path: /openshell-admins
         realmRoles:
@@ -719,6 +753,8 @@ spec:
         realmRoles:
           - openshell-admin
           - openshell-user
+          - ursula-admin
+          - ursula-user
       # Service account for the Ursula client. Grant it admin so automation can manage providers/config;
       # drop openshell-admin if CI should only drive sandboxes.
       - username: service-account-ursula
@@ -727,7 +763,46 @@ spec:
         realmRoles:
           - openshell-admin
           - openshell-user
+          - ursula-admin
+          - ursula-user
       # Example local users - uncomment for a quick smoke test, or federate an IdP instead
+      - username: ursula-admin
+        enabled: true
+        email: admin@ursula.kemo.labs
+        emailVerified: true
+        firstName: Admin
+        lastName: Ursula
+        credentials:
+          - type: password
+            value: changeme
+            temporary: true
+        groups:
+          - /ursula-admins
+      - username: ursula-auditor
+        enabled: true
+        email: auditor@ursula.kemo.labs
+        emailVerified: true
+        firstName: Auditor
+        lastName: OpenShell
+        credentials:
+          - type: password
+            value: changeme
+            temporary: true
+        groups:
+          - /ursula-auditors
+      - username: ursula-user
+        enabled: true
+        email: user@ursula.kemo.labs
+        emailVerified: true
+        firstName: User
+        lastName: OpenShell
+        credentials:
+          - type: password
+            value: changeme
+            temporary: true
+        groups:
+          - /ursula-users
+
       - username: openshell-admin
         enabled: true
         email: admin@openshell.kemo.labs
