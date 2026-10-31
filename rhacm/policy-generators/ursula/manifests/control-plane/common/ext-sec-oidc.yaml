@@ -1,0 +1,23 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: vault-ursula-web-oidc
+  namespace: ursula
+spec:
+  refreshInterval: "3600s"
+  secretStoreRef:
+    name: kemo-labs-vault
+    kind: ClusterSecretStore
+  target:
+    name: ursula-oidc
+    creationPolicy: Owner
+    deletionPolicy: Retain
+    template:
+      engineVersion: v2
+      type: Opaque
+  data:
+    - secretKey: clientSecret
+      remoteRef:
+        key: kemo.labs/oauth/keycloak/openshell
+        property: ursulaWebClientSecret
