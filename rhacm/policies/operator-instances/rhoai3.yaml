@@ -610,7 +610,7 @@ spec:
                     disableHealthCheck: false
                     customExtraParams: '{"tls":"false"}'
                     externalDB:
-                      host: mlpipeline.models-as-a-service.svc.cluster.local
+                      host: mlpipeline.models-as-a-service.svc
                       port: "3306"
                       pipelineDBName: mlpipeline
                       username: mlpipeline
