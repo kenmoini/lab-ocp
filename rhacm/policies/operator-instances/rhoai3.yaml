@@ -598,8 +598,8 @@ spec:
                 spec:
                   apiServer:
                     cABundle:
-                      configMapKey: service-ca.crt
-                      configMapName: openshift-service-ca.crt
+                      configMapKey: combo-ca
+                      configMapName: combo-ca.crt
                     caBundleFileMountPath: ''
                     caBundleFileName: ''
                     deploy: true
