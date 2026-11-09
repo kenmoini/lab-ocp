@@ -598,8 +598,8 @@ spec:
                 spec:
                   apiServer:
                     cABundle:
-                      configMapKey: combo-ca
-                      configMapName: combo-ca.crt
+                      configMapKey: combo-ca.crt
+                      configMapName: combo-ca
                     caBundleFileMountPath: ''
                     caBundleFileName: ''
                     deploy: true
