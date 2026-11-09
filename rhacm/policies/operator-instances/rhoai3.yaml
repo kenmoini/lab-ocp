@@ -597,6 +597,9 @@ spec:
                   namespace: models-as-a-service
                 spec:
                   apiServer:
+                    cABundle:
+                      configMapKey: service-ca.crt
+                      configMapName: openshift-service-ca.crt
                     caBundleFileMountPath: ''
                     caBundleFileName: ''
                     deploy: true
